@@ -1,14 +1,17 @@
 // Validate case files and the checklist. Rules: AGENTS.md "Case files".
-// Usage: node scripts/validate.mjs            (all of cases/ plus checklist.md)
+// Usage: node scripts/validate.mjs            (all of cases/ plus checklist.md and pitfalls.md)
 //        node scripts/validate.mjs <file|dir>  (only those cases; no checklist check)
+//        node scripts/validate.mjs --cases-dir cases <staged case>  (its links resolve in cases/)
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import {
   CASES_DIR, CHECKLIST, NOTICE, SOURCE_TYPES, KINDS, AI_SHARES, RELATIONS, EVIDENCE, OUTCOMES,
-  STATUSES, BASES, REQUIRED, SECTIONS, NUMBERS_HEADER, UNITS, SCALES, parseCase, listCases, sections,
+  STATUSES, BASES, REQUIRED, SECTIONS, NUMBERS_HEADER, UNITS, SCALES, PITFALLS, CHECKLIST_MAX_BYTES,
+  parseCase, listCases, sections,
 } from './lib.mjs';
 
 const errors = [];
+const warnings = [];
 const err = (file, msg) => errors.push(`${file}: ${msg}`);
 const pad = n => String(n).padStart(2, '0');
 const localDate = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
@@ -23,7 +26,7 @@ const notice = existsSync(NOTICE) ? readFileSync(NOTICE, 'utf8').replace(/\r\n/g
 // A number is a word that starts with a digit (after an optional ~ ≈ $ € £ or opening bracket),
 // such as 3,500 or 3.5K or 4.0x or 60–90%. Not numbers: digits inside a word (GPT-5.6, E0425,
 // o200k), inline code, link targets, dates (2025-04-01, 2025-04), periods (2023..2024) and list
-// markers, ordinals (4th). Exempt: a year (1900-2099) with no unit after it, a small number right
+// markers, ordinals (4th), digit-led names (1Password). Exempt: a year (1900-2099) with no unit after it, a small number right
 // after a capitalised name that does not start a sentence (Opus 4.8, Java 21, August 21), and a
 // number after a label word (part 4, step 2). Every other number needs a unit: a % or x suffix, a
 // currency sign, or a word from UNITS within the next three words (scale words such as "million"
@@ -75,6 +78,7 @@ function checkUnits(text) {
     if (!m) return;
     const core = m[2];
     if (/^(st|nd|rd|th)$/i.test(m[3])) return; // an ordinal: 4th
+    if (/^[A-Z][a-z]{2,}$/.test(m[3])) return; // a digit-led name: 1Password
     const hasUnit = look(i);
     if (!m[1] && !m[3] && /^(19|20)\d\d$/.test(core) && !hasUnit) return; // a year (1999 files is a quantity)
     const prev = toks[i - 1] || '';
@@ -146,7 +150,7 @@ function validateCase(c) {
   if (meta.status === 'superseded') {
     if (!meta.superseded_by) err(file, 'superseded needs superseded_by');
     else if (!/^\d{4}-\d{2}-\d{2}-[a-z0-9-]+\.md$/.test(meta.superseded_by) || meta.superseded_by === file) err(file, `superseded_by must name another case file`);
-    else if (!existsSync(join(dirname(path), meta.superseded_by))) err(file, `superseded_by "${meta.superseded_by}" not found`);
+    else if (!existsSync(join(linkBase(path), meta.superseded_by))) err(file, `superseded_by "${meta.superseded_by}" not found`);
     else if (statusOf.has(meta.superseded_by) && statusOf.get(meta.superseded_by) !== 'current') err(file, `superseded_by "${meta.superseded_by}" is itself superseded; point to the current case`);
     // Only a later account of the same migration by the same company supersedes a case.
     else if (companyOf.has(meta.superseded_by) && companyOf.get(meta.superseded_by) !== meta.company) err(file, `superseded_by "${meta.superseded_by}" is another company's case; only the same company's later account of the same migration supersedes`);
@@ -197,7 +201,7 @@ function validateCase(c) {
     if (/^https?:/.test(target)) { if (!isHttps(target)) err(file, `link must be https: ${target}`); continue; }
     if (/^[a-z][a-z0-9+.-]*:/i.test(target)) continue; // mailto: and other schemes are not files
     const t = target.split('#')[0];
-    if (t && !existsSync(resolve(dirname(path), t))) err(file, `broken link ${target}`);
+    if (t && !existsSync(resolve(linkBase(path), t))) err(file, `broken link ${target}`);
   }
 
   // Numbers table.
@@ -251,10 +255,33 @@ function validateCase(c) {
 }
 
 // ---- Checklist ------------------------------------------------------------------------------
+// A case link is inline, [GitHub](cases/x.md), or by reference, [GitHub][] or [text][GitHub],
+// with the definition `[GitHub]: cases/x.md` anywhere in the file.
+const caseTarget = t => t.match(/^(?:\.\/)?cases\/([^#\s]+\.md)/)?.[1];
+function caseLinks(text, refs) {
+  const inline = [...text.matchAll(/\]\(([^)\s]+)[^)]*\)/g)].map(m => caseTarget(m[1]));
+  const byRef = [...text.matchAll(/\[([^\]]+)\]\[([^\]]*)\]/g)].map(m => caseTarget(refs.get((m[2] || m[1]).toLowerCase()) ?? ''));
+  return [...inline, ...byRef].filter(Boolean);
+}
+// Reference definitions: label (lower case) -> target.
+const refDefs = lines => new Map(lines.map(l => l.match(/^\[([^\]]+)\]:\s*(\S+)/)).filter(Boolean)
+  .map(m => [m[1].toLowerCase(), m[2]]));
+// Relative link targets (inline and definitions) that do not resolve from `dir`.
+function brokenLinks(text, dir) {
+  const t = text.replace(/```[\s\S]*?```/g, '').replace(/`[^`]*`/g, '');
+  const targets = [...t.matchAll(/\]\(([^)\s]+)[^)]*\)/g)].map(m => m[1]);
+  targets.push(...refDefs(t.split('\n')).values());
+  return targets.filter(x => !/^[a-z][a-z0-9+.-]*:/i.test(x) && x.split('#')[0] && !existsSync(resolve(dir, x.split('#')[0])));
+}
+
 function validateChecklist(caseFiles) {
   const f = 'checklist.md';
   if (!existsSync(CHECKLIST)) return err(f, 'missing');
+  const size = statSync(CHECKLIST).size;
+  if (size > CHECKLIST_MAX_BYTES) err(f, `${size} bytes (at most ${CHECKLIST_MAX_BYTES}); move detail to pitfalls.md or merge questions`);
   const lines = readFileSync(CHECKLIST, 'utf8').replace(/\r\n/g, '\n').split('\n');
+  const refs = refDefs(lines);
+  const cited = new Set();
   const qs = [];
   let cur = null;
   for (const l of lines) {
@@ -265,16 +292,35 @@ function validateChecklist(caseFiles) {
   for (const q of qs) {
     if (!/\bCheck:/.test(q.text)) err(f, `"${q.title}" has no "Check:" step`);
     if (!/\bEvidence:\s+\S/.test(q.text)) err(f, `"${q.title}" has no "Evidence:" line (what the cases show, in our words)`);
-    const links = [...q.text.matchAll(/\]\((?:\.\/)?cases\/([^)#\s]+\.md)[^)]*\)/g)].map(m => m[1]);
+    const links = caseLinks(q.text, refs);
     if (!links.length) err(f, `"${q.title}" links to no case`);
-    for (const l of links) if (!caseFiles.has(l)) err(f, `"${q.title}" links to missing case ${l}`);
+    for (const l of links) { if (!caseFiles.has(l)) err(f, `"${q.title}" links to missing case ${l}`); cited.add(l); }
   }
+  for (const t of brokenLinks(lines.join('\n'), dirname(CHECKLIST))) err(f, `broken link ${t}`);
   if (!lines.some(l => /^## Report format/.test(l))) err(f, 'needs a "## Report format" section');
+  const uncited = [...caseFiles].filter(c => !cited.has(c));
+  if (uncited.length) warnings.push(`checklist.md cites no question for: ${uncited.join(', ')}`);
   return qs.length;
+}
+
+// pitfalls.md (optional): every relative link resolves.
+function validatePitfalls() {
+  if (!existsSync(PITFALLS)) return;
+  for (const t of brokenLinks(readFileSync(PITFALLS, 'utf8').replace(/\r\n/g, '\n'), dirname(PITFALLS))) err('pitfalls.md', `broken link ${t}`);
 }
 
 // ---- Run ------------------------------------------------------------------------------------
 const args = process.argv.slice(2);
+// --cases-dir <dir>: resolve a case's relative links there instead of beside the file, so a
+// staged case that links to published cases validates where it is.
+const cd = args.indexOf('--cases-dir');
+let casesDir = null;
+if (cd >= 0) {
+  casesDir = args.splice(cd, 2)[1];
+  if (!casesDir || !existsSync(casesDir) || !statSync(casesDir).isDirectory()) { console.error(`--cases-dir needs a folder: ${casesDir}`); process.exit(2); }
+  casesDir = resolve(casesDir);
+}
+function linkBase(path) { return casesDir ?? dirname(path); }
 const paths = [];
 for (const a of args.length ? args : [CASES_DIR]) {
   if (!existsSync(a)) { console.error(`not found: ${a}`); process.exit(2); }
@@ -287,7 +333,9 @@ const statusOf = new Map(cases.map(c => [c.file, c.meta.status]));
 const companyOf = new Map(cases.map(c => [c.file, c.meta.company]));
 cases.forEach(validateCase);
 const nq = args.length ? null : validateChecklist(new Set(cases.map(c => c.file)));
+if (nq !== null) validatePitfalls();
 
+for (const w of warnings) console.warn(`note: ${w}`);
 if (errors.length) {
   console.error(`${errors.length} problem(s):\n` + errors.map(e => '  ' + e).join('\n'));
   process.exit(1);

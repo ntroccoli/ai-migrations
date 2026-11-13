@@ -9,5 +9,5 @@
     "MD025": { "front_matter_title": "" },
     "MD024": { "siblings_only": true }
   },
-  "ignores": ["node_modules/**"]
+  "ignores": ["node_modules/**", ".test-tmp/**"]
 }

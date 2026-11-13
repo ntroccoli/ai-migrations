@@ -7,10 +7,13 @@ export const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 export const CASES_DIR = join(ROOT, 'cases');
 export const CHECKLIST = join(ROOT, 'checklist.md');
 export const NOTICE = join(ROOT, 'NOTICE.md');
+export const PITFALLS = join(ROOT, 'pitfalls.md');
+// Agents read checklist.md whole before a migration: keep it small.
+export const CHECKLIST_MAX_BYTES = 20 * 1024;
 
 // Field values. Keep in sync with AGENTS.md "Case files".
 export const SOURCE_TYPES = ['engineering-post', 'paper', 'talk', 'repo', 'vendor-marketing'];
-export const KINDS = ['language', 'framework', 'test-framework', 'library-upgrade', 'data', 'mixed'];
+export const KINDS = ['language', 'framework', 'test-framework', 'library-upgrade', 'data', 'architecture', 'mixed'];
 export const AI_SHARES = ['most', 'part', 'little', 'unstated'];
 export const RELATIONS = ['seller-of-tool', 'user-of-tool', 'independent'];
 export const EVIDENCE = ['independent-data', 'shown-in-source', 'assertion-only'];
@@ -41,6 +44,7 @@ export const UNITS = new Set(`
   release migration pipeline dataset change error diagnostic regression compaction issue bug
   people person engineer developer team user product language sdk
   character word example comment review lifecycle window event
+  method task rule instruction zone office symbol project library librarie cent
 `.trim().split(/\s+/));
 // Words that may sit between a number and its unit without being units themselves.
 export const SCALES = new Set(['thousand', 'million', 'billion', 'k', 'm', 'b']);

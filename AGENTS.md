@@ -22,7 +22,10 @@ One file per case: `cases/YYYY-MM-DD-company-what.md`, where the date is the sou
 date (for a series, its first part). `node scripts/validate.mjs` checks the rules below; it
 must exit 0 before a commit, and so must the Markdown linter:
 `npx markdownlint-cli2@0.24.0 "**/*.md"` (pinned; the version in markdownlint-cli2-action
-v25.0.0; rules in `.markdownlint-cli2.jsonc`).
+v25.0.0; rules in `.markdownlint-cli2.jsonc`). A case staged outside `cases/` validates in place
+with `node scripts/validate.mjs --cases-dir cases <staged case>` (its links to other cases resolve
+in `cases/`). After a change to the validator, `node scripts/test-validate.mjs` (broken-copy
+tests) must exit 0; add a test for each new rule.
 
 ```markdown
 ---
@@ -86,7 +89,9 @@ Field rules (all checked):
 - `evidence`: how far a reader can check the claims. `independent-data` (someone outside the
   company measured it), `shown-in-source` (the source shows the data, logs, benchmark or method
   behind its numbers), `assertion-only` (numbers are stated, not shown).
-- `kind`: `language`, `framework`, `test-framework`, `library-upgrade`, `data`, `mixed`.
+- `kind`: `language`, `framework`, `test-framework`, `library-upgrade`, `data`, `architecture`
+  (restructuring within one language: a monolith split into services, an API pattern changed
+  across call sites), `mixed`.
 - `from`, `to`, `size`, `duration`, `people`: short text; every number carries a unit;
   `unstated` when the source does not say.
 - `ai_share`: `most`, `part`, `little` or `unstated`: the share of the changed code AI produced,
@@ -135,7 +140,8 @@ Body rules (all checked):
 How the units check works (`scripts/validate.mjs`, `checkUnits`). A number is a word that starts
 with a digit, after an optional `~`, currency sign or bracket: `3,500`, `3.5K`, `4.0x`, `60–90%`.
 Not numbers: digits inside a word (`GPT-5.6`, `E0425`), inline code, link targets, dates
-(`2025-04-01`), periods (`2023..2024`), ordinals (`4th`) and list markers. Exempt: a year (1900 to
+(`2025-04-01`), periods (`2023..2024`), ordinals (`4th`), digit-led names (`1Password`: a digit
+then a capitalised word) and list markers. Exempt: a year (1900 to
 2099) with no unit after it, a number of up to three digits right after a capitalised name that
 does not start a sentence (`Opus 4.8`, `Java 21`, `August 21`), and a number after a label word
 (`part 4`, `step 2`; list `LABELS`).
@@ -156,8 +162,13 @@ repository's `raw/`), outside "In their words". Run it on each new or changed ca
 `checklist.md`: 5 to 12 questions; merge before adding. Each question has a "Check:" an agent can
 run on a repository, an "Evidence:" line saying in our words what the cases show (so an agent
 without the cases can use it), and links only to cases that support it. Our own inferences are
-allowed and marked "(ours)". Examples stay language-neutral or give a few per kind of move. The
-validator checks the count, "Check:", "Evidence:" and the case links.
+allowed and marked "(ours)". Questions stay language-neutral; lists per kind of move (pitfalls,
+seams) go to `pitfalls.md`, which the questions link. `checklist.md` stays at or under 20 KB
+(20,480 bytes; agents read it whole): trim or move detail before adding. Cases are cited by
+reference links (`[Bun][]`, defined once at the end of the file). The validator checks the count,
+the size, "Check:", "Evidence:", the case links, and links in `pitfalls.md`; it prints a note for
+any case no question cites. Run `check-copy` on `checklist.md` and `pitfalls.md` against all of
+`raw/` after changing them.
 
 ## One line per case
 
