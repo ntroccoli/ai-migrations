@@ -14,6 +14,7 @@ to: Rust (native library with a C ABI)
 size: about 430,000 lines of TypeScript ported into 832,378 lines of Rust
 duration: about 14.5 weeks
 people: 1 lead developer, with a team for interop, SDK bindings, packaging and reviews
+cost: ~$120,000 for ~136.3 billion tokens (engineer time not priced)
 ai_share: most
 tools: [GitHub Copilot app, GitHub Copilot CLI, agent merge, Copilot Code Review, napi-rs, cargo, end-to-end test suites]
 models: [Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6]
@@ -95,6 +96,7 @@ before and during the port
 | 128 pull requests | port pull requests merged to the main branch | measured | [post](https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/) |
 | roughly 14.5 weeks | porting window | measured | [post](https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/#h-in-place-porting-strategy) |
 | 135 releases | releases from main in the window: 100 pre-releases and 35 stable releases | measured | [post](https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/#h-in-place-porting-strategy) |
+| 10.5% | share of npm downloads that went to pre-release versions, in a seven-day sample: how few users saw a port first | measured | [post](https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/#h-in-place-porting-strategy) |
 | 2,019 exports | peak of temporary Rust-to-Node interop exports, 2026-08-03, with 3,356 TypeScript call sites; 0 exports at the end | measured | [post](https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/#h-interop) |
 | 2,639 messages | messages the engineer typed or spoke, out of 31,247 user-role messages in the session logs | measured | [post](https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/#h-what-the-session-data-shows) |
 | 31.0% | share of the engineer's messages spent on review, tests and CI; 17.4% questioned design choices, 15.0% pushed for completeness; each message's intent was assigned by Copilot, an LLM, not by a person | measured | [post](https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/#h-what-the-session-data-shows) |

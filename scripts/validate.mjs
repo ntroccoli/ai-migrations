@@ -134,6 +134,13 @@ function validateCase(c) {
     if (typeof meta[k] !== 'string' || !meta[k]) { err(file, `${k}: short text, or "unstated"`); continue; }
     for (const n of checkUnits(meta[k]).missing) err(file, `${k}: number "${n}" has no unit`);
   }
+  // cost: the spend with its unit (money, tokens, compute), or "unstated".
+  if (typeof meta.cost !== 'string' || !meta.cost) err(file, 'cost: the spend with its unit, or "unstated"');
+  else if (meta.cost !== 'unstated') {
+    const { need, missing } = checkUnits(meta.cost);
+    if (!need) err(file, 'cost: give an amount with its unit (for example ~$120,000), or "unstated"');
+    for (const n of missing) err(file, `cost: number "${n}" has no unit`);
+  }
   for (const k of ['tools', 'models']) if (!Array.isArray(meta[k]) || !meta[k].length) err(file, `${k}: an inline list, or [unstated]`);
   if (!/^(unstated|\d{4}(-\d{2})?(\.\.\d{4}(-\d{2})?)?)$/.test(meta.period || '')) err(file, 'period: YYYY, YYYY-MM, a range A..B, or unstated');
   if (meta.status === 'superseded') {
@@ -141,6 +148,8 @@ function validateCase(c) {
     else if (!/^\d{4}-\d{2}-\d{2}-[a-z0-9-]+\.md$/.test(meta.superseded_by) || meta.superseded_by === file) err(file, `superseded_by must name another case file`);
     else if (!existsSync(join(dirname(path), meta.superseded_by))) err(file, `superseded_by "${meta.superseded_by}" not found`);
     else if (statusOf.has(meta.superseded_by) && statusOf.get(meta.superseded_by) !== 'current') err(file, `superseded_by "${meta.superseded_by}" is itself superseded; point to the current case`);
+    // Only a later account of the same migration by the same company supersedes a case.
+    else if (companyOf.has(meta.superseded_by) && companyOf.get(meta.superseded_by) !== meta.company) err(file, `superseded_by "${meta.superseded_by}" is another company's case; only the same company's later account of the same migration supersedes`);
   } else if (meta.superseded_by) err(file, 'superseded_by set but status is current');
 
   // Title, summary paragraph, sections in order.
@@ -275,6 +284,7 @@ for (const a of args.length ? args : [CASES_DIR]) {
 }
 const cases = paths.map(parseCase);
 const statusOf = new Map(cases.map(c => [c.file, c.meta.status]));
+const companyOf = new Map(cases.map(c => [c.file, c.meta.company]));
 cases.forEach(validateCase);
 const nq = args.length ? null : validateChecklist(new Set(cases.map(c => c.file)));
 

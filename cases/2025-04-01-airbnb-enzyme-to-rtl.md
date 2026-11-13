@@ -14,6 +14,7 @@ to: React Testing Library
 size: nearly 3,500 test files
 duration: 6 weeks
 people: unstated
+cost: unstated
 ai_share: most
 tools: [custom LLM migration pipeline, Jest, ESLint, TypeScript compiler]
 models: [unstated]

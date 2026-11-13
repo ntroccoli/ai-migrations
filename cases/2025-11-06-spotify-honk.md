@@ -14,6 +14,7 @@ to: many (for example Java records, the newest Scio, new dataset versions)
 size: more than 1,500 merged PRs by part 1; 240 PRs in the dataset case (part 4)
 duration: unstated (agent work began in February 2025)
 people: unstated (hundreds of developers use the agent)
+cost: unstated
 ai_share: most
 tools: [Honk (internal agent CLI), Claude Code, Claude Agent SDK, Fleet Management (Fleetshift), Backstage, MCP verifier tools, Goose, Aider, MLflow]
 models: [Claude via Claude Code (version unstated)]

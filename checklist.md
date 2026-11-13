@@ -102,33 +102,52 @@ Cases: [GitHub, Copilot runtime TypeScript to Rust, 2026](cases/2026-09-16-githu
    failures into instructions, skills and evals.
    Cases: [Airbnb](cases/2025-04-01-airbnb-enzyme-to-rtl.md), [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md).
 10. **What may the agent decide and reach alone, and who reviews?**
-   Check: list the guardrails an agent could switch off (deleting or editing tests, updating
-   snapshots or baselines, waiver labels, CI flags) and who must approve each. List the tools,
-   skills and credentials agent sessions can reach. Ask the owner who reviews and how many hours a
-   week they have; the repository cannot tell you.
-   Evidence: a GitHub agent applied a waiver label to pass a failing check, and a session used an
-   orchestration skill nobody asked for to merge a peer's work; humans there reviewed
-   architecture and risk while several models compared old and new code. Spotify keeps its
-   agent's tools few, sandboxes it and never lets it push. Budgeting reviewer time is ours.
-   Cases: [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md), [Spotify](cases/2025-11-06-spotify-honk.md).
+    Check: list the guardrails an agent could switch off (deleting or editing tests, updating
+    snapshots or baselines, waiver labels, CI flags) and who must approve each. List the tools,
+    skills and credentials agent sessions can reach. Ask the owner who reviews and how many hours a
+    week they have; the repository cannot tell you.
+    Evidence: a GitHub agent applied a waiver label to pass a failing check, and a session used an
+    orchestration skill nobody asked for to merge a peer's work; humans there reviewed
+    architecture and risk while several models compared old and new code. Spotify keeps its
+    agent's tools few, sandboxes it and never lets it push. Budgeting reviewer time is ours.
+    Cases: [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md), [Spotify](cases/2025-11-06-spotify-honk.md).
 11. **How will changes reach users?**
-   Check: find the release channels (pre-release, flags, canary), what share of users each
-   reaches, how problems are reported and watched, and how one unit's change is rolled back.
-   Evidence: GitHub aimed to ship each port to a pre-release first (not always), so each release
-   held a small set of ports and problems were easy to trace; it compared issue rates before and
-   during the port. A rollback path per unit is ours.
-   Cases: [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md).
+    Check: find the release channels (pre-release, flags, canary), what share of users each
+    reaches, how problems are reported and watched, and how one unit's change is rolled back.
+    Evidence: GitHub aimed to ship each port to a pre-release first (not always), so each release
+    held a small set of ports and problems were easy to trace; it compared issue rates before and
+    during the port. A rollback path per unit is ours.
+    Cases: [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md).
 12. **How will you measure cost and result?**
-   Check: write down the manual estimate and how it was made. Measure, before the port and on
-   fixed hardware, the number the product exists for (speed, latency, memory, output quality).
-   Plan to record tokens or spend, engineer hours, pull requests, regressions after merge and
-   reverts, and mark which numbers are measured and which are estimates.
-   Evidence: GitHub benchmarked before and after and gave its token bill, warning that other
-   changes landed in the same window; Airbnb and Spotify give savings as their own estimates
-   with no cost figure. Recording reverts and regressions after merge is ours: no case reports
-   them.
-   Cases: [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md), [Airbnb](cases/2025-04-01-airbnb-enzyme-to-rtl.md),
-   [Spotify](cases/2025-11-06-spotify-honk.md).
+    Check: write down the manual estimate and how it was made. Measure, before the port and on
+    fixed hardware, the number the product exists for (speed, latency, memory, output quality).
+    Plan to record tokens or spend, engineer hours, pull requests, regressions after merge and
+    reverts, and mark which numbers are measured and which are estimates.
+    Evidence: GitHub benchmarked before and after and gave its token bill, warning that other
+    changes landed in the same window; Airbnb and Spotify give savings as their own estimates
+    with no cost figure. Recording reverts and regressions after merge is ours: no case reports
+    them.
+    Cases: [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md), [Airbnb](cases/2025-04-01-airbnb-enzyme-to-rtl.md),
+    [Spotify](cases/2025-11-06-spotify-honk.md).
+
+## Starting thresholds
+
+Only where a case gives a number. They are starting points from one case each, not targets;
+adjust them to the repository. Questions without a line here have no supported number: judge
+"gap" from the Check alone.
+
+- Q9: Airbnb saw most simple and medium files pass within about 10 attempts per step, and 50 to
+  100 attempts on the hardest files gained little before people finished them. No retry limit,
+  or no rule to stop and hand-port, is a gap.
+  [Airbnb](cases/2025-04-01-airbnb-enzyme-to-rtl.md).
+- Q9: Airbnb tuned each fix on a sample of 5 to 10 failing files before sweeping all of them
+  again. [Airbnb](cases/2025-04-01-airbnb-enzyme-to-rtl.md).
+- Q4: GitHub's first count was about 130,000 lines and about 430,000 went through the port. A
+  scope count with no allowance for code moving in and new code arriving is a partial gap.
+  [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md).
+- Q11: pre-release versions took 10.5% of GitHub's npm downloads, so few users saw a port first.
+  A reference point for exposure, not a threshold.
+  [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md).
 
 ## How to run this checklist
 
@@ -148,6 +167,15 @@ Cases: [GitHub, Copilot runtime TypeScript to Rust, 2026](cases/2026-09-16-githu
    else), then what other proposals depend on (the oracle, the baseline, the end state), then the
    rest.
 8. Report as below and wait for the owner's choice.
+9. Record: once the owner has chosen, write `docs/migration-review.md` in the measured
+   repository (the one file this checklist adds there). It lists each proposal with its status:
+   open, proven, waiting for first use, stopped holding, or skipped; for proven and stopped
+   holding, the event that shows it (a commit, a test run, a measured number) and its date. In a
+   read-only run, put the record's text at the end of the report instead.
+10. Revisit: a later run reads `docs/migration-review.md` first and re-checks only the open,
+    waiting and stopped-holding items, plus any question whose measurement may have moved (new
+    code in scope, a new toolchain). Update each status with the date and the event. Do not
+    reopen proven or skipped items unless their check now fails.
 
 ## Report format
 
@@ -179,3 +207,17 @@ Go / no-go: go | go after the blockers | no-go — <one line why>.
    Check that proves it: <command or count to rerun after the change>.
 2. ...
 ```
+
+The record, `docs/migration-review.md` in the measured repository:
+
+```markdown
+# Migration review record: <repository>
+
+Checklist: <ai-migrations commit or date>. Migration: <from> to <to>.
+
+| # | Question | Proposal | Status | Event that shows it | Date |
+| --- | --- | --- | --- | --- | --- |
+| 1 | Q<n> | <one line> | <status> | <commit, test run or number> | <YYYY-MM-DD> |
+```
+
+Status is one of: open, proven, waiting for first use, stopped holding, skipped.

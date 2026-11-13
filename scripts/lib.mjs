@@ -18,7 +18,7 @@ export const OUTCOMES = ['completed', 'partial', 'ongoing', 'abandoned'];
 export const STATUSES = ['current', 'superseded'];
 export const BASES = ['measured', 'reported', 'estimate', 'self-estimate', 'vendor-claim'];
 export const REQUIRED = ['title', 'date', 'company', 'summary', 'source_url', 'also', 'source_type',
-  'author_relation', 'evidence', 'kind', 'from', 'to', 'size', 'duration', 'people', 'ai_share', 'tools',
+  'author_relation', 'evidence', 'kind', 'from', 'to', 'size', 'duration', 'people', 'cost', 'ai_share', 'tools',
   'models', 'period', 'outcome', 'status', 'superseded_by'];
 // Sections in order; `optional` ones may be left out.
 export const SECTIONS = [
