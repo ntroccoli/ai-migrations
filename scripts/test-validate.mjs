@@ -76,6 +76,10 @@ test('--cases-dir needs a folder', 2, d => ['--cases-dir', join(d, 'nowhere'), c
 // checklist.md: size cap, reference links, every question cites a case.
 test('checklist over the size cap fails', 1,
   d => appendFileSync(join(d, 'checklist.md'), `\n${'Padding words for the size test. '.repeat(700)}\n`), null, 'bytes (at most');
+test('checklist with CRLF line ends measures as LF', 0, d => {
+  const p = join(d, 'checklist.md');
+  writeFileSync(p, readFileSync(p, 'utf8').replace(/\r?\n/g, '\r\n'));
+});
 test('checklist reference to a missing case fails', 1,
   d => edit(join(d, 'checklist.md'), '[Bun]: cases/2026-07-08-bun-zig-to-rust.md', '[Bun]: cases/2026-07-08-bun-missing.md'), null, 'missing case 2026-07-08-bun-missing.md');
 test('checklist question with no case fails', 1,

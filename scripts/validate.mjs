@@ -277,9 +277,11 @@ function brokenLinks(text, dir) {
 function validateChecklist(caseFiles) {
   const f = 'checklist.md';
   if (!existsSync(CHECKLIST)) return err(f, 'missing');
-  const size = statSync(CHECKLIST).size;
+  const text = readFileSync(CHECKLIST, 'utf8').replace(/\r\n/g, '\n');
+  // Bytes with LF line ends, so a Windows checkout (CRLF) measures the same as the repository.
+  const size = Buffer.byteLength(text, 'utf8');
   if (size > CHECKLIST_MAX_BYTES) err(f, `${size} bytes (at most ${CHECKLIST_MAX_BYTES}); move detail to pitfalls.md or merge questions`);
-  const lines = readFileSync(CHECKLIST, 'utf8').replace(/\r\n/g, '\n').split('\n');
+  const lines = text.split('\n');
   const refs = refDefs(lines);
   const cited = new Set();
   const qs = [];
