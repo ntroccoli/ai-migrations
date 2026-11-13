@@ -2,7 +2,7 @@
 title: Bun moves its JavaScript runtime off Zig onto Rust with Claude agents in 11 days
 date: 2026-07-08
 company: Bun
-summary: One engineer ran about 50 Claude Code workflows, up to 64 agents at once, to port 535K lines of Zig to Rust; all tests passed and it merged in 11 days.
+summary: One engineer ran about 50 Claude Code workflows, up to 64 agents at once, to port 535K lines of Zig to Rust in 11 days; tests passed, 19 regressions shipped.
 source_url: https://bun.com/blog/bun-in-rust
 also: []
 source_type: engineering-post

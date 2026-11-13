@@ -184,7 +184,7 @@ from interviewing the three developers afterwards.
 - [stated] Order checks from cheap to costly: response, non-trivial diff, parse, model self-check, build, tests; drop a file at its first failure. ([Section 3.3](https://arxiv.org/html/2504.09691#S3.SS3))
 - [stated] Run the pipeline nightly so the list of remaining locations refreshes and progress shows. ([Section 4.3](https://arxiv.org/html/2504.09691#S4.SS3))
 - [stated] Have a developer read every generated change and its code owners accept it before it is submitted. ([Section 3.3](https://arxiv.org/html/2504.09691#S3.SS3))
-- [stated] Measure the model's and people's shares as edit distance between file snapshots. ([Section 4.1](https://arxiv.org/html/2504.09691#S4.SS1))
+- [ours] Measure the model's and people's shares as edit distance between file snapshots, knowing the authors list it as a threat: it misses the thinking behind an edit. ([Section 4.1](https://arxiv.org/html/2504.09691#S4.SS1))
 - [stated] Start with small, local migrations while the team learns the tool, then move to large ones. ([Section 4.3](https://arxiv.org/html/2504.09691#S4.SS3))
 - [ours] Fix failing tests and support golden-file updates before starting, or correct changes stall at the test gate. ([Section 4.3](https://arxiv.org/html/2504.09691#S4.SS3))
 - [ours] Check how well the model handles each language in scope; a weak language falls back to people. ([Section 4.3](https://arxiv.org/html/2504.09691#S4.SS3))

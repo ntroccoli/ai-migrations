@@ -48,7 +48,7 @@ the key sentences checked word for word
 
 ## What was migrated
 
-Java tests in Uber's Bazel monorepo: over 600,000 tests written for JUnit 4, across a code base of 15 million lines.
+Java tests in Uber's Bazel monorepo: over 600,000 tests written for JUnit 4, spread across 15 million lines of code.
 Active development of JUnit 4 had stopped in 2021, and future JUnit releases plan to drop it.
 Bazel runs JUnit 4 natively but not the JUnit Platform that JUnit 5 needs, so the build had to
 change before any test could move. The post reports over 75,000 test classes migrated; it does
