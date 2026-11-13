@@ -1,0 +1,47 @@
+# Machines and operations
+
+Running many agents on real machines, and keeping the result healthy after merge.
+
+Evidence base: every lesson here comes from the AI-assisted **migrations** in [this collection](../index.md); many apply to large engineering work done with AI agents generally.
+
+`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle": does the lesson rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong (`yes`, `no`, `partly`). "Strength": `strong` (several cases, or measured), `medium`, `weak` (one case or assertion only).
+
+- **OPS-1** [stated] Parallel agents saturate CPU, disk and I/O: size the machine first, let one agent build at a time through a lease, and push full test runs to CI.
+  - Old system as oracle: no. Strength: strong. Era: 2026.
+  - Cases: [GitHub: what went wrong][gh-wrong], [Bun: what went wrong][bun-wrong].
+  - Against: None found.
+- **OPS-2** [stated] Contain heavy tests with operating-system limits (control groups, process namespaces, disk quotas); asking the agent to be careful contains nothing.
+  - Old system as oracle: no. Strength: weak. Era: 2026.
+  - Cases: [Bun: what went wrong][bun-wrong].
+  - Against: None found.
+- **OPS-3** [stated] Make the inner loop fast (module splits, build caches, host I/O) before scaling agents; their time goes mostly to reading, building and testing, not writing.
+  - Old system as oracle: no. Strength: medium. Era: 2026.
+  - Cases: [GitHub: what went wrong][gh-wrong], [GitHub: numbers][gh-numbers], [Bun: practices to copy][bun-practices].
+  - Against: None found.
+- **OPS-4** [stated] List what the old runtime supplied silently (time zone, environment, process flags) and test every platform you ship; one green platform says little.
+  - Old system as oracle: yes. Strength: strong. Era: 2025–2026.
+  - Cases: [GitHub: what went wrong][gh-wrong], [Spotify: what went wrong][spo-wrong].
+  - Against: None found.
+- **OPS-5** [stated] Keep hardening after merge: repeated security review, round-the-clock fuzzing and leak tracking, with people reviewing the fixes they produce.
+  - Old system as oracle: no. Strength: weak. Era: 2026.
+  - Cases: [Bun: how it was checked][bun-checked].
+  - Against: Disagree: the Zig creator says Bun was not fuzzing before the port, against the post's claim ([Bun][bun-wrong]).
+- **OPS-6** [stated] Run bulk agent jobs as scheduled batches sized to the infrastructure, sort results into status groups, and rerun only what is stuck.
+  - Old system as oracle: partly. Strength: strong. Era: 2023–2025.
+  - Cases: [Slack: what worked][slk-worked], [Google: what worked][goo-worked], [Airbnb: what worked][air-worked].
+  - Against: None found.
+  - Sceptic: tag changed from no to partly. Challenge: the status groups count how many converted old tests pass, so the old behaviour is the oracle. Answer: accepted; Google's groups count remaining sites instead, which needs no oracle.
+- **OPS-7** [ours] Load-test the new code for blocking and resource exhaustion; one port froze its interface on a synchronous call across the bridge.
+  - Old system as oracle: partly. Strength: medium. Era: 2026.
+  - Cases: [GitHub: what went wrong][gh-wrong].
+  - Against: None found.
+
+[air-worked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-worked
+[bun-checked]: ../cases/2026-07-08-bun-zig-to-rust.md#how-it-was-checked
+[bun-practices]: ../cases/2026-07-08-bun-zig-to-rust.md#practices-to-copy
+[bun-wrong]: ../cases/2026-07-08-bun-zig-to-rust.md#what-went-wrong
+[gh-numbers]: ../cases/2026-09-16-github-copilot-runtime-rust.md#numbers
+[gh-wrong]: ../cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong
+[goo-worked]: ../cases/2025-04-13-google-int64-ids.md#what-worked
+[slk-worked]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#what-worked
+[spo-wrong]: ../cases/2025-11-06-spotify-honk.md#what-went-wrong

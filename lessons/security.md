@@ -1,0 +1,67 @@
+# Security
+
+Sandboxing agents, memory safety, dependencies and data integrity.
+
+Evidence base: every lesson here comes from the AI-assisted **migrations** in [this collection](../index.md); many apply to large engineering work done with AI agents generally.
+
+`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle": does the lesson rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong (`yes`, `no`, `partly`). "Strength": `strong` (several cases, or measured), `medium`, `weak` (one case or assertion only).
+
+- **SEC-1** [stated] Run unattended agents in a minimal sandbox with an allowlist of commands; pushing, merging and talking to people belong to the surrounding infrastructure.
+  - Old system as oracle: no. Strength: strong. Era: Claude Code, 2025–2026.
+  - Cases: [Spotify: what worked][spo-worked], [Spotify: practices to copy][spo-practices].
+  - Against: Bun's agents committed and pushed themselves and the project still finished ([Bun][bun-wrong]).
+  - Related view (karpathy-ideas): [agent security is the wild west][k-agent-security-is-the-wild-west], agrees.
+- **SEC-2** [stated] Whatever the harness exposes may get used unasked (an unlisted skill, git commands, a peer's worktree); remove what the task does not need.
+  - Old system as oracle: no. Strength: strong. Era: 2025–2026.
+  - Cases: [GitHub: what went wrong][gh-wrong], [Bun: what went wrong][bun-wrong], [Spotify: what worked][spo-worked].
+  - Against: Disagree: Spotify itself is adding skills and self-gathered context because prompts grew unwieldy without them ([Spotify][spo-wrong]).
+- **SEC-3** [ours] Block destructive repository and system commands in the tool layer, not with a prompt rule, which only arrives after the damage.
+  - Old system as oracle: no. Strength: medium. Era: 2025–2026.
+  - Cases: [Bun: what went wrong][bun-wrong], [Spotify: practices to copy][spo-practices].
+  - Against: None found.
+- **SEC-4** [stated] After a port into a memory-safe language, count where unsafe code sits, allow it only at foreign and system boundaries, and have the compiler forbid it elsewhere.
+  - Old system as oracle: no. Strength: strong. Era: 2026.
+  - Cases: [GitHub: numbers][gh-numbers], [Bun: what went wrong][bun-wrong], [Intel: practices to copy][int-practices].
+  - Against: Disagree: on how much to allow, Bun's faithful port keeps far more unsafe code and plans to cut it only by later refactoring ([Bun][bun-wrong]).
+- **SEC-5** [stated] Generate foreign-function signatures with a binding tool and reject any model answer that differs; a wrong contract leaks unsafety into safe-looking code.
+  - Old system as oracle: partly. Strength: medium. Era: 2026.
+  - Cases: [Intel: what worked][int-worked], [Intel: practices to copy][int-practices].
+  - Against: None found.
+- **SEC-6** [ours] A bounds-checked target turns silent out-of-range access into crashes; expect new crash reports and test limits at real-world sizes.
+  - Old system as oracle: partly. Strength: medium. Era: 2026.
+  - Cases: [Bun: what went wrong][bun-wrong].
+  - Against: None found.
+- **SEC-7** [ours] Treat each replaced library as a migration of its own, above all sanitizers, credential stores and protocol SDKs, and vet every new dependency.
+  - Old system as oracle: partly. Strength: medium. Era: 2026.
+  - Cases: [GitHub: what went wrong][gh-wrong].
+  - Against: None found; no case shows new dependencies being vetted.
+  - Related view (karpathy-ideas): [rethink dependencies supply chain][k-rethink-dependencies-supply-chain], agrees.
+  - Sceptic: tag changed from no to partly. Challenge: the library-swap regressions were caught as departures from the old behaviour. Answer: accepted; vetting new dependencies still holds without an old system.
+- **SEC-8** [stated] Treat agent session logs and traces as data that may hold secrets; control where they are stored and where they are uploaded.
+  - Old system as oracle: no. Strength: medium. Era: 2025–2026.
+  - Cases: [GitHub: how it was checked][gh-checked], [Spotify: who did what][spo-who].
+  - Against: None found.
+- **SEC-9** [stated] Isolate each agent run from earlier attempts and reference answers, which it could otherwise read and lean on; limit network access too.
+  - Old system as oracle: no. Strength: weak. Era: 2026.
+  - Cases: [Intel: who did what][int-who].
+  - Against: None found.
+- **SEC-10** [stated] Never let agents choose the order of schema changes, backfills or ownership of shared tables; one agent's chosen order would have lost data silently.
+  - Old system as oracle: no. Strength: medium. Era: 2026 (models unstated).
+  - Cases: [1Password: what went wrong][opw-wrong], [1Password: practices to copy][opw-practices].
+  - Against: None found.
+
+[bun-wrong]: ../cases/2026-07-08-bun-zig-to-rust.md#what-went-wrong
+[gh-checked]: ../cases/2026-09-16-github-copilot-runtime-rust.md#how-it-was-checked
+[gh-numbers]: ../cases/2026-09-16-github-copilot-runtime-rust.md#numbers
+[gh-wrong]: ../cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong
+[int-practices]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#practices-to-copy
+[int-who]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#who-did-what
+[int-worked]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#what-worked
+[opw-practices]: ../cases/2026-04-20-1password-monolith-refactor.md#practices-to-copy
+[opw-wrong]: ../cases/2026-04-20-1password-monolith-refactor.md#what-went-wrong
+[spo-practices]: ../cases/2025-11-06-spotify-honk.md#practices-to-copy
+[spo-who]: ../cases/2025-11-06-spotify-honk.md#who-did-what
+[spo-worked]: ../cases/2025-11-06-spotify-honk.md#what-worked
+[spo-wrong]: ../cases/2025-11-06-spotify-honk.md#what-went-wrong
+[k-agent-security-is-the-wild-west]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2025-06-16-agent-security-is-the-wild-west.md
+[k-rethink-dependencies-supply-chain]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2026-03-24-rethink-dependencies-supply-chain.md

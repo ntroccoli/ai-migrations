@@ -1,0 +1,68 @@
+# Measuring and reading results
+
+How to read the numbers in these sources, and how to report your own.
+
+Evidence base: every lesson here comes from the AI-assisted **migrations** in [this collection](../index.md); many apply to large engineering work done with AI agents generally.
+
+`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle": does the lesson rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong (`yes`, `no`, `partly`). "Strength": `strong` (several cases, or measured), `medium`, `weak` (one case or assertion only).
+
+- **MSR-1** [ours] Treat savings measured against a manual effort that never ran as self-estimates; record the basis beside each figure and never add them across cases.
+  - Old system as oracle: no. Strength: strong. Era: all.
+  - Cases: [Google: what went wrong][goo-wrong], [Spotify: numbers][spo-numbers], [Airbnb: numbers][air-numbers], [Slack: numbers][slk-numbers], [Bun: numbers][bun-numbers], [1Password: what went wrong][opw-wrong].
+  - Against: Google's estimate at least agrees with its measured shares of model-made edits ([Google][goo-numbers]).
+- **MSR-2** [ours] For every success rate ask out of what (attempted, opened, merged, dropped from scope), and report each measure with its base; bases differed several-fold.
+  - Old system as oracle: no. Strength: strong. Era: all.
+  - Cases: [Spotify: what went wrong][spo-wrong], [Slack: how it was checked][slk-checked].
+  - Against: Airbnb's main rate covers its whole file set ([Airbnb][air-numbers]).
+- **MSR-3** [ours] Weigh each source by the author's stake in the tool (seller, owner, partner); none of the eight had outside measurement.
+  - Old system as oracle: no. Strength: strong. Era: all.
+  - Cases: [Bun: who did what][bun-who], [GitHub: context][gh-context], [Spotify: context][spo-context], [1Password: context][opw-context], [Intel: who did what][int-who].
+  - Against: Google lists its own threats to validity ([Google][goo-wrong]), and Slack has no stake in the model it used.
+- **MSR-4** [stated] Credit a gain to the migration only after separating it from work that landed in the same window (other speed work, linker changes, unrelated fixes).
+  - Old system as oracle: partly. Strength: medium. Era: 2026.
+  - Cases: [GitHub: what went wrong][gh-wrong], [Bun: what went wrong][bun-wrong].
+  - Against: Disagree: the Zig creator credits link-time optimisation the old toolchain already had for Bun's speed-up ([Bun][bun-wrong]).
+- **MSR-5** [stated] Escaped defects are unknown by nature: publish known regressions as a floor, grouped by cause, and use a before-and-after proxy labelled as a proxy.
+  - Old system as oracle: partly. Strength: medium. Era: 2026.
+  - Cases: [GitHub: what went wrong][gh-wrong], [Bun: what went wrong][bun-wrong].
+  - Against: Airbnb reports no defects after merge at all, which is missing data, not evidence ([Airbnb][air-wrong]).
+- **MSR-6** [ours] Activity numbers (lines per minute, commits, merged changes) are not progress; track verified behaviour or the shrinking list of remaining sites.
+  - Old system as oracle: no. Strength: medium. Era: all.
+  - Cases: [Bun: numbers][bun-numbers], [Spotify: numbers][spo-numbers], [GitHub: what went wrong][gh-wrong].
+  - Against: None found.
+- **MSR-7** [ours] Re-date a lesson before reusing it: early negative results, and results from pre-release or restricted models, may not hold for the models you use.
+  - Old system as oracle: no. Strength: medium. Era: Claude 2.1 (2024) to pre-release models (2026).
+  - Cases: [Slack: who did what][slk-who], [Bun: who did what][bun-who], [Intel: who did what][int-who], [Google: what went wrong][goo-wrong].
+  - Against: 1Password's 2026 agents still broke ordering rules ([1Password][opw-wrong]), so some failures persist across eras.
+- **MSR-8** [ours] Do not credit the model with work the deterministic tools did: finding sites, building manifests and codemods were often the hard part.
+  - Old system as oracle: no. Strength: strong. Era: all.
+  - Cases: [Google: who did what][goo-who], [Slack: who did what][slk-who], [1Password: who did what][opw-who], [Spotify: who did what][spo-who].
+  - Against: In Bun almost all the work ran through agent workflows ([Bun][bun-who]).
+- **MSR-9** [stated] If you will claim savings, measure people's share from file snapshots or logs from day one; estimates from the tool's own builders are biased.
+  - Old system as oracle: no. Strength: medium. Era: internal Gemini.
+  - Cases: [Google: how it was checked][goo-checked], [Google: practices to copy][goo-practices].
+  - Against: None found.
+
+[air-numbers]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#numbers
+[air-wrong]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-went-wrong
+[bun-numbers]: ../cases/2026-07-08-bun-zig-to-rust.md#numbers
+[bun-who]: ../cases/2026-07-08-bun-zig-to-rust.md#who-did-what
+[bun-wrong]: ../cases/2026-07-08-bun-zig-to-rust.md#what-went-wrong
+[gh-context]: ../cases/2026-09-16-github-copilot-runtime-rust.md#context
+[gh-wrong]: ../cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong
+[goo-checked]: ../cases/2025-04-13-google-int64-ids.md#how-it-was-checked
+[goo-numbers]: ../cases/2025-04-13-google-int64-ids.md#numbers
+[goo-practices]: ../cases/2025-04-13-google-int64-ids.md#practices-to-copy
+[goo-who]: ../cases/2025-04-13-google-int64-ids.md#who-did-what
+[goo-wrong]: ../cases/2025-04-13-google-int64-ids.md#what-went-wrong
+[int-who]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#who-did-what
+[opw-context]: ../cases/2026-04-20-1password-monolith-refactor.md#context
+[opw-who]: ../cases/2026-04-20-1password-monolith-refactor.md#who-did-what
+[opw-wrong]: ../cases/2026-04-20-1password-monolith-refactor.md#what-went-wrong
+[slk-checked]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#how-it-was-checked
+[slk-numbers]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#numbers
+[slk-who]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#who-did-what
+[spo-context]: ../cases/2025-11-06-spotify-honk.md#context
+[spo-numbers]: ../cases/2025-11-06-spotify-honk.md#numbers
+[spo-who]: ../cases/2025-11-06-spotify-honk.md#who-did-what
+[spo-wrong]: ../cases/2025-11-06-spotify-honk.md#what-went-wrong
