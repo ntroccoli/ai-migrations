@@ -1,0 +1,12 @@
+{
+  "name": "ai-migrations",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Case studies of software migrations done with AI, and a before-you-migrate checklist.",
+  "license": "MIT",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "validate": "node scripts/validate.mjs"
+  }
+}
