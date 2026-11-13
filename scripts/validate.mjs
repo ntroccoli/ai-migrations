@@ -1,13 +1,15 @@
-// Validate case files and the checklist. Rules: AGENTS.md "Case files".
-// Usage: node scripts/validate.mjs            (all of cases/ plus checklist.md and pitfalls.md)
+// Validate case files, lesson pages and the checklist. Rules: AGENTS.md "Case files", "Lessons"
+// and "Checklist".
+// Usage: node scripts/validate.mjs            (all of cases/, lessons/, checklist.md and pitfalls.md)
 //        node scripts/validate.mjs <file|dir>  (only those cases; no checklist check)
 //        node scripts/validate.mjs --cases-dir cases <staged case>  (its links resolve in cases/)
-import { existsSync, readFileSync, statSync } from 'node:fs';
-import { join, dirname, resolve } from 'node:path';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { join, dirname, resolve, basename } from 'node:path';
 import {
   CASES_DIR, CHECKLIST, NOTICE, SOURCE_TYPES, KINDS, AI_SHARES, RELATIONS, EVIDENCE, OUTCOMES,
   STATUSES, BASES, REQUIRED, SECTIONS, NUMBERS_HEADER, UNITS, SCALES, PITFALLS, CHECKLIST_MAX_BYTES,
-  parseCase, listCases, sections,
+  parseCase, listCases, sections, refDefs, linksIn, anchor,
+  LESSONS_DIR, LESSON_PAGES, LESSON_MAX_BYTES, LESSON_NOTE, KARPATHY_IDEAS, ORACLES, STRENGTHS, parseLessonPage,
 } from './lib.mjs';
 
 const errors = [];
@@ -80,8 +82,9 @@ function checkUnits(text) {
     if (/^(st|nd|rd|th)$/i.test(m[3])) return; // an ordinal: 4th
     if (/^[A-Z][a-z]{2,}$/.test(m[3])) return; // a digit-led name: 1Password
     const hasUnit = look(i);
-    if (!m[1] && !m[3] && /^(19|20)\d\d$/.test(core) && !hasUnit) return; // a year (1999 files is a quantity)
-    const prev = toks[i - 1] || '';
+    // A year or a range of years (1999 files is a quantity).
+    if (!m[1] && !m[3] && /^(19|20)\d\d([–-](19|20)\d\d)?$/.test(core) && !hasUnit) return;
+    const prev = (toks[i - 1] || '').replace(/^[([]+/, ''); // (Claude 2.1): the name is inside the bracket
     if (LABELS.has(bare(prev).toLowerCase())) return; // part 4
     // A name before a small number (Opus 4.8), but not a word that starts a sentence.
     const sentenceStart = i < 2 || /[.!?:]$/.test(toks[i - 2]);
@@ -263,9 +266,6 @@ function caseLinks(text, refs) {
   const byRef = [...text.matchAll(/\[([^\]]+)\]\[([^\]]*)\]/g)].map(m => caseTarget(refs.get((m[2] || m[1]).toLowerCase()) ?? ''));
   return [...inline, ...byRef].filter(Boolean);
 }
-// Reference definitions: label (lower case) -> target.
-const refDefs = lines => new Map(lines.map(l => l.match(/^\[([^\]]+)\]:\s*(\S+)/)).filter(Boolean)
-  .map(m => [m[1].toLowerCase(), m[2]]));
 // Relative link targets (inline and definitions) that do not resolve from `dir`.
 function brokenLinks(text, dir) {
   const t = text.replace(/```[\s\S]*?```/g, '').replace(/`[^`]*`/g, '');
@@ -274,7 +274,110 @@ function brokenLinks(text, dir) {
   return targets.filter(x => !/^[a-z][a-z0-9+.-]*:/i.test(x) && x.split('#')[0] && !existsSync(resolve(dir, x.split('#')[0])));
 }
 
-function validateChecklist(caseFiles) {
+// ---- Lessons --------------------------------------------------------------------------------
+// One page per aspect (LESSON_PAGES). Returns the lesson IDs (ID -> page file) and the case files
+// the lessons cite, in "Cases" or "Against".
+const ID = /^([A-Z]{3})-[1-9]\d*$/;
+const SUBS = /^Old system as oracle\|Cases\|Against(\|Related view)?(\|Sceptic)*$/;
+const caseSections = new Map(); // case file -> Set of section anchors
+function sectionsOf(file) {
+  if (!caseSections.has(file)) {
+    const p = join(CASES_DIR, file);
+    caseSections.set(file, existsSync(p) ? new Set(sections(parseCase(p).body).map(s => anchor(s.name))) : null);
+  }
+  return caseSections.get(file);
+}
+
+function validateLessons() {
+  const ids = new Map();
+  const cited = new Set();
+  const prefixes = new Map();
+  if (!existsSync(LESSONS_DIR)) { err('lessons/', 'missing'); return { ids, cited }; }
+  const present = readdirSync(LESSONS_DIR).filter(f => f.endsWith('.md') && f !== 'index.md').map(f => basename(f, '.md'));
+  for (const s of present) if (!LESSON_PAGES.includes(s)) err(`lessons/${s}.md`, 'not listed in LESSON_PAGES (scripts/lib.mjs)');
+  for (const s of LESSON_PAGES) if (!present.includes(s)) err(`lessons/${s}.md`, 'listed in LESSON_PAGES but missing');
+
+  for (const slug of LESSON_PAGES.filter(s => present.includes(s))) {
+    const page = parseLessonPage(join(LESSONS_DIR, `${slug}.md`));
+    const f = page.file;
+    const e = (line, msg) => err(f, line ? `line ${line}: ${msg}` : msg);
+    const size = Buffer.byteLength(page.text, 'utf8');
+    if (size > LESSON_MAX_BYTES) e(0, `${size} bytes (at most ${LESSON_MAX_BYTES}); split the page or trim lessons`);
+    if (!page.title) e(0, 'needs a "# Title" heading');
+    if (!page.intro || page.intro === LESSON_NOTE || /^[-*] /.test(page.intro)) e(0, 'needs a one-paragraph intro under the title');
+    if (!page.lines.includes(LESSON_NOTE)) e(0, `needs the evidence note as its own paragraph: "${LESSON_NOTE.slice(0, 60)}..."`);
+    if (!page.lessons.length) e(0, 'has no lessons ("- **ID** [stated] text")');
+    for (const s of page.stray) e(s.line, `not a lesson, a sub-item or a reference definition: "${s.text.slice(0, 50)}"`);
+
+    // A link in "Cases" or "Against": to a case file and one of its ## sections.
+    const caseLink = (l, x, where) => {
+      if (!x.target) return e(l.line, `${l.id} ${where}: link "${x.text}" has no reference definition`);
+      const m = x.target.match(/^\.\.\/cases\/([^#/\s]+\.md)#(.+)$/);
+      if (!m) return e(l.line, `${l.id} ${where}: link must go to a case section, ../cases/<file>.md#<section>: ${x.target}`);
+      const secs = sectionsOf(m[1]);
+      if (!secs) return e(l.line, `${l.id} ${where}: case not found: ${m[1]}`);
+      if (!secs.has(m[2])) return e(l.line, `${l.id} ${where}: no section #${m[2]} in ${m[1]}`);
+      cited.add(m[1]);
+    };
+
+    for (const l of page.lessons) {
+      const id = l.id.match(ID);
+      if (!id) e(l.line, `lesson ID "${l.id}" must be three capital letters, a hyphen and a number (TST-1)`);
+      else {
+        const first = prefixes.get(id[1]);
+        if (first && first !== f) e(l.line, `${l.id}: prefix ${id[1]} already belongs to ${first}`);
+        else prefixes.set(id[1], f);
+        const pagePrefix = page.lessons.map(x => x.id.match(ID)?.[1]).find(Boolean); // first well-formed ID
+        if (id[1] !== pagePrefix) e(l.line, `${l.id}: every lesson on a page shares one prefix (${pagePrefix})`);
+      }
+      if (ids.has(l.id)) e(l.line, `${l.id} is used twice (also in ${ids.get(l.id)}); IDs are never reused`);
+      ids.set(l.id, f);
+      if (!['stated', 'ours'].includes(l.tag)) e(l.line, `${l.id}: tag must be [stated] or [ours]`);
+      if (!l.text || l.text.length > 200) e(l.line, `${l.id}: lesson text must be one line of 1 to 200 characters (${l.text.length})`);
+      if (checkUnits(l.text).need) e(l.line, `${l.id}: lesson text holds a number; put numbers in the cases`);
+
+      const labels = l.subs.map(s => s.label).join('|');
+      if (!SUBS.test(labels)) e(l.line, `${l.id}: sub-items must be, in order: Old system as oracle, Cases, Against, optional Related view, optional Sceptic (found: ${labels || 'none'})`);
+      for (const s of l.subs) {
+        if (!s.text) e(s.line, `${l.id}: "${s.label}" is empty`);
+        if (s.label === 'Old system as oracle') {
+          const m = s.text.match(/^(\w+)\. Strength: (\w+)\. Era: (.+)\.$/);
+          if (!m) e(s.line, `${l.id}: write "Old system as oracle: ${ORACLES.join('|')}. Strength: ${STRENGTHS.join('|')}. Era: ...."`);
+          else {
+            if (!ORACLES.includes(m[1])) e(s.line, `${l.id}: oracle must be one of ${ORACLES.join(', ')}`);
+            if (!STRENGTHS.includes(m[2])) e(s.line, `${l.id}: strength must be one of ${STRENGTHS.join(', ')}`);
+          }
+        } else if (s.label === 'Cases' || s.label === 'Against') {
+          const links = linksIn(s.text, page.refs);
+          if (s.label === 'Cases' && !links.length) e(s.line, `${l.id}: "Cases" needs at least one link to a case section`);
+          // Exactly "Disagree:" puts the lesson in the index's list of splits; a near miss would drop it silently.
+          if (s.label === 'Against' && /^disagree/i.test(s.text) && !/^Disagree: \S/.test(s.text)) e(s.line, `${l.id}: start a split with "Against: Disagree: ..."`);
+          for (const x of links) caseLink(l, x, s.label);
+        } else if (s.label === 'Related view') {
+          const links = linksIn(s.text, page.refs);
+          if (!/^ {2}- Related view \(karpathy-ideas\): /.test(s.raw)) e(s.line, `${l.id}: write "Related view (karpathy-ideas): [idea][ref], agrees." or "..., contradicts: why."`);
+          if (links.length !== 1 || !links[0].target?.startsWith(KARPATHY_IDEAS) || !links[0].target.endsWith('.md')) {
+            e(s.line, `${l.id}: "Related view" links one idea file under ${KARPATHY_IDEAS}`);
+          }
+          if (!/, (agrees|contradicts: \S.*)\.$/.test(s.text)) e(s.line, `${l.id}: "Related view" ends with ", agrees." or ", contradicts: why."`);
+        }
+      }
+    }
+
+    // Numbers carry units (the Era names models and years, like a case's models and period);
+    // lessons are our own words (no quoted span over four words).
+    for (const b of blocks(page.text)) {
+      for (const n of checkUnits(b.text.replace(/Era: .*$/gm, '')).missing) e(b.line, `number "${n}" has no unit`);
+    }
+    const prose = page.text.replace(/```[\s\S]*?```/g, '').replace(/`[^`]*`/g, '');
+    const spans = [/"([^"\n]+)"/g, /“([^”\n]+)”/g].flatMap(re => [...prose.matchAll(re)].map(m => m[1]));
+    for (const q of spans.filter(q => words(q) > 4)) e(0, `quoted span over four words (lessons are in our own words): "${q.slice(0, 50)}"`);
+    for (const t of brokenLinks(page.text, LESSONS_DIR)) e(0, `broken link ${t}`);
+  }
+  return { ids, cited };
+}
+
+function validateChecklist(caseFiles, lessonIds) {
   const f = 'checklist.md';
   if (!existsSync(CHECKLIST)) return err(f, 'missing');
   const text = readFileSync(CHECKLIST, 'utf8').replace(/\r\n/g, '\n');
@@ -294,15 +397,16 @@ function validateChecklist(caseFiles) {
   for (const q of qs) {
     if (!/\bCheck:/.test(q.text)) err(f, `"${q.title}" has no "Check:" step`);
     if (!/\bEvidence:\s+\S/.test(q.text)) err(f, `"${q.title}" has no "Evidence:" line (what the cases show, in our words)`);
-    const links = caseLinks(q.text, refs);
-    if (!links.length) err(f, `"${q.title}" links to no case`);
-    for (const l of links) { if (!caseFiles.has(l)) err(f, `"${q.title}" links to missing case ${l}`); cited.add(l); }
+    // "Lessons: TST-1, REV-3." on a line of its own; only IDs on that line count (GPT-5 elsewhere is a model).
+    const ids = [...q.text.matchAll(/^\s*Lessons:([^\n]*)$/gm)]
+      .flatMap(m => m[1].match(/\b[A-Z]{3}-\d+\b/g) || []);
+    if (!ids.length) err(f, `"${q.title}" cites no lesson ("Lessons: TST-1, REV-3")`);
+    for (const id of ids) if (!lessonIds.has(id)) err(f, `"${q.title}" cites lesson ${id}, which no lesson page holds`);
+    for (const l of caseLinks(q.text, refs)) { if (!caseFiles.has(l)) err(f, `"${q.title}" links to missing case ${l}`); cited.add(l); }
   }
   for (const t of brokenLinks(lines.join('\n'), dirname(CHECKLIST))) err(f, `broken link ${t}`);
   if (!lines.some(l => /^## Report format/.test(l))) err(f, 'needs a "## Report format" section');
-  const uncited = [...caseFiles].filter(c => !cited.has(c));
-  if (uncited.length) warnings.push(`checklist.md cites no question for: ${uncited.join(', ')}`);
-  return qs.length;
+  return { n: qs.length, cited };
 }
 
 // pitfalls.md (optional): every relative link resolves.
@@ -334,12 +438,20 @@ const cases = paths.map(parseCase);
 const statusOf = new Map(cases.map(c => [c.file, c.meta.status]));
 const companyOf = new Map(cases.map(c => [c.file, c.meta.company]));
 cases.forEach(validateCase);
-const nq = args.length ? null : validateChecklist(new Set(cases.map(c => c.file)));
-if (nq !== null) validatePitfalls();
+let summary = '';
+if (!args.length) {
+  // The whole repository: lessons, checklist, pitfalls, and every case cited somewhere.
+  const files = new Set(cases.map(c => c.file));
+  const lessons = validateLessons();
+  const list = validateChecklist(files, lessons.ids);
+  validatePitfalls();
+  for (const c of files) if (!lessons.cited.has(c) && !list?.cited.has(c)) err(c, 'no lesson and no checklist question cites this case');
+  summary = ` ${lessons.ids.size} lessons valid. checklist.md valid: ${list?.n ?? 0} questions, each citing lessons.`;
+}
 
 for (const w of warnings) console.warn(`note: ${w}`);
 if (errors.length) {
   console.error(`${errors.length} problem(s):\n` + errors.map(e => '  ' + e).join('\n'));
   process.exit(1);
 }
-console.log(`${cases.length} case file(s) valid.` + (nq === null ? '' : ` checklist.md valid: ${nq} questions, each linked to a case.`));
+console.log(`${cases.length} case file(s) valid.${summary}`);

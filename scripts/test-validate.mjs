@@ -7,7 +7,7 @@ import { spawnSync } from 'node:child_process';
 import { ROOT } from './lib.mjs';
 
 const TMP = join(ROOT, '.test-tmp');
-const PARTS = ['scripts', 'cases', 'checklist.md', 'pitfalls.md', 'NOTICE.md'];
+const PARTS = ['scripts', 'cases', 'lessons', 'checklist.md', 'pitfalls.md', 'NOTICE.md', 'index.md', 'llms.txt', 'llms-full.txt'];
 const ONEPW = '2026-04-20-1password-monolith-refactor.md';
 const INTEL = '2026-08-24-intel-ideas-c-to-rust.md';
 const BUN = '2026-07-08-bun-zig-to-rust.md';
@@ -25,12 +25,14 @@ const edit = (file, from, to) => {
   if (!t.includes(from)) throw new Error(`test setup: "${from}" not in ${file}`);
   writeFileSync(file, t.replace(from, to));
 };
-const run = (dir, args = []) => spawnSync(process.execPath, [join(dir, 'scripts', 'validate.mjs'), ...args], { cwd: dir, encoding: 'utf8' });
+const node = (dir, script, args) => spawnSync(process.execPath, [join(dir, 'scripts', script), ...args], { cwd: dir, encoding: 'utf8' });
+const run = (dir, args = []) => node(dir, 'validate.mjs', args);
 // expect: 0 (valid), 1 (problems), 2 (usage); `want` must appear in the output when given.
-function test(name, expect, setup, args, want) {
+// `script` runs another script than validate.mjs (build.mjs for the --check tests).
+function test(name, expect, setup, args, want, script = 'validate.mjs') {
   const dir = copy();
   let r;
-  try { r = run(dir, setup(dir) || args || []); } catch (e) { failed.push(`${name}: ${e.message}`); return; }
+  try { r = node(dir, script, setup(dir) || args || []); } catch (e) { failed.push(`${name}: ${e.message}`); return; }
   const out = r.stdout + r.stderr;
   const ok = r.status === expect && (!want || out.includes(want));
   console.log(`${ok ? 'ok  ' : 'FAIL'} ${name} (exit ${r.status})`);
@@ -81,9 +83,99 @@ test('checklist with CRLF line ends measures as LF', 0, d => {
   writeFileSync(p, readFileSync(p, 'utf8').replace(/\r?\n/g, '\r\n'));
 });
 test('checklist reference to a missing case fails', 1,
-  d => edit(join(d, 'checklist.md'), '[Bun]: cases/2026-07-08-bun-zig-to-rust.md', '[Bun]: cases/2026-07-08-bun-missing.md'), null, 'missing case 2026-07-08-bun-missing.md');
-test('checklist question with no case fails', 1,
-  d => edit(join(d, 'checklist.md'), '   Cases: [GitHub][], [Bun][], [Slack][], [Google][].\n', ''), null, 'links to no case');
+  d => edit(join(d, 'checklist.md'), '[Bun]: cases/2026-07-08-bun-zig-to-rust.md', '[Bun]: cases/2026-07-08-bun-missing.md'), null, 'broken link cases/2026-07-08-bun-missing.md');
+test('checklist question with no lesson fails', 1,
+  d => edit(join(d, 'checklist.md'), '   Lessons: PLN-7, PLN-8, PLN-9, SEC-7.\n', ''), null, 'cites no lesson');
+test('checklist citing an unknown lesson fails', 1,
+  d => edit(join(d, 'checklist.md'), 'Lessons: PLN-7, PLN-8,', 'Lessons: PLN-7, PLN-99,'), null, 'cites lesson PLN-99, which no lesson page holds');
+test('a model name outside "Lessons:" is not a lesson ID', 0,
+  d => edit(join(d, 'checklist.md'), 'The rest is ours.\n', 'The rest is ours; GPT-5 is a model name.\n'));
+test('a model name on a line after "Lessons:" is not a lesson ID', 0,
+  d => edit(join(d, 'checklist.md'), '   Lessons: PLN-7, PLN-8, PLN-9, SEC-7.\n', '   Lessons: PLN-7, PLN-8, PLN-9, SEC-7.\n   Note: GPT-5 and SHA-256 are not lessons.\n'));
+
+// Lessons (AGENTS.md "Lessons"): one broken copy per rule.
+const L = (d, page) => join(d, 'lessons', `${page}.md`);
+const REV1 = '- **REV-1** [stated] Never let the writing agent review its own change;';
+test('lesson with an unknown tag fails', 1,
+  d => edit(L(d, 'review'), '- **REV-1** [stated]', '- **REV-1** [maybe]'), null, 'REV-1: tag must be [stated] or [ours]');
+test('lesson text over 200 characters fails', 1,
+  d => edit(L(d, 'review'), REV1, `${REV1} ${'and then some more words '.repeat(6)}`), null, 'REV-1: lesson text must be one line of 1 to 200 characters');
+test('lesson text with a number fails', 1,
+  d => edit(L(d, 'review'), REV1, '- **REV-1** [stated] Never let the writing agent review its own 3 changes;'), null, 'REV-1: lesson text holds a number');
+test('duplicate lesson ID fails', 1,
+  d => edit(L(d, 'review'), '- **REV-2** [stated]', '- **REV-1** [stated]'), null, 'REV-1 is used twice');
+test('lesson ID with the wrong prefix for its page fails', 1,
+  d => edit(L(d, 'review'), '- **REV-2** [stated]', '- **TST-99** [stated]'), null, 'prefix TST already belongs to lessons/testing.md');
+test('malformed lesson ID fails', 1,
+  d => edit(L(d, 'review'), '- **REV-2** [stated]', '- **REV-02** [stated]'), null, 'must be three capital letters');
+test('lesson without "Against" fails', 1, d => {
+  const p = L(d, 'review');
+  writeFileSync(p, readFileSync(p, 'utf8').replace(/\n {2}- Against: [^\n]*/, ''));
+}, null, 'REV-1: sub-items must be, in order');
+test('lesson sub-items out of order fails', 1, d => {
+  const p = L(d, 'review');
+  writeFileSync(p, readFileSync(p, 'utf8').replace(/(\n {2}- Cases: [^\n]*)(\n {2}- Against: [^\n]*)/, '$2$1'));
+}, null, 'REV-1: sub-items must be, in order');
+test('unknown sub-item fails', 1,
+  d => edit(L(d, 'review'), '  - Against: None found.\n', '  - Against: None found.\n  - Note: an extra line.\n'), null, 'sub-items must be, in order');
+test('bad oracle value fails', 1,
+  d => edit(L(d, 'review'), 'Old system as oracle: partly. Strength: medium.', 'Old system as oracle: maybe. Strength: medium.'), null, 'REV-1: oracle must be one of');
+test('bad strength value fails', 1,
+  d => edit(L(d, 'review'), 'Old system as oracle: partly. Strength: medium.', 'Old system as oracle: partly. Strength: huge.'), null, 'REV-1: strength must be one of');
+test('"Cases" with no link fails', 1, d => {
+  const p = L(d, 'review');
+  writeFileSync(p, readFileSync(p, 'utf8').replace(/\n {2}- Cases: [^\n]*/, '\n  - Cases: Bun, GitHub.'));
+}, null, 'REV-1: "Cases" needs at least one link');
+test('lesson link to a missing case fails', 1,
+  d => edit(L(d, 'review'), '[bun-checked]: ../cases/2026-07-08-bun-zig-to-rust.md#how-it-was-checked', '[bun-checked]: ../cases/2026-07-08-bun-gone.md#how-it-was-checked'), null, 'case not found: 2026-07-08-bun-gone.md');
+test('lesson link to a missing case section fails', 1,
+  d => edit(L(d, 'review'), '[bun-checked]: ../cases/2026-07-08-bun-zig-to-rust.md#how-it-was-checked', '[bun-checked]: ../cases/2026-07-08-bun-zig-to-rust.md#how-it-was-tested'), null, 'no section #how-it-was-tested');
+test('lesson link to a case with no section fails', 1,
+  d => edit(L(d, 'review'), '[bun-checked]: ../cases/2026-07-08-bun-zig-to-rust.md#how-it-was-checked', '[bun-checked]: ../cases/2026-07-08-bun-zig-to-rust.md'), null, 'link must go to a case section');
+test('"Against" link to a missing section fails', 1,
+  d => edit(L(d, 'review'), '[bun-wrong]: ../cases/2026-07-08-bun-zig-to-rust.md#what-went-wrong', '[bun-wrong]: ../cases/2026-07-08-bun-zig-to-rust.md#what-failed'), null, 'Against: no section #what-failed');
+test('undefined reference label fails', 1,
+  d => edit(L(d, 'review'), '[Bun: how it was checked][bun-checked], [Bun: what worked]', '[Bun: how it was checked][bun-nowhere], [Bun: what worked]'), null, 'has no reference definition');
+test('"Related view" to another site fails', 1,
+  d => edit(L(d, 'review'), '[k-llm-council-anonymous-peer-review]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/', '[k-llm-council-anonymous-peer-review]: https://example.com/ideas/'), null, '"Related view" links one idea file');
+test('"Related view" without agrees or contradicts fails', 1,
+  d => edit(L(d, 'review'), '[k-llm-council-anonymous-peer-review], agrees.', '[k-llm-council-anonymous-peer-review], related.'), null, 'ends with ", agrees." or ", contradicts: why."');
+test('"Against" with a near-miss "Disagree" fails', 1,
+  d => edit(L(d, 'review'), '  - Against: Disagree: at Slack', '  - Against: Disagrees: at Slack'), null, 'start a split with "Against: Disagree: ..."');
+test('lesson page without an intro fails', 1,
+  d => edit(L(d, 'review'), 'How agent-written changes were reviewed, by agents and by people.\n\n', ''), null, 'needs a one-paragraph intro');
+test('lesson page without the evidence note fails', 1,
+  d => edit(L(d, 'review'), 'Evidence base: every lesson here comes from', 'Evidence: every lesson here comes from'), null, 'needs the evidence note');
+test('lesson page over the size cap fails', 1,
+  d => appendFileSync(L(d, 'review'), `\n[pad]: ../index.md${' '.repeat(21000)}\n`), null, 'bytes (at most 20480)');
+test('bare number in a lesson sub-item fails', 1,
+  d => edit(L(d, 'review'), '  - Against: None found.\n', '  - Against: None found in 7 gizmos.\n'), null, 'number "7" has no unit');
+test('long quote in a lesson page fails', 1,
+  d => edit(L(d, 'review'), '  - Against: None found.\n', '  - Against: None found; "these words are copied from the source".\n'), null, 'quoted span over four words');
+test('stray line in a lesson list fails', 1,
+  d => edit(L(d, 'review'), '  - Against: None found.\n', '  - Against: None found.\nA loose paragraph.\n'), null, 'not a lesson, a sub-item or a reference definition');
+test('lesson page not in LESSON_PAGES fails', 1,
+  d => cpSync(L(d, 'team'), L(d, 'extra')), null, 'lessons/extra.md: not listed in LESSON_PAGES');
+test('lesson page in LESSON_PAGES but missing fails', 1,
+  d => rmSync(L(d, 'team')), null, 'lessons/team.md: listed in LESSON_PAGES but missing');
+test('a case that no lesson and no question cites fails', 1, d => {
+  const c = caseFile(d, BUN);
+  cpSync(c, caseFile(d, '2026-07-09-bun-copy.md'));
+  edit(caseFile(d, '2026-07-09-bun-copy.md'), 'date: 2026-07-08', 'date: 2026-07-09');
+}, null, '2026-07-09-bun-copy.md: no lesson and no checklist question cites this case');
+
+// build.mjs --check: generated files must match the sources.
+test('build --check passes on the repository', 0, () => ['--check'], null, null, 'build.mjs');
+test('build --check fails after hand-editing llms.txt', 1,
+  d => { appendFileSync(join(d, 'llms.txt'), '\nA hand edit.\n'); return ['--check']; }, null, 'out of date: llms.txt', 'build.mjs');
+test('build --check fails after a lesson change without a rebuild', 1,
+  d => { edit(L(d, 'review'), '- **REV-2** [stated]', '- **REV-2** [ours]'); return ['--check']; }, null, 'lessons/index.md', 'build.mjs');
+test('build refuses a case that does not parse', 1,
+  d => { edit(caseFile(d, BUN), 'kind: language\n', 'kind language\n'); return []; }, null, 'cannot build', 'build.mjs');
+test('build refuses a lesson without its oracle line', 1,
+  d => { edit(L(d, 'review'), '  - Old system as oracle: partly. Strength: medium. Era: 2026.\n  - Cases: [GitHub: who did what]', '  - Cases: [GitHub: who did what]'); return []; }, null, 'REV-2: no "Old system as oracle" line', 'build.mjs');
+test('build --check fails after hand-editing lessons/index.md', 1,
+  d => { appendFileSync(join(d, 'lessons', 'index.md'), '\nA hand edit.\n'); return ['--check']; }, null, 'out of date: lessons/index.md', 'build.mjs');
 
 // pitfalls.md: relative links resolve.
 test('pitfalls broken link fails', 1,
