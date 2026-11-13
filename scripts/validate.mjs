@@ -9,7 +9,7 @@ import {
   CASES_DIR, CHECKLIST, NOTICE, SOURCE_TYPES, KINDS, AI_SHARES, RELATIONS, EVIDENCE, OUTCOMES,
   STATUSES, BASES, REQUIRED, SECTIONS, NUMBERS_HEADER, UNITS, SCALES, PITFALLS, CHECKLIST_MAX_BYTES,
   parseCase, listCases, sections, refDefs, linksIn, anchor,
-  LESSONS_DIR, LESSON_PAGES, LESSON_MAX_BYTES, LESSON_NOTE, KARPATHY_IDEAS, ORACLES, STRENGTHS, parseLessonPage,
+  LESSONS_DIR, LESSON_PAGES, LESSON_MAX_BYTES, LESSON_NOTE, LESSON_LEGEND, KARPATHY_IDEAS, ORACLES, STRENGTHS, parseLessonPage, strengthCeiling, lessonMeta,
 } from './lib.mjs';
 
 const errors = [];
@@ -284,13 +284,17 @@ function brokenLinks(text, dir) {
 const ID = /^([A-Z]{3})-[1-9]\d*$/;
 const SUBS = /^Old system as oracle\|Cases\|Against(\|Related view)?(\|Sceptic)*$/;
 const caseSections = new Map(); // case file -> Set of section anchors
+const caseMetas = new Map(); // case file -> front matter
 function sectionsOf(file) {
   if (!caseSections.has(file)) {
     const p = join(CASES_DIR, file);
-    caseSections.set(file, existsSync(p) ? new Set(sections(parseCase(p).body).map(s => anchor(s.name))) : null);
+    const c = existsSync(p) ? parseCase(p) : null;
+    caseSections.set(file, c ? new Set(sections(c.body).map(s => anchor(s.name))) : null);
+    if (c) caseMetas.set(file, c.meta);
   }
   return caseSections.get(file);
 }
+const RANK = { weak: 0, medium: 1, strong: 2 };
 
 function validateLessons() {
   const ids = new Map();
@@ -310,6 +314,7 @@ function validateLessons() {
     if (!page.title) e(0, 'needs a "# Title" heading');
     if (!page.intro || page.intro === LESSON_NOTE || /^[-*] /.test(page.intro)) e(0, 'needs a one-paragraph intro under the title');
     if (!page.lines.includes(LESSON_NOTE)) e(0, `needs the evidence note as its own paragraph: "${LESSON_NOTE.slice(0, 60)}..."`);
+    if (!page.lines.includes(LESSON_LEGEND)) e(0, `needs the legend as its own paragraph (LESSON_LEGEND in scripts/lib.mjs): "${LESSON_LEGEND.slice(0, 40)}..."`);
     if (!page.lessons.length) e(0, 'has no lessons ("- **ID** [stated] text")');
     for (const s of page.stray) e(s.line, `not a lesson, a sub-item or a reference definition: "${s.text.slice(0, 50)}"`);
 
@@ -322,6 +327,7 @@ function validateLessons() {
       if (!secs) return e(l.line, `${l.id} ${where}: case not found: ${m[1]}`);
       if (!secs.has(m[2])) return e(l.line, `${l.id} ${where}: no section #${m[2]} in ${m[1]}`);
       cited.add(m[1]);
+      return m[1];
     };
 
     for (const l of page.lessons) {
@@ -356,7 +362,15 @@ function validateLessons() {
           if (s.label === 'Cases' && !links.length) e(s.line, `${l.id}: "Cases" needs at least one link to a case section`);
           // Exactly "Disagree:" puts the lesson in the index's list of splits; a near miss would drop it silently.
           if (s.label === 'Against' && /^disagree/i.test(s.text) && !/^Disagree: \S/.test(s.text)) e(s.line, `${l.id}: start a split with "Against: Disagree: ..."`);
-          for (const x of links) caseLink(l, x, s.label);
+          const files = new Set(links.map(x => caseLink(l, x, s.label)).filter(Boolean));
+          // Strength follows the evidence: the cases behind the lesson set its ceiling.
+          const strength = lessonMeta(l).strength;
+          if (s.label === 'Cases' && STRENGTHS.includes(strength)) {
+            const ceiling = strengthCeiling([...files].map(f => caseMetas.get(f)).filter(Boolean));
+            if (RANK[strength] > RANK[ceiling]) {
+              e(s.line, `${l.id}: strength ${strength} needs more evidence; its cases allow at most ${ceiling} (strong: two or more cases, or one that shows its data, not all from sellers of the tool; medium: two or more cases, or one that shows its data)`);
+            }
+          }
         } else if (s.label === 'Related view') {
           const links = linksIn(s.text, page.refs);
           if (!/^ {2}- Related view \(karpathy-ideas\): /.test(s.raw)) e(s.line, `${l.id}: write "Related view (karpathy-ideas): [idea][ref], agrees." or "..., contradicts: why."`);

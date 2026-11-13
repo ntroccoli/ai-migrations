@@ -2,22 +2,26 @@
 
 > Case studies of software migrations done with AI: what worked, what failed, and which part AI did versus rule-based tools and people. Lessons drawn from them by aspect (planning, testing, review, rollout, cost and more), and a before-you-migrate checklist an agent runs on a repository.
 
-Unofficial; company names describe the subject only. Every lesson comes from migrations; many apply to large engineering work done with AI agents generally, and those marked "Old system as oracle: no" carry over as they are. Each case says how far its claims can be checked and what stake its author has in the tools: weigh it accordingly.
+Unofficial; company names describe the subject only. Every lesson comes from migrations; many apply to large engineering work done with AI agents generally. A lesson's "Old system as oracle" tag says whether its evidence leaned on the old system; it hints at how far the lesson travels but is not a filter, so judge each lesson by its own words. Each case says how far its claims can be checked and what stake its author has in the tools: weigh it accordingly; a lesson that rests only on cases whose authors sell the tool is never rated strong.
+
+Disclosure: the cases and lessons are drafted by Claude, an Anthropic model, and reviewed by the maintainer. 5 of the 9 cases used Claude models (GitHub, Intel, Bun, Spotify, Slack), and Anthropic owns Bun, the subject of one case.
+
+Moves covered: Zig, C and TypeScript ported to Rust; React component tests in JavaScript and TypeScript; Java tests; a Go monolith; ID types in Java, C++, Dart and other languages; Java and Scala library moves. No case starts from Python, C#, Ruby or PHP: lessons applied there are extrapolation.
 
 ## How to use
 
 - Before a migration: run the [checklist](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/checklist.md) on the repository and change nothing. Each question has a Check to measure and cites lesson IDs; open only the lessons and cases behind a gap.
-- For any other large piece of AI-driven work: pick the 2-3 aspect pages below that match it and read only those (one line per lesson, then its cases, the evidence against it, and its oracle and strength).
+- For any other large piece of AI-driven work: scan the one-line list of every lesson at the end of [lessons/index.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/index.md) (about 31 KB), then open the aspect pages of the lessons that fit (each lesson there has its cases, the evidence against it, and its oracle and strength).
 - Open a case only when you need its detail. Each has "Who did what", "How it was checked", a Numbers table with the basis of each number, "What went wrong" and "Practices to copy". File format: [AGENTS.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/AGENTS.md).
 - Relative links inside these files resolve against https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/.
 
 ## Lessons
 
 - [Planning and scoping](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/planning.md): 10 lessons, PLN-n (8 stated, 2 ours; oracle: 1 yes, 1 partly, 8 no). How to size, slice, order and stage a large piece of AI-driven work before agents touch the code.
-- [Testing and oracles](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/testing.md): 10 lessons, TST-n (8 stated, 2 ours; oracle: 7 yes, 2 partly, 1 no). What tells you the new code is right, and where those oracles fail.
+- [Testing and oracles](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/testing.md): 10 lessons, TST-n (6 stated, 4 ours; oracle: 7 yes, 2 partly, 1 no). What tells you the new code is right, and where those oracles fail.
 - [Verification loops and gates](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/verification.md): 9 lessons, VER-n (9 stated, 0 ours; oracle: 1 yes, 6 partly, 2 no). The automated checks around each agent change, and what they can and cannot prove.
-- [Code review](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/review.md): 10 lessons, REV-n (8 stated, 2 ours; oracle: 2 yes, 4 partly, 4 no). How agent-written changes were reviewed, by agents and by people.
-- [Release and rollout](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/rollout.md): 8 lessons, ROL-n (7 stated, 1 ours; oracle: 3 yes, 2 partly, 3 no). How the new code reached users, and how risk was limited on the way.
+- [Code review](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/review.md): 10 lessons, REV-n (7 stated, 3 ours; oracle: 2 yes, 4 partly, 4 no). How agent-written changes were reviewed, by agents and by people.
+- [Release and rollout](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/rollout.md): 8 lessons, ROL-n (7 stated, 1 ours; oracle: 1 yes, 2 partly, 5 no). How the new code reached users, and how risk was limited on the way.
 - [Machines and operations](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/operations.md): 7 lessons, OPS-n (6 stated, 1 ours; oracle: 1 yes, 2 partly, 4 no). Running many agents on real machines, and keeping the result healthy after merge.
 - [Security](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/security.md): 10 lessons, SEC-n (7 stated, 3 ours; oracle: 0 yes, 3 partly, 7 no). Sandboxing agents, memory safety, dependencies and data integrity.
 - [Cost](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/cost.md): 9 lessons, CST-n (3 stated, 6 ours; oracle: 0 yes, 1 partly, 8 no). Tokens, money, people's time and the bill after merge.
@@ -44,6 +48,6 @@ Unofficial; company names describe the subject only. Every lesson comes from mig
 
 ## Optional
 
-- [Every lesson in one file](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms-full.txt): for tools that cannot follow links. About 99 KB (~25k tokens), so prefer the aspect pages when you can.
+- [Everything in one file](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms-full.txt): every lesson, every case line, the checklist and the pitfalls, for tools that cannot follow links. About 128 KB (~33k tokens), so prefer the aspect pages when you can.
 - [Pitfalls by kind of move](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/pitfalls.md): what the old stack did implicitly, and seams for moving in steps.
 - [Lessons index](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/index.md): counts, the cases behind each lesson, and where the cases disagree.

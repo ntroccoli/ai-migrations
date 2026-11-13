@@ -4,10 +4,10 @@ Tokens, money, people's time and the bill after merge.
 
 Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
-`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle": does the lesson rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong (`yes`, `no`, `partly`). "Strength": `strong` (several cases, or measured), `medium`, `weak` (one case or assertion only).
+`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
 
 - **CST-1** [stated] Long agent runs are affordable only with high prompt-cache reuse: keep a stable prompt prefix and track the hit rate and each kind of token.
-  - Old system as oracle: no. Strength: strong. Era: 2026.
+  - Old system as oracle: no. Strength: medium. Era: 2026.
   - Cases: [GitHub: numbers][gh-numbers], [GitHub: what worked][gh-worked], [Bun: numbers][bun-numbers].
   - Against: None found.
 - **CST-2** [ours] Ask for the full bill: tokens at the price paid, people's hours by role, compute and CI, review, and the work after merge; most sources give one piece.
@@ -27,7 +27,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Bun: numbers][bun-numbers], [GitHub: numbers][gh-numbers], [Intel: numbers][int-numbers].
   - Against: None found.
 - **CST-6** [ours] Count the work after merge (regression fixes, security rounds, fuzzing, clean-up and speed work) as part of the cost of the migration.
-  - Old system as oracle: no. Strength: strong. Era: 2026.
+  - Old system as oracle: no. Strength: medium. Era: 2026.
   - Cases: [Bun: what went wrong][bun-wrong], [GitHub: what went wrong][gh-wrong].
   - Against: None found.
 - **CST-7** [ours] Budget review agents as a multiple of generation (several reviewers and a fixer per writer), and ask for their share of tokens, which no case reports.
@@ -39,7 +39,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Spotify: how it was checked][spo-checked], [Google: what went wrong][goo-wrong].
   - Against: None found.
 - **CST-9** [stated] Pipeline and harness costs pay back over many repositories or migrations; a one-off project should reuse a general harness rather than build one.
-  - Old system as oracle: no. Strength: medium. Era: 2025–2026.
+  - Old system as oracle: no. Strength: weak. Era: 2025–2026.
   - Cases: [Spotify: numbers][spo-numbers], [Spotify: what worked][spo-worked].
   - Against: None found.
 

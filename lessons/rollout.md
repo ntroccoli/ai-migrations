@@ -4,14 +4,14 @@ How the new code reached users, and how risk was limited on the way.
 
 Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
-`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle": does the lesson rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong (`yes`, `no`, `partly`). "Strength": `strong` (several cases, or measured), `medium`, `weak` (one case or assertion only).
+`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
 
 - **ROL-1** [stated] Swap one component per change inside normal releases, old and new in one tree joined by a temporary bridge, so the main branch can always ship.
   - Old system as oracle: partly. Strength: medium. Era: 2026.
   - Cases: [GitHub: what worked][gh-worked], [GitHub: practices to copy][gh-practices], [Uber: what worked][ubr-worked].
   - Against: Disagree: Bun's author says doing everything at once beats an incremental move, and merged one branch after eleven days ([Bun][bun-worked]).
 - **ROL-2** [stated] Treat merged and released as separate gates: ship first to a canary or pre-release that few users take, and promote it only after real use.
-  - Old system as oracle: no. Strength: strong. Era: 2024–2026.
+  - Old system as oracle: no. Strength: medium. Era: 2024–2026.
   - Cases: [Bun: what went wrong][bun-wrong], [GitHub: how it was checked][gh-checked], [Google: what went wrong][goo-wrong].
   - Against: Some GitHub regressions still reached a stable release ([GitHub][gh-checked]).
 - **ROL-3** [stated] Changes that reach many teams' systems still need slow production rollouts watched by their owners; the AI pipeline speeds the code, not this step.
@@ -19,7 +19,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Google: what went wrong][goo-wrong].
   - Against: A downstream product took the whole Bun rewrite in one release and barely anyone noticed ([Bun][bun-wrong]).
 - **ROL-4** [stated] Delete the old code in the same change that adds the new; concurrent edits to ported code then surface as rebase conflicts instead of silent losses.
-  - Old system as oracle: yes. Strength: weak. Era: 2026.
+  - Old system as oracle: no. Strength: weak. Era: 2026.
   - Cases: [GitHub: how it was checked][gh-checked].
   - Against: Branch drift and rebases still caused a few regressions ([GitHub][gh-wrong]).
 - **ROL-5** [stated] Keep agent branches short-lived against a busy main branch; sessions left open for days pile up drift, and rebases lose changes.
@@ -27,7 +27,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [GitHub: what went wrong][gh-wrong].
   - Against: None found.
 - **ROL-6** [ours] Track the size of the temporary bridge between old and new as the progress signal and drive it to zero; line counts on a busy code base mislead.
-  - Old system as oracle: yes. Strength: weak. Era: 2026.
+  - Old system as oracle: no. Strength: weak. Era: 2026.
   - Cases: [GitHub: numbers][gh-numbers].
   - Against: None found.
 - **ROL-7** [stated] Ship a new failure boundary (such as hosting in-process) as an opt-in mode beside the old default, separate from the code port itself.

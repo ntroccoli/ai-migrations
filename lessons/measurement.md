@@ -4,7 +4,7 @@ How to read the numbers in these sources, and how to report your own.
 
 Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
-`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle": does the lesson rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong (`yes`, `no`, `partly`). "Strength": `strong` (several cases, or measured), `medium`, `weak` (one case or assertion only).
+`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
 
 - **MSR-1** [ours] Treat savings measured against a manual effort that never ran as self-estimates; record the basis beside each figure and never add them across cases.
   - Old system as oracle: no. Strength: strong. Era: all.
@@ -14,7 +14,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: no. Strength: strong. Era: all.
   - Cases: [Spotify: what went wrong][spo-wrong], [Slack: how it was checked][slk-checked].
   - Against: Airbnb's main rate covers its whole file set ([Airbnb][air-numbers]).
-- **MSR-3** [ours] Weigh each source by the author's stake in the tool (seller, owner, partner); none of the eight had outside measurement.
+- **MSR-3** [ours] Weigh each source by the author's stake in the tool (seller, owner, partner); none of the cases had outside measurement.
   - Old system as oracle: no. Strength: strong. Era: all.
   - Cases: [Bun: who did what][bun-who], [GitHub: context][gh-context], [Spotify: context][spo-context], [1Password: context][opw-context], [Intel: who did what][int-who].
   - Against: Google lists its own threats to validity ([Google][goo-wrong]), and Slack has no stake in the model it used.

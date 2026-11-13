@@ -4,10 +4,10 @@ Who does what when agents write most of the code.
 
 Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
-`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle": does the lesson rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong (`yes`, `no`, `partly`). "Strength": `strong` (several cases, or measured), `medium`, `weak` (one case or assertion only).
+`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
 
 - **TEM-1** [stated] The lead engineer's job becomes running the control loop: framing slices, challenging design, pushing for completeness, deciding every merge.
-  - Old system as oracle: no. Strength: strong. Era: 2026.
+  - Old system as oracle: no. Strength: medium. Era: 2026.
   - Cases: [GitHub: numbers][gh-numbers], [GitHub: who did what][gh-who], [Bun: who did what][bun-who].
   - Against: None found.
   - Related view (karpathy-ideas): [partial autonomy and autonomy slider][k-partial-autonomy-and-autonomy-slider], agrees.

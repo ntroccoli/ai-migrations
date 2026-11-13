@@ -4,7 +4,7 @@ How to size, slice, order and stage a large piece of AI-driven work before agent
 
 Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
-`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle": does the lesson rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong (`yes`, `no`, `partly`). "Strength": `strong` (several cases, or measured), `medium`, `weak` (one case or assertion only).
+`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
 
 - **PLN-1** [stated] Pilot the whole pipeline (build, CI, review, packaging, release) on a few easy, well-tested units, and settle the conventions before fanning out to the rest.
   - Old system as oracle: partly. Strength: strong. Era: 2023–2026, all model eras.
@@ -21,10 +21,10 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: None found; the Airbnb file set was fixed, so it had no inflow ([Airbnb][air-numbers]).
 - **PLN-4** [stated] Order the slices along the dependency graph, leaves first and the most connected hub last, and approach the hub from one direction only.
   - Old system as oracle: no. Strength: strong. Era: 2026.
-  - Cases: [GitHub: what worked][gh-worked], [GitHub: what went wrong][gh-wrong], [Intel: who did what][int-who], [1Password: what went wrong][opw-wrong].
+  - Cases: [GitHub: what worked][gh-worked], [GitHub: what went wrong][gh-wrong], [Intel: who did what][int-who], [1Password: what worked][opw-worked].
   - Against: None found.
 - **PLN-5** [stated] Translate first and redesign later: keep behaviour the same during the move so that any failure points at the port, not at a deliberate change.
-  - Old system as oracle: yes. Strength: strong. Era: 2026.
+  - Old system as oracle: yes. Strength: medium. Era: 2026.
   - Cases: [GitHub: practices to copy][gh-practices], [Bun: what worked][bun-worked].
   - Against: Disagree: Intel aims for idiomatic data structures at translation time ([Intel][int-practices]), and GitHub's own review prompt asked for idiomatic, optimised code during the port.
 - **PLN-6** [stated] Set expectations per class of work: bounded, repetitive edits gain a lot; work with ordering, schema or shared-state constraints gains far less.

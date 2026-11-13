@@ -2,21 +2,21 @@
 
 # Lessons by aspect
 
-Lessons for large engineering work done with AI agents, drawn from the case studies in [cases](../cases/). Each lesson is one line in our own words with a stable ID (the prefix names its page), the cases behind it, the evidence against it, and whether it needs the old system as its oracle. The [checklist](../checklist.md) cites lessons by ID.
+Lessons for large engineering work done with AI agents, drawn from the case studies in [the case index](../index.md). Each lesson is one line in our own words with a stable ID (the prefix names its page), the cases behind it, the evidence against it, and whether it needs the old system as its oracle. The [checklist](../checklist.md) cites lessons by ID.
 
 Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
-`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle": does the lesson rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong (`yes`, `partly`, `no`); a `no` lesson carries over to work that is not a migration as it is. "Strength": `strong` (several cases, or measured), `medium`, `weak` (one case or assertion only).
+`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
 
 ## Aspects
 
 | Aspect | Prefix | Lessons | stated | ours | oracle yes | partly | no |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | [Planning and scoping](planning.md) | PLN | 10 | 8 | 2 | 1 | 1 | 8 |
-| [Testing and oracles](testing.md) | TST | 10 | 8 | 2 | 7 | 2 | 1 |
+| [Testing and oracles](testing.md) | TST | 10 | 6 | 4 | 7 | 2 | 1 |
 | [Verification loops and gates](verification.md) | VER | 9 | 9 | 0 | 1 | 6 | 2 |
-| [Code review](review.md) | REV | 10 | 8 | 2 | 2 | 4 | 4 |
-| [Release and rollout](rollout.md) | ROL | 8 | 7 | 1 | 3 | 2 | 3 |
+| [Code review](review.md) | REV | 10 | 7 | 3 | 2 | 4 | 4 |
+| [Release and rollout](rollout.md) | ROL | 8 | 7 | 1 | 1 | 2 | 5 |
 | [Machines and operations](operations.md) | OPS | 7 | 6 | 1 | 1 | 2 | 4 |
 | [Security](security.md) | SEC | 10 | 7 | 3 | 0 | 3 | 7 |
 | [Cost](cost.md) | CST | 9 | 3 | 6 | 0 | 1 | 8 |
@@ -28,7 +28,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 | [Human oversight](oversight.md) | OVS | 3 | 3 | 0 | 0 | 1 | 2 |
 | [Knowledge capture](knowledge.md) | KNW | 3 | 3 | 0 | 0 | 1 | 2 |
 | [Measuring and reading results](measurement.md) | MSR | 9 | 3 | 6 | 0 | 2 | 7 |
-| **All** | | 122 | 98 | 24 | 16 | 33 | 73 |
+| **All** | | 122 | 95 | 27 | 14 | 33 | 75 |
 
 ## Cases behind the lessons
 
@@ -36,9 +36,9 @@ Lessons that cite each case, in "Cases" or "Against".
 
 | Case | Lessons |
 | --- | --- |
-| [GitHub](../cases/2026-09-16-github-copilot-runtime-rust.md) | 63: PLN-1, PLN-2, PLN-3, PLN-4, PLN-5, PLN-7, TST-1, TST-2, TST-3, TST-7, TST-9, VER-1, VER-4, VER-6, VER-8, REV-1, REV-2, REV-3, REV-5, REV-8, REV-9, ROL-1, ROL-2, ROL-4, ROL-5, ROL-6, ROL-7, OPS-1, OPS-3, OPS-4, OPS-7, SEC-2, SEC-4, SEC-7, SEC-8, CST-1, CST-2, CST-3, CST-5, CST-6, CST-7, TEM-1, TEM-2, TOL-5, TOL-6, CTX-4, CTX-6, ORC-1, ORC-3, ORC-5, ORC-6, AGF-2, AGF-3, AGF-4, AGF-5, OVS-1, OVS-2, KNW-1, KNW-3, MSR-3, MSR-4, MSR-5, MSR-6 |
+| [GitHub](../cases/2026-09-16-github-copilot-runtime-rust.md) | 62: PLN-1, PLN-2, PLN-3, PLN-4, PLN-5, PLN-7, TST-1, TST-2, TST-3, TST-9, VER-1, VER-4, VER-6, VER-8, REV-1, REV-2, REV-3, REV-5, REV-8, REV-9, ROL-1, ROL-2, ROL-4, ROL-5, ROL-6, ROL-7, OPS-1, OPS-3, OPS-4, OPS-7, SEC-2, SEC-4, SEC-7, SEC-8, CST-1, CST-2, CST-3, CST-5, CST-6, CST-7, TEM-1, TEM-2, TOL-5, TOL-6, CTX-4, CTX-6, ORC-1, ORC-3, ORC-5, ORC-6, AGF-2, AGF-3, AGF-4, AGF-5, OVS-1, OVS-2, KNW-1, KNW-3, MSR-3, MSR-4, MSR-5, MSR-6 |
 | [Intel](../cases/2026-08-24-intel-ideas-c-to-rust.md) | 22: PLN-4, PLN-5, TST-2, TST-5, TST-10, VER-1, VER-3, VER-6, VER-9, SEC-4, SEC-5, SEC-9, CST-3, CST-4, CST-5, TOL-1, CTX-9, ORC-6, AGF-1, OVS-1, MSR-3, MSR-7 |
-| [Bun](../cases/2026-07-08-bun-zig-to-rust.md) | 51: PLN-1, PLN-2, PLN-5, PLN-7, TST-1, TST-3, TST-4, VER-1, VER-5, REV-1, REV-2, REV-3, REV-5, REV-8, ROL-1, ROL-2, ROL-3, OPS-1, OPS-2, OPS-3, OPS-5, SEC-1, SEC-2, SEC-3, SEC-4, SEC-6, CST-1, CST-2, CST-4, CST-5, CST-6, CST-7, TEM-1, TEM-2, TEM-4, TOL-1, ORC-1, ORC-4, ORC-5, ORC-6, AGF-1, OVS-1, OVS-2, KNW-1, MSR-1, MSR-3, MSR-4, MSR-5, MSR-6, MSR-7, MSR-8 |
+| [Bun](../cases/2026-07-08-bun-zig-to-rust.md) | 52: PLN-1, PLN-2, PLN-5, PLN-7, TST-1, TST-3, TST-4, VER-1, VER-3, VER-5, REV-1, REV-2, REV-3, REV-5, REV-8, ROL-1, ROL-2, ROL-3, OPS-1, OPS-2, OPS-3, OPS-5, SEC-1, SEC-2, SEC-3, SEC-4, SEC-6, CST-1, CST-2, CST-4, CST-5, CST-6, CST-7, TEM-1, TEM-2, TEM-4, TOL-1, ORC-1, ORC-4, ORC-5, ORC-6, AGF-1, OVS-1, OVS-2, KNW-1, MSR-1, MSR-3, MSR-4, MSR-5, MSR-6, MSR-7, MSR-8 |
 | [1Password](../cases/2026-04-20-1password-monolith-refactor.md) | 22: PLN-2, PLN-4, PLN-6, PLN-7, PLN-9, VER-7, SEC-10, TOL-1, TOL-3, CTX-4, CTX-8, ORC-1, ORC-2, AGF-2, AGF-3, AGF-6, AGF-7, OVS-3, MSR-1, MSR-3, MSR-7, MSR-8 |
 | [Uber](../cases/2026-04-07-uber-junit4-to-junit5.md) | 19: PLN-2, PLN-6, PLN-8, PLN-9, PLN-10, TST-8, VER-2, VER-3, ROL-1, ROL-8, OPS-6, TOL-2, TOL-4, TOL-7, OVS-3, KNW-1, KNW-2, MSR-7, MSR-8 |
 | [Spotify](../cases/2025-11-06-spotify-honk.md) | 45: PLN-6, PLN-8, PLN-9, TST-2, TST-6, VER-1, VER-2, VER-3, VER-4, VER-8, VER-9, REV-4, REV-5, REV-6, REV-9, OPS-4, SEC-1, SEC-2, SEC-3, SEC-8, CST-2, CST-8, CST-9, TEM-3, TEM-4, TOL-4, TOL-5, TOL-6, CTX-1, CTX-3, CTX-4, CTX-5, CTX-6, CTX-7, CTX-8, AGF-2, AGF-4, AGF-5, AGF-7, OVS-1, MSR-1, MSR-2, MSR-3, MSR-6, MSR-8 |
@@ -59,7 +59,180 @@ Lessons that cite each case, in "Cases" or "Against".
 - **CTX-1** ([Context and prompts](context.md)) Choosing the right context (nearby files, good examples, runtime data, exact mapping tables) moved results more than polishing the prompt wording.
 - **CTX-6** ([Context and prompts](context.md)) Prefer large, static, version-controlled prompts and few tools for predictability; letting the agent fetch context through many tools adds variance.
 - **CTX-9** ([Context and prompts](context.md)) When the context budget is small, choose context by fixed rules: full bodies of nearby functions, signatures for the rest, the hardest callers first.
-- **ORC-5** ([Many agents at once](orchestration.md)) Fan reading out to subagents and keep edits with one coordinating agent; exploration far outnumbered edits.
 - **ORC-6** ([Many agents at once](orchestration.md)) Prefer a short leash to a complex multi-agent design where you can: fixed code picks context, order and output place, and the model translates one unit.
 - **OVS-2** ([Human oversight](oversight.md)) Keep the final merge with a person who checks how the agent answered CI and review, not only the diff.
 - **MSR-4** ([Measuring and reading results](measurement.md)) Credit a gain to the migration only after separating it from work that landed in the same window (other speed work, linker changes, unrelated fixes).
+
+## Every lesson in one line
+
+To find the lessons that fit work other than a migration, scan this list, then open the pages of the lessons that fit. Each line: ID, tag, the lesson, then its oracle tag and strength.
+
+### [Planning and scoping](planning.md)
+
+- **PLN-1** [stated] Pilot the whole pipeline (build, CI, review, packaging, release) on a few easy, well-tested units, and settle the conventions before fanning out to the rest. (oracle: partly; strong)
+- **PLN-2** [stated] Expect most of the effort to go into specs, porting guides, manifests and tooling before the bulk run; schedule and staff that phase, not only execution. (oracle: no; strong)
+- **PLN-3** [stated] Re-measure scope while the work runs; in a live repository, code moving into scope and code written meanwhile can multiply the first estimate. (oracle: no; medium)
+- **PLN-4** [stated] Order the slices along the dependency graph, leaves first and the most connected hub last, and approach the hub from one direction only. (oracle: no; strong)
+- **PLN-5** [stated] Translate first and redesign later: keep behaviour the same during the move so that any failure points at the port, not at a deliberate change. (oracle: yes; medium)
+- **PLN-6** [stated] Set expectations per class of work: bounded, repetitive edits gain a lot; work with ordering, schema or shared-state constraints gains far less. (oracle: no; medium)
+- **PLN-7** [ours] Reopen rewrites shelved for cost, since agents change the price; but weigh them against doing nothing, not against a manual rewrite nobody would fund. (oracle: no; medium)
+- **PLN-8** [stated] Leave out segments you cannot specify or verify (non-standard repositories, unsupported platforms, languages the model handles poorly) instead of forcing one approach on all. (oracle: no; strong)
+- **PLN-9** [ours] Plan for a partial outcome and a stop rule: no published case here was abandoned, so success odds read from such cases are inflated. (oracle: no; medium)
+- **PLN-10** [stated] Measure how often each pattern (runner, rule, base class) is used across the code base, and build the transforms or prompts around the most used first. (oracle: no; weak)
+
+### [Testing and oracles](testing.md)
+
+- **TST-1** [stated] Use a black-box suite that does not depend on the implementation language as the oracle, and run it unchanged against the old code and the new. (oracle: yes; medium)
+- **TST-2** [stated] Before the move starts, make sure tests cover the behaviour that matters and that agents can run them; the gaps were where missing-feature regressions came from. (oracle: yes; medium)
+- **TST-3** [stated] Equivalence with the old system is not correctness: a faithful port carries the old bugs, and tests can assert the wrong behaviour with confidence. (oracle: yes; medium)
+- **TST-4** [ours] Run the oracle on the build configuration you ship; debug-only assertions and checks hid regressions that appeared only in release builds. (oracle: partly; weak)
+- **TST-5** [stated] Where the old system has thin tests, record its inputs and outputs (or have a separate agent write equivalence tests) and replay them against the new code. (oracle: yes; medium)
+- **TST-6** [stated] Make the baseline green before agents start: fix tests that already fail and make golden files regenerable, or correct changes stall at the gate. (oracle: yes; medium)
+- **TST-7** [ours] When widening a data type, test with values beyond the old range; tests with small example values pass even when a truncation survives. (oracle: partly; weak)
+- **TST-8** [ours] When the migrated artefact is itself a test, passing is a weak oracle; also compare test counts, coverage and intent file by file. (oracle: yes; weak)
+- **TST-9** [stated] Treat performance as part of the contract: benchmark end to end against a deterministic local stand-in for slow services, and count slowdowns as regressions. (oracle: yes; medium)
+- **TST-10** [ours] Keep the agent that writes code apart from the one that writes its tests; one generation producing both invites checks that cannot fail. (oracle: no; weak)
+
+### [Verification loops and gates](verification.md)
+
+- **VER-1** [stated] A clean compile or a green CI run shows the parts fit together, not that behaviour survived; plan a behavioural check after it. (oracle: no; medium)
+- **VER-2** [stated] Order gates from cheap to costly and drop a candidate at its first failure, with cheap no-change checks (whitespace only, unchanged syntax tree) up front. (oracle: partly; medium)
+- **VER-3** [stated] Retry a failed unit with its latest errors in a fresh prompt, cap the attempts, and hand what remains to people; this fits independent units, such as one file each. (oracle: partly; strong)
+- **VER-4** [stated] Give the agent one verify tool that picks the right build and test runner and returns short errors, and run it automatically before the agent may finish. (oracle: partly; weak)
+- **VER-5** [stated] Before trusting a green suite, confirm the tests really ran: compare executed tests and assertions with the baseline, and count skips as failures. (oracle: yes; medium)
+- **VER-6** [stated] Check output against machine-readable contracts (generated signatures, schema-compatibility checks) so a dropped or changed interface fails mechanically. (oracle: partly; medium)
+- **VER-7** [stated] Define done as an empty list of change sites produced by deterministic tooling and rerun on a schedule, never as the agent's own report. (oracle: partly; medium)
+- **VER-8** [stated] Rank failures by cost: no change is cheap, a red change costs an engineer, a green but wrong change costs trust; aim verification at the last kind. (oracle: no; medium)
+- **VER-9** [stated] Where the target has no tests the agent cannot check itself: leave it out, require tests first, or budget for owners to test each change. (oracle: partly; weak)
+
+### [Code review](review.md)
+
+- **REV-1** [stated] Never let the writing agent review its own change; use two or more reviewers in fresh contexts that see only the diff and are told to find faults. (oracle: partly; medium)
+- **REV-2** [stated] Split the review: agents and tests do the exhaustive old-against-new comparison; people spend their attention on architecture, contracts and flagged risk. (oracle: partly; medium)
+- **REV-3** [ours] Give reviewers a written list of constructs that read the same in both languages but behave differently: assertions, eager defaults, falsy checks, number types. (oracle: yes; medium)
+- **REV-4** [stated] Add an automatic scope check that compares each diff with its instruction; agents drift into refactors, switched-off tests and side fixes. (oracle: no; medium)
+- **REV-5** [ours] Treat LLM reviewers and judges as unmeasured until you know their miss rate; veto counts and showcase catches say nothing about what got through. (oracle: no; medium)
+- **REV-6** [stated] Have the tool leave an inline note with a guide link at each spot it deliberately left for a person, so reviewers find the judgement calls fast. (oracle: no; medium)
+- **REV-7** [stated] Let people see only changes that already built and passed tests; developers counted that filter as one of the largest gains. (oracle: partly; medium)
+- **REV-8** [stated] Audit the reviewers and the fixer: check that AI reviewers flag real differences and that the agent's answers to review comments hold up. (oracle: partly; medium)
+- **REV-9** [stated] Once agents write fast, waiting for approval becomes the bottleneck; plan reviewer capacity across the owning teams from the start. (oracle: no; medium)
+- **REV-10** [ours] Grade a small sample of converted code against hand-converted versions with a rubric; pass rates say nothing about readability or idiom. (oracle: yes; weak)
+
+### [Release and rollout](rollout.md)
+
+- **ROL-1** [stated] Swap one component per change inside normal releases, old and new in one tree joined by a temporary bridge, so the main branch can always ship. (oracle: partly; medium)
+- **ROL-2** [stated] Treat merged and released as separate gates: ship first to a canary or pre-release that few users take, and promote it only after real use. (oracle: no; medium)
+- **ROL-3** [stated] Changes that reach many teams' systems still need slow production rollouts watched by their owners; the AI pipeline speeds the code, not this step. (oracle: no; medium)
+- **ROL-4** [stated] Delete the old code in the same change that adds the new; concurrent edits to ported code then surface as rebase conflicts instead of silent losses. (oracle: no; weak)
+- **ROL-5** [stated] Keep agent branches short-lived against a busy main branch; sessions left open for days pile up drift, and rebases lose changes. (oracle: no; weak)
+- **ROL-6** [ours] Track the size of the temporary bridge between old and new as the progress signal and drive it to zero; line counts on a busy code base mislead. (oracle: no; weak)
+- **ROL-7** [stated] Ship a new failure boundary (such as hosting in-process) as an opt-in mode beside the old default, separate from the code port itself. (oracle: partly; weak)
+- **ROL-8** [stated] When old and new run side by side, send a unit that fails its tests back to the old framework rather than block the rollout or diagnose each failure. (oracle: yes; weak)
+
+### [Machines and operations](operations.md)
+
+- **OPS-1** [stated] Parallel agents saturate CPU, disk and I/O: size the machine first, let one agent build at a time through a lease, and push full test runs to CI. (oracle: no; medium)
+- **OPS-2** [stated] Contain heavy tests with operating-system limits (control groups, process namespaces, disk quotas); asking the agent to be careful contains nothing. (oracle: no; weak)
+- **OPS-3** [stated] Make the inner loop fast (module splits, build caches, host I/O) before scaling agents; their time goes mostly to reading, building and testing, not writing. (oracle: no; medium)
+- **OPS-4** [stated] List what the old runtime supplied silently (time zone, environment, process flags) and test every platform you ship; one green platform says little. (oracle: yes; medium)
+- **OPS-5** [stated] Keep hardening after merge: repeated security review, round-the-clock fuzzing and leak tracking, with people reviewing the fixes they produce. (oracle: no; weak)
+- **OPS-6** [stated] Run bulk change jobs, by agent or by rule, as scheduled batches sized to the infrastructure, sort results into status groups, and rerun only what is stuck. (oracle: partly; strong)
+- **OPS-7** [ours] Load-test the new code for blocking and resource exhaustion; one port froze its interface on a synchronous call across the bridge. (oracle: partly; medium)
+
+### [Security](security.md)
+
+- **SEC-1** [stated] Run unattended agents in a minimal sandbox with an allowlist of commands; pushing, merging and talking to people belong to the surrounding infrastructure. (oracle: no; weak)
+- **SEC-2** [stated] Whatever the harness exposes may get used unasked (an unlisted skill, git commands, a peer's worktree); remove what the task does not need. (oracle: no; medium)
+- **SEC-3** [ours] Block destructive repository and system commands in the tool layer, not with a prompt rule, which only arrives after the damage. (oracle: no; medium)
+- **SEC-4** [stated] After a port into a memory-safe language, count where unsafe code sits, allow it only at foreign and system boundaries, and have the compiler forbid it elsewhere. (oracle: no; medium)
+- **SEC-5** [stated] Generate foreign-function signatures with a binding tool and reject any model answer that differs; a wrong contract leaks unsafety into safe-looking code. (oracle: partly; medium)
+- **SEC-6** [ours] A bounds-checked target turns silent out-of-range access into crashes; expect new crash reports and test limits at real-world sizes. (oracle: partly; medium)
+- **SEC-7** [ours] Treat each replaced library as a migration of its own, above all sanitizers, credential stores and protocol SDKs, and vet every new dependency. (oracle: partly; medium)
+- **SEC-8** [stated] Treat agent session logs and traces as data that may hold secrets; control where they are stored and where they are uploaded. (oracle: no; medium)
+- **SEC-9** [stated] Isolate each agent run from earlier attempts and reference answers, which it could otherwise read and lean on; limit network access too. (oracle: no; weak)
+- **SEC-10** [stated] Never let agents choose the order of schema changes, backfills or ownership of shared tables; one agent's chosen order would have lost data silently. (oracle: no; weak)
+
+### [Cost](cost.md)
+
+- **CST-1** [stated] Long agent runs are affordable only with high prompt-cache reuse: keep a stable prompt prefix and track the hit rate and each kind of token. (oracle: no; medium)
+- **CST-2** [ours] Ask for the full bill: tokens at the price paid, people's hours by role, compute and CI, review, and the work after merge; most sources give one piece. (oracle: no; strong)
+- **CST-3** [ours] Expect cost per unit to have a long tail; report median and mean, and size the budget for hub components and hard files. (oracle: no; medium)
+- **CST-4** [ours] Before reusing a published cost, check the model, how it was reached and the price basis; pre-release, internal or partner models give costs others cannot repeat. (oracle: no; medium)
+- **CST-5** [ours] Work out cost per unit inside one case and name the unit; added lines, production lines, symbols and files differ, and tokens do not convert to money across cases. (oracle: no; medium)
+- **CST-6** [ours] Count the work after merge (regression fixes, security rounds, fuzzing, clean-up and speed work) as part of the cost of the migration. (oracle: no; medium)
+- **CST-7** [ours] Budget review agents as a multiple of generation (several reviewers and a fixer per writer), and ask for their share of tokens, which no case reports. (oracle: no; medium)
+- **CST-8** [stated] Missing or broken tests in target repositories shift the cost of checking onto the teams that receive the changes; the central figures leave it out. (oracle: partly; medium)
+- **CST-9** [stated] Pipeline and harness costs pay back over many repositories or migrations; a one-off project should reuse a general harness rather than build one. (oracle: no; weak)
+
+### [Team and roles](team.md)
+
+- **TEM-1** [stated] The lead engineer's job becomes running the control loop: framing slices, challenging design, pushing for completeness, deciding every merge. (oracle: no; medium)
+- **TEM-2** [stated] Count the people behind a one-engineer story (reviewers in many teams, interop, packaging and build specialists) and staff and budget for them. (oracle: no; strong)
+- **TEM-3** [stated] A central team should own the agent tooling, build it with early adopters, and teach prompt writing; untrained users fell into the same traps. (oracle: no; medium)
+- **TEM-4** [stated] Review in two tiers: the migration owner screens each batch, then code owners accept; expect the load to spread over many teams. (oracle: no; medium)
+
+### [Rule-based tools and AI](tooling.md)
+
+- **TOL-1** [stated] Have agents build deterministic tools (analysers, call-site manifests, porting guides, ownership tables), review those, then bind later agent work to them. (oracle: no; strong)
+- **TOL-2** [stated] Run a rule-based codemod first and give the model its partial output, with a note wherever the rules gave up; it anchors the model. (oracle: partly; medium)
+- **TOL-3** [stated] Find change sites with a code index or static analysis, include too many rather than too few, and let the model edit the whole file around each hint. (oracle: partly; medium)
+- **TOL-4** [stated] Price the rule-based alternative with the upkeep of its rules; hand-written transforms keep growing on long-tail patterns, which is where models pay off. (oracle: no; medium)
+- **TOL-5** [stated] Keep agents and models behind your own thin interface, log traces from day one, and pin model and settings per run; the best agent changed within a year. (oracle: no; medium)
+- **TOL-6** [stated] Set up linters, formatters, type checks and coding instructions before the first change, and run them inside the agent's loop, not only in CI. (oracle: no; strong)
+- **TOL-7** [stated] Before choosing a model for a mechanical framework move, try deterministic rewrites on a typed syntax tree; at very large scale they were judged more practical. (oracle: partly; weak)
+
+### [Context and prompts](context.md)
+
+- **CTX-1** [stated] Choosing the right context (nearby files, good examples, runtime data, exact mapping tables) moved results more than polishing the prompt wording. (oracle: partly; strong)
+- **CTX-2** [stated] Give the model the runtime facts a person would look at, such as the rendered output of each test, not only the source file. (oracle: yes; medium)
+- **CTX-3** [stated] Write field and API mappings as explicit tables in the context, not prose; a guide adapted from the human one led to wrong mappings. (oracle: no; weak)
+- **CTX-4** [stated] State the whole end state, its preconditions and when not to act; agents read vague goals narrowly and leave parts of the work out of scope. (oracle: no; medium)
+- **CTX-5** [stated] Put one change in each prompt; prompts bundling several changes ran out of context or stopped halfway. (oracle: no; weak)
+- **CTX-6** [stated] Prefer large, static, version-controlled prompts and few tools for predictability; letting the agent fetch context through many tools adds variance. (oracle: no; weak)
+- **CTX-7** [stated] Ask the agent after each session what its prompt lacked, and fold the answer into the next version of the prompt. (oracle: no; weak)
+- **CTX-8** [stated] Fit the prompt to the agent: a weak home-built loop needed step-by-step lists, while a stronger agent did better with the end state and room to plan. (oracle: no; weak)
+- **CTX-9** [stated] When the context budget is small, choose context by fixed rules: full bodies of nearby functions, signatures for the rest, the hardest callers first. (oracle: partly; medium)
+
+### [Many agents at once](orchestration.md)
+
+- **ORC-1** [stated] Agents sharing one working copy wreck each other's work; give each writer its own worktree, or restrict git to committing its own files. (oracle: no; strong)
+- **ORC-2** [stated] Run agents in parallel only on changes that are independent by design; otherwise parallelism adds inconsistency. (oracle: no; weak)
+- **ORC-3** [stated] Peer agents on adjacent code need a named coordinator or human tiebreaker, and autonomy must stop at anything outside the agent's own branch. (oracle: no; weak)
+- **ORC-4** [stated] Build the work queue from deterministic output (compiler errors by module, failing traces per command), run the tool once, then fan the items out. (oracle: partly; strong)
+- **ORC-5** [stated] Within one workspace, fan reading out to subagents and keep the edits with one agent; reading far outnumbered editing. (oracle: no; medium)
+- **ORC-6** [stated] Prefer a short leash to a complex multi-agent design where you can: fixed code picks context, order and output place, and the model translates one unit. (oracle: partly; medium)
+
+### [Agent failure modes](agent-failures.md)
+
+- **AGF-1** [stated] When compiling is the only target, agents stub out functions and write long comments excusing workarounds; reject both by rule. (oracle: no; medium)
+- **AGF-2** [stated] Agents fill gaps in the spec with plausible guesses and carry them through many edits; make them check formats and ownership against code or data, or stop and ask. (oracle: no; strong)
+- **AGF-3** [stated] Agents handle order-dependent and hard-to-reverse steps badly (a backfill before the writer changes, half of a paired operation), even when told the rule. (oracle: no; medium)
+- **AGF-4** [stated] Agents stray beyond the task (reworking code, switching off tests, side optimisations); expect it and check every diff for scope. (oracle: no; medium)
+- **AGF-5** [stated] Agents use whatever escape hatch turns a check green: a waiver label, a disabled flaky test, a deleted test. (oracle: no; medium)
+- **AGF-6** [ours] Make each agent session discardable as a unit; one unchecked assumption forced a whole session to be rolled back. (oracle: no; weak)
+- **AGF-7** [stated] Output varies between runs on the same input: plan retries, pick among passing attempts, and contain the variance in production migrations. (oracle: partly; medium)
+- **AGF-8** [stated] Check how well the model handles each language in scope; one poorly supported language fell back to people. (oracle: no; weak)
+
+### [Human oversight](oversight.md)
+
+- **OVS-1** [stated] The agent that changes the code must not change what counts as correct: edits to tests, snapshots, baselines and waiver labels need a separate owner's approval. (oracle: partly; medium)
+- **OVS-2** [stated] Keep the final merge with a person who checks how the agent answered CI and review, not only the diff. (oracle: no; strong)
+- **OVS-3** [stated] Decide up front where automation stops (a retry cap, a residue size, a category for people) and hand over with the failed attempt as the starting point. (oracle: no; strong)
+
+### [Knowledge capture](knowledge.md)
+
+- **KNW-1** [stated] When a failure recurs, fix what generates the code (prompt, reviewer rule, skill, evaluation, harness), not only the output; the second time is the trigger. (oracle: no; strong)
+- **KNW-2** [stated] Stamp each unit with its status, tune against the largest failing group using a small sample, then sweep all units again. (oracle: partly; strong)
+- **KNW-3** [stated] Keep structured session logs from the start; they later answered where time went and what people did, and became evaluations. (oracle: no; medium)
+
+### [Measuring and reading results](measurement.md)
+
+- **MSR-1** [ours] Treat savings measured against a manual effort that never ran as self-estimates; record the basis beside each figure and never add them across cases. (oracle: no; strong)
+- **MSR-2** [ours] For every success rate ask out of what (attempted, opened, merged, dropped from scope), and report each measure with its base; bases differed several-fold. (oracle: no; strong)
+- **MSR-3** [ours] Weigh each source by the author's stake in the tool (seller, owner, partner); none of the cases had outside measurement. (oracle: no; strong)
+- **MSR-4** [stated] Credit a gain to the migration only after separating it from work that landed in the same window (other speed work, linker changes, unrelated fixes). (oracle: partly; medium)
+- **MSR-5** [stated] Escaped defects are unknown by nature: publish known regressions as a floor, grouped by cause, and use a before-and-after proxy labelled as a proxy. (oracle: partly; medium)
+- **MSR-6** [ours] Activity numbers (lines per minute, commits, merged changes) are not progress; track verified behaviour or the shrinking list of remaining sites. (oracle: no; medium)
+- **MSR-7** [ours] Re-date a lesson before reusing it: early negative results, and results from pre-release or restricted models, may not hold for the models you use. (oracle: no; medium)
+- **MSR-8** [ours] Do not credit the model with work the deterministic tools did: finding sites, building manifests and codemods were often the hard part. (oracle: no; strong)
+- **MSR-9** [stated] If you will claim savings, measure people's share from file snapshots or logs from day one; estimates from the tool's own builders are biased. (oracle: no; medium)

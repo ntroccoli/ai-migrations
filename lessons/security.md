@@ -4,15 +4,15 @@ Sandboxing agents, memory safety, dependencies and data integrity.
 
 Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
-`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle": does the lesson rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong (`yes`, `no`, `partly`). "Strength": `strong` (several cases, or measured), `medium`, `weak` (one case or assertion only).
+`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
 
 - **SEC-1** [stated] Run unattended agents in a minimal sandbox with an allowlist of commands; pushing, merging and talking to people belong to the surrounding infrastructure.
-  - Old system as oracle: no. Strength: strong. Era: Claude Code, 2025–2026.
+  - Old system as oracle: no. Strength: weak. Era: Claude Code, 2025–2026.
   - Cases: [Spotify: what worked][spo-worked], [Spotify: practices to copy][spo-practices].
   - Against: Bun's agents committed and pushed themselves and the project still finished ([Bun][bun-wrong]).
   - Related view (karpathy-ideas): [agent security is the wild west][k-agent-security-is-the-wild-west], agrees.
 - **SEC-2** [stated] Whatever the harness exposes may get used unasked (an unlisted skill, git commands, a peer's worktree); remove what the task does not need.
-  - Old system as oracle: no. Strength: strong. Era: 2025–2026.
+  - Old system as oracle: no. Strength: medium. Era: 2025–2026.
   - Cases: [GitHub: what went wrong][gh-wrong], [Bun: what went wrong][bun-wrong], [Spotify: what worked][spo-worked].
   - Against: Disagree: Spotify itself is adding skills and self-gathered context because prompts grew unwieldy without them ([Spotify][spo-wrong]).
 - **SEC-3** [ours] Block destructive repository and system commands in the tool layer, not with a prompt rule, which only arrives after the damage.
@@ -20,7 +20,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Bun: what went wrong][bun-wrong], [Spotify: practices to copy][spo-practices].
   - Against: None found.
 - **SEC-4** [stated] After a port into a memory-safe language, count where unsafe code sits, allow it only at foreign and system boundaries, and have the compiler forbid it elsewhere.
-  - Old system as oracle: no. Strength: strong. Era: 2026.
+  - Old system as oracle: no. Strength: medium. Era: 2026.
   - Cases: [GitHub: numbers][gh-numbers], [Bun: what went wrong][bun-wrong], [Intel: practices to copy][int-practices].
   - Against: Disagree: on how much to allow, Bun's faithful port keeps far more unsafe code and plans to cut it only by later refactoring ([Bun][bun-wrong]).
 - **SEC-5** [stated] Generate foreign-function signatures with a binding tool and reject any model answer that differs; a wrong contract leaks unsafety into safe-looking code.
@@ -46,7 +46,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Intel: who did what][int-who].
   - Against: None found.
 - **SEC-10** [stated] Never let agents choose the order of schema changes, backfills or ownership of shared tables; one agent's chosen order would have lost data silently.
-  - Old system as oracle: no. Strength: medium. Era: 2026 (models unstated).
+  - Old system as oracle: no. Strength: weak. Era: 2026 (models unstated).
   - Cases: [1Password: what went wrong][opw-wrong], [1Password: practices to copy][opw-practices].
   - Against: None found.
 

@@ -4,10 +4,10 @@ Running many agents on real machines, and keeping the result healthy after merge
 
 Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
-`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle": does the lesson rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong (`yes`, `no`, `partly`). "Strength": `strong` (several cases, or measured), `medium`, `weak` (one case or assertion only).
+`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
 
 - **OPS-1** [stated] Parallel agents saturate CPU, disk and I/O: size the machine first, let one agent build at a time through a lease, and push full test runs to CI.
-  - Old system as oracle: no. Strength: strong. Era: 2026.
+  - Old system as oracle: no. Strength: medium. Era: 2026.
   - Cases: [GitHub: what went wrong][gh-wrong], [Bun: what went wrong][bun-wrong].
   - Against: None found.
 - **OPS-2** [stated] Contain heavy tests with operating-system limits (control groups, process namespaces, disk quotas); asking the agent to be careful contains nothing.
@@ -19,14 +19,14 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [GitHub: what went wrong][gh-wrong], [GitHub: numbers][gh-numbers], [Bun: practices to copy][bun-practices].
   - Against: None found.
 - **OPS-4** [stated] List what the old runtime supplied silently (time zone, environment, process flags) and test every platform you ship; one green platform says little.
-  - Old system as oracle: yes. Strength: strong. Era: 2025–2026.
+  - Old system as oracle: yes. Strength: medium. Era: 2025–2026.
   - Cases: [GitHub: what went wrong][gh-wrong], [Spotify: what went wrong][spo-wrong].
   - Against: None found.
 - **OPS-5** [stated] Keep hardening after merge: repeated security review, round-the-clock fuzzing and leak tracking, with people reviewing the fixes they produce.
   - Old system as oracle: no. Strength: weak. Era: 2026.
   - Cases: [Bun: how it was checked][bun-checked].
   - Against: Disagree: the Zig creator says Bun was not fuzzing before the port, against the post's claim ([Bun][bun-wrong]).
-- **OPS-6** [stated] Run bulk agent jobs as scheduled batches sized to the infrastructure, sort results into status groups, and rerun only what is stuck.
+- **OPS-6** [stated] Run bulk change jobs, by agent or by rule, as scheduled batches sized to the infrastructure, sort results into status groups, and rerun only what is stuck.
   - Old system as oracle: partly. Strength: strong. Era: 2023–2025.
   - Cases: [Slack: what worked][slk-worked], [Google: what worked][goo-worked], [Airbnb: what worked][air-worked], [Uber: what worked][ubr-worked].
   - Against: None found.

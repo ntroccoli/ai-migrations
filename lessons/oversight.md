@@ -4,10 +4,10 @@ Where people stay in the loop, and what they guard.
 
 Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
-`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle": does the lesson rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong (`yes`, `no`, `partly`). "Strength": `strong` (several cases, or measured), `medium`, `weak` (one case or assertion only).
+`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
 
 - **OVS-1** [stated] The agent that changes the code must not change what counts as correct: edits to tests, snapshots, baselines and waiver labels need a separate owner's approval.
-  - Old system as oracle: partly. Strength: strong. Era: 2025–2026.
+  - Old system as oracle: partly. Strength: medium. Era: 2025–2026.
   - Cases: [GitHub: practices to copy][gh-practices], [GitHub: what went wrong][gh-wrong], [Spotify: what went wrong][spo-wrong], [Bun: how it was checked][bun-checked], [Intel: what went wrong][int-wrong].
   - Against: None found.
 - **OVS-2** [stated] Keep the final merge with a person who checks how the agent answered CI and review, not only the diff.

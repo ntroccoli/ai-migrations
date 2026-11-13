@@ -4,7 +4,7 @@ How agent-written changes were reviewed, by agents and by people.
 
 Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
-`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle": does the lesson rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong (`yes`, `no`, `partly`). "Strength": `strong` (several cases, or measured), `medium`, `weak` (one case or assertion only).
+`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
 
 - **REV-1** [stated] Never let the writing agent review its own change; use two or more reviewers in fresh contexts that see only the diff and are told to find faults.
   - Old system as oracle: partly. Strength: medium. Era: 2026 (Claude Fable 5 pre-release; Opus 5, GPT-5.6 Sol, Grok 4.6).
@@ -15,8 +15,8 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: partly. Strength: medium. Era: 2026.
   - Cases: [GitHub: who did what][gh-who], [Bun: how it was checked][bun-checked].
   - Against: Disagree: at Slack and Google a person checked every change before merge ([Slack][slk-who]) ([Google][goo-checked]); in Bun no person read every line.
-- **REV-3** [stated] Give reviewers a written list of constructs that read the same in both languages but behave differently: assertions, eager defaults, falsy checks, number types.
-  - Old system as oracle: yes. Strength: strong. Era: 2026.
+- **REV-3** [ours] Give reviewers a written list of constructs that read the same in both languages but behave differently: assertions, eager defaults, falsy checks, number types.
+  - Old system as oracle: yes. Strength: medium. Era: 2026.
   - Cases: [Bun: what went wrong][bun-wrong], [GitHub: what went wrong][gh-wrong].
   - Against: None found.
 - **REV-4** [stated] Add an automatic scope check that compares each diff with its instruction; agents drift into refactors, switched-off tests and side fixes.
@@ -42,7 +42,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: None found.
   - Sceptic: tag changed from no to partly. Challenge: the audited reviewers compared new code with old code line by line, so "real differences" assumes a reference. Answer: accepted; checking the agent's replies to review comments still holds without one.
 - **REV-9** [stated] Once agents write fast, waiting for approval becomes the bottleneck; plan reviewer capacity across the owning teams from the start.
-  - Old system as oracle: no. Strength: strong. Era: 2023–2026.
+  - Old system as oracle: no. Strength: medium. Era: 2023–2026.
   - Cases: [GitHub: what went wrong][gh-wrong], [Google: who did what][goo-who], [Spotify: how it was checked][spo-checked].
   - Against: None found.
   - Related view (karpathy-ideas): [verification not generation is the bottleneck][k-verification-not-generation-is-the-bottleneck], agrees.

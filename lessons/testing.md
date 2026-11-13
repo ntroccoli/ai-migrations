@@ -4,15 +4,15 @@ What tells you the new code is right, and where those oracles fail.
 
 Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
-`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle": does the lesson rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong (`yes`, `no`, `partly`). "Strength": `strong` (several cases, or measured), `medium`, `weak` (one case or assertion only).
+`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
 
 - **TST-1** [stated] Use a black-box suite that does not depend on the implementation language as the oracle, and run it unchanged against the old code and the new.
-  - Old system as oracle: yes. Strength: strong. Era: 2026.
+  - Old system as oracle: yes. Strength: medium. Era: 2026.
   - Cases: [Bun: how it was checked][bun-checked], [GitHub: how it was checked][gh-checked].
   - Against: An outside critic asks why a suite that let the old bugs through should vet the new code ([Bun][bun-wrong]); Bun still shipped known regressions after a fully green run.
   - Related view (karpathy-ideas): [port with equality tests][k-port-with-equality-tests], agrees.
-- **TST-2** [stated] Before the move starts, widen end-to-end coverage of the behaviour that matters; the gaps in it are where missing-feature regressions came from.
-  - Old system as oracle: yes. Strength: strong. Era: 2025–2026.
+- **TST-2** [stated] Before the move starts, make sure tests cover the behaviour that matters and that agents can run them; the gaps were where missing-feature regressions came from.
+  - Old system as oracle: yes. Strength: medium. Era: 2025–2026.
   - Cases: [GitHub: what went wrong][gh-wrong], [Spotify: practices to copy][spo-practices].
   - Against: Google leaned on the owning teams' existing regression suites and slow rollouts rather than new tests ([Google][goo-checked]); Intel left the tests out on purpose and got a build that crashed ([Intel][int-wrong]).
 - **TST-3** [stated] Equivalence with the old system is not correctness: a faithful port carries the old bugs, and tests can assert the wrong behaviour with confidence.
@@ -32,9 +32,9 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: yes. Strength: medium. Era: internal Gemini, period unstated.
   - Cases: [Google: what went wrong][goo-wrong], [Spotify: how it was checked][spo-checked].
   - Against: None found.
-- **TST-7** [stated] When widening or retyping data, test with values outside the old range; small test values pass even when a truncation or a wrong type survives.
-  - Old system as oracle: partly. Strength: medium. Era: internal Gemini; 2026.
-  - Cases: [Google: who did what][goo-who], [GitHub: what went wrong][gh-wrong].
+- **TST-7** [ours] When widening a data type, test with values beyond the old range; tests with small example values pass even when a truncation survives.
+  - Old system as oracle: partly. Strength: weak. Era: internal Gemini.
+  - Cases: [Google: what was migrated][goo-migrated].
   - Against: None found.
 - **TST-8** [ours] When the migrated artefact is itself a test, passing is a weak oracle; also compare test counts, coverage and intent file by file.
   - Old system as oracle: yes. Strength: weak. Era: 2023–2024.
@@ -44,7 +44,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: yes. Strength: medium. Era: 2026.
   - Cases: [GitHub: what went wrong][gh-wrong], [GitHub: numbers][gh-numbers].
   - Against: GitHub's own before-and-after mixes in other changes from the same months, which the author flags.
-- **TST-10** [stated] Keep the agent that writes code apart from the one that writes its tests; one generation producing both invites checks that cannot fail.
+- **TST-10** [ours] Keep the agent that writes code apart from the one that writes its tests; one generation producing both invites checks that cannot fail.
   - Old system as oracle: no. Strength: weak. Era: 2026.
   - Cases: [Intel: what went wrong][int-wrong], [Intel: practices to copy][int-practices].
   - Against: When generated separately, Intel's agent-written tests worked as well as expert ones as feedback ([Intel][int-worked]).
@@ -56,7 +56,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [gh-numbers]: ../cases/2026-09-16-github-copilot-runtime-rust.md#numbers
 [gh-wrong]: ../cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong
 [goo-checked]: ../cases/2025-04-13-google-int64-ids.md#how-it-was-checked
-[goo-who]: ../cases/2025-04-13-google-int64-ids.md#who-did-what
+[goo-migrated]: ../cases/2025-04-13-google-int64-ids.md#what-was-migrated
 [goo-wrong]: ../cases/2025-04-13-google-int64-ids.md#what-went-wrong
 [int-practices]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#practices-to-copy
 [int-worked]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#what-worked

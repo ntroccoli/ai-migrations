@@ -172,6 +172,20 @@ test('a case that no lesson and no question cites fails', 1, d => {
   edit(caseFile(d, '2026-07-09-bun-copy.md'), 'date: 2026-07-08', 'date: 2026-07-09');
 }, null, '2026-07-09-bun-copy.md: no lesson and no checklist question cites this case');
 
+// Strength ceiling: the cases behind a lesson cap its strength.
+const strength = (id, from, to) => d => {
+  const page = { AGF: 'agent-failures', KNW: 'knowledge', TST: 'testing' }[id.slice(0, 3)];
+  const t = readFileSync(L(d, page), 'utf8').replace(/\r\n/g, '\n');
+  const at = t.indexOf(`- **${id}** `);
+  const i = t.indexOf(`Strength: ${from}.`, at);
+  writeFileSync(L(d, page), t.slice(0, i) + `Strength: ${to}.` + t.slice(i + `Strength: ${from}.`.length));
+};
+test('medium on one assertion-only case fails', 1, strength('AGF-6', 'weak', 'medium'),
+  null, 'AGF-6: strength medium needs more evidence; its cases allow at most weak');
+test('strong on cases only from sellers of the tool fails', 1, strength('KNW-3', 'medium', 'strong'),
+  null, 'KNW-3: strength strong needs more evidence; its cases allow at most medium');
+test('strong on two cases, one not from a seller, passes', 0, strength('TST-5', 'medium', 'strong'));
+
 // build.mjs --check: generated files must match the sources.
 test('build --check passes on the repository', 0, () => ['--check'], null, null, 'build.mjs');
 test('build --check fails after hand-editing llms.txt', 1,

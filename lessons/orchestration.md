@@ -4,14 +4,14 @@ Running several agents in parallel without them wrecking each other.
 
 Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
-`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle": does the lesson rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong (`yes`, `no`, `partly`). "Strength": `strong` (several cases, or measured), `medium`, `weak` (one case or assertion only).
+`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
 
 - **ORC-1** [stated] Agents sharing one working copy wreck each other's work; give each writer its own worktree, or restrict git to committing its own files.
   - Old system as oracle: no. Strength: strong. Era: 2026.
   - Cases: [Bun: what went wrong][bun-wrong], [1Password: what worked][opw-worked], [GitHub: what worked][gh-worked].
   - Against: One worktree per agent would have filled Bun's disk, so it used a few shared ones with git restricted ([Bun][bun-wrong]).
 - **ORC-2** [stated] Run agents in parallel only on changes that are independent by design; otherwise parallelism adds inconsistency.
-  - Old system as oracle: no. Strength: medium. Era: 2026.
+  - Old system as oracle: no. Strength: weak. Era: 2026.
   - Cases: [1Password: practices to copy][opw-practices].
   - Against: None found.
 - **ORC-3** [stated] Peer agents on adjacent code need a named coordinator or human tiebreaker, and autonomy must stop at anything outside the agent's own branch.
@@ -23,10 +23,10 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: partly. Strength: strong. Era: 2024–2026.
   - Cases: [Bun: what worked][bun-worked], [Airbnb: what worked][air-worked].
   - Against: None found.
-- **ORC-5** [stated] Fan reading out to subagents and keep edits with one coordinating agent; exploration far outnumbered edits.
+- **ORC-5** [stated] Within one workspace, fan reading out to subagents and keep the edits with one agent; reading far outnumbered editing.
   - Old system as oracle: no. Strength: medium. Era: 2026.
   - Cases: [GitHub: what worked][gh-worked], [GitHub: numbers][gh-numbers].
-  - Against: Disagree: Bun ran dozens of writers at once, split by crate ([Bun][bun-worked]).
+  - Against: Parallel writing still worked with a separate workspace per writer: GitHub's child sessions ported in their own worktrees ([GitHub][gh-worked]), and Bun ran dozens of writers split by crate ([Bun][bun-worked]).
   - Sceptic: tag kept at no. Challenge: the reading-to-editing ratio was measured in a port, where much reading was of the old code. Answer: kept at "no": reading old code is input, not an oracle; the ratio may differ in new work, which the Era and Strength already limit.
 - **ORC-6** [stated] Prefer a short leash to a complex multi-agent design where you can: fixed code picks context, order and output place, and the model translates one unit.
   - Old system as oracle: partly. Strength: medium. Era: 2026.

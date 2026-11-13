@@ -4,22 +4,22 @@ The automated checks around each agent change, and what they can and cannot prov
 
 Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
-`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle": does the lesson rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong (`yes`, `no`, `partly`). "Strength": `strong` (several cases, or measured), `medium`, `weak` (one case or assertion only).
+`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
 
 - **VER-1** [stated] A clean compile or a green CI run shows the parts fit together, not that behaviour survived; plan a behavioural check after it.
-  - Old system as oracle: no. Strength: strong. Era: 2025–2026.
+  - Old system as oracle: no. Strength: medium. Era: 2025–2026.
   - Cases: [GitHub: what went wrong][gh-wrong], [Intel: what went wrong][int-wrong], [Spotify: what went wrong][spo-wrong].
   - Against: In a memory-safe target, one class of memory bugs does become a compile error ([Bun][bun-checked]), so the compiler is a real but narrow check.
 - **VER-2** [stated] Order gates from cheap to costly and drop a candidate at its first failure, with cheap no-change checks (whitespace only, unchanged syntax tree) up front.
-  - Old system as oracle: partly. Strength: strong. Era: 2023–2025.
-  - Cases: [Google: how it was checked][goo-checked], [Airbnb: what worked][air-worked], [Slack: what worked][slk-worked], [Spotify: how it was checked][spo-checked], [Uber: how it was checked][ubr-checked].
-  - Against: None found.
-- **VER-3** [stated] Retry a failed unit with its latest errors in a fresh prompt, cap the attempts, and hand what remains to people.
+  - Old system as oracle: partly. Strength: medium. Era: 2023–2026.
+  - Cases: [Google: how it was checked][goo-checked], [Uber: how it was checked][ubr-checked].
+  - Against: Airbnb ran the tests before lint and type checks and retried a failed step instead of dropping the file ([Airbnb][air-worked]); Slack and Spotify send failures back to the model ([Slack][slk-worked], [Spotify][spo-checked]).
+- **VER-3** [stated] Retry a failed unit with its latest errors in a fresh prompt, cap the attempts, and hand what remains to people; this fits independent units, such as one file each.
   - Old system as oracle: partly. Strength: strong. Era: unnamed frontier models (2024) to 2026.
   - Cases: [Airbnb: what worked][air-worked], [Google: who did what][goo-who], [Spotify: numbers][spo-numbers].
-  - Against: Google's developers could not tell how many retries a file would need ([Google][goo-wrong]); test feedback helped one model on Intel's battery far more than another ([Intel][int-worked]); Uber neither retried nor handed over files whose tests failed but put them back on the old framework, as diagnosing each was impractical ([Uber][ubr-wrong]).
+  - Against: Google's developers could not tell how many retries a file would need ([Google][goo-wrong]); test feedback helped one model on Intel's battery far more than another ([Intel][int-worked]); Uber neither retried nor handed over files whose tests failed but put them back on the old framework, as diagnosing each was impractical ([Uber][ubr-wrong]); in Bun's port, where units depended on each other, the engineer fixed the workflow prompt instead of handing units to people ([Bun][bun-practices]).
 - **VER-4** [stated] Give the agent one verify tool that picks the right build and test runner and returns short errors, and run it automatically before the agent may finish.
-  - Old system as oracle: partly. Strength: medium. Era: Claude Code, 2025.
+  - Old system as oracle: partly. Strength: weak. Era: Claude Code, 2025.
   - Cases: [Spotify: what worked][spo-worked], [Spotify: practices to copy][spo-practices].
   - Against: GitHub's agents called the raw build and test commands directly, in large volume, and still finished ([GitHub][gh-numbers]).
   - Sceptic: tag changed from no to partly. Challenge: the verify tool runs only the tests a repository already has, and stopped helping where there were none. Answer: accepted; new work must write those tests before the tool helps.
@@ -40,7 +40,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Spotify: what went wrong][spo-wrong], [GitHub: how it was checked][gh-checked].
   - Against: None found.
 - **VER-9** [stated] Where the target has no tests the agent cannot check itself: leave it out, require tests first, or budget for owners to test each change.
-  - Old system as oracle: partly. Strength: strong. Era: Claude Code, 2025–2026.
+  - Old system as oracle: partly. Strength: weak. Era: Claude Code, 2025–2026.
   - Cases: [Spotify: how it was checked][spo-checked], [Spotify: practices to copy][spo-practices].
   - Against: Intel translated without tests on purpose to measure the repair cost afterwards ([Intel][int-checked]).
 
