@@ -23,7 +23,7 @@ must exit 0 before a commit.
 
 ```markdown
 ---
-title: Airbnb moves 3.5K test files from Enzyme to React Testing Library
+title: Airbnb moves 3.5K React test files off Enzyme onto React Testing Library
 date: 2025-04-01
 company: Airbnb
 summary: One sentence, at most 160 characters, for the index and llms.txt.
@@ -47,7 +47,7 @@ status: current
 superseded_by:
 ---
 
-# Airbnb moves 3.5K test files from Enzyme to React Testing Library
+# Airbnb moves 3.5K React test files off Enzyme onto React Testing Library
 
 Summary in our own words, 40 to 150 words.
 
@@ -105,8 +105,11 @@ Body rules (all checked):
 - "What went wrong" is never empty and always has a **Not reported:** bullet naming what the
   source leaves out (failure rates, rollbacks, cost, review effort). When the source names no
   failure, say "The source reports none." (survivor bias: most sources announce wins).
-- "Practices to copy": one list item per practice, one line, at most 200 characters, no number.
-  Checklist questions link to the case files behind them.
+- "Practices to copy": one line per practice, `- [stated] text ([Section](source link))` or
+  `- [ours] text ([Section](source link))`. `[stated]`: the source recommends it or reports it
+  as what worked. `[ours]`: we infer it from what the source reports (often from a failure). The
+  link goes to the source section it comes from. The text is at most 200 characters, with no
+  number.
 - "Numbers": one row per number as the source writes it, with its unit. Basis: `measured` (the
   source says how it counted: logs, repository history, a benchmark), `reported` (stated as
   fact, method not given), `estimate` (the source calls it an estimate), `self-estimate` (a team
@@ -133,6 +136,18 @@ bare number, not a wrong unit. Numbers written as words ("three") are not checke
 `UNITS` when a case needs one.
 
 Never sum or compare numbers across cases unless the units match.
+
+Own words, checked: `node scripts/check-copy.mjs <case> <source text files>` lists every run of 5
+or more consecutive words the case shares with its source (the source text lives in the private
+repository's `raw/`), outside "In their words". Run it on each new or changed case.
+
+## Checklist
+
+`checklist.md`: 5 to 12 questions; merge before adding. Each question has a "Check:" an agent can
+run on a repository, an "Evidence:" line saying in our words what the cases show (so an agent
+without the cases can use it), and links only to cases that support it. Our own inferences are
+allowed and marked "(ours)". Examples stay language-neutral or give a few per kind of move. The
+validator checks the count, "Check:", "Evidence:" and the case links.
 
 ## Writing rules
 - Summaries in our own words. At most one quote per file, 15 words or fewer, attributed, linked.

@@ -1,86 +1,170 @@
 # Before you migrate: checklist
 
 Questions to answer about a repository before an AI-driven migration to another language,
-framework or library. Each question has a "Check" an agent can run on the repository, and links
-to the cases it comes from. The wording is ours; the cases hold the evidence, and three cases are
-a small base (see their "What went wrong" sections). How to run it and the report format are at
+framework or library. Each question has a **Check** an agent runs on the repository, an
+**Evidence** line saying in our words what the cases show (so an agent that cannot open the
+cases can still use it), and links to the cases that support it. A part marked "(ours)" is our
+inference, not something a case reports. Three cases are a small base; read their "What went
+wrong" sections before you rely on them. How to run the checklist and the report format are at
 the end.
 
-1. **Is there a test oracle the agent cannot edit?**
-   Check: list the end-to-end and integration test suites that exercise public behaviour, count
-   their tests, and run them once. Find whether a change to those tests needs a separate owner or
-   approval (CODEOWNERS, branch rules, CI checks). No suite, or a suite the migrating agent may
-   rewrite, is a gap. Cases: [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md),
-   [Spotify](cases/2025-11-06-spotify-honk.md), [Airbnb](cases/2025-04-01-airbnb-enzyme-to-rtl.md).
-2. **Can an agent build, lint and test alone, fast, and in parallel?**
-   Check: find the single command (or write it down) that formats, builds, lints and tests one
-   unit; time it; measure how long its output is on failure. Run it in two worktrees at once.
-   Slow, noisy or shared-state steps are gaps.
-   Cases: [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md),
-   [Spotify](cases/2025-11-06-spotify-honk.md), [Airbnb](cases/2025-04-01-airbnb-enzyme-to-rtl.md).
-3. **How big is the job, really?**
-   Check: count the lines and files in scope, then add code that will move into scope (layers
-   tangled with it) and the rate of incoming change: commits and lines per week that touch the
-   scope over the last quarter (`git log --since`). A scope with no measured change rate is a
-   gap. Cases: [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md),
+Cases: [GitHub, Copilot runtime TypeScript to Rust, 2026](cases/2026-09-16-github-copilot-runtime-rust.md);
+[Airbnb, Enzyme to React Testing Library, 2025](cases/2025-04-01-airbnb-enzyme-to-rtl.md);
+[Spotify, Honk background coding agent, 2025-2026](cases/2025-11-06-spotify-honk.md).
+
+1. **Is the move allowed, and what is it for?**
+   Check: find the written reason for the migration and the measured problem behind it. Find the
+   repository's own rules that pin the stack, forbid new libraries or name an owner who must
+   approve the change. List what the target must win, as numbers where possible.
+   Evidence: GitHub moved for in-process embedding, startup time and memory, and says the right
+   target language differs from product to product. Checking the repository's own rules first is
+   ours. Cases: [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md).
+2. **Is there a test oracle that survives the move and that the agent cannot edit?**
+   Check: list the tests that exercise behaviour through a public interface (CLI, API, files
+   written, golden outputs) apart from white-box tests in the old language; count each kind and
+   run them once. Find who must approve a change to them (CODEOWNERS, branch rules, CI, or the
+   owner).
+   Evidence: GitHub kept its end-to-end suites unchanged as the oracle; most regressions that lost
+   a feature came from gaps in that suite, and one port deleted a test. Spotify's agent could not
+   check its work where repositories had no tests, so owners tested by hand. That white-box tests
+   written in the old language rarely survive a language change is ours.
+   Cases: [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md), [Spotify](cases/2025-11-06-spotify-honk.md).
+3. **Can an agent build, check and test alone, fast, and in parallel, in both toolchains?**
+   Check: find the command that builds, formats, lints and tests one unit in the old stack, and
+   name the one for the target stack (pin its toolchain). Time each, count the lines of output on
+   a failure, and run two worktrees at once. A missing formatter or linter counts as a finding.
+   Evidence: GitHub's agents leaned on fast compiler feedback and needed a build lock when many
+   built at once; Spotify gives its agent one verify tool that returns short errors; Airbnb gated
+   each file on tests, lint and type checks.
+   Cases: [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md), [Spotify](cases/2025-11-06-spotify-honk.md),
    [Airbnb](cases/2025-04-01-airbnb-enzyme-to-rtl.md).
-4. **Can the work ship in small units, old and new side by side?**
-   Check: split the scope into units (files, components, repositories) and draw their dependency
-   order; mark leaf units with no I/O or shared state. Find whether a unit can switch to the new
-   code while the rest stays on the old (a shim, an interop layer, per-file independence). Pick
-   the first pilot units. Cases: [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md),
-   [Airbnb](cases/2025-04-01-airbnb-enzyme-to-rtl.md), [Spotify](cases/2025-11-06-spotify-honk.md).
-5. **Is the end state written so an agent can check it?**
-   Check: look for a written target (what done means for the whole migration, not one unit),
-   before-and-after examples from this repository, and the cases where the agent must not act.
-   Missing any of the three is a gap.
-   Cases: [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md),
-   [Spotify](cases/2025-11-06-spotify-honk.md), [Airbnb](cases/2025-04-01-airbnb-enzyme-to-rtl.md).
-6. **What does the old stack do implicitly?**
-   Check: search the scope for behaviour the target will not give for free: loose number types,
-   falsy defaults, time zone and locale, environment reads, patched platform calls, global state.
-   List each dependency and whether the target ecosystem has a like-for-like replacement.
+4. **How big is the job, really?**
+   Check: count lines and files in scope, separately for code, tests, build scripts and other
+   languages (shaders, generated files). Add code that will move into scope because it is
+   tangled with it. Give the change rate in scope over the last quarter (`git log --since`
+   with `--numstat`): commits and lines per week, the number of active days and the last change,
+   since an average hides bursts.
+   Evidence: GitHub's first count was about a third of what was finally ported, because code
+   moved into scope and colleagues kept adding to the old code during the port.
    Cases: [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md).
-7. **Is the code uniform enough for one prompt?**
-   Check: count the distinct frameworks, build systems and coding styles in scope, and how many
-   units each covers. Group the units; a group too varied to describe in one prompt with
-   examples is a candidate to defer or do by hand.
+5. **Can the work ship in small units, with old and new side by side?**
+   Check: split the scope into units (files, components, repositories), draw their dependency
+   order and mark the leaves that touch neither I/O nor shared state. Find the seam that lets one unit switch
+   while the rest stays (a shim, a foreign-function interface, per-file independence) and how the
+   build links both languages meanwhile. Pick the first pilot units.
+   Evidence: GitHub replaced one component per pull request through a temporary interop layer and
+   removed the old code in the same change, starting from pure leaf helpers; Airbnb pushed each
+   file through its own steps; Spotify opens one pull request per repository. The cost of a
+   mixed-language build is ours.
+   Cases: [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md), [Airbnb](cases/2025-04-01-airbnb-enzyme-to-rtl.md),
+   [Spotify](cases/2025-11-06-spotify-honk.md).
+6. **Is the end state written, and is the scope held?**
+   Check: look for a written target for the whole migration (not one unit), before-and-after
+   examples from this repository, the cases where the agent must not act, a rule to translate
+   first and redesign later, and a check on each diff for changes outside its scope.
+   Evidence: GitHub's agents read "port X" as the hot paths only until the full end state was
+   written, and each redesign during the port cost regressions; Spotify's prompts describe the
+   end state with examples and preconditions, and about a quarter of its sessions are vetoed by
+   its judge, mostly for straying from the prompt; Airbnb's prompts carried hand-written examples.
+   Cases: [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md), [Spotify](cases/2025-11-06-spotify-honk.md),
+   [Airbnb](cases/2025-04-01-airbnb-enzyme-to-rtl.md).
+7. **What does the old stack do implicitly?**
+   Check: search the scope for behaviour the target will not give for free, and list each item
+   with "like for like" or "needs a decision". Typical items by kind of move:
+   - dynamic to static typing (for example TypeScript to Rust, Go or C#): one number type for
+     integers and floats, falsy defaults, time zone and locale, environment reads, runtime patches
+     to platform calls;
+   - C or C++ to Rust (ours): integer overflow and wrap, out-of-range float-to-integer casts,
+     aliasing and casts away from const, mutable globals, custom allocators, unchecked indexing,
+     and how much `unsafe` the target may use and where;
+   - any move: libraries with no like-for-like replacement; source shared with another language
+     or toolchain (shader headers, generated code), which a port splits into copies that drift
+     (ours); bit-exact results across languages (float model, thread count) when tests compare
+     outputs (ours).
+   Evidence: most of GitHub's regressions compiled cleanly and came from implicit behaviour:
+   number types, falsy defaults, time zone and environment, a Windows process flag, and libraries
+   that behave differently. Cases: [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md).
+8. **Is the code uniform enough for one prompt, and what context goes with it?**
+   Check: group the units by kind of code (pure logic, concurrency, OS layer, GPU or UI, data
+   pipelines) and by framework, build system and style. For each group, name the context an agent
+   gets: the unit's source, its neighbours' tests, good examples, and mapping tables for renamed
+   fields or APIs. A group too varied for one prompt is a candidate to defer or do by hand.
+   Evidence: Spotify dropped one pipeline framework because its code varied too much for one
+   prompt, and mapping tables fixed wrong field mappings; Airbnb found that choosing the related
+   files mattered more than prompt wording.
    Cases: [Spotify](cases/2025-11-06-spotify-honk.md), [Airbnb](cases/2025-04-01-airbnb-enzyme-to-rtl.md).
-8. **How will you work the long tail and stop?**
-   Check: look for a per-unit status record, a way to rerun failing units by step, a retry limit,
-   and a rule for when to stop automating and finish by hand. A plan with none of these is a gap.
-   Cases: [Airbnb](cases/2025-04-01-airbnb-enzyme-to-rtl.md),
+9. **How will you work the long tail, stop, and learn from failures?**
+   Check: look for a status record per unit, a way to rerun failing units by step, a retry limit,
+   a rule for when to stop automating and finish by hand, and a place where a failure seen twice
+   becomes a standing instruction, skill or eval.
+   Evidence: Airbnb stamped each file with its status, tuned on small samples of failures, swept
+   again, and finished the last files by hand once retries stopped helping; GitHub turned repeated
+   failures into instructions, skills and evals.
+   Cases: [Airbnb](cases/2025-04-01-airbnb-enzyme-to-rtl.md), [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md).
+10. **What may the agent decide and reach alone, and who reviews?**
+   Check: list the guardrails an agent could switch off (deleting or editing tests, updating
+   snapshots or baselines, waiver labels, CI flags) and who must approve each. List the tools,
+   skills and credentials agent sessions can reach. Ask the owner who reviews and how many hours a
+   week they have; the repository cannot tell you.
+   Evidence: a GitHub agent applied a waiver label to pass a failing check, and a session used an
+   orchestration skill nobody asked for to merge a peer's work; humans there reviewed
+   architecture and risk while several models compared old and new code. Spotify keeps its
+   agent's tools few, sandboxes it and never lets it push. Budgeting reviewer time is ours.
+   Cases: [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md), [Spotify](cases/2025-11-06-spotify-honk.md).
+11. **How will changes reach users?**
+   Check: find the release channels (pre-release, flags, canary), what share of users each
+   reaches, how problems are reported and watched, and how one unit's change is rolled back.
+   Evidence: GitHub aimed to ship each port to a pre-release first (not always), so each release
+   held a small set of ports and problems were easy to trace; it compared issue rates before and
+   during the port. A rollback path per unit is ours.
+   Cases: [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md).
+12. **How will you measure cost and result?**
+   Check: write down the manual estimate and how it was made. Measure, before the port and on
+   fixed hardware, the number the product exists for (speed, latency, memory, output quality).
+   Plan to record tokens or spend, engineer hours, pull requests, regressions after merge and
+   reverts, and mark which numbers are measured and which are estimates.
+   Evidence: GitHub benchmarked before and after and gave its token bill, warning that other
+   changes landed in the same window; Airbnb and Spotify give savings as their own estimates
+   with no cost figure. Recording reverts and regressions after merge is ours: no case reports
+   them.
+   Cases: [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md), [Airbnb](cases/2025-04-01-airbnb-enzyme-to-rtl.md),
    [Spotify](cases/2025-11-06-spotify-honk.md).
-9. **What may the agent decide alone, and who reviews?**
-   Check: list the guardrails an agent could switch off (waiver labels, snapshot updates, skipped
-   or disabled tests, baselines) and who must approve each. Count reviewer hours per week against
-   the expected pull requests per week. Look for a scope check on each diff (a judge, a size limit).
-   Cases: [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md),
-   [Spotify](cases/2025-11-06-spotify-honk.md).
-10. **How will you measure cost and result?**
-   Check: write down the manual estimate before you start and how it was made, then plan to
-   record tokens or API spend, engineer hours, pull requests, regressions found after merge and
-   reverts. Name which numbers will be measured and which are estimates.
-   Cases: [GitHub](cases/2026-09-16-github-copilot-runtime-rust.md),
-   [Airbnb](cases/2025-04-01-airbnb-enzyme-to-rtl.md), [Spotify](cases/2025-11-06-spotify-honk.md).
 
 ## How to run this checklist
 
-1. Run it in a fresh session on the repository you plan to migrate. Change nothing.
-2. Measure first: answer every question with the number, file or command output its Check asks
+1. Run it in a fresh session on the repository you plan to migrate. Change nothing in the
+   repository.
+2. Measure first: answer each question with the number, file or command output its Check asks
    for, not from memory.
-3. Mark each question "gap", "partial gap" or "no gap", with the measurement. List the questions
-   with no gap in one line each.
-4. For each gap, open only the linked cases' "Practices to copy" and "What went wrong" to write
-   the proposal. Do not compare numbers across cases unless their units match.
-5. Report as below and wait for the owner's choice.
+3. A check you may not run (read-only review, shared hardware, no target toolchain yet): write the
+   exact command, mark it "not run" with the reason, and do not guess its result.
+4. A fact only the owner knows (review time, budget, approval of a new stack): write the question
+   and mark it "ask the owner".
+5. Mark each question "gap", "partial gap" or "no gap", with the measurement.
+6. Write proposals from the Evidence lines. If you can open the cases, also read the linked
+   cases' "Practices to copy" (each marked `[stated]` by the source or `[ours]`) and "What went
+   wrong". Do not compare numbers across cases unless their units match.
+7. Order proposals by what blocks the rest: a blocker first (a "no" on question 1 stops all
+   else), then what other proposals depend on (the oracle, the baseline, the end state), then the
+   rest.
+8. Report as below and wait for the owner's choice.
 
 ## Report format
 
 ```markdown
 # Before-you-migrate review: <repository>, <YYYY-MM-DD>
 
-Migration: <from> to <to>. Scope measured: <lines, files, units, change rate per week>.
+Migration: <from> to <to>. Scope measured: <lines and files by kind, units, change rate>.
+Go / no-go: go | go after the blockers | no-go — <one line why>.
+
+## Blockers
+- Q<n>: <what must happen first, and who decides>.
+
+## Not run
+- Q<n>: `<exact command>` — <why it was not run>.
+
+## Ask the owner
+- Q<n>: <question>.
 
 ## No gap
 - Q<n> <question>: <measurement>.
@@ -89,7 +173,8 @@ Migration: <from> to <to>. Scope measured: <lines, files, units, change rate per
 1. Q<n> <question> — gap | partial gap.
    Today: <what the repository does, with the measurement>.
    Change: <the proposal>.
-   Cases: <links to the cases behind it>.
+   Evidence: <the case evidence, or "ours">. Cases: <links, if opened>.
+   Depends on: <proposal numbers, or none>.
    Cost: S | M | L. Recommendation: do | later | skip.
    Check that proves it: <command or count to rerun after the change>.
 2. ...

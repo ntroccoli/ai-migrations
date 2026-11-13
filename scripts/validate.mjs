@@ -157,6 +157,11 @@ function validateCase(c) {
   const sec = n => secs.find(s => s.name === n)?.text ?? '';
   for (const s of secs) if (!s.text) err(file, `section "${s.name}" is empty`);
 
+  // The case's own source URLs: links to them count as source links.
+  const sources = [meta.source_url, ...(Array.isArray(meta.also) ? meta.also : [])]
+    .filter(u => typeof u === 'string' && u).map(u => u.replace(/\/$/, ''));
+  const isSource = u => sources.some(s => u.split('#')[0].replace(/\/$/, '') === s);
+
   // Who did what: the three bullets.
   for (const who of ['AI', 'Rule-based tools', 'People']) {
     if (!new RegExp(`^- \\*\\*${who}:\\*\\*\\s+\\S`, 'm').test(sec('Who did what'))) err(file, `"Who did what" needs "- **${who}:** ..."`);
@@ -168,15 +173,16 @@ function validateCase(c) {
   // Practices: one line each.
   const prac = sec('Practices to copy').split('\n').filter(l => l.trim());
   if (!prac.length) err(file, '"Practices to copy" needs at least one item');
+  // Each: `- [stated] text ([Section](source-url#anchor))` or `- [ours] ...`, one line.
   for (const l of prac) {
-    if (!/^- \S/.test(l)) err(file, `practice must be one list item on one line: "${l.slice(0, 50)}"`);
-    else if (l.length - 2 > 200) err(file, `practice longer than 200 characters: "${l.slice(2, 52)}..."`);
-    else if (checkUnits(l).need) err(file, `practice holds a number (keep numbers in the Numbers table): "${l.slice(2, 52)}"`);
+    const p = l.trimEnd().match(/^- \[(stated|ours)\] (.+) \(\[[^\]]+\]\((https:[^)\s]+)\)\)$/);
+    if (!p) { err(file, `practice must be one line: "- [stated] or [ours] text ([Section](source link))": "${l.slice(0, 50)}"`); continue; }
+    if (p[2].length > 200) err(file, `practice text longer than 200 characters: "${p[2].slice(0, 50)}..."`);
+    if (checkUnits(p[2]).need) err(file, `practice holds a number (keep numbers in the Numbers table): "${p[2].slice(0, 50)}"`);
+    if (!isSource(p[3])) err(file, `practice must link a section of this case's source: "${p[2].slice(0, 50)}"`);
   }
 
-  // Links: the case's own source URLs, well-formed external links, relative links that resolve.
-  const sources = [meta.source_url, ...(Array.isArray(meta.also) ? meta.also : [])].filter(Boolean).map(u => u.replace(/\/$/, ''));
-  const isSource = u => sources.some(s => u.split('#')[0].replace(/\/$/, '') === s);
+  // Links: well-formed external links, relative links that resolve.
   const noCode = body.replace(/```[\s\S]*?```/g, '').replace(/`[^`]*`/g, '');
   for (const [, target] of noCode.matchAll(/\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g)) {
     if (/^https?:/.test(target)) { if (!isHttps(target)) err(file, `link must be https: ${target}`); continue; }
@@ -246,9 +252,10 @@ function validateChecklist(caseFiles) {
     const q = l.match(/^(\d+)\. \*\*(.+?)\*\*/);
     if (q) { cur = { title: q[2], text: l }; qs.push(cur); } else if (/^#/.test(l)) cur = null; else if (cur) cur.text += '\n' + l;
   }
-  if (qs.length < 5 || qs.length > 10) err(f, `${qs.length} questions (5 to 10)`);
+  if (qs.length < 5 || qs.length > 12) err(f, `${qs.length} questions (5 to 12)`);
   for (const q of qs) {
     if (!/\bCheck:/.test(q.text)) err(f, `"${q.title}" has no "Check:" step`);
+    if (!/\bEvidence:\s+\S/.test(q.text)) err(f, `"${q.title}" has no "Evidence:" line (what the cases show, in our words)`);
     const links = [...q.text.matchAll(/\]\((?:\.\/)?cases\/([^)#\s]+\.md)[^)]*\)/g)].map(m => m[1]);
     if (!links.length) err(f, `"${q.title}" links to no case`);
     for (const l of links) if (!caseFiles.has(l)) err(f, `"${q.title}" links to missing case ${l}`);

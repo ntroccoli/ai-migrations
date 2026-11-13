@@ -1,5 +1,5 @@
 ---
-title: Airbnb moves 3.5K test files from Enzyme to React Testing Library
+title: Airbnb moves 3.5K React test files off Enzyme onto React Testing Library
 date: 2025-04-01
 company: Airbnb
 summary: An LLM pipeline with per-file validation steps and retries migrated 97% of about 3,500 React test files; people finished the rest by hand.
@@ -23,7 +23,7 @@ status: current
 superseded_by:
 ---
 
-# Airbnb moves 3.5K test files from Enzyme to React Testing Library
+# Airbnb moves 3.5K React test files off Enzyme onto React Testing Library
 
 Airbnb replaced Enzyme with React Testing Library in nearly 3,500 component test files using an
 LLM pipeline. Each file moved through validation steps (refactor, tests, lint, types), and the LLM
@@ -37,8 +37,8 @@ about a week. The team had estimated the work at 1.5 years by hand and finished 
 
 A post on Airbnb's engineering blog by one of its engineers (the page shows no date; the site's
 publishing data gives 2025-04-01). Airbnb does not sell the tools it used. The post states its
-results but shows no data behind them: no model, no team size, no cost figure, and two diagrams
-of the pipeline.
+results without the data behind them. It names no model, team size or cost figure; its only
+figures are two diagrams of the pipeline.
 
 ## What was migrated
 
@@ -81,7 +81,7 @@ intent was checked or whether people reviewed the migrated files before merging
 | just under 100 files | files left for people at that point | reported | [post](https://airbnb.tech/infrastructure/accelerating-large-scale-test-migration-with-llms/#93c5) |
 | 50 to 100 retries | attempts already spent on many long-tail files before the switch to manual work | reported | [post](https://airbnb.tech/infrastructure/accelerating-large-scale-test-migration-with-llms/#93c5) |
 | 10 attempts | attempts by which most simple-to-medium files succeeded | reported | [post](https://airbnb.tech/infrastructure/accelerating-large-scale-test-migration-with-llms/#0e90) |
-| 40,000 to 100,000 tokens | prompt size by the end of the migration | reported | [post](https://airbnb.tech/infrastructure/accelerating-large-scale-test-migration-with-llms/#c032) |
+| 40,000 to 100,000 tokens | prompt size reached late in the migration | reported | [post](https://airbnb.tech/infrastructure/accelerating-large-scale-test-migration-with-llms/#c032) |
 | as many as 50 files | related files pulled into one prompt | reported | [post](https://airbnb.tech/infrastructure/accelerating-large-scale-test-migration-with-llms/#c032) |
 | 5 to 10 files | sample of failing files used to tune a fix for one common issue | reported | [post](https://airbnb.tech/infrastructure/accelerating-large-scale-test-migration-with-llms/#93c5) |
 | another week | manual work to finish the last 3% of files | reported | [post](https://airbnb.tech/infrastructure/accelerating-large-scale-test-migration-with-llms/#7d0c) |
@@ -95,8 +95,8 @@ intent was checked or whether people reviewed the migrated files before merging
   simple and medium files; most passed within 10 attempts
   ([source](https://airbnb.tech/infrastructure/accelerating-large-scale-test-migration-with-llms/#0e90)).
 - For complex files, more context did the work: the component source, the test, sibling tests
-  from the same folder, imports, guidelines and examples. The authors say choosing the right
-  related files mattered more than perfecting the prompt
+  from the same folder, imports, guidelines and examples. The authors say picking which
+  related files to include mattered more than perfecting the prompt
   ([source](https://airbnb.tech/infrastructure/accelerating-large-scale-test-migration-with-llms/#c032)).
 - The long tail was worked breadth first: a status comment in each file showed where files got
   stuck, a command re-ran files by step and path, and a loop of sampling, tuning and sweeping took
@@ -112,19 +112,24 @@ intent was checked or whether people reviewed the migrated files before merging
   ([source](https://airbnb.tech/infrastructure/accelerating-large-scale-test-migration-with-llms/#93c5)).
 - Early prompt-engineering experiments helped less than brute-force retries
   ([source](https://airbnb.tech/infrastructure/accelerating-large-scale-test-migration-with-llms/#0e90)).
+- Retries alone did not work for files with complicated test setup or many layers of
+  indirection; those needed much larger prompts with related files and examples
+  ([source](https://airbnb.tech/infrastructure/accelerating-large-scale-test-migration-with-llms/#c032)).
 - **Not reported:** the models used; team size; the API cost (the post only says the total was
   far below the manual estimate); how test intent was verified; whether people reviewed the
-  migrated files; any defects or flaky tests found after the migration.
+  migrated files; any defects or flaky tests found after the migration. The steps it times (4
+  hours, 4 days, another week) do not add up to the 6 weeks it gives for the whole migration, and
+  it does not say where the rest went ([source](https://airbnb.tech/infrastructure/accelerating-large-scale-test-migration-with-llms/#7d0c)).
 
 ## Practices to copy
 
-- Model the migration as per-file steps with a validation gate (refactor, tests, lint, types) between each.
-- On a failed step, retry with the errors and the latest file in a fresh prompt, up to a set limit.
-- Pick context files well (component source, sibling tests, imports, good examples) before tuning prompt wording.
-- Stamp each file with its migration status so failures can be grouped and rerun by step.
-- Work the long tail breadth first: sample a few failing files per issue, fix the prompt, then sweep all files again.
-- Stop automating at a ceiling and finish by hand, starting from the failed automatic attempt.
-- Check that code coverage holds before you delete the old test framework.
+- [stated] Split the migration into per-file steps, each closed by a check (refactor, tests, lint, types) before the next starts. ([Steps](https://airbnb.tech/infrastructure/accelerating-large-scale-test-migration-with-llms/#f20f))
+- [stated] On a failed step, retry with the errors and the current file in a fresh prompt, up to a set limit. ([Retry loops](https://airbnb.tech/infrastructure/accelerating-large-scale-test-migration-with-llms/#0e90))
+- [stated] Pick context files well (component source, sibling tests, imports, good examples) before tuning prompt wording. ([Increasing the context](https://airbnb.tech/infrastructure/accelerating-large-scale-test-migration-with-llms/#c032))
+- [stated] Mark each file with its migration status so failures can be grouped and rerun by step. ([Systematic improvement](https://airbnb.tech/infrastructure/accelerating-large-scale-test-migration-with-llms/#93c5))
+- [stated] Work the long tail breadth first: sample a few failing files per issue, fix the prompt, then sweep all files again. ([Systematic improvement](https://airbnb.tech/infrastructure/accelerating-large-scale-test-migration-with-llms/#93c5))
+- [stated] Stop automating at a ceiling and finish by hand, starting from the failed automatic attempt. ([Systematic improvement](https://airbnb.tech/infrastructure/accelerating-large-scale-test-migration-with-llms/#93c5))
+- [ours] Before deleting the old test framework, measure coverage and decide how test intent will be checked, since the source does not say. ([Results and impact](https://airbnb.tech/infrastructure/accelerating-large-scale-test-migration-with-llms/#7d0c))
 
 ## Context
 
