@@ -13,6 +13,7 @@ Moves covered: Zig, C and TypeScript ported to Rust; React component tests in Ja
 - Before a migration: run the [checklist](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/checklist.md) on the repository and change nothing. Each question has a Check to measure and cites lesson IDs; open only the lessons and cases behind a gap.
 - For any other large piece of AI-driven work: scan the one-line list of every lesson at the end of [lessons/index.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/index.md) (about 31 KB), then open the aspect pages of the lessons that fit (each lesson there has its cases, the evidence against it, and its oracle and strength).
 - Open a case only when you need its detail. Each has "Who did what", "How it was checked", a Numbers table with the basis of each number, "What went wrong" and "Practices to copy". File format: [AGENTS.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/AGENTS.md).
+- After a review, a migration or a revisit: tell what the checklist or the lessons foresaw and what they missed, in a field report ([how](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/field-reports.md)); show the user the exact text before posting.
 - Relative links inside these files resolve against https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/.
 
 ## Lessons

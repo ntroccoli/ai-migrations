@@ -16,7 +16,8 @@ const REPO = `https://github.com/${REPO_SLUG}`;
 const RAW_BASE = `https://raw.githubusercontent.com/${REPO_SLUG}/main`;
 // Hand-written files that name this repository: the build rewrites any older slug in REPO_SLUGS
 // (scripts/lib.mjs) to REPO_SLUG and leaves every other URL alone. README.md also gets the generated blocks in README_BLOCKS, each between its markers.
-const SYNCED = ['README.md', 'CONTRIBUTING.md', 'LICENSE-CONTENT.md', '.github/ISSUE_TEMPLATE/config.yml', 'lychee.toml'];
+const SYNCED = ['README.md', 'CONTRIBUTING.md', 'LICENSE-CONTENT.md', 'docs/field-reports.md', '.github/ISSUE_TEMPLATE/config.yml',
+  '.github/ISSUE_TEMPLATE/field-report.yml', 'lychee.toml'];
 // Source languages and stacks the cases start from; update it when a case adds one.
 const COVERED = 'Zig, C and TypeScript ported to Rust; React component tests in JavaScript and TypeScript; ' +
   'Java tests; a Go monolith; ID types in Java, C++, Dart and other languages; Java and Scala library moves. ' +
@@ -185,6 +186,8 @@ out['llms.txt'] = [
     'that fit (each lesson there has its cases, the evidence against it, and its oracle and strength).',
   `- Open a case only when you need its detail. Each has "Who did what", "How it was checked", a Numbers table with ` +
     `the basis of each number, "What went wrong" and "Practices to copy". File format: [AGENTS.md](${RAW_BASE}/AGENTS.md).`,
+  `- After a review, a migration or a revisit: tell what the checklist or the lessons foresaw and what they missed, ` +
+    `in a field report ([how](${RAW_BASE}/docs/field-reports.md)); show the user the exact text before posting.`,
   `- Relative links inside these files resolve against ${RAW_BASE}/.`, '',
   '## Lessons', '',
   ...pages.map(p => {

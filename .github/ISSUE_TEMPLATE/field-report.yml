@@ -1,0 +1,96 @@
+name: Field report
+description: What the checklist or the lessons predicted on your project, and what actually happened. Usually drafted by your coding agent.
+title: "Field report: "
+labels: [field-report]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        How reports are used, and what never to include: [docs/field-reports.md](https://github.com/ntroccoli/ai-migrations/blob/main/docs/field-reports.md). Reports are public. No code, diffs, prompts, file paths, URLs, secrets, personal data, or names of companies, products or people. The maintainer reads reports in batches at each update: a complete report is closed with the label `collected`; an incomplete one gets `needs-fix` and one comment.
+  - type: dropdown
+    id: ran
+    attributes:
+      label: What the agent ran
+      options:
+        - The checklist (a before-you-migrate review)
+        - Some lessons only
+        - The checklist and some lessons
+    validations:
+      required: true
+  - type: input
+    id: used
+    attributes:
+      label: Questions and lessons used
+      description: IDs, comma-separated, for example "Q1, Q4, TST-1". Write "all" for the whole checklist.
+    validations:
+      required: true
+  - type: input
+    id: move
+    attributes:
+      label: The move
+      description: From what to what, as a category, for example "TypeScript service to Rust" or "Enzyme tests to React Testing Library". No names.
+    validations:
+      required: true
+  - type: dropdown
+    id: size
+    attributes:
+      label: Code in scope
+      options:
+        - Under 10,000 lines
+        - 10,000 to 100,000 lines
+        - 100,000 to 1,000,000 lines
+        - Over 1,000,000 lines
+        - Not measured
+    validations:
+      required: true
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Where the migration stands
+      options:
+        - Review only, no migration started
+        - In progress
+        - Finished
+        - Stopped or abandoned
+    validations:
+      required: true
+  - type: textarea
+    id: predicted
+    attributes:
+      label: What the review predicted
+      description: The go or no-go, the blockers and the main gaps, a few lines.
+    validations:
+      required: true
+  - type: textarea
+    id: happened
+    attributes:
+      label: What actually happened
+      description: Above all the regressions and problems you hit, with numbers where you have them (counts, sizes, shares). For a review only, write what you decided and why.
+    validations:
+      required: true
+  - type: input
+    id: foreseen
+    attributes:
+      label: IDs that foresaw a problem you hit
+      description: Question or lesson IDs, comma-separated, or "none".
+    validations:
+      required: true
+  - type: input
+    id: wrong
+    attributes:
+      label: IDs whose prediction did not hold
+      description: Question or lesson IDs, comma-separated, or "none". Say why in the next box.
+    validations:
+      required: true
+  - type: textarea
+    id: missed
+    attributes:
+      label: What nothing foresaw, and what to change
+      description: Problems no question or lesson predicted, wording that confused the agent, a check that could not run.
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: Consent
+      options:
+        - label: I read the exact text; it has no code, secrets or confidential details; I license it under CC BY 4.0.
+          required: true

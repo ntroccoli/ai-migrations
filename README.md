@@ -40,13 +40,32 @@ Now: 9 cases (Slack, Airbnb, Google, Spotify, Uber, 1Password, Bun, Intel, GitHu
 ## Try it
 
 Open your coding agent (Claude Code, Codex, Cursor, …) in the project you are thinking of
-migrating, and paste:
+migrating. Step 1 only reads your project; steps 2 and 3 are optional.
+
+### Step 1: review
 
 ```text
 Read https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms.txt and follow it. Run the checklist on this project: measure every question with its check; do not judge from memory. Report in the checklist's report format: each answer with its evidence and the cases behind it, then a go or no-go with the main risks. Change nothing.
 ```
 
-The agent only reads your project. What to change, if anything, is your call.
+What to change, if anything, is your call.
+
+### Step 2: apply
+
+```text
+Apply the proposals you marked "do" (or: apply proposals 1, 3 and 5). For each, first state the check that proves it, then make the change and run that check. Write the record the checklist defines in docs/migration-review.md: every proposal with its status, the event that shows it and the date. Name the newest log.md entry this review covered.
+```
+
+### Step 3: revisit, and tell us what happened
+
+When the code has moved on, or the migration has started, paste:
+
+```text
+Read docs/migration-review.md and https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/log.md. Re-run only the open, waiting and stopped-holding items, and any question whose measurement may have moved or that a newer log entry changed. Update the record. Then draft a field report as https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/field-reports.md describes, and show it to me before posting.
+```
+
+A [field report](docs/field-reports.md) says which questions foresaw the problems you hit and
+which missed them; it is how the checklist improves.
 
 ## Contributing
 

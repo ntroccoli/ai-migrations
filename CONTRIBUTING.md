@@ -9,6 +9,8 @@ Thanks for helping keep these cases accurate.
 - **Suggestions:** a well-documented migration done with AI that is missing. Link its primary
   source (an engineering post, paper, talk or official repository); secondhand reports are left
   out. Use the "Suggest a case" form.
+- **Field reports:** what the checklist or the lessons predicted on your project, and what
+  actually happened. See [docs/field-reports.md](docs/field-reports.md).
 
 Please open an [issue](https://github.com/ntroccoli/ai-migrations/issues/new/choose). Pull
 requests from outside contributors are not accepted yet.
