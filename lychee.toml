@@ -1,0 +1,12 @@
+# Link checker config (https://lychee.cli.rs)
+max_concurrency = 4
+# 429 and 503 mean rate-limited, not a broken link.
+accept = ["200..=299", "429", "503"]
+# This repository's own GitHub URLs exist only once it is published.
+exclude = [
+  '^https://raw\.githubusercontent\.com/ntroccoli/ai-migrations/',
+  '^https://github\.com/ntroccoli/ai-migrations(/|$)',
+]
+exclude_path = ["node_modules", ".test-tmp", "CODE_OF_CONDUCT.md"]
+cache = true
+max_cache_age = "7d"
