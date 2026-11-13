@@ -48,8 +48,9 @@ model share chart.
 
 ## What was migrated
 
-The type of ID fields in protocol buffer schemas, from int32 to int64, in 39 migrations, one per ID
-([section 2.1](https://arxiv.org/html/2504.09691#S2.SS1)). A schema change alone is easy; the work is in
+The type of ID fields in protocol buffer schemas, from int32 to int64
+([section 2.1](https://arxiv.org/html/2504.09691#S2.SS1)), in 39 migrations, one per ID
+([section 4.2](https://arxiv.org/html/2504.09691#S4.SS2)). A schema change alone is easy; the work is in
 the code that reads or writes the ID, directly or through other variables: accessors, values passed
 along, bit operations that assume the int32 width, and tests whose example IDs should exceed the
 int32 range; one example in the paper also changes values inside SQL strings

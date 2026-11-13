@@ -48,7 +48,7 @@ the key sentences checked word for word
 
 ## What was migrated
 
-Java tests in Uber's Bazel monorepo: over 600,000 tests written for JUnit 4, spread across 15 million lines of code.
+Java tests in Uber's Bazel monorepo: over 600,000 tests written for JUnit 4, spanning code that totals 15 million lines.
 Active development of JUnit 4 had stopped in 2021, and future JUnit releases plan to drop it.
 Bazel runs JUnit 4 natively but not the JUnit Platform that JUnit 5 needs, so the build had to
 change before any test could move. The post reports over 75,000 test classes migrated; it does
@@ -108,8 +108,8 @@ reviewed the diffs or compared test counts before and after is not stated
 - Precondition filters skipped any file using a runner, rule or base class the recipes did not
   support, so no file was left half on JUnit 4 and half on JUnit 5 and one hard file did not block
   its target ([source](https://www.uber.com/blog/junit-migration/)).
-- Search recipes counted how often each runner and rule was used (751 files for the most common
-  rule), and the recipes were built around the most used ones
+- Search recipes counted how often each runner and rule was used (751 files for the top rule in the
+  post's sample table), and the recipes were built around the most used ones
   ([source](https://www.uber.com/blog/junit-migration/)).
 - A one-argument script per target and Shepherd to fan out over thousands of targets; the first
   rollout already produced over 2,000 code-change diffs, and rollouts were repeated with new

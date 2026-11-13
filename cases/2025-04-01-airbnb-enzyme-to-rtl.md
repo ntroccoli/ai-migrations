@@ -18,7 +18,7 @@ cost: unstated
 ai_share: most
 tools: [custom LLM migration pipeline, Jest, ESLint, TypeScript compiler]
 models: [unstated]
-period: 2023..2024
+period: 2024
 outcome: completed
 status: current
 superseded_by:
@@ -52,7 +52,9 @@ and its coverage ([source](https://airbnb.tech/infrastructure/accelerating-large
 ## Who did what
 
 - **AI:** LLMs (not named; the post says frontier models) rewrote each test file and fixed the
-  failures of each validation step, given the errors and the latest version of the file. A
+  failures of each validation step, given the errors and the latest version of the file. Basis
+  for `ai_share: most`: the pipeline migrated 97% of the files and people the rest
+  ([source](https://airbnb.tech/infrastructure/accelerating-large-scale-test-migration-with-llms/)). A
   hackathon team first showed in mid-2023 that LLMs could convert hundreds of files in a few
   days.
 - **Rule-based tools:** the pipeline itself: a per-file state machine that ran Jest, ESLint and

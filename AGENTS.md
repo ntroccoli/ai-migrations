@@ -59,7 +59,7 @@ cost: unstated
 ai_share: most
 tools: [custom LLM migration pipeline, Jest, ESLint, TypeScript compiler]
 models: [unstated]
-period: 2023..2024
+period: 2024
 outcome: completed
 status: current
 superseded_by:

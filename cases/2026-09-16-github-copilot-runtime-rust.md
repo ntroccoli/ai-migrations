@@ -34,13 +34,13 @@ stable one. The source reports about 430,000
 lines of TypeScript ported, 128 pull requests, 14.5 weeks and about $120,000 in tokens, along with
 dozens of regressions and a first scope estimate that was off by more than three times
 ([source](https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/)).
-It is the most detailed account in this collection of how agent fleets behave on a large port.
+It reports fleet behaviour from session logs: reading against editing, compactions, rebases.
 
 ## Source
 
 A long post on the GitHub Blog by the engineer who led the port, dated 2026-09-16 and updated
 2026-09-23. GitHub sells Copilot, the tool that did the work, so the post is also promotion; it
-weighs less for that. It is unusually open: it shows numbers from the repository history and
+weighs less for that. It shows numbers from the repository history and
 from the agent session logs, lists the regressions by kind, and gives the token bill. The
 repository itself is private, so the numbers cannot be checked from outside. Charts are images;
 the archive keeps their alt text.
@@ -110,6 +110,7 @@ before and during the port
 | 158 blocks | `unsafe` blocks in the runtime crate, across 36 files, all at external boundaries | measured | [post](https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/#h-how-much-unsafe) |
 | 7.55 to 120.0 lifecycles per second | sessions created, run for one turn and closed per second, Node runtime against Rust in process, on a local stub model | measured | [post](https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/#h-perf-perf-and-more-perf) |
 | 1,383 MB → 126 MB | peak private memory added by a ten-client batch, Node against Rust in process | measured | [post](https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/#h-perf-perf-and-more-perf) |
+| 260 MB | event log one ported read-only scan duplicated instead of borrowing | reported | [post](https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/#h-the-regressions) |
 | ~136.3 billion tokens | tokens spent on the port, including ~130.6 billion tokens of cached input reads | measured | [post](https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/#h-what-the-port-cost) |
 | ~$120,000 | monetary bill for those tokens | measured | [post](https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/#h-what-the-port-cost) |
 | roughly 3 weeks | the lead developer's time on the port, from the port's share of their pull requests | self-estimate | [post](https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/#h-what-the-port-cost) |
@@ -144,7 +145,8 @@ before and during the port
   rejected, JavaScript falsy defaults ported with different semantics, ambient behaviour (time
   zone, environment, a Windows window flag) that Node had supplied silently, paired operations
   ported only on one side, lifecycle and ordering bugs, missed features, library differences
-  (one caused an infinite loop at startup), changes lost in rebases, and slower code. Some got as far as
+  (one caused an infinite loop at startup), changes lost in rebases, and slower code (one read-only scan duplicated a whole event log of 260 MB rather
+  than borrowing it; another kept a handle per event until the JavaScript heap ran out). Some got as far as
   a stable release, and the author is certain that more exist than are known
   ([source](https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/#h-the-regressions)).
 - The end-to-end suite was too thin. With one exception, every regression that lost a feature
