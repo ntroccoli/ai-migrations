@@ -48,6 +48,6 @@ Moves covered: Zig, C and TypeScript ported to Rust; React component tests in Ja
 
 ## Optional
 
-- [Everything in one file](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms-full.txt): every lesson, every case line, the checklist and the pitfalls, for tools that cannot follow links. About 128 KB (~33k tokens), so prefer the aspect pages when you can.
+- [Everything in one file](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms-full.txt): every lesson, every case line, the checklist and the pitfalls, for tools that cannot follow links. About 131 KB (~33k tokens), so prefer the aspect pages when you can.
 - [Pitfalls by kind of move](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/pitfalls.md): what the old stack did implicitly, and seams for moving in steps.
 - [Lessons index](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/index.md): counts, the cases behind each lesson, and where the cases disagree.

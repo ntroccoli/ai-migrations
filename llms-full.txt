@@ -618,8 +618,8 @@ How to read the numbers in these sources, and how to report your own.
 Questions to answer about a repository before an AI-driven migration to another language,
 framework or library, or a large restructuring. Each has a **Check** an agent runs on the
 repository, an **Evidence** line saying in our words what the cases show ("ours" marks our own
-inference), and the **Lessons** behind it: IDs whose prefix names a page listed in
-[lessons/index.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/index.md) (`TST-2` is lesson 2 on the testing page); each lesson links
+inference), and the **Lessons** behind it: IDs whose prefix names an aspect page listed in
+[llms.txt](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms.txt) (`TST-2` is lesson 2 on the testing page); each lesson links
 the case sections it rests on. Pitfalls by kind of move: [pitfalls.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/pitfalls.md). How to run it
 and the report format are at the end.
 
@@ -646,19 +646,21 @@ restructuring); [Spotify](https://raw.githubusercontent.com/ntroccoli/ai-migrati
    implementation and how they are regenerated. Say how results are compared across languages
    (plain-data summaries, tolerances) and how you confirm the tests ran. When the tests are what
    moves, say how intent and coverage are compared (coverage before and after, a hand-converted
-   sample) and check new tests can fail. Find who must approve a test change (CODEOWNERS, branch
+   sample) and check new tests can fail. Say whether old and new can take the same inputs side by side
+   and have their outputs compared (a differential or shadow run). Find who must approve a test change (CODEOWNERS, branch
    rules, CI, the owner); none is a finding.
    Evidence: GitHub kept its end-to-end suites unchanged as the oracle, and its feature-loss
    regressions came almost all from gaps in them. Bun's suite, in a third language, judged the
    whole port; a critic notes it had missed the old bugs. Intel's translation compiled yet
    crashed until repaired; Google's correct changes stalled on failing tests and goldens;
-   Spotify's worst case is green CI with wrong behaviour.
+   Spotify's worst case is green CI with wrong behaviour. Intel checked its repaired port by
+   matching the C original's `git blame` output; running both on live inputs is ours.
    Lessons: TST-1, TST-2, TST-3, TST-4, TST-5, TST-6, TST-8, TST-10, VER-5, OVS-1.
 3. **Can an agent build, check and test alone, fast, and in parallel, in both toolchains?**
    Check: find the command that builds, formats, lints and tests one unit in the old stack, and
    name the one for the target stack (pin its toolchain). Use recorded timings first (logs, CI
-   history); otherwise time each, count the output lines of a failure, and run two worktrees at
-   once. For the number of agents you plan, estimate compile time, disk space, disk speed and
+   history); otherwise time each, count the output lines of a failure, and build two separate clones
+   outside the repository at once (a worktree would write into its `.git`). For the number of agents you plan, estimate compile time, disk space, disk speed and
    process limits; say how agents are kept from undoing each other's work, and which target
    platforms their machines can build and test. A missing formatter or linter is a finding.
    Evidence: GitHub needed a build lock once many agents built at once. Bun's agents sharing one
@@ -668,12 +670,13 @@ restructuring); [Spotify](https://raw.githubusercontent.com/ntroccoli/ai-migrati
    Lessons: OPS-1, OPS-2, OPS-3, ORC-1, ORC-2, VER-2, VER-4, TOL-6.
 4. **How big is the job, really?**
    Check: scope is everything that must exist in the target. Count lines and files in scope
-   (`git ls-files | xargs wc -l`, by folder) for code (GPU code counts), tests, build scripts,
+   (`git ls-files -z -- <scope> | xargs -0 wc -l`, or `scc`, `tokei` or `cloc`, by folder) for code (GPU code counts), tests, build scripts,
    and other languages (shaders, generated files, templates or DSLs of the old stack). For a
    change across call sites, list every site with a code index or static analyzer, not text
    search alone, and keep the list. Add code tangled with the scope. List the data and asset
    formats both builds read, and stored data that must stay readable (rows, hashes, saves). Give
-   the change rate in scope over the last quarter (`git log --since --numstat`): commits and
+   the change rate in scope over the last quarter
+   (`git log --since="3 months ago" --numstat --format=%ad --date=short -- <scope>`): commits and
    lines per week, active days, last change. Code still changing fast: ask the owner whether to
    wait, or delete the old code in the change that ports it so later edits conflict.
    Evidence: GitHub's first count was about a third of what it finally ported, as code moved
@@ -682,8 +685,9 @@ restructuring); [Spotify](https://raw.githubusercontent.com/ntroccoli/ai-migrati
    Lessons: PLN-3, PLN-10, ROL-4, TOL-1, TOL-3, MSR-8.
 5. **Can the work ship in small units, with old and new side by side?**
    Check: split the scope into units (files, components, packages, repositories), draw their
-   dependency order with the language's own read-only graph tool (`go list -deps`, `cargo tree`,
-   an import graph), count the cycles, and mark the leaves that touch neither I/O nor shared
+   dependency order with a read-only graph tool for the language (`go mod graph`, `cargo tree`,
+   `jdeps`, `madge`, `pydeps`), and count the cycles (Go and Cargo forbid package cycles: look
+   between modules or files instead), and mark the leaves that touch neither I/O nor shared
    state. Find the seam that lets one unit switch while the rest stays, and how the build links
    both languages meanwhile (seams by kind of move: [pitfalls.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/pitfalls.md#seams)). No seam:
    say so, the move is one switch. Check what the platform rules allow. Pick the pilot units.
@@ -721,8 +725,8 @@ restructuring); [Spotify](https://raw.githubusercontent.com/ntroccoli/ai-migrati
    pipelines) and by framework, build system and style. For each group, name the context an
    agent gets: the unit's source, its neighbours' tests, good examples, mapping tables for
    renamed fields or APIs, runtime facts a person would look at, and what a rule-based codemod
-   can do first. Check the model handles each language in scope and the largest files fit its
-   context window. A group too varied for one prompt is a candidate to defer or do by hand.
+   can do first. Pilot the model on the hardest files of each language in scope, and check the
+   largest files fit its context window. A group too varied for one prompt is a candidate to defer or do by hand.
    Evidence: Spotify dropped a framework too varied for one prompt, and mapping tables fixed
    wrong field mappings; Airbnb found the choice of related files mattered more than prompt
    wording; Slack gave the model a codemod's partial output and each test's rendered output;
@@ -730,7 +734,8 @@ restructuring); [Spotify](https://raw.githubusercontent.com/ntroccoli/ai-migrati
    where its AI attempt failed.
    Lessons: CTX-1, CTX-2, CTX-3, CTX-5, CTX-9, TOL-2, TOL-7, AGF-8, PLN-8.
 9. **How will you work the long tail, stop, and learn from failures?**
-   Check: look for a status record per unit, a way to rerun failing units by step, a retry limit,
+   Check: look for a status record per unit, a way to rerun failing units by step, a retry limit (for independent units such as
+   files; where units depend on each other, a rule to fix the workflow and rerun instead),
    a rule for when to stop automating and finish by hand, and a place where a failure seen twice
    becomes a standing instruction, skill or eval. Say which exist and which the port must add.
    Evidence: Airbnb stamped each file with its status, tuned on small samples of failures, swept
@@ -776,15 +781,15 @@ restructuring); [Spotify](https://raw.githubusercontent.com/ntroccoli/ai-migrati
 Only where a case gives a number. They are starting points from one case each, not targets;
 adjust them to the repository. For a question without a line here, judge "gap" from the Check alone.
 
+- Q4: GitHub's first count was about 130,000 lines and about 430,000 went through the port. A
+  scope count with no allowance for code moving in and new code arriving is a partial gap.
+  [GitHub](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md)
+- Q5: Bun ran its whole loop on 3 files before all 1,448. No pilot before the bulk run is a gap.
+  [Bun](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md)
 - Q9: Airbnb saw most simple and medium files pass within about 10 attempts, and 50 to
   100 attempts on the hardest gained little before people finished them; it tuned each fix on 5
   to 10 failing files before sweeping again. No retry limit, or no rule to stop and hand-port, is
   a gap. [Airbnb](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-01-airbnb-enzyme-to-rtl.md)
-- Q5: Bun ran its whole loop on 3 files before all 1,448. No pilot before the bulk run is a gap.
-  [Bun](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md)
-- Q4: GitHub's first count was about 130,000 lines and about 430,000 went through the port. A
-  scope count with no allowance for code moving in and new code arriving is a partial gap.
-  [GitHub](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md)
 
 ### How to run this checklist
 
@@ -887,7 +892,10 @@ scope for each item that applies, give the search you used, and mark the item "l
 "needs a decision". An item with a case link is reported by that case; an item marked (ours) is
 our inference. A count only says where to look.
 
-### Dynamic to static typing (for example TypeScript to Rust, Go or C#)
+### A JavaScript runtime to a compiled language (for example TypeScript on Node.js to Rust, Go or C#)
+
+TypeScript's types are erased at run time: the regressions come from what the JavaScript runtime
+does underneath them.
 
 - One number type for integers and floats; falsy defaults; time zone; environment reads;
   platform behaviour the old runtime supplied silently, such as a Windows window flag. [GitHub](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md)
@@ -898,24 +906,32 @@ our inference. A count only says where to look.
   frames; an event loop against threads; `undefined`, `null` and absent fields in parsed JSON;
   DOM or `window` access.
 
+### Python to a compiled language (ours; no case covers it)
+
+- Integers without a size limit; the global interpreter lock hiding data races; `asyncio`'s event
+  loop against threads; C extensions and who owns their memory; data saved with `pickle` or other
+  Python-only formats; attributes added or patched at run time; truthiness of empty values;
+  decorators and metaclasses that generate code.
+
 ### Garbage-collected static languages to Rust (Go, Java, C#; ours)
 
 - Ownership of shared mutable state; the choice of async runtime; cancellation (Go's `context`);
   goroutines or threads; map iteration order; the exact bytes a serialiser writes;
   reflection-based decoding (struct tags, annotations); template engines and their escaping; files
   embedded at build time.
+- Integer overflow (Go and Java wrap silently; Rust panics in debug builds and wraps in release);
+  UTF-16 strings and their indexing (Java, C#) against UTF-8; exceptions against `Result`, and
+  which errors the old code let pass.
 
 ### C, C++ or Zig to Rust
 
 - Lines that read the same in both languages but behave differently: a side effect inside an
   assertion compiled only in debug builds disappears from release builds; a slice cast panics on
-  an odd byte count; text is rewritten inside formatted arguments. [Bun](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md)
+  an odd byte count; colour markers rewritten inside formatted output. [Bun](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md)
 - A placeholder constant lowered a limit that real projects reached. [Bun](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md) (ours) Search the
   port for placeholder values left for a later phase.
 - A comparison of two pointers by address where the original compared what they point to: safe,
   compiles, and is always false. [Intel](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-08-24-intel-ideas-c-to-rust.md)
-- Functions left as stubs, or missing, behind a clean build; compiler feedback alone lets them
-  through. [Intel](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-08-24-intel-ideas-c-to-rust.md), [Bun](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md)
 - Firmware and code that calls hardware or assembly cannot be safe Rust; platforms without the
   Rust standard library or compiler need extra work. [Intel](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-08-24-intel-ideas-c-to-rust.md)
 - A faithful port keeps the old design, so some `unsafe` code remains; decide how much the target
@@ -930,6 +946,8 @@ our inference. A count only says where to look.
   outputs that must be regenerated with the project's own tools. [Google](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-13-google-int64-ids.md)
 - Uses reached only through other variables, several steps from the changed field; an index
   search with a distance limit can miss them. [Google](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-13-google-int64-ids.md)
+- (ours) 64-bit values read as JSON by JavaScript or any reader that keeps numbers as doubles lose
+  precision above 2^53; send them as strings.
 
 ### Restructuring within one language (monolith to services, an API pattern across call sites)
 
@@ -948,7 +966,16 @@ our inference. A count only says where to look.
   a syntax-tree rule over one file cannot see; per-method rules for the old library keep growing.
   [Slack](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2024-05-22-slack-enzyme-to-rtl.md)
 - Converted files that fail at setup or import hide every test case in them, right or wrong.
-  [Slack](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2024-05-22-slack-enzyme-to-rtl.md)
+  [Slack](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2024-05-22-slack-enzyme-to-rtl.md) (ours) Compare the count of discovered tests before and after the move.
+- In-house runners, rules and base classes that no stock rule handles; Uber first changed the build
+  so both versions ran side by side, and skipped any file using a pattern its recipes did not
+  support. [Uber](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-07-uber-junit4-to-junit5.md)
+
+### A library or framework version upgrade (ours)
+
+- Removed or deprecated APIs; changed defaults; behaviour changes listed only in the release notes
+  between the two versions (read them all, not only the latest); transitive dependencies that
+  now conflict; generated code or configuration that must be regenerated.
 
 ### Seams
 
@@ -962,6 +989,13 @@ where a case is linked):
 - C or C++ to Rust: a C ABI; Intel generated each wrapper's signature with a binding tool and,
   where tests existed (none for libgit2), tested a mixed build after each symbol. [Intel](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-08-24-intel-ideas-c-to-rust.md)
 - Go, Java or C# to Rust: a process boundary or a C ABI.
+- Across a C ABI: who allocates and frees each value, and panics or exceptions that must not
+  cross the boundary.
+- A service split: route requests per path or tenant to the old or the new side and move the
+  routes one at a time (the strangler-fig pattern).
+- A schema or storage change: expand and contract. Add the new form, write both, backfill, switch
+  the reads, then drop the old form; this order avoids the backfill loss 1Password hit.
+  [1Password](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-20-1password-monolith-refactor.md)
 
 ### Any move
 
@@ -971,6 +1005,8 @@ where a case is linked):
 - (ours) Source shared with another language or toolchain (shader headers, generated code), which a
   port splits into copies that drift.
 - (ours) Bit-exact results across languages (float model, thread count) when tests compare outputs.
+- Not a language difference but an agent failure that looks like one: functions left as stubs, or
+  missing, behind a clean build; compiler feedback alone lets them through. [Intel](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-08-24-intel-ideas-c-to-rust.md), [Bun](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md)
 
 [GitHub]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md
 [Bun]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md
@@ -978,3 +1014,4 @@ where a case is linked):
 [Google]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-13-google-int64-ids.md
 [1Password]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-20-1password-monolith-refactor.md
 [Slack]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2024-05-22-slack-enzyme-to-rtl.md
+[Uber]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-07-uber-junit4-to-junit5.md
