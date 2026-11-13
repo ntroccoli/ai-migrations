@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // Find runs of N or more consecutive words (default 5) that a case shares with its source text.
 // The source text is not in this repository; pass the files that hold it.
 // Usage: node scripts/check-copy.mjs <case.md> <source file or folder>... [--min 5]

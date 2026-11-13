@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // Validate case files, lesson pages and the checklist. Rules: AGENTS.md "Case files", "Lessons"
 // and "Checklist".
 // Usage: node scripts/validate.mjs            (all of cases/, lessons/, checklist.md and pitfalls.md)
@@ -17,7 +18,7 @@ const warnings = [];
 const err = (file, msg) => errors.push(`${file}: ${msg}`);
 const pad = n => String(n).padStart(2, '0');
 const localDate = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-const today = localDate(new Date()); // local, not UTC: the owner works at UTC-3
+const today = localDate(new Date()); // local, not UTC: the maintainer works at UTC-3
 // A real calendar date: Date.parse accepts 2025-02-30 and rolls it over, so compare the round trip.
 const realDate = s => /^\d{4}-\d{2}-\d{2}$/.test(s || '') && new Date(`${s}T00:00:00Z`).toISOString().slice(0, 10) === s;
 const isHttps = u => /^https:\/\/[^\s<>"]+$/.test(u || '');
@@ -25,15 +26,20 @@ const words = s => s.trim().split(/\s+/).filter(Boolean).length;
 const notice = existsSync(NOTICE) ? readFileSync(NOTICE, 'utf8').replace(/\r\n/g, '\n') : '';
 
 // ---- Units ----------------------------------------------------------------------------------
-// A number is a word that starts with a digit (after an optional ~ ≈ $ € £ or opening bracket),
-// such as 3,500 or 3.5K or 4.0x or 60–90%. Not numbers: digits inside a word (GPT-5.6, E0425,
-// o200k), inline code, link targets, dates (2025-04-01, 2025-04), periods (2023..2024) and list
-// markers, ordinals (4th), digit-led names (1Password). Exempt: a year (1900-2099) with no unit after it, a small number right
-// after a capitalised name that does not start a sentence (Opus 4.8, Java 21, August 21), and a
-// number after a label word (part 4, step 2). Every other number needs a unit: a % or x suffix, a
-// currency sign, or a word from UNITS within the next three words (scale words such as "million"
-// may sit between). In "5 to 10 files" or "120 of 140 files" the first number takes the unit of
-// the second. Returns the numbers that lack a unit and the count of numbers that need a source.
+// The units rule (AGENTS.md "Case files" points here). A number is a word that starts with a digit,
+// after an optional ~ ≈ $ € £ or opening bracket: 3,500, 3.5K, 4.0x, 60–90%. Not numbers: digits
+// inside a word (GPT-5.6, E0425, o200k), inline code, link targets, dates (2025-04-01, 2025-04),
+// periods (2023..2024), list markers, ordinals (4th) and digit-led names (1Password: a digit then a
+// capitalised word). Exempt: a year (1900-2099) or a range of years (2023–2026) with no unit after
+// it; a number of up to three digits right after a capitalised name that does not start a sentence
+// (Opus 4.8, Java 21, August 21; also inside a bracket, (Claude 2.1); and the second of a pair
+// after such a name, JUnit 4 and 5, Java 17 or 21); and a number after a label word (part 4,
+// step 2; see LABELS). Every other number needs a unit: a % or x suffix, a currency sign, or a word
+// from UNITS (scripts/lib.mjs) within the next three words; scale words such as "million" or "K"
+// may sit between. In "5 to 10 files" or "120 of 140 files" the first number takes the unit of the
+// second. It is a heuristic: it catches a bare number, not a wrong unit, and numbers written as
+// words ("three") are not checked. Returns the numbers that lack a unit and the count of numbers
+// that need a source.
 const NUM = /^[~≈(]*([$€£]?)(\d+(?:,\d{3})*(?:\.\d+)?(?:[–-]\d+(?:,\d{3})*(?:\.\d+)?)?)([a-zA-Z%]*)\+?[)\]]*[.,;:!?)]*$/;
 const CONNECTORS = new Set(['to', 'of', 'and', 'or', 'out', 'in', 'from', 'the', 'by', '–', '-', '/', 'vs']);
 const STARTERS = new Set(['The', 'A', 'An', 'In', 'By', 'Over', 'About', 'Only', 'All', 'Each', 'Some',

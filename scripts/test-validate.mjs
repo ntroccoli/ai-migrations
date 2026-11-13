@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // Broken-copy tests for scripts/validate.mjs: copy the repository's cases, checklist and scripts
 // into .test-tmp/ (git-ignored), break one thing per test, and check the validator's exit code.
 // Usage: node scripts/test-validate.mjs   (exit 1 when a test fails; .test-tmp/ is removed)
@@ -7,7 +8,8 @@ import { spawnSync } from 'node:child_process';
 import { ROOT } from './lib.mjs';
 
 const TMP = join(ROOT, '.test-tmp');
-const PARTS = ['scripts', 'cases', 'lessons', 'checklist.md', 'pitfalls.md', 'NOTICE.md', 'index.md', 'llms.txt', 'llms-full.txt'];
+const PARTS = ['scripts', 'cases', 'lessons', 'checklist.md', 'pitfalls.md', 'NOTICE.md', 'index.md', 'llms.txt', 'llms-full.txt',
+  'README.md', 'CONTRIBUTING.md', 'LICENSE-CONTENT.md', '.github'];
 const ONEPW = '2026-04-20-1password-monolith-refactor.md';
 const INTEL = '2026-08-24-intel-ideas-c-to-rust.md';
 const BUN = '2026-07-08-bun-zig-to-rust.md';
@@ -198,6 +200,14 @@ test('build refuses a lesson without its oracle line', 1,
   d => { edit(L(d, 'review'), '  - Old system as oracle: partly. Strength: medium. Era: 2026.\n  - Cases: [GitHub: who did what]', '  - Cases: [GitHub: who did what]'); return []; }, null, 'REV-2: no "Old system as oracle" line', 'build.mjs');
 test('build --check fails after hand-editing lessons/index.md', 1,
   d => { appendFileSync(join(d, 'lessons', 'index.md'), '\nA hand edit.\n'); return ['--check']; }, null, 'out of date: lessons/index.md', 'build.mjs');
+
+// Synced hand-written files: one repository slug, README's generated blocks.
+test('build --check fails on a URL to another repository name', 1,
+  d => { edit(join(d, 'CONTRIBUTING.md'), 'ntroccoli/ai-migrations/issues', 'someone/old-name/issues'); return ['--check']; }, null, 'out of date: CONTRIBUTING.md', 'build.mjs');
+test('build --check fails after hand-editing the README disclosure', 1,
+  d => { edit(join(d, 'README.md'), 'Disclosure: the cases', 'Disclosure: some cases'); return ['--check']; }, null, 'out of date: README.md', 'build.mjs');
+test('build refuses a README without its block markers', 1,
+  d => { edit(join(d, 'README.md'), '<!-- /contents -->', ''); return []; }, null, 'needs the markers', 'build.mjs');
 
 // pitfalls.md: relative links resolve.
 test('pitfalls broken link fails', 1,

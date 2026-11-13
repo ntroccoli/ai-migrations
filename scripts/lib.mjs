@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // Shared helpers for the scripts. No dependencies.
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join, dirname, basename } from 'node:path';
