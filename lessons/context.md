@@ -43,7 +43,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **CTX-9** [stated] When the context budget is small, choose context by fixed rules: full bodies of nearby functions, signatures for the rest, the hardest callers first.
   - Old system as oracle: partly. Strength: medium. Era: 2026.
   - Cases: [Intel: practices to copy][int-practices].
-  - Against: Disagree: Airbnb went the other way, with very large prompts pulling in dozens of related files ([Airbnb][air-worked]).
+  - Against: Airbnb, with a large context budget, filled prompts with dozens of related files, also chosen by rules ([Airbnb][air-worked]); the lesson is for small budgets.
 
 [air-worked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-worked
 [gh-worked]: ../cases/2026-09-16-github-copilot-runtime-rust.md#what-worked

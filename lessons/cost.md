@@ -38,11 +38,12 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: partly. Strength: medium. Era: 2023–2026.
   - Cases: [Spotify: how it was checked][spo-checked], [Google: what went wrong][goo-wrong].
   - Against: None found.
-- **CST-9** [stated] Pipeline and harness costs pay back over many repositories or migrations; a one-off project should reuse a general harness rather than build one.
+- **CST-9** [ours] Pipeline and harness costs pay back over many repositories or migrations; a one-off project should reuse a general harness rather than build one.
   - Old system as oracle: no. Strength: weak. Era: 2025–2026.
   - Cases: [Spotify: numbers][spo-numbers], [Spotify: what worked][spo-worked].
-  - Against: None found.
+  - Against: Disagree: Airbnb built its own pipeline for one migration and finished far inside its manual estimate ([Airbnb][air-who]), and Slack's author expects custom pipelines to stay necessary ([Slack][slk-wrong]).
 
+[air-who]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#who-did-what
 [air-wrong]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-went-wrong
 [bun-numbers]: ../cases/2026-07-08-bun-zig-to-rust.md#numbers
 [bun-who]: ../cases/2026-07-08-bun-zig-to-rust.md#who-did-what
@@ -56,6 +57,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [int-numbers]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#numbers
 [int-who]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#who-did-what
 [int-worked]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#what-worked
+[slk-wrong]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#what-went-wrong
 [spo-checked]: ../cases/2025-11-06-spotify-honk.md#how-it-was-checked
 [spo-numbers]: ../cases/2025-11-06-spotify-honk.md#numbers
 [spo-worked]: ../cases/2025-11-06-spotify-honk.md#what-worked

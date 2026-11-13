@@ -17,12 +17,12 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **ORC-3** [stated] Peer agents on adjacent code need a named coordinator or human tiebreaker, and autonomy must stop at anything outside the agent's own branch.
   - Old system as oracle: no. Strength: weak. Era: 2026 (GPT-5.6 Sol, Opus 4.8 sessions).
   - Cases: [GitHub: what went wrong][gh-wrong], [GitHub: practices to copy][gh-practices].
-  - Against: None found.
+  - Against: The GitHub author blames splitting the work from both ends so that they met at the hub, not missing coordination ([GitHub][gh-wrong]); a coordinator patches a split that is better avoided.
   - Related view (karpathy-ideas): [delegate long tasks decompose well][k-delegate-long-tasks-decompose-well], agrees.
 - **ORC-4** [stated] Build the work queue from deterministic output (compiler errors by module, failing traces per command), run the tool once, then fan the items out.
   - Old system as oracle: partly. Strength: strong. Era: 2024–2026.
   - Cases: [Bun: what worked][bun-worked], [Airbnb: what worked][air-worked].
-  - Against: None found.
+  - Against: Disagree: GitHub's agents recompiled after each small edit and the author credits that loop ([GitHub][gh-worked]); Bun's run-once queue also followed from banning builds in shared checkouts ([Bun][bun-wrong]).
 - **ORC-5** [stated] Within one workspace, fan reading out to subagents and keep the edits with one agent; reading far outnumbered editing.
   - Old system as oracle: no. Strength: medium. Era: 2026.
   - Cases: [GitHub: what worked][gh-worked], [GitHub: numbers][gh-numbers].

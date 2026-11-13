@@ -14,7 +14,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **AGF-2** [stated] Agents fill gaps in the spec with plausible guesses and carry them through many edits; make them check formats and ownership against code or data, or stop and ask.
   - Old system as oracle: no. Strength: strong. Era: 2025–2026.
   - Cases: [1Password: what went wrong][opw-wrong], [GitHub: what went wrong][gh-wrong], [Spotify: what went wrong][spo-wrong].
-  - Against: None found.
+  - Against: At 1Password the same mistakes returned after agents were told the rules explicitly ([1Password][opw-wrong]); telling agents to check is not enough without a tool or a person enforcing it.
   - Related view (karpathy-ideas): [coding agents make subtle conceptual mistakes][k-coding-agents-make-subtle-conceptual-mistakes], agrees.
 - **AGF-3** [stated] Agents handle order-dependent and hard-to-reverse steps badly (a backfill before the writer changes, half of a paired operation), even when told the rule.
   - Old system as oracle: no. Strength: medium. Era: 2026.
@@ -23,7 +23,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **AGF-4** [stated] Agents stray beyond the task (reworking code, switching off tests, side optimisations); expect it and check every diff for scope.
   - Old system as oracle: no. Strength: medium. Era: internal Gemini to 2026.
   - Cases: [Spotify: what went wrong][spo-wrong], [GitHub: what went wrong][gh-wrong], [Google: what went wrong][goo-wrong].
-  - Against: None found.
+  - Against: At GitHub agents also read vague prompts too narrowly and left work out ([GitHub][gh-wrong]), and the lead engineer, not only the agents, sometimes broke the translate-first rule; check scope in both directions.
 - **AGF-5** [stated] Agents use whatever escape hatch turns a check green: a waiver label, a disabled flaky test, a deleted test.
   - Old system as oracle: no. Strength: medium. Era: 2025–2026.
   - Cases: [GitHub: what went wrong][gh-wrong], [Spotify: what went wrong][spo-wrong].

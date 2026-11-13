@@ -19,7 +19,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 | [Release and rollout](rollout.md) | ROL | 8 | 7 | 1 | 1 | 2 | 5 |
 | [Machines and operations](operations.md) | OPS | 7 | 6 | 1 | 1 | 2 | 4 |
 | [Security](security.md) | SEC | 10 | 7 | 3 | 0 | 3 | 7 |
-| [Cost](cost.md) | CST | 9 | 3 | 6 | 0 | 1 | 8 |
+| [Cost](cost.md) | CST | 9 | 2 | 7 | 0 | 1 | 8 |
 | [Team and roles](team.md) | TEM | 4 | 4 | 0 | 0 | 0 | 4 |
 | [Rule-based tools and AI](tooling.md) | TOL | 7 | 7 | 0 | 0 | 3 | 4 |
 | [Context and prompts](context.md) | CTX | 9 | 9 | 0 | 1 | 2 | 6 |
@@ -28,7 +28,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 | [Human oversight](oversight.md) | OVS | 3 | 3 | 0 | 0 | 1 | 2 |
 | [Knowledge capture](knowledge.md) | KNW | 3 | 3 | 0 | 0 | 1 | 2 |
 | [Measuring and reading results](measurement.md) | MSR | 9 | 3 | 6 | 0 | 2 | 7 |
-| **All** | | 122 | 95 | 27 | 14 | 33 | 75 |
+| **All** | | 122 | 94 | 28 | 14 | 33 | 75 |
 
 ## Cases behind the lessons
 
@@ -36,15 +36,15 @@ Lessons that cite each case, in "Cases" or "Against".
 
 | Case | Lessons |
 | --- | --- |
-| [GitHub](../cases/2026-09-16-github-copilot-runtime-rust.md) | 62: PLN-1, PLN-2, PLN-3, PLN-4, PLN-5, PLN-7, TST-1, TST-2, TST-3, TST-9, VER-1, VER-4, VER-6, VER-8, REV-1, REV-2, REV-3, REV-5, REV-8, REV-9, ROL-1, ROL-2, ROL-4, ROL-5, ROL-6, ROL-7, OPS-1, OPS-3, OPS-4, OPS-7, SEC-2, SEC-4, SEC-7, SEC-8, CST-1, CST-2, CST-3, CST-5, CST-6, CST-7, TEM-1, TEM-2, TOL-5, TOL-6, CTX-4, CTX-6, ORC-1, ORC-3, ORC-5, ORC-6, AGF-2, AGF-3, AGF-4, AGF-5, OVS-1, OVS-2, KNW-1, KNW-3, MSR-3, MSR-4, MSR-5, MSR-6 |
+| [GitHub](../cases/2026-09-16-github-copilot-runtime-rust.md) | 63: PLN-1, PLN-2, PLN-3, PLN-4, PLN-5, PLN-7, TST-1, TST-2, TST-3, TST-9, VER-1, VER-4, VER-6, VER-8, REV-1, REV-2, REV-3, REV-5, REV-8, REV-9, ROL-1, ROL-2, ROL-4, ROL-5, ROL-6, ROL-7, OPS-1, OPS-3, OPS-4, OPS-7, SEC-2, SEC-4, SEC-7, SEC-8, CST-1, CST-2, CST-3, CST-5, CST-6, CST-7, TEM-1, TEM-2, TOL-5, TOL-6, CTX-4, CTX-6, ORC-1, ORC-3, ORC-4, ORC-5, ORC-6, AGF-2, AGF-3, AGF-4, AGF-5, OVS-1, OVS-2, KNW-1, KNW-3, MSR-3, MSR-4, MSR-5, MSR-6 |
 | [Intel](../cases/2026-08-24-intel-ideas-c-to-rust.md) | 22: PLN-4, PLN-5, TST-2, TST-5, TST-10, VER-1, VER-3, VER-6, VER-9, SEC-4, SEC-5, SEC-9, CST-3, CST-4, CST-5, TOL-1, CTX-9, ORC-6, AGF-1, OVS-1, MSR-3, MSR-7 |
 | [Bun](../cases/2026-07-08-bun-zig-to-rust.md) | 52: PLN-1, PLN-2, PLN-5, PLN-7, TST-1, TST-3, TST-4, VER-1, VER-3, VER-5, REV-1, REV-2, REV-3, REV-5, REV-8, ROL-1, ROL-2, ROL-3, OPS-1, OPS-2, OPS-3, OPS-5, SEC-1, SEC-2, SEC-3, SEC-4, SEC-6, CST-1, CST-2, CST-4, CST-5, CST-6, CST-7, TEM-1, TEM-2, TEM-4, TOL-1, ORC-1, ORC-4, ORC-5, ORC-6, AGF-1, OVS-1, OVS-2, KNW-1, MSR-1, MSR-3, MSR-4, MSR-5, MSR-6, MSR-7, MSR-8 |
 | [1Password](../cases/2026-04-20-1password-monolith-refactor.md) | 22: PLN-2, PLN-4, PLN-6, PLN-7, PLN-9, VER-7, SEC-10, TOL-1, TOL-3, CTX-4, CTX-8, ORC-1, ORC-2, AGF-2, AGF-3, AGF-6, AGF-7, OVS-3, MSR-1, MSR-3, MSR-7, MSR-8 |
 | [Uber](../cases/2026-04-07-uber-junit4-to-junit5.md) | 19: PLN-2, PLN-6, PLN-8, PLN-9, PLN-10, TST-8, VER-2, VER-3, ROL-1, ROL-8, OPS-6, TOL-2, TOL-4, TOL-7, OVS-3, KNW-1, KNW-2, MSR-7, MSR-8 |
-| [Spotify](../cases/2025-11-06-spotify-honk.md) | 45: PLN-6, PLN-8, PLN-9, TST-2, TST-6, VER-1, VER-2, VER-3, VER-4, VER-8, VER-9, REV-4, REV-5, REV-6, REV-9, OPS-4, SEC-1, SEC-2, SEC-3, SEC-8, CST-2, CST-8, CST-9, TEM-3, TEM-4, TOL-4, TOL-5, TOL-6, CTX-1, CTX-3, CTX-4, CTX-5, CTX-6, CTX-7, CTX-8, AGF-2, AGF-4, AGF-5, AGF-7, OVS-1, MSR-1, MSR-2, MSR-3, MSR-6, MSR-8 |
+| [Spotify](../cases/2025-11-06-spotify-honk.md) | 46: PLN-6, PLN-8, PLN-9, TST-2, TST-6, VER-1, VER-2, VER-3, VER-4, VER-8, VER-9, REV-4, REV-5, REV-6, REV-7, REV-9, OPS-4, SEC-1, SEC-2, SEC-3, SEC-8, CST-2, CST-8, CST-9, TEM-3, TEM-4, TOL-4, TOL-5, TOL-6, CTX-1, CTX-3, CTX-4, CTX-5, CTX-6, CTX-7, CTX-8, AGF-2, AGF-4, AGF-5, AGF-7, OVS-1, MSR-1, MSR-2, MSR-3, MSR-6, MSR-8 |
 | [Google](../cases/2025-04-13-google-int64-ids.md) | 34: PLN-1, PLN-8, TST-2, TST-6, TST-7, VER-2, VER-3, VER-7, REV-2, REV-4, REV-7, REV-9, ROL-2, ROL-3, OPS-6, CST-4, CST-8, TEM-2, TEM-4, TOL-2, TOL-3, TOL-4, TOL-5, AGF-4, AGF-7, AGF-8, OVS-2, OVS-3, KNW-2, MSR-1, MSR-3, MSR-7, MSR-8, MSR-9 |
-| [Airbnb](../cases/2025-04-01-airbnb-enzyme-to-rtl.md) | 22: PLN-1, PLN-2, PLN-3, PLN-9, TST-8, VER-2, VER-3, REV-10, OPS-6, CST-2, CST-3, TOL-6, TOL-7, CTX-1, CTX-9, ORC-4, OVS-3, KNW-1, KNW-2, MSR-1, MSR-2, MSR-5 |
-| [Slack](../cases/2024-05-22-slack-enzyme-to-rtl.md) | 24: PLN-7, PLN-9, TST-5, TST-8, VER-2, VER-5, REV-2, REV-6, REV-10, OPS-6, TEM-2, TEM-3, TOL-2, TOL-4, TOL-6, TOL-7, CTX-1, CTX-2, OVS-2, KNW-2, MSR-1, MSR-2, MSR-7, MSR-8 |
+| [Airbnb](../cases/2025-04-01-airbnb-enzyme-to-rtl.md) | 23: PLN-1, PLN-2, PLN-3, PLN-9, TST-8, VER-2, VER-3, REV-10, OPS-6, CST-2, CST-3, CST-9, TOL-6, TOL-7, CTX-1, CTX-9, ORC-4, OVS-3, KNW-1, KNW-2, MSR-1, MSR-2, MSR-5 |
+| [Slack](../cases/2024-05-22-slack-enzyme-to-rtl.md) | 25: PLN-7, PLN-9, TST-5, TST-8, VER-2, VER-5, REV-2, REV-6, REV-10, OPS-6, CST-9, TEM-2, TEM-3, TOL-2, TOL-4, TOL-6, TOL-7, CTX-1, CTX-2, OVS-2, KNW-2, MSR-1, MSR-2, MSR-7, MSR-8 |
 
 ## Where the cases disagree
 
@@ -54,11 +54,12 @@ Lessons that cite each case, in "Cases" or "Against".
 - **OPS-5** ([Machines and operations](operations.md)) Keep hardening after merge: repeated security review, round-the-clock fuzzing and leak tracking, with people reviewing the fixes they produce.
 - **SEC-2** ([Security](security.md)) Whatever the harness exposes may get used unasked (an unlisted skill, git commands, a peer's worktree); remove what the task does not need.
 - **SEC-4** ([Security](security.md)) After a port into a memory-safe language, count where unsafe code sits, allow it only at foreign and system boundaries, and have the compiler forbid it elsewhere.
+- **CST-9** ([Cost](cost.md)) Pipeline and harness costs pay back over many repositories or migrations; a one-off project should reuse a general harness rather than build one.
 - **TOL-4** ([Rule-based tools and AI](tooling.md)) Price the rule-based alternative with the upkeep of its rules; hand-written transforms keep growing on long-tail patterns, which is where models pay off.
 - **TOL-5** ([Rule-based tools and AI](tooling.md)) Keep agents and models behind your own thin interface, log traces from day one, and pin model and settings per run; the best agent changed within a year.
 - **CTX-1** ([Context and prompts](context.md)) Choosing the right context (nearby files, good examples, runtime data, exact mapping tables) moved results more than polishing the prompt wording.
 - **CTX-6** ([Context and prompts](context.md)) Prefer large, static, version-controlled prompts and few tools for predictability; letting the agent fetch context through many tools adds variance.
-- **CTX-9** ([Context and prompts](context.md)) When the context budget is small, choose context by fixed rules: full bodies of nearby functions, signatures for the rest, the hardest callers first.
+- **ORC-4** ([Many agents at once](orchestration.md)) Build the work queue from deterministic output (compiler errors by module, failing traces per command), run the tool once, then fan the items out.
 - **ORC-6** ([Many agents at once](orchestration.md)) Prefer a short leash to a complex multi-agent design where you can: fixed code picks context, order and output place, and the model translates one unit.
 - **OVS-2** ([Human oversight](oversight.md)) Keep the final merge with a person who checks how the agent answered CI and review, not only the diff.
 - **MSR-4** ([Measuring and reading results](measurement.md)) Credit a gain to the migration only after separating it from work that landed in the same window (other speed work, linker changes, unrelated fixes).
@@ -149,7 +150,7 @@ To find the lessons that fit work other than a migration, scan this list, then o
 - **SEC-6** [ours] A bounds-checked target turns silent out-of-range access into crashes; expect new crash reports and test limits at real-world sizes. (oracle: partly; medium)
 - **SEC-7** [ours] Treat each replaced library as a migration of its own, above all sanitizers, credential stores and protocol SDKs, and vet every new dependency. (oracle: partly; medium)
 - **SEC-8** [stated] Treat agent session logs and traces as data that may hold secrets; control where they are stored and where they are uploaded. (oracle: no; medium)
-- **SEC-9** [stated] Isolate each agent run from earlier attempts and reference answers, which it could otherwise read and lean on; limit network access too. (oracle: no; weak)
+- **SEC-9** [stated] Isolate each agent run from earlier attempts and reference answers, which it could otherwise read and lean on; decide about network access too. (oracle: no; weak)
 - **SEC-10** [stated] Never let agents choose the order of schema changes, backfills or ownership of shared tables; one agent's chosen order would have lost data silently. (oracle: no; weak)
 
 ### [Cost](cost.md)
@@ -162,7 +163,7 @@ To find the lessons that fit work other than a migration, scan this list, then o
 - **CST-6** [ours] Count the work after merge (regression fixes, security rounds, fuzzing, clean-up and speed work) as part of the cost of the migration. (oracle: no; medium)
 - **CST-7** [ours] Budget review agents as a multiple of generation (several reviewers and a fixer per writer), and ask for their share of tokens, which no case reports. (oracle: no; medium)
 - **CST-8** [stated] Missing or broken tests in target repositories shift the cost of checking onto the teams that receive the changes; the central figures leave it out. (oracle: partly; medium)
-- **CST-9** [stated] Pipeline and harness costs pay back over many repositories or migrations; a one-off project should reuse a general harness rather than build one. (oracle: no; weak)
+- **CST-9** [ours] Pipeline and harness costs pay back over many repositories or migrations; a one-off project should reuse a general harness rather than build one. (oracle: no; weak)
 
 ### [Team and roles](team.md)
 

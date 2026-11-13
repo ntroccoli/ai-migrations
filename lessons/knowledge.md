@@ -17,7 +17,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **KNW-3** [stated] Keep structured session logs from the start; they later answered where time went and what people did, and became evaluations.
   - Old system as oracle: no. Strength: medium. Era: 2026.
   - Cases: [GitHub: numbers][gh-numbers], [GitHub: what worked][gh-worked].
-  - Against: None found.
+  - Against: GitHub's split of the engineer's messages by intent was labelled by an LLM, not checked by a person ([GitHub][gh-numbers]).
 
 [air-worked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-worked
 [bun-worked]: ../cases/2026-07-08-bun-zig-to-rust.md#what-worked

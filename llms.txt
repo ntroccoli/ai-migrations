@@ -24,7 +24,7 @@ Moves covered: Zig, C and TypeScript ported to Rust; React component tests in Ja
 - [Release and rollout](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/rollout.md): 8 lessons, ROL-n (7 stated, 1 ours; oracle: 1 yes, 2 partly, 5 no). How the new code reached users, and how risk was limited on the way.
 - [Machines and operations](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/operations.md): 7 lessons, OPS-n (6 stated, 1 ours; oracle: 1 yes, 2 partly, 4 no). Running many agents on real machines, and keeping the result healthy after merge.
 - [Security](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/security.md): 10 lessons, SEC-n (7 stated, 3 ours; oracle: 0 yes, 3 partly, 7 no). Sandboxing agents, memory safety, dependencies and data integrity.
-- [Cost](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/cost.md): 9 lessons, CST-n (3 stated, 6 ours; oracle: 0 yes, 1 partly, 8 no). Tokens, money, people's time and the bill after merge.
+- [Cost](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/cost.md): 9 lessons, CST-n (2 stated, 7 ours; oracle: 0 yes, 1 partly, 8 no). Tokens, money, people's time and the bill after merge.
 - [Team and roles](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/team.md): 4 lessons, TEM-n (4 stated, 0 ours; oracle: 0 yes, 0 partly, 4 no). Who does what when agents write most of the code.
 - [Rule-based tools and AI](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/tooling.md): 7 lessons, TOL-n (7 stated, 0 ours; oracle: 0 yes, 3 partly, 4 no). Splitting the work between deterministic tools and models.
 - [Context and prompts](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/context.md): 9 lessons, CTX-n (9 stated, 0 ours; oracle: 1 yes, 2 partly, 6 no). What goes into the model's context, and how prompts are written.
@@ -48,6 +48,6 @@ Moves covered: Zig, C and TypeScript ported to Rust; React component tests in Ja
 
 ## Optional
 
-- [Everything in one file](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms-full.txt): every lesson, every case line, the checklist and the pitfalls, for tools that cannot follow links. About 131 KB (~33k tokens), so prefer the aspect pages when you can.
+- [Everything in one file](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms-full.txt): every lesson, every case line, the checklist and the pitfalls, for tools that cannot follow links. About 134 KB (~34k tokens), so prefer the aspect pages when you can.
 - [Pitfalls by kind of move](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/pitfalls.md): what the old stack did implicitly, and seams for moving in steps.
 - [Lessons index](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/index.md): counts, the cases behind each lesson, and where the cases disagree.

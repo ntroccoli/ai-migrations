@@ -35,7 +35,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **REV-7** [stated] Let people see only changes that already built and passed tests; developers counted that filter as one of the largest gains.
   - Old system as oracle: partly. Strength: medium. Era: internal Gemini.
   - Cases: [Google: what worked][goo-worked].
-  - Against: None found.
+  - Against: The green filter also held back correct changes where old tests already failed ([Google][goo-wrong]), and a green change can still be wrong in ways reviewers miss ([Spotify][spo-wrong]).
 - **REV-8** [stated] Audit the reviewers and the fixer: check that AI reviewers flag real differences and that the agent's answers to review comments hold up.
   - Old system as oracle: partly. Strength: medium. Era: 2026.
   - Cases: [Bun: how it was checked][bun-checked], [GitHub: what went wrong][gh-wrong].
@@ -62,6 +62,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [goo-checked]: ../cases/2025-04-13-google-int64-ids.md#how-it-was-checked
 [goo-who]: ../cases/2025-04-13-google-int64-ids.md#who-did-what
 [goo-worked]: ../cases/2025-04-13-google-int64-ids.md#what-worked
+[goo-wrong]: ../cases/2025-04-13-google-int64-ids.md#what-went-wrong
 [slk-checked]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#how-it-was-checked
 [slk-who]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#who-did-what
 [spo-checked]: ../cases/2025-11-06-spotify-honk.md#how-it-was-checked

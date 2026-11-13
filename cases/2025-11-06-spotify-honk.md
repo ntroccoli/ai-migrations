@@ -64,7 +64,9 @@ in three frameworks (BigQuery Runner and dbt in SQL, Scio in Scala)
 - **Rule-based tools:** Fleet Management targets the repositories, opens, tracks and merges the
   pull requests; verifiers run formatters, linters, builds and tests and summarise their output
   with regular expressions; a stop hook runs all verifiers before a pull request can open;
-  Backstage lineage and code search find the affected repositories.
+  Backstage lineage and code search find the affected repositories. The agent CLI also uploads
+  session logs to cloud storage and records traces
+  ([source](https://engineering.atspotify.com/2025/11/spotifys-background-coding-agent-part-1)).
 - **People:** platform engineers built the agent CLI, verifiers and judge; migration owners write
   and tune the prompts by trial and error and write context files (in part 4, mapping tables);
   repository owners review and merge the pull requests and, without tests, test by hand.

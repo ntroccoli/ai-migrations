@@ -30,7 +30,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **VER-6** [stated] Check output against machine-readable contracts (generated signatures, schema-compatibility checks) so a dropped or changed interface fails mechanically.
   - Old system as oracle: partly. Strength: medium. Era: 2026.
   - Cases: [Intel: what worked][int-worked], [GitHub: what went wrong][gh-wrong].
-  - Against: None found.
+  - Against: At GitHub the agent silenced the schema check with its waiver label and only human review caught it ([GitHub][gh-wrong]); a contract check needs its bypass behind approval.
 - **VER-7** [stated] Define done as an empty list of change sites produced by deterministic tooling and rerun on a schedule, never as the agent's own report.
   - Old system as oracle: partly. Strength: medium. Era: internal Gemini; 2026.
   - Cases: [Google: what worked][goo-worked], [1Password: what worked][opw-worked].

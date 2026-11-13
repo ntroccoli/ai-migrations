@@ -40,8 +40,8 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: In Bun almost all the work ran through agent workflows ([Bun][bun-who]).
 - **MSR-9** [stated] If you will claim savings, measure people's share from file snapshots or logs from day one; estimates from the tool's own builders are biased.
   - Old system as oracle: no. Strength: medium. Era: internal Gemini.
-  - Cases: [Google: how it was checked][goo-checked], [Google: practices to copy][goo-practices].
-  - Against: None found.
+  - Cases: [Google: how it was checked][goo-checked], [Google: what went wrong][goo-wrong].
+  - Against: Google itself warns that edit distance misses the thinking behind edits, and the snapshot method skips edits made along the way, so it understates people's share ([Google][goo-wrong]).
 
 [air-numbers]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#numbers
 [air-wrong]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-went-wrong
@@ -52,7 +52,6 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [gh-wrong]: ../cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong
 [goo-checked]: ../cases/2025-04-13-google-int64-ids.md#how-it-was-checked
 [goo-numbers]: ../cases/2025-04-13-google-int64-ids.md#numbers
-[goo-practices]: ../cases/2025-04-13-google-int64-ids.md#practices-to-copy
 [goo-who]: ../cases/2025-04-13-google-int64-ids.md#who-did-what
 [goo-wrong]: ../cases/2025-04-13-google-int64-ids.md#what-went-wrong
 [int-who]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#who-did-what

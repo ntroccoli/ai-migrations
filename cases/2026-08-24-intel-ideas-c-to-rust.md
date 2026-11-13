@@ -70,7 +70,10 @@ void pointers, manual memory management, comparisons of raw pointers, and pointe
   projects; Claude Mythos Preview wrote equivalence tests as an autonomous agent. Basis for
   `ai_share`: the post says every part of the output came from the LLM call, the only
   non-deterministic step.
-- **Rule-based tools:** everything around the model call. IDEAS analyses the build and the code,
+- **Rule-based tools:** everything around the model call. Each agent runs in a sandbox: the
+  project's README warns that without it agents could read earlier translation attempts and be
+  swayed by them, and notes that its lighter sandbox mode leaves network access open
+  ([repository](https://github.com/IntelLabs/IDEAS)). IDEAS analyses the build and the code,
   picks the context for each symbol (nearby functions in full, others as signatures, C callers
   ranked by their hardest constructs, void pointers first), and walks the symbols in dependency order. Every
   module carries a compiler setting that rejects `unsafe` code; failed builds are retried up to a

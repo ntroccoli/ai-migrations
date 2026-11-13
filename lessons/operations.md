@@ -13,7 +13,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **OPS-2** [stated] Contain heavy tests with operating-system limits (control groups, process namespaces, disk quotas); asking the agent to be careful contains nothing.
   - Old system as oracle: no. Strength: weak. Era: 2026.
   - Cases: [Bun: what went wrong][bun-wrong].
-  - Against: None found.
+  - Against: Bun's limits covered memory, CPU and processes, yet the disk still filled and crashed the machine several times ([Bun][bun-wrong]); no case shows disk quotas in use.
 - **OPS-3** [stated] Make the inner loop fast (module splits, build caches, host I/O) before scaling agents; their time goes mostly to reading, building and testing, not writing.
   - Old system as oracle: no. Strength: medium. Era: 2026.
   - Cases: [GitHub: what went wrong][gh-wrong], [GitHub: numbers][gh-numbers], [Bun: practices to copy][bun-practices].

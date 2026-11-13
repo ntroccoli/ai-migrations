@@ -130,7 +130,7 @@ The automated checks around each agent change, and what they can and cannot prov
 - **VER-6** [stated] Check output against machine-readable contracts (generated signatures, schema-compatibility checks) so a dropped or changed interface fails mechanically.
   - Old system as oracle: partly. Strength: medium. Era: 2026.
   - Cases: [Intel: what worked](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-08-24-intel-ideas-c-to-rust.md#what-worked), [GitHub: what went wrong](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong).
-  - Against: None found.
+  - Against: At GitHub the agent silenced the schema check with its waiver label and only human review caught it ([GitHub](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong)); a contract check needs its bypass behind approval.
 - **VER-7** [stated] Define done as an empty list of change sites produced by deterministic tooling and rerun on a schedule, never as the agent's own report.
   - Old system as oracle: partly. Strength: medium. Era: internal Gemini; 2026.
   - Cases: [Google: what worked](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-13-google-int64-ids.md#what-worked), [1Password: what worked](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-20-1password-monolith-refactor.md#what-worked).
@@ -177,7 +177,7 @@ How agent-written changes were reviewed, by agents and by people.
 - **REV-7** [stated] Let people see only changes that already built and passed tests; developers counted that filter as one of the largest gains.
   - Old system as oracle: partly. Strength: medium. Era: internal Gemini.
   - Cases: [Google: what worked](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-13-google-int64-ids.md#what-worked).
-  - Against: None found.
+  - Against: The green filter also held back correct changes where old tests already failed ([Google](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-13-google-int64-ids.md#what-went-wrong)), and a green change can still be wrong in ways reviewers miss ([Spotify](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-11-06-spotify-honk.md#what-went-wrong)).
 - **REV-8** [stated] Audit the reviewers and the fixer: check that AI reviewers flag real differences and that the agent's answers to review comments hold up.
   - Old system as oracle: partly. Strength: medium. Era: 2026.
   - Cases: [Bun: how it was checked](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md#how-it-was-checked), [GitHub: what went wrong](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong).
@@ -241,7 +241,7 @@ Running many agents on real machines, and keeping the result healthy after merge
 - **OPS-2** [stated] Contain heavy tests with operating-system limits (control groups, process namespaces, disk quotas); asking the agent to be careful contains nothing.
   - Old system as oracle: no. Strength: weak. Era: 2026.
   - Cases: [Bun: what went wrong](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md#what-went-wrong).
-  - Against: None found.
+  - Against: Bun's limits covered memory, CPU and processes, yet the disk still filled and crashed the machine several times ([Bun](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md#what-went-wrong)); no case shows disk quotas in use.
 - **OPS-3** [stated] Make the inner loop fast (module splits, build caches, host I/O) before scaling agents; their time goes mostly to reading, building and testing, not writing.
   - Old system as oracle: no. Strength: medium. Era: 2026.
   - Cases: [GitHub: what went wrong](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong), [GitHub: numbers](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#numbers), [Bun: practices to copy](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md#practices-to-copy).
@@ -303,7 +303,7 @@ Sandboxing agents, memory safety, dependencies and data integrity.
   - Old system as oracle: no. Strength: medium. Era: 2025–2026.
   - Cases: [GitHub: how it was checked](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#how-it-was-checked), [Spotify: who did what](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-11-06-spotify-honk.md#who-did-what).
   - Against: None found.
-- **SEC-9** [stated] Isolate each agent run from earlier attempts and reference answers, which it could otherwise read and lean on; limit network access too.
+- **SEC-9** [stated] Isolate each agent run from earlier attempts and reference answers, which it could otherwise read and lean on; decide about network access too.
   - Old system as oracle: no. Strength: weak. Era: 2026.
   - Cases: [Intel: who did what](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-08-24-intel-ideas-c-to-rust.md#who-did-what).
   - Against: None found.
@@ -348,10 +348,10 @@ Tokens, money, people's time and the bill after merge.
   - Old system as oracle: partly. Strength: medium. Era: 2023–2026.
   - Cases: [Spotify: how it was checked](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-11-06-spotify-honk.md#how-it-was-checked), [Google: what went wrong](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-13-google-int64-ids.md#what-went-wrong).
   - Against: None found.
-- **CST-9** [stated] Pipeline and harness costs pay back over many repositories or migrations; a one-off project should reuse a general harness rather than build one.
+- **CST-9** [ours] Pipeline and harness costs pay back over many repositories or migrations; a one-off project should reuse a general harness rather than build one.
   - Old system as oracle: no. Strength: weak. Era: 2025–2026.
   - Cases: [Spotify: numbers](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-11-06-spotify-honk.md#numbers), [Spotify: what worked](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-11-06-spotify-honk.md#what-worked).
-  - Against: None found.
+  - Against: Disagree: Airbnb built its own pipeline for one migration and finished far inside its manual estimate ([Airbnb](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-01-airbnb-enzyme-to-rtl.md#who-did-what)), and Slack's author expects custom pipelines to stay necessary ([Slack](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2024-05-22-slack-enzyme-to-rtl.md#what-went-wrong)).
 
 ## Team and roles (team.md)
 
@@ -360,7 +360,7 @@ Who does what when agents write most of the code.
 - **TEM-1** [stated] The lead engineer's job becomes running the control loop: framing slices, challenging design, pushing for completeness, deciding every merge.
   - Old system as oracle: no. Strength: medium. Era: 2026.
   - Cases: [GitHub: numbers](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#numbers), [GitHub: who did what](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#who-did-what), [Bun: who did what](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md#who-did-what).
-  - Against: None found.
+  - Against: GitHub's split of the engineer's messages by intent was labelled by an LLM, not checked by a person ([GitHub](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#numbers)).
   - Related view (karpathy-ideas): [partial autonomy and autonomy slider](https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2025-06-17-partial-autonomy-and-autonomy-slider.md), agrees.
 - **TEM-2** [stated] Count the people behind a one-engineer story (reviewers in many teams, interop, packaging and build specialists) and staff and budget for them.
   - Old system as oracle: no. Strength: strong. Era: 2023–2026.
@@ -453,7 +453,7 @@ What goes into the model's context, and how prompts are written.
 - **CTX-9** [stated] When the context budget is small, choose context by fixed rules: full bodies of nearby functions, signatures for the rest, the hardest callers first.
   - Old system as oracle: partly. Strength: medium. Era: 2026.
   - Cases: [Intel: practices to copy](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-08-24-intel-ideas-c-to-rust.md#practices-to-copy).
-  - Against: Disagree: Airbnb went the other way, with very large prompts pulling in dozens of related files ([Airbnb](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-worked)).
+  - Against: Airbnb, with a large context budget, filled prompts with dozens of related files, also chosen by rules ([Airbnb](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-worked)); the lesson is for small budgets.
 
 ## Many agents at once (orchestration.md)
 
@@ -470,12 +470,12 @@ Running several agents in parallel without them wrecking each other.
 - **ORC-3** [stated] Peer agents on adjacent code need a named coordinator or human tiebreaker, and autonomy must stop at anything outside the agent's own branch.
   - Old system as oracle: no. Strength: weak. Era: 2026 (GPT-5.6 Sol, Opus 4.8 sessions).
   - Cases: [GitHub: what went wrong](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong), [GitHub: practices to copy](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#practices-to-copy).
-  - Against: None found.
+  - Against: The GitHub author blames splitting the work from both ends so that they met at the hub, not missing coordination ([GitHub](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong)); a coordinator patches a split that is better avoided.
   - Related view (karpathy-ideas): [delegate long tasks decompose well](https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2026-02-25-delegate-long-tasks-decompose-well.md), agrees.
 - **ORC-4** [stated] Build the work queue from deterministic output (compiler errors by module, failing traces per command), run the tool once, then fan the items out.
   - Old system as oracle: partly. Strength: strong. Era: 2024–2026.
   - Cases: [Bun: what worked](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md#what-worked), [Airbnb: what worked](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-worked).
-  - Against: None found.
+  - Against: Disagree: GitHub's agents recompiled after each small edit and the author credits that loop ([GitHub](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#what-worked)); Bun's run-once queue also followed from banning builds in shared checkouts ([Bun](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md#what-went-wrong)).
 - **ORC-5** [stated] Within one workspace, fan reading out to subagents and keep the edits with one agent; reading far outnumbered editing.
   - Old system as oracle: no. Strength: medium. Era: 2026.
   - Cases: [GitHub: what worked](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#what-worked), [GitHub: numbers](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#numbers).
@@ -498,7 +498,7 @@ How agents went wrong, so a plan can expect it.
 - **AGF-2** [stated] Agents fill gaps in the spec with plausible guesses and carry them through many edits; make them check formats and ownership against code or data, or stop and ask.
   - Old system as oracle: no. Strength: strong. Era: 2025–2026.
   - Cases: [1Password: what went wrong](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-20-1password-monolith-refactor.md#what-went-wrong), [GitHub: what went wrong](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong), [Spotify: what went wrong](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-11-06-spotify-honk.md#what-went-wrong).
-  - Against: None found.
+  - Against: At 1Password the same mistakes returned after agents were told the rules explicitly ([1Password](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-20-1password-monolith-refactor.md#what-went-wrong)); telling agents to check is not enough without a tool or a person enforcing it.
   - Related view (karpathy-ideas): [coding agents make subtle conceptual mistakes](https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2026-01-26-coding-agents-make-subtle-conceptual-mistakes.md), agrees.
 - **AGF-3** [stated] Agents handle order-dependent and hard-to-reverse steps badly (a backfill before the writer changes, half of a paired operation), even when told the rule.
   - Old system as oracle: no. Strength: medium. Era: 2026.
@@ -507,7 +507,7 @@ How agents went wrong, so a plan can expect it.
 - **AGF-4** [stated] Agents stray beyond the task (reworking code, switching off tests, side optimisations); expect it and check every diff for scope.
   - Old system as oracle: no. Strength: medium. Era: internal Gemini to 2026.
   - Cases: [Spotify: what went wrong](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-11-06-spotify-honk.md#what-went-wrong), [GitHub: what went wrong](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong), [Google: what went wrong](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-13-google-int64-ids.md#what-went-wrong).
-  - Against: None found.
+  - Against: At GitHub agents also read vague prompts too narrowly and left work out ([GitHub](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong)), and the lead engineer, not only the agents, sometimes broke the translate-first rule; check scope in both directions.
 - **AGF-5** [stated] Agents use whatever escape hatch turns a check green: a waiver label, a disabled flaky test, a deleted test.
   - Old system as oracle: no. Strength: medium. Era: 2025–2026.
   - Cases: [GitHub: what went wrong](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong), [Spotify: what went wrong](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-11-06-spotify-honk.md#what-went-wrong).
@@ -558,7 +558,7 @@ Turning failures and logs into lasting improvements.
 - **KNW-3** [stated] Keep structured session logs from the start; they later answered where time went and what people did, and became evaluations.
   - Old system as oracle: no. Strength: medium. Era: 2026.
   - Cases: [GitHub: numbers](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#numbers), [GitHub: what worked](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#what-worked).
-  - Against: None found.
+  - Against: GitHub's split of the engineer's messages by intent was labelled by an LLM, not checked by a person ([GitHub](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#numbers)).
 
 ## Measuring and reading results (measurement.md)
 
@@ -598,8 +598,8 @@ How to read the numbers in these sources, and how to report your own.
   - Against: In Bun almost all the work ran through agent workflows ([Bun](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md#who-did-what)).
 - **MSR-9** [stated] If you will claim savings, measure people's share from file snapshots or logs from day one; estimates from the tool's own builders are biased.
   - Old system as oracle: no. Strength: medium. Era: internal Gemini.
-  - Cases: [Google: how it was checked](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-13-google-int64-ids.md#how-it-was-checked), [Google: practices to copy](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-13-google-int64-ids.md#practices-to-copy).
-  - Against: None found.
+  - Cases: [Google: how it was checked](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-13-google-int64-ids.md#how-it-was-checked), [Google: what went wrong](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-13-google-int64-ids.md#what-went-wrong).
+  - Against: Google itself warns that edit distance misses the thinking behind edits, and the snapshot method skips edits made along the way, so it understates people's share ([Google](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-13-google-int64-ids.md#what-went-wrong)).
 
 ## Cases
 

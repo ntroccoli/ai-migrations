@@ -41,7 +41,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: no. Strength: medium. Era: 2025–2026.
   - Cases: [GitHub: how it was checked][gh-checked], [Spotify: who did what][spo-who].
   - Against: None found.
-- **SEC-9** [stated] Isolate each agent run from earlier attempts and reference answers, which it could otherwise read and lean on; limit network access too.
+- **SEC-9** [stated] Isolate each agent run from earlier attempts and reference answers, which it could otherwise read and lean on; decide about network access too.
   - Old system as oracle: no. Strength: weak. Era: 2026.
   - Cases: [Intel: who did what][int-who].
   - Against: None found.

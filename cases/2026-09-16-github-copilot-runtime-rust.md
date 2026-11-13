@@ -83,6 +83,11 @@ releases in the window, 100 of them pre-releases
 Afterwards the author compared the share of quality-related issues in two public repositories
 before and during the port
 ([source](https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/#h-the-regressions)).
+The finished runtime can run inside the host's process or behind the old server boundary; the
+in-process mode stays opt-in until the team trusts that host and runtime can share one failure
+boundary. Most of the post's figures come from the repository history and the agent session
+logs, which can hold prompts, command output and secrets, so the team treats them as sensitive
+data ([source](https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/)).
 
 ## Numbers
 
@@ -145,7 +150,7 @@ before and during the port
   rejected, JavaScript falsy defaults ported with different semantics, ambient behaviour (time
   zone, environment, a Windows window flag) that Node had supplied silently, paired operations
   ported only on one side, lifecycle and ordering bugs, missed features, library differences
-  (one caused an infinite loop at startup), changes lost in rebases, and slower code (one read-only scan duplicated a whole event log of 260 MB rather
+  (one caused an infinite loop at startup), changes lost in rebases of sessions left open for days, and slower code (one read-only scan duplicated a whole event log of 260 MB rather
   than borrowing it; another kept a handle per event until the JavaScript heap ran out). Some got as far as
   a stable release, and the author is certain that more exist than are known
   ([source](https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/#h-the-regressions)).
@@ -174,6 +179,9 @@ before and during the port
   improved CI caching ([source](https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/#h-what-the-port-cost)).
 - The CLI still reaches into runtime internals in places, so the layering goal is not finished
   ([source](https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/#h-why-we-needed-to-port)).
+- Once agents produced changes quickly, waiting for review and approval became the slow part:
+  the activity charts end in idle stretches while pull requests waited for a stamp
+  ([source](https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/)).
 - **Not reported:** the exact number of regressions and how many reached users; the review hours
   of the other engineers; the model mix on the main sessions (shown only in a chart). The
   benchmark is end to end, other changes landed in the same period, and the author warns to read
