@@ -140,3 +140,6 @@ intent was checked or whether people reviewed the migrated files before merging
 - Related: an agent-driven language port that used end-to-end tests as its oracle,
   [GitHub Copilot runtime to Rust](2026-09-16-github-copilot-runtime-rust.md); fleet-wide
   migrations with verifiers and an LLM judge, [Spotify Honk](2025-11-06-spotify-honk.md).
+- Same move at another company a year earlier, with a rule-based codemod feeding the model:
+  [Slack Enzyme to RTL](2024-05-22-slack-enzyme-to-rtl.md). The two count success differently,
+  so their figures do not compare.

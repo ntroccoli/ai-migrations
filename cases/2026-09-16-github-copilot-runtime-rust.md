@@ -209,3 +209,6 @@ before and during the port
 - Related: a pipeline that migrates file by file with retries,
   [Airbnb Enzyme to RTL](2025-04-01-airbnb-enzyme-to-rtl.md); verifiers and an LLM judge around
   an agent, [Spotify Honk](2025-11-06-spotify-honk.md).
+- Other ports to Rust: an all-at-once Zig port judged by the old test suite,
+  [Bun Zig to Rust](2026-07-08-bun-zig-to-rust.md); a symbol-by-symbol C port checked only by the
+  compiler until repair, [Intel IDEAS C to Rust](2026-08-24-intel-ideas-c-to-rust.md).
