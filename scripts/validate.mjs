@@ -75,6 +75,7 @@ function checkUnits(text) {
   };
   let need = 0;
   const missing = [];
+  const named = new Set(); // indices of numbers exempted as part of a name (Opus 4.8)
   toks.forEach((t, i) => {
     const m = t.match(NUM);
     if (!m) return;
@@ -88,7 +89,10 @@ function checkUnits(text) {
     if (LABELS.has(bare(prev).toLowerCase())) return; // part 4
     // A name before a small number (Opus 4.8), but not a word that starts a sentence.
     const sentenceStart = i < 2 || /[.!?:]$/.test(toks[i - 2]);
-    if (/^\d{1,3}(\.\d+)?$/.test(core) && /^[A-Z][\p{L}.-]*$/u.test(prev) && !STARTERS.has(prev) && !sentenceStart) return;
+    const small = /^\d{1,3}(\.\d+)?$/.test(core);
+    if (small && /^[A-Z][\p{L}.-]*$/u.test(prev) && !STARTERS.has(prev) && !sentenceStart) { named.add(i); return; }
+    // The second of a pair after a name: JUnit 4 and 5, Java 17 or 21, Python 2 to 3.
+    if (small && ['and', 'or', 'to'].includes(prev) && named.has(i - 2)) { named.add(i); return; }
     need++;
     if (!hasUnit) missing.push(t.replace(/[.,;:!?)]+$/, ''));
   });

@@ -21,7 +21,7 @@ function copy() {
   return dir;
 }
 const edit = (file, from, to) => {
-  const t = readFileSync(file, 'utf8');
+  const t = readFileSync(file, 'utf8').replace(/\r\n/g, '\n'); // a Windows checkout may hold CRLF
   if (!t.includes(from)) throw new Error(`test setup: "${from}" not in ${file}`);
   writeFileSync(file, t.replace(from, to));
 };
@@ -63,6 +63,14 @@ test('added units are accepted', 0, d => {
 test('a number before a non-unit word fails', 1, d => {
   appendFileSync(caseFile(d, INTEL), `- Units: 7 gizmos ([source](${sourceOf(d, INTEL)})).\n`);
 }, null, 'number "7" has no unit');
+
+// Names with numbers: inside a bracket, and the second of a pair after a name.
+test('a name inside a bracket and a version pair are not quantities', 0, d => {
+  appendFileSync(caseFile(d, INTEL), `- Names: moved from JUnit 4 and 5 to Java 17 or 21 with help from (Claude 2.1) ([source](${sourceOf(d, INTEL)})).\n`);
+});
+test('a pair with no name before it still needs a unit', 1, d => {
+  appendFileSync(caseFile(d, INTEL), `- Pair: between them 4 and 5 were moved ([source](${sourceOf(d, INTEL)})).\n`);
+}, null, 'number "4" has no unit');
 
 // --cases-dir: a staged case outside cases/ links to published cases.
 const stage = d => { mkdirSync(join(d, 'staged')); cpSync(caseFile(d, BUN), join(d, 'staged', BUN)); rmSync(caseFile(d, BUN)); return join(d, 'staged', BUN); };
