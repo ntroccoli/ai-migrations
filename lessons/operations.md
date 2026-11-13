@@ -2,7 +2,7 @@
 
 Running many agents on real machines, and keeping the result healthy after merge.
 
-Evidence base: every lesson here comes from the AI-assisted **migrations** in [this collection](../index.md); many apply to large engineering work done with AI agents generally.
+Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
 `[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle": does the lesson rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong (`yes`, `no`, `partly`). "Strength": `strong` (several cases, or measured), `medium`, `weak` (one case or assertion only).
 
@@ -28,7 +28,7 @@ Evidence base: every lesson here comes from the AI-assisted **migrations** in [t
   - Against: Disagree: the Zig creator says Bun was not fuzzing before the port, against the post's claim ([Bun][bun-wrong]).
 - **OPS-6** [stated] Run bulk agent jobs as scheduled batches sized to the infrastructure, sort results into status groups, and rerun only what is stuck.
   - Old system as oracle: partly. Strength: strong. Era: 2023–2025.
-  - Cases: [Slack: what worked][slk-worked], [Google: what worked][goo-worked], [Airbnb: what worked][air-worked].
+  - Cases: [Slack: what worked][slk-worked], [Google: what worked][goo-worked], [Airbnb: what worked][air-worked], [Uber: what worked][ubr-worked].
   - Against: None found.
   - Sceptic: tag changed from no to partly. Challenge: the status groups count how many converted old tests pass, so the old behaviour is the oracle. Answer: accepted; Google's groups count remaining sites instead, which needs no oracle.
 - **OPS-7** [ours] Load-test the new code for blocking and resource exhaustion; one port froze its interface on a synchronous call across the bridge.
@@ -45,3 +45,4 @@ Evidence base: every lesson here comes from the AI-assisted **migrations** in [t
 [goo-worked]: ../cases/2025-04-13-google-int64-ids.md#what-worked
 [slk-worked]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#what-worked
 [spo-wrong]: ../cases/2025-11-06-spotify-honk.md#what-went-wrong
+[ubr-worked]: ../cases/2026-04-07-uber-junit4-to-junit5.md#what-worked

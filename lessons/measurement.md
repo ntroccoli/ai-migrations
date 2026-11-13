@@ -2,7 +2,7 @@
 
 How to read the numbers in these sources, and how to report your own.
 
-Evidence base: every lesson here comes from the AI-assisted **migrations** in [this collection](../index.md); many apply to large engineering work done with AI agents generally.
+Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
 `[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle": does the lesson rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong (`yes`, `no`, `partly`). "Strength": `strong` (several cases, or measured), `medium`, `weak` (one case or assertion only).
 
@@ -32,11 +32,11 @@ Evidence base: every lesson here comes from the AI-assisted **migrations** in [t
   - Against: None found.
 - **MSR-7** [ours] Re-date a lesson before reusing it: early negative results, and results from pre-release or restricted models, may not hold for the models you use.
   - Old system as oracle: no. Strength: medium. Era: Claude 2.1 (2024) to pre-release models (2026).
-  - Cases: [Slack: who did what][slk-who], [Bun: who did what][bun-who], [Intel: who did what][int-who], [Google: what went wrong][goo-wrong].
+  - Cases: [Slack: who did what][slk-who], [Bun: who did what][bun-who], [Intel: who did what][int-who], [Google: what went wrong][goo-wrong], [Uber: what went wrong][ubr-wrong].
   - Against: 1Password's 2026 agents still broke ordering rules ([1Password][opw-wrong]), so some failures persist across eras.
 - **MSR-8** [ours] Do not credit the model with work the deterministic tools did: finding sites, building manifests and codemods were often the hard part.
   - Old system as oracle: no. Strength: strong. Era: all.
-  - Cases: [Google: who did what][goo-who], [Slack: who did what][slk-who], [1Password: who did what][opw-who], [Spotify: who did what][spo-who].
+  - Cases: [Google: who did what][goo-who], [Slack: who did what][slk-who], [1Password: who did what][opw-who], [Spotify: who did what][spo-who], [Uber: who did what][ubr-who].
   - Against: In Bun almost all the work ran through agent workflows ([Bun][bun-who]).
 - **MSR-9** [stated] If you will claim savings, measure people's share from file snapshots or logs from day one; estimates from the tool's own builders are biased.
   - Old system as oracle: no. Strength: medium. Era: internal Gemini.
@@ -66,3 +66,5 @@ Evidence base: every lesson here comes from the AI-assisted **migrations** in [t
 [spo-numbers]: ../cases/2025-11-06-spotify-honk.md#numbers
 [spo-who]: ../cases/2025-11-06-spotify-honk.md#who-did-what
 [spo-wrong]: ../cases/2025-11-06-spotify-honk.md#what-went-wrong
+[ubr-who]: ../cases/2026-04-07-uber-junit4-to-junit5.md#who-did-what
+[ubr-wrong]: ../cases/2026-04-07-uber-junit4-to-junit5.md#what-went-wrong

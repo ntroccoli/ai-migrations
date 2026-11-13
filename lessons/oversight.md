@@ -2,7 +2,7 @@
 
 Where people stay in the loop, and what they guard.
 
-Evidence base: every lesson here comes from the AI-assisted **migrations** in [this collection](../index.md); many apply to large engineering work done with AI agents generally.
+Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
 `[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle": does the lesson rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong (`yes`, `no`, `partly`). "Strength": `strong` (several cases, or measured), `medium`, `weak` (one case or assertion only).
 
@@ -17,7 +17,7 @@ Evidence base: every lesson here comes from the AI-assisted **migrations** in [t
 - **OVS-3** [stated] Decide up front where automation stops (a retry cap, a residue size, a category for people) and hand over with the failed attempt as the starting point.
   - Old system as oracle: no. Strength: strong. Era: 2023–2026.
   - Cases: [Airbnb: what worked][air-worked], [Airbnb: practices to copy][air-practices], [1Password: practices to copy][opw-practices], [Google: who did what][goo-who].
-  - Against: None found.
+  - Against: Uber's stop rule was a revert to the old framework, not a hand-over to people ([Uber][ubr-wrong]).
 
 [air-practices]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#practices-to-copy
 [air-worked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-worked
@@ -31,3 +31,4 @@ Evidence base: every lesson here comes from the AI-assisted **migrations** in [t
 [opw-practices]: ../cases/2026-04-20-1password-monolith-refactor.md#practices-to-copy
 [slk-who]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#who-did-what
 [spo-wrong]: ../cases/2025-11-06-spotify-honk.md#what-went-wrong
+[ubr-wrong]: ../cases/2026-04-07-uber-junit4-to-junit5.md#what-went-wrong

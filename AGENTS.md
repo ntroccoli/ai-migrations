@@ -19,6 +19,10 @@ companion repo with full source text, handoff and gate: `C:\Users\ntroc\git\ai-m
 
 - Only migrations done with AI. Rule-based tools used inside one (OpenRewrite, codemods,
   syntax-tree rewrites) are recorded in that case, never a case of their own.
+- One exception, a contrast case: a migration done mainly with rule-based tools whose source
+  reports an AI attempt that failed or was dropped. Its summary starts "Contrast case.", its
+  Context says why it is here, `ai_share` is `little`, and it never raises the strength of a
+  lesson about what models do. Uber's JUnit move is the first.
 - Primary sources only (engineering posts, papers, talks, official repos). Secondhand reports
   point to a primary source or are left out.
 
@@ -150,7 +154,8 @@ Not numbers: digits inside a word (`GPT-5.6`, `E0425`), inline code, link target
 then a capitalised word) and list markers. Exempt: a year (1900 to
 2099) or a range of years (`2023–2026`) with no unit after it, a number of up to three digits
 right after a capitalised name that does not start a sentence (`Opus 4.8`, `Java 21`,
-`August 21`, also inside a bracket: `(Claude 2.1)`), and a number after a label word (`part 4`,
+`August 21`, also inside a bracket: `(Claude 2.1)`; and the second of a pair after such a name:
+`JUnit 4 and 5`, `Java 17 or 21`), and a number after a label word (`part 4`,
 `step 2`; list `LABELS`).
 Every other number needs a `%` or `x` suffix, a currency sign, or a word from `UNITS` in
 `scripts/lib.mjs` within the next three words; scale words (`million`, `K`) may sit between. In
@@ -242,13 +247,13 @@ The index and `llms.txt` list each case on one line, so an agent can pick cases 
 them. The line is built from the front matter only:
 
 ```markdown
-- [<title>](cases/<file>) — <kind>, <from> to <to>; evidence: <evidence>; author: <author_relation>; cost: <cost>. <summary>
+- [<title>](cases/<file>) — <kind>, <from> to <to>; AI share: <ai_share>; evidence: <evidence>; author: <author_relation>; cost: <cost>. <summary>
 ```
 
 Example:
 
 ```markdown
-- [Airbnb moves 3.5K React test files off Enzyme onto React Testing Library](cases/2025-04-01-airbnb-enzyme-to-rtl.md) — test-framework, Enzyme (React component tests) to React Testing Library; evidence: assertion-only; author: user-of-tool; cost: unstated. An LLM pipeline with per-file validation steps and retries migrated 97% of about 3,500 React test files; people finished the rest by hand.
+- [Airbnb moves 3.5K React test files off Enzyme onto React Testing Library](cases/2025-04-01-airbnb-enzyme-to-rtl.md) — test-framework, Enzyme (React component tests) to React Testing Library; AI share: most; evidence: assertion-only; author: user-of-tool; cost: unstated. An LLM pipeline with per-file validation steps and retries migrated 97% of about 3,500 React test files; people finished the rest by hand.
 ```
 
 ## Writing rules

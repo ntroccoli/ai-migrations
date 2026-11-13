@@ -2,7 +2,7 @@
 
 What tells you the new code is right, and where those oracles fail.
 
-Evidence base: every lesson here comes from the AI-assisted **migrations** in [this collection](../index.md); many apply to large engineering work done with AI agents generally.
+Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
 `[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle": does the lesson rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong (`yes`, `no`, `partly`). "Strength": `strong` (several cases, or measured), `medium`, `weak` (one case or assertion only).
 
@@ -38,7 +38,7 @@ Evidence base: every lesson here comes from the AI-assisted **migrations** in [t
   - Against: None found.
 - **TST-8** [ours] When the migrated artefact is itself a test, passing is a weak oracle; also compare test counts, coverage and intent file by file.
   - Old system as oracle: yes. Strength: weak. Era: 2023–2024.
-  - Cases: [Slack: practices to copy][slk-practices], [Airbnb: how it was checked][air-checked].
+  - Cases: [Slack: practices to copy][slk-practices], [Airbnb: how it was checked][air-checked], [Uber: how it was checked][ubr-checked].
   - Against: None found; Airbnb says coverage and intent were kept but shows no method.
 - **TST-9** [stated] Treat performance as part of the contract: benchmark end to end against a deterministic local stand-in for slow services, and count slowdowns as regressions.
   - Old system as oracle: yes. Strength: medium. Era: 2026.
@@ -65,4 +65,5 @@ Evidence base: every lesson here comes from the AI-assisted **migrations** in [t
 [slk-worked]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#what-worked
 [spo-checked]: ../cases/2025-11-06-spotify-honk.md#how-it-was-checked
 [spo-practices]: ../cases/2025-11-06-spotify-honk.md#practices-to-copy
+[ubr-checked]: ../cases/2026-04-07-uber-junit4-to-junit5.md#how-it-was-checked
 [k-port-with-equality-tests]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2026-01-03-port-with-equality-tests.md

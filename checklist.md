@@ -10,7 +10,7 @@ and the report format are at the end.
 
 Cases: [GitHub][] (TypeScript), [Bun][] (Zig) and [Intel][] (C) to Rust; [1Password][] (Go
 restructuring); [Spotify][] (fleet changes); [Airbnb][] and [Slack][] (React tests); [Google][]
-(wider IDs). Files are linked at the end.
+(wider IDs); [Uber][] (Java tests, rule-based: a contrast case). Files are linked at the end.
 
 1. **Is the move allowed, possible and worth it?**
    Check: find the written reason and the measured problem behind it (none written: ask the
@@ -64,7 +64,7 @@ restructuring); [Spotify][] (fleet changes); [Airbnb][] and [Slack][] (React tes
    Evidence: GitHub's first count was about a third of what it finally ported, as code moved
    into scope and colleagues kept adding to the old code. Google's code index beat text search
    but listed irrelevant sites; 1Password's analyzer listed every site.
-   Lessons: PLN-3, ROL-4, TOL-1, TOL-3, MSR-8.
+   Lessons: PLN-3, PLN-10, ROL-4, TOL-1, TOL-3, MSR-8.
 5. **Can the work ship in small units, with old and new side by side?**
    Check: split the scope into units (files, components, packages, repositories), draw their
    dependency order with the language's own read-only graph tool (`go list -deps`, `cargo tree`,
@@ -111,8 +111,9 @@ restructuring); [Spotify][] (fleet changes); [Airbnb][] and [Slack][] (React tes
    Evidence: Spotify dropped a framework too varied for one prompt, and mapping tables fixed
    wrong field mappings; Airbnb found the choice of related files mattered more than prompt
    wording; Slack gave the model a codemod's partial output and each test's rendered output;
-   Google's model handled Dart poorly, so people did it.
-   Lessons: CTX-1, CTX-2, CTX-3, CTX-5, CTX-9, TOL-2, AGF-8, PLN-8.
+   Google's model handled Dart poorly, so people did it. Uber's recipes did a test-framework move
+   where its AI attempt failed.
+   Lessons: CTX-1, CTX-2, CTX-3, CTX-5, CTX-9, TOL-2, TOL-7, AGF-8, PLN-8.
 9. **How will you work the long tail, stop, and learn from failures?**
    Check: look for a status record per unit, a way to rerun failing units by step, a retry limit,
    a rule for when to stop automating and finish by hand, and a place where a failure seen twice
@@ -120,8 +121,9 @@ restructuring); [Spotify][] (fleet changes); [Airbnb][] and [Slack][] (React tes
    Evidence: Airbnb stamped each file with its status, tuned on small samples of failures, swept
    again and finished the last files by hand; Intel capped retries. Bun fixed the process, not
    the code, when agents stubbed functions; GitHub turned repeated failures into instructions,
-   skills and evals; Spotify asks the agent what its prompt lacked.
-   Lessons: VER-3, KNW-1, KNW-2, OVS-3, CTX-7, AGF-7, OPS-6.
+   skills and evals; Spotify asks the agent what its prompt lacked. Uber put files whose tests
+   failed back on the old framework.
+   Lessons: VER-3, KNW-1, KNW-2, OVS-3, CTX-7, AGF-7, OPS-6, ROL-8.
 10. **What may the agent decide and reach alone, and who reviews?**
     Check: list the guardrails an agent could switch off (deleting or editing tests, updating
     snapshots or baselines, waiver labels, CI flags) and who must approve each; the steps kept
@@ -260,3 +262,4 @@ Status is one of: open, proven, waiting for first use, stopped holding, skipped.
 [Airbnb]: cases/2025-04-01-airbnb-enzyme-to-rtl.md
 [Google]: cases/2025-04-13-google-int64-ids.md
 [Slack]: cases/2024-05-22-slack-enzyme-to-rtl.md
+[Uber]: cases/2026-04-07-uber-junit4-to-junit5.md

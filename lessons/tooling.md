@@ -2,7 +2,7 @@
 
 Splitting the work between deterministic tools and models.
 
-Evidence base: every lesson here comes from the AI-assisted **migrations** in [this collection](../index.md); many apply to large engineering work done with AI agents generally.
+Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
 `[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle": does the lesson rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong (`yes`, `no`, `partly`). "Strength": `strong` (several cases, or measured), `medium`, `weak` (one case or assertion only).
 
@@ -13,7 +13,7 @@ Evidence base: every lesson here comes from the AI-assisted **migrations** in [t
 - **TOL-2** [stated] Run a rule-based codemod first and give the model its partial output, with a note wherever the rules gave up; it anchors the model.
   - Old system as oracle: partly. Strength: medium. Era: Claude 2.1, 2024; internal Gemini.
   - Cases: [Slack: what worked][slk-worked], [Google: who did what][goo-who].
-  - Against: None found.
+  - Against: Uber's recipes made all its rewrites with no model step, and its attempt to have AI migrate several files at once failed ([Uber][ubr-who]).
   - Sceptic: tag changed from no to partly. Challenge: a codemod needs old code to transform, and its gain came together with rendered output captured by running the old tests. Answer: accepted.
 - **TOL-3** [stated] Find change sites with a code index or static analysis, include too many rather than too few, and let the model edit the whole file around each hint.
   - Old system as oracle: partly. Strength: medium. Era: internal Gemini; 2026.
@@ -23,7 +23,7 @@ Evidence base: every lesson here comes from the AI-assisted **migrations** in [t
 - **TOL-4** [stated] Price the rule-based alternative with the upkeep of its rules; hand-written transforms keep growing on long-tail patterns, which is where models pay off.
   - Old system as oracle: no. Strength: medium. Era: 2024–2025.
   - Cases: [Spotify: numbers][spo-numbers], [Slack: what went wrong][slk-wrong], [Google: what worked][goo-worked].
-  - Against: At Slack the codemod's output still steered the model better than prompt work ([Slack][slk-worked]), so rules stay in the system.
+  - Against: Disagree: Uber kept writing recipes for each common build failure and sent failing files back to the old framework, so rules alone carried its long tail while a model attempt failed ([Uber][ubr-wrong]). At Slack the codemod's output still steered the model better than prompt work ([Slack][slk-worked]), so rules stay in the system.
 - **TOL-5** [stated] Keep agents and models behind your own thin interface, log traces from day one, and pin model and settings per run; the best agent changed within a year.
   - Old system as oracle: no. Strength: medium. Era: 2023–2026.
   - Cases: [Spotify: what worked][spo-worked], [Google: who did what][goo-who].
@@ -34,6 +34,10 @@ Evidence base: every lesson here comes from the AI-assisted **migrations** in [t
   - Cases: [GitHub: what worked][gh-worked], [Spotify: practices to copy][spo-practices], [Airbnb: what worked][air-worked], [Slack: what worked][slk-worked].
   - Against: None found.
   - Related view (karpathy-ideas): [agents ignore code style rules][k-agents-ignore-code-style-rules], agrees.
+- **TOL-7** [stated] Before choosing a model for a mechanical framework move, try deterministic rewrites on a typed syntax tree; at very large scale they were judged more practical.
+  - Old system as oracle: partly. Strength: weak. Era: unstated.
+  - Cases: [Uber: what went wrong][ubr-wrong], [Uber: what worked][ubr-worked].
+  - Against: Slack's codemod alone left work that a model then finished ([Slack][slk-worked]); Airbnb's LLM pipeline moved a test framework with no rule-based core ([Airbnb][air-worked]).
 
 [air-worked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-worked
 [bun-worked]: ../cases/2026-07-08-bun-zig-to-rust.md#what-worked
@@ -49,5 +53,8 @@ Evidence base: every lesson here comes from the AI-assisted **migrations** in [t
 [spo-numbers]: ../cases/2025-11-06-spotify-honk.md#numbers
 [spo-practices]: ../cases/2025-11-06-spotify-honk.md#practices-to-copy
 [spo-worked]: ../cases/2025-11-06-spotify-honk.md#what-worked
+[ubr-who]: ../cases/2026-04-07-uber-junit4-to-junit5.md#who-did-what
+[ubr-worked]: ../cases/2026-04-07-uber-junit4-to-junit5.md#what-worked
+[ubr-wrong]: ../cases/2026-04-07-uber-junit4-to-junit5.md#what-went-wrong
 [k-agents-ignore-code-style-rules]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2026-03-21-agents-ignore-code-style-rules.md
 [k-plan-for-intelligence-brownouts]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2026-03-11-plan-for-intelligence-brownouts.md

@@ -97,7 +97,7 @@ export const LESSON_PAGES = ['planning', 'testing', 'verification', 'review', 'r
   'cost', 'team', 'tooling', 'context', 'orchestration', 'agent-failures', 'oversight', 'knowledge', 'measurement'];
 export const LESSON_MAX_BYTES = 20 * 1024; // an agent reads a page whole
 // Every lesson page opens with this sentence (after its title and intro); validate.mjs matches it.
-export const LESSON_NOTE = 'Evidence base: every lesson here comes from the AI-assisted **migrations** in [this collection](../index.md); many apply to large engineering work done with AI agents generally.';
+export const LESSON_NOTE = 'Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.';
 export const KARPATHY_IDEAS = 'https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/';
 export const ORACLES = ['yes', 'partly', 'no'];
 export const STRENGTHS = ['strong', 'medium', 'weak'];

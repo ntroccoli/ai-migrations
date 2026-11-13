@@ -2,7 +2,7 @@
 
 The automated checks around each agent change, and what they can and cannot prove.
 
-Evidence base: every lesson here comes from the AI-assisted **migrations** in [this collection](../index.md); many apply to large engineering work done with AI agents generally.
+Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
 `[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle": does the lesson rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong (`yes`, `no`, `partly`). "Strength": `strong` (several cases, or measured), `medium`, `weak` (one case or assertion only).
 
@@ -12,12 +12,12 @@ Evidence base: every lesson here comes from the AI-assisted **migrations** in [t
   - Against: In a memory-safe target, one class of memory bugs does become a compile error ([Bun][bun-checked]), so the compiler is a real but narrow check.
 - **VER-2** [stated] Order gates from cheap to costly and drop a candidate at its first failure, with cheap no-change checks (whitespace only, unchanged syntax tree) up front.
   - Old system as oracle: partly. Strength: strong. Era: 2023–2025.
-  - Cases: [Google: how it was checked][goo-checked], [Airbnb: what worked][air-worked], [Slack: what worked][slk-worked], [Spotify: how it was checked][spo-checked].
+  - Cases: [Google: how it was checked][goo-checked], [Airbnb: what worked][air-worked], [Slack: what worked][slk-worked], [Spotify: how it was checked][spo-checked], [Uber: how it was checked][ubr-checked].
   - Against: None found.
 - **VER-3** [stated] Retry a failed unit with its latest errors in a fresh prompt, cap the attempts, and hand what remains to people.
   - Old system as oracle: partly. Strength: strong. Era: unnamed frontier models (2024) to 2026.
   - Cases: [Airbnb: what worked][air-worked], [Google: who did what][goo-who], [Spotify: numbers][spo-numbers].
-  - Against: Google's developers could not tell how many retries a file would need ([Google][goo-wrong]); test feedback helped one model on Intel's battery far more than another ([Intel][int-worked]).
+  - Against: Google's developers could not tell how many retries a file would need ([Google][goo-wrong]); test feedback helped one model on Intel's battery far more than another ([Intel][int-worked]); Uber neither retried nor handed over files whose tests failed but put them back on the old framework, as diagnosing each was impractical ([Uber][ubr-wrong]).
 - **VER-4** [stated] Give the agent one verify tool that picks the right build and test runner and returns short errors, and run it automatically before the agent may finish.
   - Old system as oracle: partly. Strength: medium. Era: Claude Code, 2025.
   - Cases: [Spotify: what worked][spo-worked], [Spotify: practices to copy][spo-practices].
@@ -65,3 +65,5 @@ Evidence base: every lesson here comes from the AI-assisted **migrations** in [t
 [spo-practices]: ../cases/2025-11-06-spotify-honk.md#practices-to-copy
 [spo-worked]: ../cases/2025-11-06-spotify-honk.md#what-worked
 [spo-wrong]: ../cases/2025-11-06-spotify-honk.md#what-went-wrong
+[ubr-checked]: ../cases/2026-04-07-uber-junit4-to-junit5.md#how-it-was-checked
+[ubr-wrong]: ../cases/2026-04-07-uber-junit4-to-junit5.md#what-went-wrong

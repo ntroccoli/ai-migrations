@@ -4,7 +4,7 @@
 
 Lessons for large engineering work done with AI agents, drawn from the case studies in [cases](../cases/). Each lesson is one line in our own words with a stable ID (the prefix names its page), the cases behind it, the evidence against it, and whether it needs the old system as its oracle. The [checklist](../checklist.md) cites lessons by ID.
 
-Evidence base: every lesson here comes from the AI-assisted **migrations** in [this collection](../index.md); many apply to large engineering work done with AI agents generally.
+Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
 `[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle": does the lesson rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong (`yes`, `partly`, `no`); a `no` lesson carries over to work that is not a migration as it is. "Strength": `strong` (several cases, or measured), `medium`, `weak` (one case or assertion only).
 
@@ -12,23 +12,23 @@ Evidence base: every lesson here comes from the AI-assisted **migrations** in [t
 
 | Aspect | Prefix | Lessons | stated | ours | oracle yes | partly | no |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| [Planning and scoping](planning.md) | PLN | 9 | 7 | 2 | 1 | 1 | 7 |
+| [Planning and scoping](planning.md) | PLN | 10 | 8 | 2 | 1 | 1 | 8 |
 | [Testing and oracles](testing.md) | TST | 10 | 8 | 2 | 7 | 2 | 1 |
 | [Verification loops and gates](verification.md) | VER | 9 | 9 | 0 | 1 | 6 | 2 |
 | [Code review](review.md) | REV | 10 | 8 | 2 | 2 | 4 | 4 |
-| [Release and rollout](rollout.md) | ROL | 7 | 6 | 1 | 2 | 2 | 3 |
+| [Release and rollout](rollout.md) | ROL | 8 | 7 | 1 | 3 | 2 | 3 |
 | [Machines and operations](operations.md) | OPS | 7 | 6 | 1 | 1 | 2 | 4 |
 | [Security](security.md) | SEC | 10 | 7 | 3 | 0 | 3 | 7 |
 | [Cost](cost.md) | CST | 9 | 3 | 6 | 0 | 1 | 8 |
 | [Team and roles](team.md) | TEM | 4 | 4 | 0 | 0 | 0 | 4 |
-| [Rule-based tools and AI](tooling.md) | TOL | 6 | 6 | 0 | 0 | 2 | 4 |
+| [Rule-based tools and AI](tooling.md) | TOL | 7 | 7 | 0 | 0 | 3 | 4 |
 | [Context and prompts](context.md) | CTX | 9 | 9 | 0 | 1 | 2 | 6 |
 | [Many agents at once](orchestration.md) | ORC | 6 | 6 | 0 | 0 | 2 | 4 |
 | [Agent failure modes](agent-failures.md) | AGF | 8 | 7 | 1 | 0 | 1 | 7 |
 | [Human oversight](oversight.md) | OVS | 3 | 3 | 0 | 0 | 1 | 2 |
 | [Knowledge capture](knowledge.md) | KNW | 3 | 3 | 0 | 0 | 1 | 2 |
 | [Measuring and reading results](measurement.md) | MSR | 9 | 3 | 6 | 0 | 2 | 7 |
-| **All** | | 119 | 95 | 24 | 15 | 32 | 72 |
+| **All** | | 122 | 98 | 24 | 16 | 33 | 73 |
 
 ## Cases behind the lessons
 
@@ -40,10 +40,11 @@ Lessons that cite each case, in "Cases" or "Against".
 | [Intel](../cases/2026-08-24-intel-ideas-c-to-rust.md) | 22: PLN-4, PLN-5, TST-2, TST-5, TST-10, VER-1, VER-3, VER-6, VER-9, SEC-4, SEC-5, SEC-9, CST-3, CST-4, CST-5, TOL-1, CTX-9, ORC-6, AGF-1, OVS-1, MSR-3, MSR-7 |
 | [Bun](../cases/2026-07-08-bun-zig-to-rust.md) | 51: PLN-1, PLN-2, PLN-5, PLN-7, TST-1, TST-3, TST-4, VER-1, VER-5, REV-1, REV-2, REV-3, REV-5, REV-8, ROL-1, ROL-2, ROL-3, OPS-1, OPS-2, OPS-3, OPS-5, SEC-1, SEC-2, SEC-3, SEC-4, SEC-6, CST-1, CST-2, CST-4, CST-5, CST-6, CST-7, TEM-1, TEM-2, TEM-4, TOL-1, ORC-1, ORC-4, ORC-5, ORC-6, AGF-1, OVS-1, OVS-2, KNW-1, MSR-1, MSR-3, MSR-4, MSR-5, MSR-6, MSR-7, MSR-8 |
 | [1Password](../cases/2026-04-20-1password-monolith-refactor.md) | 22: PLN-2, PLN-4, PLN-6, PLN-7, PLN-9, VER-7, SEC-10, TOL-1, TOL-3, CTX-4, CTX-8, ORC-1, ORC-2, AGF-2, AGF-3, AGF-6, AGF-7, OVS-3, MSR-1, MSR-3, MSR-7, MSR-8 |
+| [Uber](../cases/2026-04-07-uber-junit4-to-junit5.md) | 19: PLN-2, PLN-6, PLN-8, PLN-9, PLN-10, TST-8, VER-2, VER-3, ROL-1, ROL-8, OPS-6, TOL-2, TOL-4, TOL-7, OVS-3, KNW-1, KNW-2, MSR-7, MSR-8 |
 | [Spotify](../cases/2025-11-06-spotify-honk.md) | 45: PLN-6, PLN-8, PLN-9, TST-2, TST-6, VER-1, VER-2, VER-3, VER-4, VER-8, VER-9, REV-4, REV-5, REV-6, REV-9, OPS-4, SEC-1, SEC-2, SEC-3, SEC-8, CST-2, CST-8, CST-9, TEM-3, TEM-4, TOL-4, TOL-5, TOL-6, CTX-1, CTX-3, CTX-4, CTX-5, CTX-6, CTX-7, CTX-8, AGF-2, AGF-4, AGF-5, AGF-7, OVS-1, MSR-1, MSR-2, MSR-3, MSR-6, MSR-8 |
 | [Google](../cases/2025-04-13-google-int64-ids.md) | 34: PLN-1, PLN-8, TST-2, TST-6, TST-7, VER-2, VER-3, VER-7, REV-2, REV-4, REV-7, REV-9, ROL-2, ROL-3, OPS-6, CST-4, CST-8, TEM-2, TEM-4, TOL-2, TOL-3, TOL-4, TOL-5, AGF-4, AGF-7, AGF-8, OVS-2, OVS-3, KNW-2, MSR-1, MSR-3, MSR-7, MSR-8, MSR-9 |
-| [Airbnb](../cases/2025-04-01-airbnb-enzyme-to-rtl.md) | 21: PLN-1, PLN-2, PLN-3, PLN-9, TST-8, VER-2, VER-3, REV-10, OPS-6, CST-2, CST-3, TOL-6, CTX-1, CTX-9, ORC-4, OVS-3, KNW-1, KNW-2, MSR-1, MSR-2, MSR-5 |
-| [Slack](../cases/2024-05-22-slack-enzyme-to-rtl.md) | 23: PLN-7, PLN-9, TST-5, TST-8, VER-2, VER-5, REV-2, REV-6, REV-10, OPS-6, TEM-2, TEM-3, TOL-2, TOL-4, TOL-6, CTX-1, CTX-2, OVS-2, KNW-2, MSR-1, MSR-2, MSR-7, MSR-8 |
+| [Airbnb](../cases/2025-04-01-airbnb-enzyme-to-rtl.md) | 22: PLN-1, PLN-2, PLN-3, PLN-9, TST-8, VER-2, VER-3, REV-10, OPS-6, CST-2, CST-3, TOL-6, TOL-7, CTX-1, CTX-9, ORC-4, OVS-3, KNW-1, KNW-2, MSR-1, MSR-2, MSR-5 |
+| [Slack](../cases/2024-05-22-slack-enzyme-to-rtl.md) | 24: PLN-7, PLN-9, TST-5, TST-8, VER-2, VER-5, REV-2, REV-6, REV-10, OPS-6, TEM-2, TEM-3, TOL-2, TOL-4, TOL-6, TOL-7, CTX-1, CTX-2, OVS-2, KNW-2, MSR-1, MSR-2, MSR-7, MSR-8 |
 
 ## Where the cases disagree
 
@@ -53,6 +54,7 @@ Lessons that cite each case, in "Cases" or "Against".
 - **OPS-5** ([Machines and operations](operations.md)) Keep hardening after merge: repeated security review, round-the-clock fuzzing and leak tracking, with people reviewing the fixes they produce.
 - **SEC-2** ([Security](security.md)) Whatever the harness exposes may get used unasked (an unlisted skill, git commands, a peer's worktree); remove what the task does not need.
 - **SEC-4** ([Security](security.md)) After a port into a memory-safe language, count where unsafe code sits, allow it only at foreign and system boundaries, and have the compiler forbid it elsewhere.
+- **TOL-4** ([Rule-based tools and AI](tooling.md)) Price the rule-based alternative with the upkeep of its rules; hand-written transforms keep growing on long-tail patterns, which is where models pay off.
 - **TOL-5** ([Rule-based tools and AI](tooling.md)) Keep agents and models behind your own thin interface, log traces from day one, and pin model and settings per run; the best agent changed within a year.
 - **CTX-1** ([Context and prompts](context.md)) Choosing the right context (nearby files, good examples, runtime data, exact mapping tables) moved results more than polishing the prompt wording.
 - **CTX-6** ([Context and prompts](context.md)) Prefer large, static, version-controlled prompts and few tools for predictability; letting the agent fetch context through many tools adds variance.

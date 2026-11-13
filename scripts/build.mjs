@@ -32,7 +32,7 @@ if (broken.length) {
 // One line per case, from the front matter only (AGENTS.md "One line per case").
 const caseLine = (c, prefix) => {
   const m = c.meta;
-  return `- [${m.title}](${prefix}${c.file}) — ${m.kind}, ${m.from} to ${m.to}; evidence: ${m.evidence}; ` +
+  return `- [${m.title}](${prefix}${c.file}) — ${m.kind}, ${m.from} to ${m.to}; AI share: ${m.ai_share}; evidence: ${m.evidence}; ` +
     `author: ${m.author_relation}; cost: ${m.cost}. ${m.summary}`;
 };
 
@@ -99,7 +99,7 @@ const out = {};
 out['index.md'] = [
   GENERATED, '',
   '# Index', '',
-  `${cases.length} cases, newest first. Each line: title — kind, from to to; how far the claims can be checked; ` +
+  `${cases.length} cases, newest first. Each line: title — kind, from to to; the share of the changed code AI produced, as the source states it (a contrast case, mostly rule-based, says so in its summary); how far the claims can be checked; ` +
     'the author\'s stake in the tools; the cost the source gives; a one-line summary.', '',
   `Lessons drawn from the cases, by aspect: [lessons/index.md](lessons/index.md) (${all.length} lessons on ` +
     `${pages.length} pages). Before a migration: [checklist.md](checklist.md).`, '',
