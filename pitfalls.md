@@ -47,7 +47,7 @@ does underneath them.
 - A comparison of two pointers by address where the original compared what they point to: safe,
   compiles, and is always false. [Intel][]
 - Firmware and code that calls hardware or assembly cannot be safe Rust; platforms without the
-  Rust standard library or compiler need extra work. [Intel][]
+  Rust compiler or its standard library need extra work. [Intel][]
 - A faithful port keeps the old design, so some `unsafe` code remains; decide how much the target
   may use and where. [Bun][]
 - (ours) Integer overflow and wrap; out-of-range float-to-integer casts; aliasing and casts away
@@ -81,7 +81,7 @@ does underneath them.
   [Slack][]
 - Converted files that fail at setup or import hide every test case in them, right or wrong.
   [Slack][] (ours) Compare the count of discovered tests before and after the move.
-- In-house test runners, test rules and shared base classes that no stock rule handles; Uber first
+- In-house test runners, rules and shared base classes that no stock rule handles; Uber first
   changed the build so both versions ran side by side, and skipped any file using a pattern its
   recipes did not support. [Uber][]
 

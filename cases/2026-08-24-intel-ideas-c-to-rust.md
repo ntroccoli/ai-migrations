@@ -1,5 +1,5 @@
 ---
-title: Intel's IDEAS harness ports the libgit2 command-line client from C to safe Rust
+title: Intel's IDEAS harness ports the libgit2 command-line client in C to safe Rust
 date: 2026-08-24
 company: Intel
 summary: An LLM harness turned 112K lines of C into safe Rust that compiled but crashed; 8 person-hours guiding an agent got git blame working.
@@ -16,7 +16,7 @@ duration: unstated
 people: unstated
 cost: ~$0.55 per symbol for translation (total unstated), plus ~$6.5 for repair
 ai_share: most
-tools: [IDEAS, rust-bindgen, Rust compiler, VS Code Copilot agent mode, KISS agent framework, cargo-llvm-cov, Docker]
+tools: [IDEAS, rust-bindgen, Rust compiler, VS Code Copilot agent mode, KISS agent framework, Docker]
 models: [Claude Opus 4.6, Claude Sonnet 4.6, GPT-5.4, GPT-5.6 Sol, Claude Mythos Preview]
 period: unstated
 outcome: partial
@@ -24,7 +24,7 @@ status: current
 superseded_by:
 ---
 
-# Intel's IDEAS harness ports the libgit2 command-line client from C to safe Rust
+# Intel's IDEAS harness ports the libgit2 command-line client in C to safe Rust
 
 Intel researchers working in DARPA's TRACTOR program built IDEAS, an open-source harness that
 calls an LLM one C symbol at a time and keeps every other decision in ordinary code. On the
@@ -39,37 +39,38 @@ best model passed 99.4% of tests with test feedback
 ## Source
 
 A post on Intel's security blog by two researchers of Intel's CTO team, one of them Intel's
-principal investigator for DARPA TRACTOR, dated 2026-08-24. Intel sells nothing in it, but it
-presents IDEAS, Intel's own open-source translator
-([repository](https://github.com/IntelLabs/IDEAS)), and closes by pointing to Intel's memory
+principal investigator for DARPA TRACTOR, dated 2026-08-24. It presents IDEAS, Intel's own
+open-source translator ([repository](https://github.com/IntelLabs/IDEAS)), still under active
+development and offered for experimental use, and its open challenges promote Intel's memory
 tagging hardware, so the case is rated as a tool author's. The method is shown: the harness,
 its ranking code and its prompt are public, and the test format follows DARPA's public test
 corpus. The libgit2 figures are stated without logs or the translated code. The work is funded
-by DARPA. The full text of the page was not archived (the site refuses automated reading), so
-our checks for copied wording and for the numbers ran against notes taken while reading it.
+by DARPA. The site refuses automated reading; the full text was archived on 2026-11-13 by
+reading the page in a browser, and our checks for copied wording and for the numbers ran against
+that text.
 
 ## What was migrated
 
 The command-line client of libgit2 (its `src/cli` folder), a C implementation of git commands,
-about 112,000 lines of C
+about 112,000 lines of C as the post counts them
 ([source](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html)).
-The goal was Rust with no `unsafe` code at all, not a line-by-line copy. libgit2's own test
-suite was left out on purpose: the team wanted to learn whether a developer could cheaply repair
+The goal was Rust with no `unsafe` code at all. libgit2's own test suite was kept out of the
+translation on purpose: the team wanted to learn whether a developer could cheaply repair
 an automatic, memory-safe rewrite. A second set of results covers the second TRACTOR battery: 80
 small C test projects from MIT Lincoln Laboratory, each between 150 and 3,000 lines, built around
 void pointers, manual memory management, comparisons of raw pointers, and pointers to functions.
 
 ## Who did what
 
-- **AI:** Claude Opus 4.6 translated each C symbol (function or type), or each group of symbols
+- **AI:** Claude Opus 4.6 translated each C symbol (function, type or global variable), or each group of symbols
   that use each other, into safe Rust, and wrote the bodies of the C-compatible wrappers. Claude
   Sonnet 4.6, run as an agent inside VS Code Copilot, found the pointer bug and, with developer
-  guidance, the repair shimmed the missing functions (the post does not name who wrote each
-  shim). GPT-5.6 Sol produced the post's example of one data-structure translation, with
+  guidance, found and shimmed the stubbed file-system functions; who shimmed the missing
+  object-database functions is not stated. GPT-5.6 Sol produced the post's example of one data-structure translation, with
   converters and a round-trip test; GPT-5.4 and Claude Sonnet 4.6 translated the battery's
   projects; Claude Mythos Preview wrote equivalence tests as an autonomous agent. Basis for
-  `ai_share`: the post says every part of the output came from the LLM call, the only
-  non-deterministic step.
+  `ai_share`: the post calls the translator entirely LLM-based, the model call being its only
+  non-deterministic step; bindgen wrote the wrapper signatures and people guided the repair.
 - **Rule-based tools:** everything around the model call. Each agent runs in a sandbox: the
   project's README warns that without it agents could read earlier translation attempts and be
   swayed by them, and notes that its lighter sandbox mode leaves network access open
@@ -102,15 +103,15 @@ and the tests cover defined behaviour only
 | --- | --- | --- | --- |
 | about 112,000 lines | C code of the libgit2 command-line client given as input | reported | [post](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html) |
 | about 116,000 lines | safe Rust produced (elsewhere the post gives 120,000 lines) | reported | [post](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html) |
-| about 4,600 symbols (functions, types) | C symbols translated, in dependency order | reported | [post](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html) |
-| 133 symbols (functions, types) | the largest cycle of mutually dependent symbols, done in one go | reported | [post](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html) |
+| about 4,600 symbols (functions, types, globals) | C symbols translated, in dependency order | reported | [post](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html) |
+| 133 symbols (functions, types) | a cycle of mutually dependent symbols, translated jointly | reported | [post](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html) |
 | about $0.55 per symbol | average model cost of translating one symbol | reported | [post](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html) |
 | 4 attempts | most consecutive failed attempts before any merged symbol compiled | reported | [post](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html) |
 | about 6.5 USD | extra model cost of the repair | reported | [post](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html) |
 | 8 person-hours | cumulative human time spent guiding the repair | reported | [post](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html) |
 | 4 sessions | prompting sessions of the repair | reported | [post](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html) |
 | about 3,500 tokens | length of the translation prompt | reported | [post](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html) |
-| up to 3,500 lines | largest C project in the test-generation experiment (cJSON) | reported | [post](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html) |
+| up to 3,500 lines | largest C project in the test-generation experiment (cJSON was the hardest to cover) | reported | [post](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html) |
 | 80 test projects | C projects in the second TRACTOR battery, each between 150 and 3,000 lines | reported | [post](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html) |
 | 87.8% and 63 of 80 test projects | GPT-5.4, one shot: share of tests passed, and projects passing all their tests | measured | [post](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html) |
 | 92.1% and 70 of 80 test projects | GPT-5.4 with test feedback during translation: the same two measures | measured | [post](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html) |
@@ -134,7 +135,7 @@ and the tests cover defined behaviour only
   the body; any answer with a different signature is rejected (how often is not given)
   ([source](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html)).
 - Cheap repair of the safe rewrite: 8 person-hours and about $6.5 of agent time let the client
-  run the benchmark script without crashing and reproduce `git blame` exactly
+  run the benchmark script with no crash and reproduce `git blame` exactly
   ([source](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html)).
 - Test feedback during translation raised both models on the battery: GPT-5.4 from 63 to 70 test
   projects fully passing, Claude Sonnet 4.6 from 73 to 75 test projects
@@ -169,6 +170,14 @@ and the tests cover defined behaviour only
   for a dependable way to split the code, and how existing per-file harnesses would handle such
   amalgamations is an open question
   ([source](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html)).
+- A data structure translated wrongly early on can spoil the whole incremental run and force a
+  large refactoring later, since every function that uses it is built on it; when the retries
+  for a symbol run out, the output stops at the last symbol that built
+  ([source](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html)).
+- libgit2's own test suites are fragmented and do not reach full branch coverage, and C lacks a
+  standard test framework, so turning C tests into tests of the Rust is usually difficult; this is
+  why the authors had an agent write equivalence tests
+  ([source](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html)).
 - The C-compatible layer and the data-structure helpers may use `unsafe`; the final step that
   removes them also drops compatibility with the C interface
   ([source](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html)).
@@ -179,8 +188,10 @@ and the tests cover defined behaviour only
   claim that shortening context does not hurt quality; whether the Rust is idiomatic or
   maintainable (the authors list idiomatic output as an open question); which 68 libraries the
   test agent ran on and their coverage one by one (only in an image); a link to the test
-  harness the post says is online; whether the translated code is published. The post gives 116,000 and 120,000
-  lines for the same output without explanation
+  harness the post says is online; whether the translated code is published; figures for the rerun of the battery with
+  agent-written tests (the post says only that results did not drop, on 68 of the 80 projects);
+  why the test agent's projects reach 3,500 lines when the battery's stop at 3,000 lines. The
+  post gives 116,000 and 120,000 lines for the same output without explanation
   ([source](https://www.intel.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor.html)).
 
 ## Practices to copy
