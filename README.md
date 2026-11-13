@@ -1,0 +1,54 @@
+# AI Migrations
+
+> Lessons from products migrated to another language or framework with AI, for anyone running a
+> large project with AI agents.
+
+**Unofficial. No company named here endorses or is affiliated with this project.** Company and
+product names describe the subject of each case only. Summaries are in our own words and link to
+their primary sources.
+
+Disclosure: the agents that maintain this project run on Claude, by Anthropic, and some cases
+involve Anthropic or its tools.
+
+[![CI](https://github.com/ntroccoli/ai-migrations/actions/workflows/ci.yml/badge.svg)](https://github.com/ntroccoli/ai-migrations/actions/workflows/ci.yml)
+[![Content: CC BY 4.0](https://img.shields.io/badge/content-CC%20BY%204.0-lightgrey.svg)](LICENSE-CONTENT.md)
+[![Code: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](LICENSE)
+
+## What it does
+
+- **Cases** ([cases/](cases/)): one file per migration done with AI, from engineering posts,
+  papers and official repositories. Each says what AI did, what rule-based tools and people did,
+  how the result was checked, the numbers with their basis, and what went wrong, including what
+  the source leaves out.
+- **Lessons** ([lessons/](lessons/)): what the cases teach about large AI-driven work, by aspect
+  (reviews, tests, orchestration, rollout, cost). The sources stay migrations; the lessons apply
+  more widely.
+- **Checklist** ([checklist.md](checklist.md)): questions a coding agent can measure on a
+  repository before a migration, each with a check and the evidence behind it.
+- **For agents** (`llms.txt`): one line per case and lesson, so an agent reads only what it needs.
+
+[index.md](index.md) lists everything. [log.md](log.md) records what each update covered.
+
+## Try it
+
+Open your coding agent (Claude Code, Codex, Cursor, …) in the project you are thinking of
+migrating, and paste:
+
+```text
+Read https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms.txt and follow it. Run the checklist on this project: measure every question with its check; do not judge from memory. Report each answer with its evidence and the cases behind it, then a go or no-go with the main risks. Change nothing.
+```
+
+The agent only reads your project. What to change, if anything, is your call.
+
+## Contributing
+
+Corrections are welcome: a wrong number, a broken link, a summary that misreads its source. Open
+an issue; see [CONTRIBUTING.md](CONTRIBUTING.md). [AGENTS.md](AGENTS.md) describes the case
+format and the rules every file follows.
+
+## License
+
+- Text written for this repository (cases, lessons, checklist, `llms.txt`): [CC BY 4.0](LICENSE-CONTENT.md).
+- Scripts: [MIT](LICENSE).
+- Quoted excerpts belong to their authors and are not covered by either license. See
+  [NOTICE.md](NOTICE.md).
