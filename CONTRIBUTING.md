@@ -8,7 +8,7 @@ Thanks for helping keep these cases accurate.
   that misreads its source, a quote that is not exact.
 - **Suggestions:** a well-documented migration done with AI that is missing. Link its primary
   source (an engineering post, paper, talk or official repository); secondhand reports are left
-  out.
+  out. Use the "Suggest a case" form.
 
 Please open an [issue](https://github.com/ntroccoli/ai-migrations/issues/new/choose). Pull
 requests from outside contributors are not accepted yet.
@@ -16,12 +16,15 @@ requests from outside contributors are not accepted yet.
 ## Rules every file follows
 
 - One case per file in `cases/`, in the format described in [AGENTS.md](AGENTS.md).
-- Only migrations done with AI. Rule-based tools used inside one are recorded in that case.
+- Only migrations done with AI. Rule-based tools used inside one are recorded in that case; the
+  one exception, a contrast case, is described in [AGENTS.md](AGENTS.md#scope).
 - Summaries in our own words. At most one quote per file, 15 words or fewer, attributed, linked
   and listed in [NOTICE.md](NOTICE.md).
 - Every number carries its unit and links to its source; inferences are marked as ours.
-- `index.md` and `llms.txt` are generated: run `node scripts/build.mjs`, then
-  `node scripts/validate.mjs` (Node.js 20 or later).
+- `index.md`, `lessons/index.md`, `llms.txt` and `llms-full.txt` are generated: change the
+  sources, run `node scripts/build.mjs`, then `npm run check:all` (validator, generated files
+  and the validator's tests; Node.js 20 or later) and
+  `npx markdownlint-cli2@0.24.0 "**/*.md"`. Both must pass.
 
 ## Commit messages
 

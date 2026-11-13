@@ -1,0 +1,27 @@
+name: Suggest a case
+description: A well-documented migration to another language or framework done with AI, missing from the collection.
+labels: [case-suggestion]
+body:
+  - type: input
+    id: source
+    attributes:
+      label: Primary source
+      description: Link to the engineering post, paper, talk or official repository by the team that did the migration. Secondhand reports are left out.
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What was migrated
+      description: From what to what, and what part AI did, in a sentence or two.
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: The source is by the people who did the migration (not a news story or a summary of it).
+          required: true
+        - label: AI did part of the migrating work, or the source reports an AI attempt that failed.
+          required: true
