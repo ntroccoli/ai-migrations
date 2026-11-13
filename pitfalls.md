@@ -6,7 +6,7 @@ scope for each item that applies, give the search you used, and mark the item "l
 "needs a decision". An item with a case link is reported by that case; an item marked (ours) is
 our inference. A count only says where to look.
 
-## A JavaScript runtime to a compiled language (for example TypeScript on Node.js to Rust, Go or C#)
+## A JavaScript runtime to a compiled language (for example TypeScript to Rust, Go or C#)
 
 TypeScript's types are erased at run time: the regressions come from what the JavaScript runtime
 does underneath them.
@@ -15,8 +15,8 @@ does underneath them.
   platform behaviour the old runtime supplied silently, such as a Windows window flag. [GitHub][]
 - Paired operations (open and close, subscribe and unsubscribe) ported on one side only;
   lifecycle and ordering. [GitHub][]
-- (ours) Locale; typed arrays and float width; exceptions against error values; garbage-collected object
-  graphs and shared mutable references against ownership; callbacks and closures held across
+- (ours) Locale; typed arrays and float width; exceptions against error values; garbage-collected
+  object graphs and shared mutable references against ownership; callbacks and closures held across
   frames; an event loop against threads; `undefined`, `null` and absent fields in parsed JSON;
   DOM or `window` access.
 

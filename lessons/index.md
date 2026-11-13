@@ -44,7 +44,7 @@ Lessons that cite each case, in "Cases" or "Against".
 | [Spotify](../cases/2025-11-06-spotify-honk.md) | 46: PLN-6, PLN-8, PLN-9, TST-2, TST-6, VER-1, VER-2, VER-3, VER-4, VER-8, VER-9, REV-4, REV-5, REV-6, REV-7, REV-9, OPS-4, SEC-1, SEC-2, SEC-3, SEC-8, CST-2, CST-8, CST-9, TEM-3, TEM-4, TOL-4, TOL-5, TOL-6, CTX-1, CTX-3, CTX-4, CTX-5, CTX-6, CTX-7, CTX-8, AGF-2, AGF-4, AGF-5, AGF-7, OVS-1, MSR-1, MSR-2, MSR-3, MSR-6, MSR-8 |
 | [Google](../cases/2025-04-13-google-int64-ids.md) | 34: PLN-1, PLN-8, TST-2, TST-6, TST-7, VER-2, VER-3, VER-7, REV-2, REV-4, REV-7, REV-9, ROL-2, ROL-3, OPS-6, CST-4, CST-8, TEM-2, TEM-4, TOL-2, TOL-3, TOL-4, TOL-5, AGF-4, AGF-7, AGF-8, OVS-2, OVS-3, KNW-2, MSR-1, MSR-3, MSR-7, MSR-8, MSR-9 |
 | [Airbnb](../cases/2025-04-01-airbnb-enzyme-to-rtl.md) | 23: PLN-1, PLN-2, PLN-3, PLN-9, TST-8, VER-2, VER-3, REV-10, OPS-6, CST-2, CST-3, CST-9, TOL-6, TOL-7, CTX-1, CTX-9, ORC-4, OVS-3, KNW-1, KNW-2, MSR-1, MSR-2, MSR-5 |
-| [Slack](../cases/2024-05-22-slack-enzyme-to-rtl.md) | 25: PLN-7, PLN-9, TST-5, TST-8, VER-2, VER-5, REV-2, REV-6, REV-10, OPS-6, CST-9, TEM-2, TEM-3, TOL-2, TOL-4, TOL-6, TOL-7, CTX-1, CTX-2, OVS-2, KNW-2, MSR-1, MSR-2, MSR-7, MSR-8 |
+| [Slack](../cases/2024-05-22-slack-enzyme-to-rtl.md) | 26: PLN-7, PLN-9, TST-5, TST-8, VER-2, VER-5, REV-2, REV-6, REV-10, OPS-6, CST-9, TEM-2, TEM-3, TOL-2, TOL-4, TOL-6, TOL-7, CTX-1, CTX-2, OVS-2, KNW-2, MSR-1, MSR-2, MSR-3, MSR-7, MSR-8 |
 
 ## Where the cases disagree
 
@@ -73,11 +73,11 @@ To find the lessons that fit work other than a migration, scan this list, then o
 - **PLN-1** [stated] Pilot the whole pipeline (build, CI, review, packaging, release) on a few easy, well-tested units, and settle the conventions before fanning out to the rest. (oracle: partly; strong)
 - **PLN-2** [stated] Expect most of the effort to go into specs, porting guides, manifests and tooling before the bulk run; schedule and staff that phase, not only execution. (oracle: no; strong)
 - **PLN-3** [stated] Re-measure scope while the work runs; in a live repository, code moving into scope and code written meanwhile can multiply the first estimate. (oracle: no; medium)
-- **PLN-4** [stated] Order the slices along the dependency graph, leaves first and the most connected hub last, and approach the hub from one direction only. (oracle: no; strong)
+- **PLN-4** [stated] Order the slices along the dependency graph, leaves first and the most connected hub last, and approach the hub from one direction only. (oracle: no; medium)
 - **PLN-5** [stated] Translate first and redesign later: keep behaviour the same during the move so that any failure points at the port, not at a deliberate change. (oracle: yes; medium)
 - **PLN-6** [stated] Set expectations per class of work: bounded, repetitive edits gain a lot; work with ordering, schema or shared-state constraints gains far less. (oracle: no; medium)
 - **PLN-7** [ours] Reopen rewrites shelved for cost, since agents change the price; but weigh them against doing nothing, not against a manual rewrite nobody would fund. (oracle: no; medium)
-- **PLN-8** [stated] Leave out segments you cannot specify or verify (non-standard repositories, unsupported platforms, languages the model handles poorly) instead of forcing one approach on all. (oracle: no; strong)
+- **PLN-8** [stated] Leave out segments you cannot specify or verify (non-standard repositories, unsupported platforms, languages the model handles poorly) instead of forcing one approach on all. (oracle: no; medium)
 - **PLN-9** [ours] Plan for a partial outcome and a stop rule: no published case here was abandoned, so success odds read from such cases are inflated. (oracle: no; medium)
 - **PLN-10** [stated] Measure how often each pattern (runner, rule, base class) is used across the code base, and build the transforms or prompts around the most used first. (oracle: no; weak)
 
@@ -230,7 +230,7 @@ To find the lessons that fit work other than a migration, scan this list, then o
 
 - **MSR-1** [ours] Treat savings measured against a manual effort that never ran as self-estimates; record the basis beside each figure and never add them across cases. (oracle: no; strong)
 - **MSR-2** [ours] For every success rate ask out of what (attempted, opened, merged, dropped from scope), and report each measure with its base; bases differed several-fold. (oracle: no; strong)
-- **MSR-3** [ours] Weigh each source by the author's stake in the tool (seller, owner, partner); none of the cases had outside measurement. (oracle: no; strong)
+- **MSR-3** [ours] Weigh each source by the author's stake in the tool (seller, owner, partner); none of the cases had outside measurement. (oracle: no; medium)
 - **MSR-4** [stated] Credit a gain to the migration only after separating it from work that landed in the same window (other speed work, linker changes, unrelated fixes). (oracle: partly; medium)
 - **MSR-5** [stated] Escaped defects are unknown by nature: publish known regressions as a floor, grouped by cause, and use a before-and-after proxy labelled as a proxy. (oracle: partly; medium)
 - **MSR-6** [ours] Activity numbers (lines per minute, commits, merged changes) are not progress; track verified behaviour or the shrinking list of remaining sites. (oracle: no; medium)

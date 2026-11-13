@@ -9,7 +9,7 @@ import { ROOT } from './lib.mjs';
 
 const TMP = join(ROOT, '.test-tmp');
 const PARTS = ['scripts', 'cases', 'lessons', 'checklist.md', 'pitfalls.md', 'NOTICE.md', 'index.md', 'llms.txt', 'llms-full.txt',
-  'README.md', 'CONTRIBUTING.md', 'LICENSE-CONTENT.md', '.github'];
+  'README.md', 'CONTRIBUTING.md', 'LICENSE-CONTENT.md', '.github', 'lychee.toml'];
 const ONEPW = '2026-04-20-1password-monolith-refactor.md';
 const INTEL = '2026-08-24-intel-ideas-c-to-rust.md';
 const BUN = '2026-07-08-bun-zig-to-rust.md';
@@ -202,8 +202,33 @@ test('build --check fails after hand-editing lessons/index.md', 1,
   d => { appendFileSync(join(d, 'lessons', 'index.md'), '\nA hand edit.\n'); return ['--check']; }, null, 'out of date: lessons/index.md', 'build.mjs');
 
 // Synced hand-written files: one repository slug, README's generated blocks.
-test('build --check fails on a URL to another repository name', 1,
-  d => { edit(join(d, 'CONTRIBUTING.md'), 'ntroccoli/ai-migrations/issues', 'someone/old-name/issues'); return ['--check']; }, null, 'out of date: CONTRIBUTING.md', 'build.mjs');
+const rename = d => edit(join(d, 'scripts', 'lib.mjs'), 'export const REPO_SLUGS = [', "export const REPO_SLUGS = ['someone/new-name', ");
+test('build --check fails after a repository rename until rebuilt', 1,
+  d => { rename(d); return ['--check']; }, null, 'lychee.toml', 'build.mjs');
+test('a rebuild after a rename rewrites the old name and leaves other URLs', 0, d => {
+  rename(d);
+  edit(join(d, 'CONTRIBUTING.md'), 'Thanks for helping', 'See https://github.com/other/repo. Thanks for helping');
+  node(d, 'build.mjs', []);
+  const t = readFileSync(join(d, 'CONTRIBUTING.md'), 'utf8');
+  if (t.includes('ntroccoli/ai-migrations') || !t.includes('someone/new-name/issues') || !t.includes('github.com/other/repo')) {
+    throw new Error('rename not applied as expected');
+  }
+  return ['--check'];
+}, null, null, 'build.mjs');
+test('a contrast case does not raise a lesson to strong', 1, d => {
+  const f = join(d, 'lessons', 'planning.md');
+  const t = readFileSync(f, 'utf8').replace(/\r\n/g, '\n');
+  const i = t.indexOf('- **PLN-8** ');
+  const j = t.indexOf('Strength: medium.', i);
+  writeFileSync(f, t.slice(0, j) + 'Strength: strong.' + t.slice(j + 'Strength: medium.'.length));
+}, null, 'PLN-8: strength strong needs more evidence');
+test('one case that shows its data, not from a seller, allows strong', 0, d => {
+  const f = join(d, 'lessons', 'context.md');
+  const t = readFileSync(f, 'utf8').replace(/\r\n/g, '\n');
+  const i = t.indexOf('- **CTX-2** ');
+  const j = t.indexOf('Strength: medium.', i);
+  writeFileSync(f, t.slice(0, j) + 'Strength: strong.' + t.slice(j + 'Strength: medium.'.length));
+});
 test('build --check fails after hand-editing the README disclosure', 1,
   d => { edit(join(d, 'README.md'), 'Disclosure: the cases', 'Disclosure: some cases'); return ['--check']; }, null, 'out of date: README.md', 'build.mjs');
 test('build refuses a README without its block markers', 1,

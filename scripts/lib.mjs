@@ -4,6 +4,11 @@ import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join, dirname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+// The public repository, owner/name, newest first. To rename it, put the new owner/name first in
+// this one line and run the build: build.mjs writes every URL from the first entry and rewrites the
+// older ones in the hand-written files it keeps in step (SYNCED in build.mjs).
+export const REPO_SLUGS = ['ntroccoli/ai-migrations'];
+export const REPO_SLUG = REPO_SLUGS[0];
 export const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 export const CASES_DIR = join(ROOT, 'cases');
 export const CHECKLIST = join(ROOT, 'checklist.md');
@@ -108,8 +113,11 @@ export const STRENGTHS = ['strong', 'medium', 'weak'];
 // The highest strength the cases in a lesson's "Cases" line allow (AGENTS.md "Lessons"): `strong`
 // needs two or more cases, or one whose source shows its data (`evidence` other than
 // `assertion-only`), and at least one case whose author does not sell the tool; `medium` needs the
-// same without the seller condition; anything else is `weak`. `metas` are the cases' front matter.
+// same without the seller condition; anything else is `weak`. Contrast cases (`ai_share: little`)
+// do not count. `metas` are the cases' front matter.
 export function strengthCeiling(metas) {
+  // A contrast case (ai_share: little) never raises a lesson about what models do.
+  metas = metas.filter(m => m.ai_share !== 'little');
   if (!metas.length) return 'weak';
   const shown = metas.some(m => m.evidence && m.evidence !== 'assertion-only');
   if (metas.length < 2 && !shown) return 'weak';

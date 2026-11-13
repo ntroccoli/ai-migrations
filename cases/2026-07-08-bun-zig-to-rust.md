@@ -2,7 +2,7 @@
 title: Bun moves its JavaScript runtime off Zig onto Rust with Claude agents in 11 days
 date: 2026-07-08
 company: Bun
-summary: One engineer ran about 50 Claude Code workflows, up to 64 agents at once, to port 535K lines of Zig to Rust in 11 days; tests passed, 19 regressions shipped.
+summary: One engineer ran about 50 Claude Code workflows, up to 64 agents at once, to port 535K lines of Zig to Rust in 11 days; 19 known regressions, all fixed.
 source_url: https://bun.com/blog/bun-in-rust
 also: []
 source_type: engineering-post
@@ -176,7 +176,7 @@ later. The single Zig compilation unit was split into about 100 Rust crates
 - Leak tests and long integration tests timed out in debug builds; stress tests forced cgroup
   isolation, and the machine still filled its disk and crashed several times
   ([source](https://bun.com/blog/bun-in-rust#even-more-false-starts)).
-- The port shipped 19 known regressions, later fixed, mostly code that reads the same in both
+- The port introduced 19 known regressions, all fixed, mostly code that reads the same in both
   languages but behaves differently: a side effect inside a Rust `debug_assert!` vanished in
   release builds and broke hot reload; a slice cast panicked on odd byte counts; a placeholder
   constant lowered a resolver limit enough for real projects to hit it; colour markers were

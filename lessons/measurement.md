@@ -15,9 +15,9 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Spotify: what went wrong][spo-wrong], [Slack: how it was checked][slk-checked].
   - Against: Airbnb's main rate covers its whole file set ([Airbnb][air-numbers]).
 - **MSR-3** [ours] Weigh each source by the author's stake in the tool (seller, owner, partner); none of the cases had outside measurement.
-  - Old system as oracle: no. Strength: strong. Era: all.
+  - Old system as oracle: no. Strength: medium. Era: all.
   - Cases: [Bun: who did what][bun-who], [GitHub: context][gh-context], [Spotify: context][spo-context], [1Password: context][opw-context], [Intel: who did what][int-who].
-  - Against: Google lists its own threats to validity ([Google][goo-wrong]), and Slack has no stake in the model it used.
+  - Against: Google lists its own threats to validity ([Google][goo-wrong]), and Slack has no stake in the model it used ([Slack][slk-who]).
 - **MSR-4** [stated] Credit a gain to the migration only after separating it from work that landed in the same window (other speed work, linker changes, unrelated fixes).
   - Old system as oracle: partly. Strength: medium. Era: 2026.
   - Cases: [GitHub: what went wrong][gh-wrong], [Bun: what went wrong][bun-wrong].

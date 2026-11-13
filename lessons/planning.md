@@ -20,7 +20,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [GitHub: what went wrong][gh-wrong].
   - Against: None found; the Airbnb file set was fixed, so it had no inflow ([Airbnb][air-numbers]).
 - **PLN-4** [stated] Order the slices along the dependency graph, leaves first and the most connected hub last, and approach the hub from one direction only.
-  - Old system as oracle: no. Strength: strong. Era: 2026.
+  - Old system as oracle: no. Strength: medium. Era: 2026.
   - Cases: [GitHub: what worked][gh-worked], [GitHub: what went wrong][gh-wrong], [Intel: who did what][int-who], [1Password: what worked][opw-worked].
   - Against: None found.
 - **PLN-5** [stated] Translate first and redesign later: keep behaviour the same during the move so that any failure points at the port, not at a deliberate change.
@@ -37,7 +37,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Bun: numbers][bun-numbers], [GitHub: context][gh-context], [1Password: what worked][opw-worked].
   - Against: Slack had no do-nothing option: the old library blocked a framework upgrade ([Slack][slk-context]); and service extraction at 1Password gained only modestly ([1Password][opw-wrong]).
 - **PLN-8** [stated] Leave out segments you cannot specify or verify (non-standard repositories, unsupported platforms, languages the model handles poorly) instead of forcing one approach on all.
-  - Old system as oracle: no. Strength: strong. Era: 2023–2026.
+  - Old system as oracle: no. Strength: medium. Era: 2023–2026.
   - Cases: [Spotify: what went wrong][spo-wrong], [Google: what went wrong][goo-wrong], [Uber: what worked][ubr-worked].
   - Against: None found.
 - **PLN-9** [ours] Plan for a partial outcome and a stop rule: no published case here was abandoned, so success odds read from such cases are inflated.

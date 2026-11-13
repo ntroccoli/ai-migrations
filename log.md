@@ -15,5 +15,6 @@ first.
   mixed; eight engineering posts and one paper; five authors sell or promote an AI tool the case
   used, so those cases weigh less (a lesson that rests only on them is never rated strong).
 - **Added:** the case files, lessons by aspect drawn from them, the before-you-migrate
-  checklist with its pitfalls page, and the generated `index.md` and `llms.txt`.
+  checklist with its pitfalls page, and the generated `index.md`, `lessons/index.md`, `llms.txt`
+  and `llms-full.txt`.
 - **Checklist impact:** first version; nothing to revisit yet.

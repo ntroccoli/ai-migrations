@@ -194,15 +194,16 @@ Rules (all checked by `node scripts/validate.mjs`; one broken-copy test each):
   `strong` needs two or more cases, or one whose `evidence` is `shown-in-source` or
   `independent-data`, and at least one case whose `author_relation` is not `seller-of-tool`;
   `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a
-  seller's case weighs less: a lesson resting only on such cases is at most `medium`. Below the
-  cap, grade by how well the cases support the lesson; recount as cases arrive. The legend on
-  every page states this rule (`LESSON_LEGEND`).
+  seller's case weighs less: a lesson resting only on such cases is at most `medium`. A contrast
+  case (`ai_share: little`) does not count toward the cap. Below the cap, grade by how well the
+  cases support the lesson; recount as cases arrive. The legend on every page states this rule
+  (`LESSON_LEGEND`).
 - Links in "Cases" and "Against" go to a case section, `../cases/<file>.md#<section>`, and must
   resolve to the file and a `##` section in it. A lesson never links a source directly: the case
   is the checked summary. Lessons cite cases, never each other.
-- "Related view" links one idea file under `https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/`
-  and ends with `, agrees.` or `, contradicts: why.`; it copies nothing from that project, and
-  only where the match is clear.
+- "Related view" links one idea file under
+  `https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/` and ends with `, agrees.` or
+  `, contradicts: why.`; it copies nothing from that project, and only where the match is clear.
 - Every number carries a unit (the Era is not checked); no quoted span over four words; every
   relative link resolves; a page stays at or under 20 KB (20,480 bytes).
 - Every case is cited by at least one lesson or checklist question.
@@ -213,7 +214,8 @@ every changed lesson page against all the source texts.
 
 Upkeep: a new case comes with its lesson edits (new lessons, new citations, new "Against" lines,
 strength changes), and the build is rerun. A sceptic pass from time to time challenges `no`
-oracle tags, `[stated]` tags and "None found" lines against the cases they cite.
+oracle tags, `[stated]` tags and "None found" lines against the cases they cite, and checks that
+the case which lifts a lesson to `strong` really supports it.
 
 ## Checklist
 
@@ -234,10 +236,13 @@ against all the source texts after changing them.
 `node scripts/build.mjs` writes `index.md` (one line per case, newest first), `lessons/index.md`,
 `llms.txt` (entry point for agents: how to use, one line per lesson page and per case) and
 `llms-full.txt` (every lesson and case line, the checklist and the pitfalls in one file) from the
-case files, lesson pages, `checklist.md` and `pitfalls.md`. It also keeps two things in step in
-hand-written files: every URL to this repository comes from `REPO_SLUG` in `scripts/build.mjs`
-(to rename the repository, change that line and rebuild), and the AI disclosure in `README.md`
-is written between its two `disclosure` comments.
+case files, lesson pages, `checklist.md` and `pitfalls.md`. It also keeps hand-written files in
+step: every URL to this repository comes from `REPO_SLUGS` in `scripts/lib.mjs` (to rename the
+repository, put the new owner/name first in that line and rebuild; the build rewrites the old
+name in `SYNCED` files, `lychee.toml` included), and two blocks in `README.md` (the AI
+disclosure and the current counts) are written between their comment markers. The moves the
+cases cover, in `llms.txt`, come from `COVERED` in `scripts/build.mjs`: update it when a case
+adds a source language.
 `node scripts/build.mjs --check` writes nothing and exits 1 when any of them is out of date; it
 must exit 0 before a commit. Never edit these files by hand: change the sources and rebuild.
 

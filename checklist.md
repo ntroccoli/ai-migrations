@@ -31,9 +31,9 @@ restructuring); [Spotify][] (fleet changes); [Airbnb][] and [Slack][] (React tes
    implementation and how they are regenerated. Say how results are compared across languages
    (plain-data summaries, tolerances) and how you confirm the tests ran. When the tests are what
    moves, say how intent and coverage are compared (coverage before and after, a hand-converted
-   sample) and check new tests can fail. Say whether old and new can take the same inputs side by side
-   and have their outputs compared (a differential or shadow run). Find who must approve a test change (CODEOWNERS, branch
-   rules, CI, the owner); none is a finding.
+   sample) and check new tests can fail. Say whether old and new can take the same inputs side by
+   side and have their outputs compared (a differential or shadow run). Find who must approve a
+   test change (CODEOWNERS, branch rules, CI, the owner); none is a finding.
    Evidence: GitHub kept its end-to-end suites unchanged as the oracle, and its feature-loss
    regressions came almost all from gaps in them. Bun's suite, in a third language, judged the
    whole port; a critic notes it had missed the old bugs. Intel's translation compiled yet
@@ -44,10 +44,11 @@ restructuring); [Spotify][] (fleet changes); [Airbnb][] and [Slack][] (React tes
 3. **Can an agent build, check and test alone, fast, and in parallel, in both toolchains?**
    Check: find the command that builds, formats, lints and tests one unit in the old stack, and
    name the one for the target stack (pin its toolchain). Use recorded timings first (logs, CI
-   history); otherwise time each, count the output lines of a failure, and build two separate clones
-   outside the repository at once (a worktree would write into its `.git`). For the number of agents you plan, estimate compile time, disk space, disk speed and
-   process limits; say how agents are kept from undoing each other's work, and which target
-   platforms their machines can build and test. A missing formatter or linter is a finding.
+   history); otherwise time each, count the output lines of a failure, and build two separate
+   clones outside the repository at once (a worktree would write into its `.git`). For the number
+   of agents you plan, estimate compile time, disk space, disk speed and process limits; say how
+   agents are kept from undoing each other's work, and which target platforms their machines can
+   build and test. A missing formatter or linter is a finding.
    Evidence: GitHub needed a build lock once many agents built at once. Bun's agents sharing one
    checkout undid each other's work within minutes, and heavy tests stalled the machine.
    1Password gave each agent a worktree; Spotify's verify tool returns short errors; Airbnb
@@ -55,12 +56,12 @@ restructuring); [Spotify][] (fleet changes); [Airbnb][] and [Slack][] (React tes
    Lessons: OPS-1, OPS-2, OPS-3, ORC-1, ORC-2, VER-2, VER-4, TOL-6.
 4. **How big is the job, really?**
    Check: scope is everything that must exist in the target. Count lines and files in scope
-   (`git ls-files -z -- <scope> | xargs -0 wc -l`, or `scc`, `tokei` or `cloc`, by folder) for code (GPU code counts), tests, build scripts,
-   and other languages (shaders, generated files, templates or DSLs of the old stack). For a
-   change across call sites, list every site with a code index or static analyzer, not text
-   search alone, and keep the list. Add code tangled with the scope. List the data and asset
-   formats both builds read, and stored data that must stay readable (rows, hashes, saves). Give
-   the change rate in scope over the last quarter
+   (`git ls-files -z -- <scope> | xargs -0 wc -l`, or `scc`, `tokei` or `cloc`, by folder) for
+   code (GPU code counts), tests, build scripts, and other languages (shaders, generated files,
+   templates or DSLs of the old stack). For a change across call sites, list every site with a
+   code index or static analyzer, not text search alone, and keep the list. Add code tangled with
+   the scope. List the data and asset formats both builds read, and stored data that must stay
+   readable (rows, hashes, saves). Give the change rate in scope over the last quarter
    (`git log --since="3 months ago" --numstat --format=%ad --date=short -- <scope>`): commits and
    lines per week, active days, last change. Code still changing fast: ask the owner whether to
    wait, or delete the old code in the change that ports it so later edits conflict.
@@ -111,7 +112,8 @@ restructuring); [Spotify][] (fleet changes); [Airbnb][] and [Slack][] (React tes
    agent gets: the unit's source, its neighbours' tests, good examples, mapping tables for
    renamed fields or APIs, runtime facts a person would look at, and what a rule-based codemod
    can do first. Pilot the model on the hardest files of each language in scope, and check the
-   largest files fit its context window. A group too varied for one prompt is a candidate to defer or do by hand.
+   largest files fit its context window. A group too varied for one prompt is a candidate to defer
+   or do by hand.
    Evidence: Spotify dropped a framework too varied for one prompt, and mapping tables fixed
    wrong field mappings; Airbnb found the choice of related files mattered more than prompt
    wording; Slack gave the model a codemod's partial output and each test's rendered output;
@@ -119,10 +121,11 @@ restructuring); [Spotify][] (fleet changes); [Airbnb][] and [Slack][] (React tes
    where its AI attempt failed.
    Lessons: CTX-1, CTX-2, CTX-3, CTX-5, CTX-9, TOL-2, TOL-7, AGF-8, PLN-8.
 9. **How will you work the long tail, stop, and learn from failures?**
-   Check: look for a status record per unit, a way to rerun failing units by step, a retry limit (for independent units such as
-   files; where units depend on each other, a rule to fix the workflow and rerun instead),
-   a rule for when to stop automating and finish by hand, and a place where a failure seen twice
-   becomes a standing instruction, skill or eval. Say which exist and which the port must add.
+   Check: look for a status record per unit, a way to rerun failing units by step, a retry limit
+   (for independent units such as files; where units depend on each other, a rule to fix the
+   workflow and rerun instead), a rule for when to stop automating and finish by hand, and a place
+   where a failure seen twice becomes a standing instruction, skill or eval. Say which exist and
+   which the port must add.
    Evidence: Airbnb stamped each file with its status, tuned on small samples of failures, swept
    again and finished the last files by hand; Intel capped retries. Bun fixed the process, not
    the code, when agents stubbed functions; GitHub turned repeated failures into instructions,
@@ -164,7 +167,8 @@ restructuring); [Spotify][] (fleet changes); [Airbnb][] and [Slack][] (React tes
 ## Starting thresholds
 
 Only where a case gives a number. They are starting points from one case each, not targets;
-adjust them to the repository. For a question without a line here, judge "gap" from the Check alone.
+adjust them to the repository. For a question without a line here, judge "gap" from the Check
+alone.
 
 - Q4: GitHub's first count was about 130,000 lines and about 430,000 went through the port. A
   scope count with no allowance for code moving in and new code arriving is a partial gap.
