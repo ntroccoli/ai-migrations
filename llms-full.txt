@@ -967,9 +967,9 @@ does underneath them.
   [Slack](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2024-05-22-slack-enzyme-to-rtl.md)
 - Converted files that fail at setup or import hide every test case in them, right or wrong.
   [Slack](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2024-05-22-slack-enzyme-to-rtl.md) (ours) Compare the count of discovered tests before and after the move.
-- In-house runners, rules and base classes that no stock rule handles; Uber first changed the build
-  so both versions ran side by side, and skipped any file using a pattern its recipes did not
-  support. [Uber](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-07-uber-junit4-to-junit5.md)
+- In-house test runners, test rules and shared base classes that no stock rule handles; Uber first
+  changed the build so both versions ran side by side, and skipped any file using a pattern its
+  recipes did not support. [Uber](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-07-uber-junit4-to-junit5.md)
 
 ### A library or framework version upgrade (ours)
 

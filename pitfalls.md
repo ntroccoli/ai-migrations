@@ -81,9 +81,9 @@ does underneath them.
   [Slack][]
 - Converted files that fail at setup or import hide every test case in them, right or wrong.
   [Slack][] (ours) Compare the count of discovered tests before and after the move.
-- In-house runners, rules and base classes that no stock rule handles; Uber first changed the build
-  so both versions ran side by side, and skipped any file using a pattern its recipes did not
-  support. [Uber][]
+- In-house test runners, test rules and shared base classes that no stock rule handles; Uber first
+  changed the build so both versions ran side by side, and skipped any file using a pattern its
+  recipes did not support. [Uber][]
 
 ## A library or framework version upgrade (ours)
 
