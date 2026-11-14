@@ -16,8 +16,8 @@ first.
   moved to ClickHouse behind a shadow comparison. One field report was open (relation to the
   collection unstated, not a migration); it is not independent evidence and changed nothing here.
 - **Mix:** two language moves, one mixed move (language and architecture), two framework moves,
-  two data-store moves and one restructuring; one author sells a tool the case used (GitLab). Two sources are kept as notes
-  only under their sites' terms (Mindstone, GitLab), so those cases have no quote.
+  two data-store moves and one restructuring; one author sells a tool the case used (GitLab). Two cases were written from notes
+  only under their sites' terms (Mindstone, GitLab), so they have no quote.
 - **Added:** the eight case files; 11 new lessons; in `pitfalls.md`, a section for data-store
   moves (access patterns kept on a new engine, sums that overflow at real volumes) and an
   equality item under library upgrades.
@@ -46,7 +46,7 @@ first.
   order, GitLab's ramp past a divergence its shadow run flagged but did not label; ROL-10,
   ROL-11, OPS-8). Questions 3 and 8 were trimmed in wording; the case list at the top keeps the
   names and points to the index for each move, and the lesson IDs point to `lessons/evidence.md`.
-  The file grew from 20,051 to 20,421 bytes, under its 20,480-byte cap. No field report was
+  The file grew from 20,051 to 20,418 bytes, under its 20,480-byte cap. No field report was
   behind any change.
 - **New lessons:** PLN-13, TST-13, TST-14, TST-15, ROL-10, ROL-11, OPS-8, TEM-6, CTX-12, CTX-13, KNW-5.
   Two merges: GitLab's shadow-mode lesson and Temporal's "aim the comparison at the largest
@@ -67,9 +67,10 @@ first.
   REV-1 (no engineer passed GitLab's failing change), and kept CTX-10 and PLN-13 weak. OVS-1 and
   TST-1 now carry the cases where the suite or its owner moved with the port: OVS-1 opens with
   "Disagree:" (Mindstone's script-guarded tests). KNW-4 dropped its clause against a growing notes
-  file, which PagerDuty's pattern file contradicted; PLN-13 now opens with "Disagree:" (Ladybird
-  and Mindstone translated the old design first). "None found" lines went from 53 to 61 (plain
-  ones from 34 to 32), mostly the new lessons' stated limits; "Disagree:" lines from 19 to 21.
+  file, which PagerDuty's pattern file contradicted; PLN-13's limit now names the language ports
+  that translated the old design first (Ladybird, Mindstone). "None found" lines went from 53 to 60
+  (plain ones from 34 to 32), mostly the new lessons' stated limits; "Disagree:" lines from 19 to
+  20.
 - **Re-checks:** TOL-2 and AGF-8 stay marked "may be outdated": no new case shows a codemod
   feeding a model or a language the model handled poorly. New model families (OpenAI Codex
   5.x, and Claude Opus and Fable with no version) come from Mindstone and Checkly, whose
@@ -77,12 +78,12 @@ first.
   tests show in TST-15).
 - **By case:**
   - Gatsby: question 6; lessons PLN-13 (new), PLN-5, PLN-9, CTX-4, AGF-6.
-  - Ladybird: question 2; lessons TST-13 (new), PLN-5, PLN-11, TST-1, TST-9, REV-1,
+  - Ladybird: question 2; lessons TST-13, PLN-13 (new), PLN-5, PLN-11, TST-1, TST-9, REV-1,
     REV-10, TEM-1, ROL-1, OVS-1.
   - PagerDuty: question 7; lessons KNW-4, TEM-1, VER-1, REV-3, AGF-9, TEM-2, MSR-1, CST-2, KNW-1.
   - Datadog: questions 6, 7 and 8; lessons PLN-13, CTX-12 (new), PLN-5, TST-1, TST-12, CTX-5,
-    CTX-1, REV-11, KNW-4.
-  - Mindstone: questions 2 and 10; lessons TST-14, TEM-6 (new), ROL-1, OVS-1, TST-5, TST-1,
+    CTX-1, REV-11, KNW-4, VER-4.
+  - Mindstone: questions 2 and 10; lessons TST-14, TEM-6, PLN-13, CTX-12 (new), ROL-1, OVS-1, TST-5, TST-1,
     TST-13, PLN-5, AGF-5, AGF-9, KNW-1, REV-1, OPS-3, CTX-4, MSR-1, PLN-12.
   - GitLab: questions 10 and 11; lessons ROL-10, OPS-8, TEM-6 (new), REV-1, ROL-2, REV-9,
     VER-7, CTX-4, OVS-3, ROL-3, REV-5.

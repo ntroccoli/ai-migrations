@@ -27,7 +27,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: no. Depends on model ability: no. Strength: weak. Era: 2024–2025; newest: GPT-4o.
   - Cases: [Zalando: what went wrong][zal-wrong].
   - Against: ts-rust's author says he read none of the ported code and left the fixing to agents; it reports no incident either way, so the case neither shows nor rules out the cost ([ts-rust][tsr-who]). In the Pokémon port the agent debugged on its own though the owner had never written Rust; the one gap he reports was in judging speed work ([Pokémon][vjx-wrong]).
-- **TEM-6** [stated] Budget for the people: an engineer new to agents can loop with one without progress, and steering agents that cut corners, then reviewing all they produce, wore one team out.
+- **TEM-6** [stated] Budget for the people: an engineer new to agents can loop with one without progress, and steering agents that cut corners, then reviewing all they produce, drains the people doing it.
   - Old system as oracle: no. Depends on model ability: partly. Strength: weak. Era: 2026; newest: Claude (version unstated).
   - Cases: [Mindstone: what went wrong][mnd-wrong], [GitLab: what went wrong][glb-wrong].
   - Against: None found; neither case gives hours, headcount or review load, and GitLab's is one engineer's remark in a seller's account ([Mindstone][mnd-wrong], [GitLab][glb-wrong]).

@@ -45,13 +45,15 @@ const orList = xs => joinList(xs, 'or');
 const byName = (a, b) => a.localeCompare(b);
 const uncovered = LANGUAGES.filter(x => !byLanguage.has(x)).sort(byName);
 const langMoves = cases.filter(c => c.meta.kind === 'language').map(c => c.meta.company).sort(byName);
+const mixedMoves = cases.filter(c => c.meta.kind === 'mixed').map(c => c.meta.company).sort(byName);
 const outOf = [...byLanguage.keys()].filter(x => cases.some(c => c.meta.kind === 'language' && [c.meta.from_languages].flat().includes(x))).sort(byName);
 const unnamed = cases.filter(c => [c.meta.from_languages].flat().every(x => !x || x === 'unstated')).map(c => c.meta.company).sort(byName);
 const COVERED =
   [...byLanguage.keys()].sort(byName).map(x => `${x} (${[...new Set(byLanguage.get(x))].sort(byName).join(', ')})`).join(', ') +
   '. Each case line below gives the move itself (from, to).' +
-  ` Only ${joinList(langMoves, 'and')} changed the code's language; the others kept it (a framework, test, data, build or ` +
-  'structure move).' +
+  ` The language moves (kind language) are ${joinList(langMoves, 'and')}` +
+  (mixedMoves.length ? `; the mixed moves (${joinList(mixedMoves, 'and')}) may change the language too, as their lines say` : '') +
+  '; the others kept it (a framework, test, data, build or structure move).' +
   (outOf.length ? ` The language-changing cases that name a language move code out of ${joinList(outOf, 'and')} only; for the other languages listed they show moves that kept the language.` : '') +
   (unnamed.length ? ` Language not named: ${unnamed.join(', ')}.` : '') +
   (uncovered.length ? ` No case names ${orList(uncovered)} as the language it started from: lessons applied there are extrapolation.` : '');

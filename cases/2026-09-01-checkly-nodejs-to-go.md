@@ -43,7 +43,7 @@ A post on Checkly's blog by Edvinas Janusevicius, a backend engineer there, date
 the page's metadata (modified 2026-09-29). Checkly sells synthetic monitoring built on Playwright,
 closes the post by promoting it, and advertises agent features beside it, but it sells none of the
 AI tools the case used, so the author counts as a tool user. The post states its results without
-the data behind them. An embedded video in which the author walks a colleague through the rewrite was
+the data behind them. An embedded video in which the author walks another person, named only as Stefan, through the rewrite was
 not archived; this case rests on the text only
 ([source](https://www.checklyhq.com/blog/agentic-rewrite-nodejs-to-go/)).
 

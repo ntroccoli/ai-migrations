@@ -56,7 +56,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: yes. Depends on model ability: no. Strength: medium. Era: 2024–2026; newest: Claude (version unstated).
   - Cases: [Shopify: how it was checked][shp-checked], [Zalando: how it was checked][zal-checked], [Datadog: how it was checked][ddg-checked], [Temporal: how it was checked][tmp-checked].
   - Against: None found; Zalando calls for visual testing without saying how it compared the two, and Shopify does not say how far parity reached beyond the flows engineers ran ([Shopify][shp-wrong]).
-- **TST-13** [stated] Make the old code's output deterministic and dumpable before porting, then run old and new side by side on real inputs and stop at the first difference.
+- **TST-13** [stated] Make the old code's output deterministic and dumpable before porting, then run old and new side by side on real or seeded inputs and stop at the first difference.
   - Old system as oracle: yes. Depends on model ability: no. Strength: medium. Era: 2025–2026; newest: unstated.
   - Cases: [Ladybird: how it was checked][lb-checked], [Ladybird: who did what][lb-who], [Pokémon: how it was checked][vjx-checked].
   - Against: Checkly and Mindstone masked values that vary per run (typed placeholders, audited wildcards) instead of making the old code deterministic ([Checkly][chk-checked], [Mindstone][mnd-checked]); Ladybird does not say how long the side-by-side browsing ran or which sites it covered ([Ladybird][lb-wrong]).

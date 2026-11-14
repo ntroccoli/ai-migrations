@@ -18,7 +18,7 @@
 - **PLN-10** [stated] Measure how often each pattern (runner, rule, base class) is used and how automatable it is, and build the transforms or prompts with the best return first. Oracle no; model partly; medium. Cases: Uber, Bloomberg. Against: none found; a limit from Bloomberg.
 - **PLN-11** [stated] Do not port a whole app in one pass, even from specs gathered first; Shopify's author says that gives code nobody can maintain. Port in small ordered slices a person can review quickly. Oracle partly; model partly; weak. Cases: Shopify, Christopher Chedeau. Against: disagree: Bun, Ladybird, Christopher Chedeau.
 - **PLN-12** [stated] Sort targets into archetypes, each with its own prompt, data collection and checks; give rare archetypes a generic starting point instead of dedicated automation. Oracle no; model partly; medium. Cases: Bloomberg, Mindstone. Against: Airbnb.
-- **PLN-13** [stated] In a framework or data-store move, build the target's foundation (architecture, data model) in its own idiom first, then port old parts onto it; one straight port rebuilt the old layers. Oracle no; model partly; weak. Cases: Robert Marshall, Datadog. Against: disagree: Ladybird, Mindstone, Datadog.
+- **PLN-13** [stated] In a framework or data-store move, build the target's foundation (architecture, data model) in its own idiom first, then port old parts onto it; one straight port rebuilt the old layers. Oracle no; model partly; weak. Cases: Robert Marshall, Datadog. Against: none found; a limit from Ladybird, Mindstone, Datadog.
 
 ## [Testing and oracles](testing.md)
 
@@ -34,7 +34,7 @@
 - **TST-10** [ours] Keep the agent that writes code apart from the one that writes its tests; one generation producing both invites checks that cannot fail. Oracle no; model partly; weak. Cases: Intel. Against: Intel.
 - **TST-11** [stated] Test the prompts too: rerun a golden set of before-and-after examples after each prompt edit or model trial; small wording changes swung results. Oracle no; model partly; weak. Cases: Zalando. Against: none found.
 - **TST-12** [stated] Check parity on what users and downstream systems see: capture screens, raw events or query answers from old and new at the same points, ignoring values that vary per run. Oracle yes; model no; medium. Cases: Shopify, Zalando, Datadog, Temporal. Against: none found; a limit from Shopify.
-- **TST-13** [stated] Make the old code's output deterministic and dumpable before porting, then run old and new side by side on real inputs and stop at the first difference. Oracle yes; model no; medium. Cases: Ladybird, Christopher Chedeau. Against: Checkly, Mindstone, Ladybird.
+- **TST-13** [stated] Make the old code's output deterministic and dumpable before porting, then run old and new side by side on real or seeded inputs and stop at the first difference. Oracle yes; model no; medium. Cases: Ladybird, Christopher Chedeau. Against: Checkly, Mindstone, Ladybird.
 - **TST-14** [stated] Never make coverage alone the target of agent-written tests: it rose while the tests asserted nothing. Fail any test that leaves a side effect or response field unasserted. Oracle no; model partly; weak. Cases: Mindstone. Against: none found; a limit from Mindstone.
 - **TST-15** [stated] Model the harness's surrounding infrastructure on production down to each queue and table; the agent builds to what the tests show, so a simplified layout ships as a bug. Oracle partly; model partly; weak. Cases: Checkly. Against: none found.
 
@@ -123,7 +123,7 @@
 - **TEM-3** [stated] A central team should own the agent tooling, build it with early adopters, and teach prompt writing; untrained users fell into the same traps. Oracle no; model partly; medium. Cases: Spotify, Slack. Against: none found.
 - **TEM-4** [stated] Review in two tiers: the migration owner screens each batch, then code owners accept; expect the load to spread over many teams. Oracle no; model no; medium. Cases: Google, Spotify, Bloomberg. Against: Bun.
 - **TEM-5** [stated] Code the model migrates is code the team never wrote; keep owners close to it and teach them the new library, or debugging and incident handling suffer. Oracle no; model no; weak. Cases: Zalando. Against: Ping.gg, Christopher Chedeau.
-- **TEM-6** [stated] Budget for the people: an engineer new to agents can loop with one without progress, and steering agents that cut corners, then reviewing all they produce, wore one team out. Oracle no; model partly; weak. Cases: Mindstone, GitLab. Against: none found; a limit from Mindstone, GitLab.
+- **TEM-6** [stated] Budget for the people: an engineer new to agents can loop with one without progress, and steering agents that cut corners, then reviewing all they produce, drains the people doing it. Oracle no; model partly; weak. Cases: Mindstone, GitLab. Against: none found; a limit from Mindstone, GitLab.
 
 ## [Rule-based tools and AI](tooling.md)
 
@@ -151,7 +151,7 @@
 - **CTX-9** [stated] When the context budget is small, choose context by fixed rules: full bodies of nearby functions, signatures for the rest, the hardest callers first. Oracle partly; model partly; medium. Cases: Intel. Against: Airbnb.
 - **CTX-10** [stated] Agents learn from the repository as it stands: fix docs and agent guidance that still favour or point at the old code, and awkward examples, or they spread. Oracle no; model partly; weak. Cases: Asana, Temporal. Against: none found; a limit from Temporal.
 - **CTX-11** [stated] Keep each unit small enough for the agent to read whole, such as one function per file in the target; very long files were refused or read in loose chunks and filled the context. Oracle no; model yes; weak. Cases: Christopher Chedeau. Against: none found.
-- **CTX-12** [stated] Before porting, have a model write down why each old function exists and what behaviour it protects, and give those notes with every prompt; they cut the rounds per unit. Oracle no; model partly; weak. Cases: Datadog. Against: none found; a limit from Datadog, Mindstone.
+- **CTX-12** [stated] Before porting, have a model write down why each old function exists and what behaviour it protects, and give those notes with every prompt; they cut the rounds per unit. Oracle no; model partly; weak. Cases: Datadog. Against: Mindstone, Datadog.
 - **CTX-13** [stated] Keep a rule for agents in an instruction file beside the code it governs, not at the root, and name the test enforcing it, so a reader can tell when the rule has expired. Oracle no; model partly; weak. Cases: Temporal. Against: none found; a limit from Temporal.
 
 ## [Many agents at once](orchestration.md)
@@ -188,7 +188,7 @@
 - **KNW-1** [stated] When a failure recurs, fix what generates the code (prompt, reviewer rule, skill, evaluation, harness), not only the output; the second time is the trigger. Oracle no; model no; strong. Cases: Bun, GitHub, Airbnb, Uber, Zalando, Shopify, Bloomberg, Christopher Chedeau, PagerDuty, Mindstone, Checkly. Against: Christopher Chedeau, 1Password.
 - **KNW-2** [stated] Stamp each unit with its status, tune against the largest failing group using a small sample, then sweep all units again. Oracle partly; model no; strong. Cases: Airbnb, Slack, Google, Uber. Against: none found.
 - **KNW-3** [stated] Keep structured session logs from the start; they later answered where time went and what people did, and became evaluations. Oracle no; model no; medium. Cases: GitHub. Against: GitHub.
-- **KNW-4** [stated] A compacted or fresh session forgets what the last one learned; keep the method in files it rereads (instructions, one debug script) and find work by search. Oracle no; model partly; medium. Cases: Christopher Chedeau, Datadog. Against: none found; a limit from PagerDuty, Christopher Chedeau, Temporal.
+- **KNW-4** [stated] A compacted or fresh session forgets what the last one learned; keep the method in files it rereads (instructions, one debug script) and find work by search. Oracle no; model partly; medium. Cases: Christopher Chedeau, Datadog. Against: PagerDuty, Christopher Chedeau, Temporal.
 - **KNW-5** [stated] Mark temporary migration code the day you write it with what it is for and how to remove it; an agent can later find the notes and work through them as the removal list. Oracle no; model partly; weak. Cases: Temporal. Against: none found; a limit from Temporal.
 
 ## [Measuring and reading results](measurement.md)

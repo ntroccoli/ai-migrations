@@ -94,7 +94,7 @@ Cases named below (moves in [index.md](index.md)): [1Password][], [Airbnb][], [A
    each redesign allowed mid-port cost regressions, time or tokens. Bun wrote a
    porting guide first and left idiomatic code for later. 1Password's call-site cleanup ran from
    a list, templates and escalation rules; Spotify's judge rejects sessions mostly for straying
-   from the prompt. Gatsby and Datadog built the target's design first.
+   from the prompt. Two other moves built the target's design first.
    Lessons: CTX-4, PLN-2, PLN-5, PLN-13, REV-4, AGF-2, AGF-4.
 7. **What does the old stack do implicitly?**
    Check: search the scope for behaviour the target will not give for free, with the lists for

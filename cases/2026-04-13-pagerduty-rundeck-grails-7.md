@@ -145,7 +145,7 @@ review found or changed
   not say how long that took
   ([source](https://www.pagerduty.com/eng/how-ai-tools-accelerated-six-month-framework-migration-to-nine-days/)).
 - The upgrade pull request in the open-source repository, by the same author, stayed open from
-  December 2025 to April 2026; its record shows one approval with no review comments, and GitHub's
+  December 2025 to April 2026; its record shows one brief approval and no other review comments, and GitHub's
   Copilot reviewer declined it as too large; the post leaves it unlinked
   ([pull request](https://github.com/rundeck/rundeck/pull/9922)).
 - The post gives no method for the 900-1500x saving; set against the $200 tools bill alone, the

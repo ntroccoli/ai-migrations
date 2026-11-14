@@ -68,7 +68,7 @@ Families group the model names the cases give by maker, line and major version (
 
 Lessons whose "Against" line opens with "Disagree:", a real split between cases; each one's line is in [evidence.md](evidence.md).
 
-- [Planning and scoping](planning.md): PLN-4, PLN-5, PLN-11, PLN-13
+- [Planning and scoping](planning.md): PLN-4, PLN-5, PLN-11
 - [Verification loops and gates](verification.md): VER-10
 - [Code review](review.md): REV-2, REV-11
 - [Release and rollout](rollout.md): ROL-1

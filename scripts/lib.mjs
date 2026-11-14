@@ -39,7 +39,7 @@ export const SECTIONS = [
 ];
 // `from_languages`: the languages the migrated code was written in before the move. Named after
 // `from`, not "source_languages": in a case, "source" is the publication (source_url, source_type).
-// build.mjs lists the covered ones in llms.txt and names the ones in this list no case starts from.
+// build.mjs lists the covered ones in index.md and names the ones in this list no case starts from.
 // Add a language here when a case needs it.
 export const LANGUAGES = ['C', 'C++', 'C#', 'Dart', 'Go', 'Groovy', 'Java', 'JavaScript', 'Kotlin', 'PHP', 'Python', 'Ruby',
   'Rust', 'Scala', 'SQL', 'Swift', 'TypeScript', 'Zig'];
