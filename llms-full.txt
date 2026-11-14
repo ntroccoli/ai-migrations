@@ -2,7 +2,7 @@
 
 Unofficial; company names describe the subject only. Summaries and lessons are our own words under CC BY 4.0. Source: https://github.com/ntroccoli/ai-migrations
 
-Disclosure: the cases and lessons are drafted by Claude, an Anthropic model, and reviewed by the maintainer. 6 of the 13 cases used Claude models (Bloomberg, GitHub, Intel, Bun, Spotify, Slack), and Anthropic owns Bun, the subject of one case.
+Disclosure: the cases and lessons are drafted by Claude, an Anthropic model, and reviewed by the maintainer. At least 6 of the 13 cases used Claude models (Bloomberg, GitHub, Intel, Bun, Spotify, Slack; 5 cases leave the models unstated), and Anthropic owns Bun, the subject of one case.
 
 Evidence base: every lesson here comes from the **migrations** in this collection, all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 

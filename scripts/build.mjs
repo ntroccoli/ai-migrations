@@ -29,12 +29,18 @@ const caseByFile = new Map(cases.map(c => [c.file, c]));
 // started from it, then the languages in LANGUAGES (scripts/lib.mjs) that no case starts from.
 const byLanguage = new Map();
 for (const c of cases) for (const x of [c.meta.from_languages].flat()) if (x && x !== 'unstated') byLanguage.set(x, [...(byLanguage.get(x) || []), c.meta.company]);
-const orList = xs => xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} or ${xs.at(-1)}`;
+const joinList = (xs, word) => xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} ${word} ${xs.at(-1)}`;
+const orList = xs => joinList(xs, 'or');
 const byName = (a, b) => a.localeCompare(b);
 const uncovered = LANGUAGES.filter(x => !byLanguage.has(x)).sort(byName);
+const langMoves = cases.filter(c => c.meta.kind === 'language').map(c => c.meta.company).sort(byName);
+const unnamed = cases.filter(c => [c.meta.from_languages].flat().every(x => !x || x === 'unstated')).map(c => c.meta.company).sort(byName);
 const COVERED =
   [...byLanguage.keys()].sort(byName).map(x => `${x} (${[...new Set(byLanguage.get(x))].sort(byName).join(', ')})`).join(', ') +
   '. Each case line below gives the move itself (from, to).' +
+  ` Only ${joinList(langMoves, 'and')} changed the code's language; the others kept it (a framework, test, data, build or ` +
+  'structure move).' +
+  (unnamed.length ? ` Language not named: ${unnamed.join(', ')}.` : '') +
   (uncovered.length ? ` No case names ${orList(uncovered)} as the language it started from: lessons applied there are extrapolation.` : '');
 
 // Build only from sources that parse; anything else would silently drop a case, a page or a count.
@@ -70,8 +76,10 @@ const all = pages.flatMap(p => p.lessons);
 const LEGEND = LESSON_LEGEND;
 // Who wrote the text, and which cases involve the maker of the model that wrote it.
 const claude = cases.filter(c => [c.meta.models].flat().some(m => /Claude/.test(m)));
+const noModels = cases.filter(c => [c.meta.models].flat().every(m => !m || m === 'unstated'));
 const DISCLOSURE = 'Disclosure: the cases and lessons are drafted by Claude, an Anthropic model, and reviewed by the ' +
-  `maintainer. ${claude.length} of the ${cases.length} cases used Claude models (${claude.map(c => c.meta.company).join(', ')}), ` +
+  `maintainer. ${noModels.length ? 'At least ' : ''}${claude.length} of the ${cases.length} cases used Claude models (${claude.map(c => c.meta.company).join(', ')}` +
+  `${noModels.length ? `; ${noModels.length} cases leave the models unstated` : ''}), ` +
   'and Anthropic owns Bun, the subject of one case.';
 
 // The case files a lesson cites, in "Cases" or "Against", with the lesson IDs.
@@ -198,7 +206,7 @@ out['llms.txt'] = [
   DISCLOSURE, '',
   `Moves covered, by the language the code was in before the move: ${COVERED}`, '',
   '## How to use', '',
-  `- Before a migration: run the [checklist](${RAW_BASE}/checklist.md) on the repository and change nothing. Each ` +
+  `- Before a migration or a large restructuring: run the [checklist](${RAW_BASE}/checklist.md) on the repository and change nothing. Each ` +
     'question has a Check to measure and cites lesson IDs; open only the lessons and cases behind a gap.',
   '- For any other large piece of AI-driven work: scan the one-line list of every lesson at the end of ' +
     `[lessons/index.md](${RAW_BASE}/lessons/index.md) (about ${indexKB} KB), then open the aspect pages of the lessons ` +
@@ -221,7 +229,8 @@ out['llms.txt'] = [
     `pitfalls, for tools that cannot follow links. About ${fullKB} KB (~${fullKTokens}k tokens), so prefer the ` +
     'aspect pages when you can.',
   `- [Pitfalls by kind of move](${RAW_BASE}/pitfalls.md): what the old stack did implicitly, and seams for moving in steps.`,
-  `- [Lessons index](${RAW_BASE}/lessons/index.md): counts, the cases behind each lesson, and where the cases disagree.`, '',
+  `- [Lessons index](${RAW_BASE}/lessons/index.md): counts, the cases behind each lesson, and where the cases disagree.`,
+  `- [Update log](${RAW_BASE}/log.md): what each update covered and changed; on a revisit, read the entries newer than your record.`, '',
 ].join('\n');
 
 // Hand-written files kept in step: this repository's URLs, and README's generated blocks.
