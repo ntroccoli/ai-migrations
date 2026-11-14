@@ -39,10 +39,19 @@ Now: 13 cases (Slack, Zalando, Airbnb, Google, Spotify, Uber, 1Password, Bun, As
 
 ## Try it
 
-Open your coding agent (Claude Code, Codex, Cursor, …) in the project you are thinking of
-migrating. Step 1 only reads your project; steps 2 and 3 are optional.
+Open your coding agent (Claude Code, Codex, Cursor, …) in your project and pick one of two routes:
 
-### Step 1: review
+- [Planning a migration](#planning-a-migration): run the checklist on the project you are
+  thinking of moving to another language, framework or major version.
+- [Learning from the lessons](#learning-from-the-lessons): compare how AI agents work in any large
+  project with what these migrations taught. Lessons tagged "Old system as oracle: no" carry over
+  as they are.
+
+In both, step 1 only reads your project; steps 2 and 3 are optional.
+
+### Planning a migration
+
+#### Step 1: review
 
 ```text
 Read https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms.txt and follow it. Run the checklist on this project: measure every question with its check; do not judge from memory. Report in the checklist's report format: each answer with its evidence and the cases behind it, then a go or no-go with the main risks. Change nothing.
@@ -50,13 +59,13 @@ Read https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms.txt and
 
 What to change, if anything, is your call.
 
-### Step 2: apply
+#### Step 2: apply
 
 ```text
 Apply the proposals you marked "do" (or: apply proposals 1, 3 and 5). For each, first state the check that proves it, then make the change and run that check. Write the record the checklist defines in docs/migration-review.md: every proposal with its status, the event that shows it and the date. Name the newest log.md entry this review covered.
 ```
 
-### Step 3: revisit, and tell us what happened
+#### Step 3: revisit, and tell us what happened
 
 When the code has moved on, or the migration has started, paste:
 
@@ -67,14 +76,32 @@ Read docs/migration-review.md and https://raw.githubusercontent.com/ntroccoli/ai
 A [field report](docs/field-reports.md) says which questions foresaw the problems you hit and
 which missed them; it is how the checklist improves.
 
-### Not migrating? Tips for any large AI project
+### Learning from the lessons
 
-Many lessons describe how AI agents behave on large work, not only in migrations. Those tagged
-"Old system as oracle: no" carry over as they are. To compare them with how your project works:
+#### Step 1: compare
 
 ```text
 Read https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms.txt and follow its route for large AI-driven work that is not a migration. Use only lessons tagged "Old system as oracle: no", or "partly" where this project already has a substitute check. Compare them with how this project's agents and sessions work today. Change nothing: give numbered proposals, each with the lesson ID, what the project does now, the change, its cost, and the check that would prove it.
 ```
+
+What to change, if anything, is your call.
+
+#### Step 2: apply
+
+```text
+Apply the proposals I choose (for example: 1, 3 and 5). For each, first state the check that proves it, then make the change and run that check. Write docs/ai-lessons-review.md: every proposal with its lesson ID, the change, its status (applied, proven, stopped holding), the event that shows it and the date. Name the newest log.md entry this review covered.
+```
+
+#### Step 3: revisit, and tell us what happened
+
+After some weeks of work with the changes, paste:
+
+```text
+Read docs/ai-lessons-review.md and https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/log.md. For each applied item, say whether its check held in the work since, with the event that shows it, and update its status. Re-check any lesson a newer log entry changed. Update the record. Then draft a field report as https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/field-reports.md describes, naming which lessons held and which did not, and show it to me before posting.
+```
+
+A field report from this route says which lessons held in a project that is not a migration; it
+tells us which lessons and "Old system as oracle" tags to re-check against their cases.
 
 ## Contributing
 
