@@ -12,13 +12,13 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: None found.
 - **OVS-2** [stated] Keep the final merge with a person who checks how the agent answered CI and review, not only the diff.
   - Old system as oracle: no. Strength: strong. Era: 2024–2026.
-  - Cases: [GitHub: how it was checked][gh-checked], [Google: how it was checked][goo-checked], [Slack: who did what][slk-who], [Shopify: how it was checked][shp-checked].
+  - Cases: [GitHub: how it was checked][gh-checked], [Google: how it was checked][goo-checked], [Slack: who did what][slk-who].
   - Against: Disagree: in Bun no person read every line; the engineer checked the reviewers instead ([Bun][bun-checked]), and an outside critic calls it unreviewed.
 - **OVS-3** [stated] Decide up front where automation stops (a retry cap, a residue size, a category for people) and hand over with the failed attempt as the starting point.
   - Old system as oracle: no. Strength: strong. Era: 2023–2026.
   - Cases: [Airbnb: what worked][air-worked], [Airbnb: practices to copy][air-practices], [1Password: practices to copy][opw-practices], [Google: who did what][goo-who], [Bloomberg: who did what][bbg-who], [Bloomberg: what went wrong][bbg-wrong].
   - Against: Uber's stop rule was a revert to the old framework, not a hand-over to people ([Uber][ubr-wrong]).
-- **OVS-4** [stated] Bind each human approval to the exact text approved, such as a hash of the plan, so an agent's later edit to the plan needs a fresh approval.
+- **OVS-4** [stated] Bind each human approval to the exact text approved, such as a hash of the plan, so any later edit to the plan needs a fresh approval.
   - Old system as oracle: no. Strength: weak. Era: 2025–2026 (models unstated).
   - Cases: [Shopify: how it was checked][shp-checked].
   - Against: None found.

@@ -8,7 +8,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 
 - **VER-1** [stated] A clean compile or a green CI run shows the parts fit together, not that behaviour survived; plan a behavioural check after it.
   - Old system as oracle: no. Strength: strong. Era: 2024–2026.
-  - Cases: [GitHub: what went wrong][gh-wrong], [Intel: what went wrong][int-wrong], [Spotify: what went wrong][spo-wrong], [Zalando: what went wrong][zal-wrong].
+  - Cases: [GitHub: what went wrong][gh-wrong], [Intel: what went wrong][int-wrong], [Spotify: what went wrong][spo-wrong], [Zalando: what went wrong][zal-wrong], [Bloomberg: what went wrong][bbg-wrong].
   - Against: In a memory-safe target, one class of memory bugs does become a compile error ([Bun][bun-checked]), so the compiler is a real but narrow check; Bloomberg calls a clean compile a strong sign of a right change when only build files move, though it still ran the unit tests after the build ([Bloomberg][bbg-worked]).
 - **VER-2** [stated] Order gates from cheap to costly and drop a candidate at its first failure, with cheap no-change checks (whitespace only, unchanged syntax tree) up front.
   - Old system as oracle: partly. Strength: medium. Era: 2023–2026.
@@ -36,14 +36,14 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Google: what worked][goo-worked], [1Password: what worked][opw-worked].
   - Against: Google's reference search stops after a set number of hops and can miss sites ([Google][goo-wrong]).
 - **VER-8** [stated] Rank failures by cost: no change is cheap, a red change costs an engineer, a green but wrong change costs trust; aim verification at the last kind.
-  - Old system as oracle: no. Strength: medium. Era: 2025–2026.
-  - Cases: [Spotify: what went wrong][spo-wrong], [GitHub: how it was checked][gh-checked], [Zalando: what went wrong][zal-wrong].
+  - Old system as oracle: no. Strength: medium. Era: 2024–2026.
+  - Cases: [Spotify: what went wrong][spo-wrong], [GitHub: how it was checked][gh-checked], [Zalando: what went wrong][zal-wrong], [Bloomberg: what went wrong][bbg-wrong].
   - Against: None found.
 - **VER-9** [stated] Where the target has no tests the agent cannot check itself: leave it out, require tests first, or budget for owners to test each change.
   - Old system as oracle: partly. Strength: weak. Era: Claude Code, 2025–2026.
   - Cases: [Spotify: how it was checked][spo-checked], [Spotify: practices to copy][spo-practices].
   - Against: Intel translated without tests on purpose to measure the repair cost afterwards ([Intel][int-checked]).
-- **VER-10** [stated] Keep every check deterministic even as the model takes on more of the writing; an error a model-run check lets through can spread across the whole fleet.
+- **VER-10** [stated] Keep automated checks out of the model even as it takes on more of the writing; an error a model-run check lets through can spread across the whole fleet.
   - Old system as oracle: no. Strength: weak. Era: Claude Sonnet 4.5, then Opus 4.6, 2025–2026.
   - Cases: [Bloomberg: what worked][bbg-worked].
   - Against: Disagree: Google's gates include the model agreeing its change was needed ([Google][goo-checked]), and Spotify gates each PR with an LLM judge ([Spotify][spo-checked]).

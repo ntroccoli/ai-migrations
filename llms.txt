@@ -27,7 +27,7 @@ Moves covered, by the language the code was in before the move: C (Intel), C++ (
 - [Security](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/security.md): 10 lessons, SEC-n (7 stated, 3 ours; oracle: 0 yes, 3 partly, 7 no). Sandboxing agents, memory safety, dependencies and data integrity.
 - [Cost](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/cost.md): 9 lessons, CST-n (2 stated, 7 ours; oracle: 0 yes, 1 partly, 8 no). Tokens, money, people's time and the bill after merge.
 - [Team and roles](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/team.md): 5 lessons, TEM-n (5 stated, 0 ours; oracle: 0 yes, 0 partly, 5 no). Who does what when agents write most of the code.
-- [Rule-based tools and AI](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/tooling.md): 10 lessons, TOL-n (10 stated, 0 ours; oracle: 0 yes, 4 partly, 6 no). Splitting the work between deterministic tools and models.
+- [Rule-based tools and AI](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/tooling.md): 10 lessons, TOL-n (10 stated, 0 ours; oracle: 0 yes, 5 partly, 5 no). Splitting the work between deterministic tools and models.
 - [Context and prompts](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/context.md): 10 lessons, CTX-n (10 stated, 0 ours; oracle: 1 yes, 2 partly, 7 no). What goes into the model's context, and how prompts are written.
 - [Many agents at once](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/orchestration.md): 6 lessons, ORC-n (6 stated, 0 ours; oracle: 0 yes, 2 partly, 4 no). Running several agents in parallel without them wrecking each other.
 - [Agent failure modes](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/agent-failures.md): 8 lessons, AGF-n (7 stated, 1 ours; oracle: 0 yes, 1 partly, 7 no). How agents went wrong, so a plan can expect it.
@@ -53,6 +53,6 @@ Moves covered, by the language the code was in before the move: C (Intel), C++ (
 
 ## Optional
 
-- [Everything in one file](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms-full.txt): every lesson, every case line, the checklist and the pitfalls, for tools that cannot follow links. About 160 KB (~41k tokens), so prefer the aspect pages when you can.
+- [Everything in one file](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms-full.txt): every lesson, every case line, the checklist and the pitfalls, for tools that cannot follow links. About 162 KB (~41k tokens), so prefer the aspect pages when you can.
 - [Pitfalls by kind of move](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/pitfalls.md): what the old stack did implicitly, and seams for moving in steps.
 - [Lessons index](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/index.md): counts, the cases behind each lesson, and where the cases disagree.

@@ -39,15 +39,15 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Uber: what went wrong][ubr-wrong], [Uber: what worked][ubr-worked].
   - Against: Slack's codemod alone left work that a model then finished ([Slack][slk-worked]); Airbnb's LLM pipeline moved a test framework with no rule-based core ([Airbnb][air-worked]).
 - **TOL-8** [stated] Give agents a direct way to inspect and drive the running app (state, events, commands, logic run headless); screenshots and accessibility trees made each test take minutes.
-  - Old system as oracle: no. Strength: weak. Era: 2025–2026 (models unstated).
+  - Old system as oracle: partly. Strength: weak. Era: 2025–2026 (models unstated).
   - Cases: [Shopify: what went wrong][shp-wrong], [Shopify: what worked][shp-worked].
   - Against: None found; Shopify gives no measured result for its headless CLI ([Shopify][shp-worked]).
 - **TOL-9** [stated] Where the old format is regular, have the model fill a schema-checked data object and let templates write the new files; one template fix then repairs every target.
-  - Old system as oracle: partly. Strength: medium. Era: Claude Sonnet 4.5, 2025–2026.
+  - Old system as oracle: partly. Strength: weak. Era: Claude Sonnet 4.5, 2025–2026.
   - Cases: [Bloomberg: what worked][bbg-worked], [Bloomberg: how it was checked][bbg-checked].
   - Against: The extraction path still produced a PR for only part of the tasks in each archetype, with reasons not given ([Bloomberg][bbg-wrong]).
 - **TOL-10** [stated] At each model upgrade, review the pre-processing built to cover the older model's gaps; keep a step only if it adds reproducibility or eases debugging.
-  - Old system as oracle: no. Strength: medium. Era: Claude Sonnet 4.5, then Opus 4.6, 2025–2026.
+  - Old system as oracle: no. Strength: weak. Era: Claude Sonnet 4.5, then Opus 4.6, 2025–2026.
   - Cases: [Bloomberg: what went wrong][bbg-wrong].
   - Against: The same authors warn that handing too much to the model makes a pipeline fragile when model behaviour shifts between versions ([Bloomberg][bbg-wrong]).
 

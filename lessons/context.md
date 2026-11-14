@@ -9,18 +9,18 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **CTX-1** [stated] Choosing the right context (nearby files, good examples, runtime data, exact mapping tables) moved results more than polishing the prompt wording.
   - Old system as oracle: partly. Strength: strong. Era: 2023–2026.
   - Cases: [Airbnb: what worked][air-worked], [Slack: what went wrong][slk-wrong], [Spotify: what worked][spo-worked], [Zalando: what worked][zal-worked], [Asana: what worked][asa-worked].
-  - Against: Disagree: Spotify treats prompt writing as the hard skill users lack ([Spotify][spo-wrong]). Zalando credits a system prompt and clearer wording as well as mappings and examples ([Zalando][zal-worked]).
+  - Against: Disagree: Spotify treats prompt writing as the hard skill users lack ([Spotify][spo-wrong]). Zalando credits a system prompt and clearer wording as well as mappings and examples ([Zalando][zal-worked]). Asana found a richer setup (a long conventions prompt, a notes file) did worse than a short goal on a well-kept code base ([Asana][asa-wrong]).
   - Related view (karpathy-ideas): [context engineering][k-context-engineering], agrees.
 - **CTX-2** [stated] Give the model the runtime facts a person would look at, such as the rendered output of each test, not only the source file.
-  - Old system as oracle: yes. Strength: medium. Era: Claude 2.1, 2024.
-  - Cases: [Slack: what worked][slk-worked], [Slack: practices to copy][slk-practices], [Zalando: what went wrong][zal-wrong], [Shopify: what worked][shp-worked].
+  - Old system as oracle: yes. Strength: medium. Era: Claude 2.1, 2024; GPT-4o, 2024–2025; Claude Opus 4.6 and unstated models, 2025–2026.
+  - Cases: [Slack: what worked][slk-worked], [Slack: practices to copy][slk-practices], [Zalando: what went wrong][zal-wrong], [Shopify: what worked][shp-worked], [Bloomberg: what worked][bbg-worked].
   - Against: None found.
 - **CTX-3** [stated] Write field and API mappings as explicit tables in the context, not prose; a guide adapted from the human one led to wrong mappings.
   - Old system as oracle: no. Strength: medium. Era: GPT-4o, 2024; Claude Code, 2025–2026.
   - Cases: [Spotify: what worked][spo-worked], [Spotify: practices to copy][spo-practices], [Zalando: what went wrong][zal-wrong].
   - Against: At Asana a much longer written guide to the target's conventions made results worse, and the code base's own examples sufficed ([Asana][asa-wrong]); that guide was prose, as the lesson warns, but more text was not better.
 - **CTX-4** [stated] State the whole end state, its preconditions and when not to act; agents read vague goals narrowly and leave parts of the work out of scope.
-  - Old system as oracle: no. Strength: medium. Era: 2025–2026.
+  - Old system as oracle: no. Strength: medium. Era: 2024–2026.
   - Cases: [GitHub: what went wrong][gh-wrong], [Spotify: practices to copy][spo-practices], [1Password: practices to copy][opw-practices], [Zalando: what went wrong][zal-wrong].
   - Against: At 1Password the same ordering mistakes came back after the agents were told explicitly about order and constraints ([1Password][opw-wrong]): a clear statement is not enough on its own.
   - Related view (karpathy-ideas): [success criteria not steps][k-success-criteria-not-steps], agrees.
@@ -52,6 +52,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [air-worked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-worked
 [asa-worked]: ../cases/2026-08-07-asana-enzyme-to-rtl.md#what-worked
 [asa-wrong]: ../cases/2026-08-07-asana-enzyme-to-rtl.md#what-went-wrong
+[bbg-worked]: ../cases/2026-11-03-bloomberg-python-cpp-uplift.md#what-worked
 [gh-worked]: ../cases/2026-09-16-github-copilot-runtime-rust.md#what-worked
 [gh-wrong]: ../cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong
 [int-practices]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#practices-to-copy

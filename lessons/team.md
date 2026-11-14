@@ -23,7 +23,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: no. Strength: medium. Era: 2023–2026.
   - Cases: [Google: how it was checked][goo-checked], [Spotify: who did what][spo-who], [Bloomberg: who did what][bbg-who].
   - Against: In Bun one engineer merged alone, with no second tier ([Bun][bun-who]).
-- **TEM-5** [stated] Code the model migrates is code the team never wrote; keep owners close to it and teach them the new library, or reviews and debugging suffer.
+- **TEM-5** [stated] Code the model migrates is code the team never wrote; keep owners close to it and teach them the new library, or debugging and incident handling suffer.
   - Old system as oracle: no. Strength: weak. Era: GPT-4o, 2024–2025.
   - Cases: [Zalando: what went wrong][zal-wrong].
   - Against: None found.

@@ -41,7 +41,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Bun: how it was checked][bun-checked], [GitHub: what went wrong][gh-wrong].
   - Against: None found.
   - Sceptic: tag changed from no to partly. Challenge: the audited reviewers compared new code with old code line by line, so "real differences" assumes a reference. Answer: accepted; checking the agent's replies to review comments still holds without one.
-- **REV-9** [stated] Once agents write fast, waiting for approval becomes the bottleneck; plan reviewer capacity across the owning teams from the start.
+- **REV-9** [stated] Once agents write fast, review, testing and deploy by the owning teams become the bottleneck; plan for that load from the start: reviewer capacity, evidence that eases review, priority.
   - Old system as oracle: no. Strength: strong. Era: 2023–2026.
   - Cases: [GitHub: what went wrong][gh-wrong], [Google: who did what][goo-who], [Spotify: how it was checked][spo-checked], [Bloomberg: what went wrong][bbg-wrong].
   - Against: At Bloomberg reviewer time was not the whole limit: the moves were low priority and owners carried the deploy risk, so most PRs got no decision; its authors look to more checks inside the pipeline and to runs that owners request ([Bloomberg][bbg-wrong]). At Asana, whose engineers reviewed their own agents' pull requests twice a day, slow lint and CI held the work up, not approval ([Asana][asa-wrong]).

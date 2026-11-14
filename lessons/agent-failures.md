@@ -12,7 +12,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: Intel says catching stubs without per-function tests is still unsolved ([Intel][int-wrong]), so the rule needs a check that can find them.
   - Related view (karpathy-ideas): [agents ignore code style rules][k-agents-ignore-code-style-rules], agrees.
 - **AGF-2** [stated] Agents fill gaps in the spec with plausible guesses and carry them through many edits; make them check formats and ownership against code or data, or stop and ask.
-  - Old system as oracle: no. Strength: strong. Era: 2025–2026.
+  - Old system as oracle: no. Strength: strong. Era: 2024–2026.
   - Cases: [1Password: what went wrong][opw-wrong], [GitHub: what went wrong][gh-wrong], [Spotify: what went wrong][spo-wrong], [Zalando: what went wrong][zal-wrong].
   - Against: At 1Password the same mistakes returned after agents were told the rules explicitly ([1Password][opw-wrong]); telling agents to check is not enough without a tool or a person enforcing it.
   - Related view (karpathy-ideas): [coding agents make subtle conceptual mistakes][k-coding-agents-make-subtle-conceptual-mistakes], agrees.

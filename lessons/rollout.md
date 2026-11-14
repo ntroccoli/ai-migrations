@@ -9,7 +9,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **ROL-1** [stated] Swap one component per change inside normal releases, old and new in one tree joined by a temporary bridge, so the main branch can always ship.
   - Old system as oracle: partly. Strength: medium. Era: 2026.
   - Cases: [GitHub: what worked][gh-worked], [GitHub: practices to copy][gh-practices], [Uber: what worked][ubr-worked].
-  - Against: Disagree: Bun's author says doing everything at once beats an incremental move, and merged one branch after eleven days ([Bun][bun-worked]); Shopify chose a fresh native build over a gradual move inside the old app ([Shopify][shp-migrated]) and released it whole after a beta ([Shopify][shp-checked]).
+  - Against: Disagree: Bun's author says doing everything at once beats an incremental move, and merged one branch after eleven days ([Bun][bun-worked]); Shopify chose a fresh native build over a gradual move inside the old app ([Shopify][shp-migrated]) and shipped it after about two months of beta ([Shopify][shp-checked]).
 - **ROL-2** [stated] Treat merged and released as separate gates: ship first to a canary or pre-release that few users take, and promote it only after real use.
   - Old system as oracle: no. Strength: medium. Era: 2024–2026.
   - Cases: [Bun: what went wrong][bun-wrong], [GitHub: how it was checked][gh-checked], [Google: what went wrong][goo-wrong].

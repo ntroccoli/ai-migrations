@@ -26,9 +26,9 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **PLN-5** [stated] Translate first and redesign later: keep behaviour the same during the move so that any failure points at the port, not at a deliberate change.
   - Old system as oracle: yes. Strength: medium. Era: 2026.
   - Cases: [GitHub: practices to copy][gh-practices], [Bun: what worked][bun-worked].
-  - Against: Disagree: Intel aims for idiomatic data structures at translation time ([Intel][int-practices]), and GitHub's own review prompt asked for idiomatic, optimised code during the port. Shopify rebuilt each app from scratch and retired or simplified some screens during the move ([Shopify][shp-migrated]).
+  - Against: Disagree: Intel aims for idiomatic data structures at translation time ([Intel][int-practices]), and GitHub's own review prompt asked for idiomatic, optimised code during the port. Shopify retired or simplified some Shop screens during the move, though each checkpoint still had to match the running old app ([Shopify][shp-migrated], [checkpoints][shp-checked]).
 - **PLN-6** [stated] Set expectations per class of work: bounded, repetitive edits gain a lot; work with ordering, schema or shared-state constraints gains far less.
-  - Old system as oracle: no. Strength: medium. Era: 2026 (models unstated).
+  - Old system as oracle: no. Strength: medium. Era: GPT-4o, 2024–2025; 2026 (models unstated).
   - Cases: [1Password: what worked][opw-worked], [1Password: what went wrong][opw-wrong], [Spotify: numbers][spo-numbers], [Zalando: what went wrong][zal-wrong].
   - Against: Uber's repetitive test-framework move did not work with generative AI over several files at once, which the authors put down to scale and in-house test patterns ([Uber][ubr-wrong]); the 1Password post is the only one to compare both classes in one team.
   - Related view (karpathy-ideas): [coding agents weak on novel code][k-coding-agents-weak-on-novel-code], agrees.
@@ -47,13 +47,13 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **PLN-10** [stated] Measure how often each pattern (runner, rule, base class) is used across the code base, and build the transforms or prompts around the most used first.
   - Old system as oracle: no. Strength: medium. Era: unstated; Claude Sonnet 4.5, then Opus 4.6, 2025–2026.
   - Cases: [Uber: what worked][ubr-worked], [Bloomberg: what worked][bbg-worked].
-  - Against: None found.
+  - Against: Bloomberg ordered its work by expected return (how automatable each archetype was), not by frequency alone ([Bloomberg][bbg-worked]).
 - **PLN-11** [stated] Do not port a whole app in one pass, even from specs gathered first; it gave code nobody could maintain. Port in small ordered slices a person can review quickly.
   - Old system as oracle: partly. Strength: weak. Era: 2025–2026 (models unstated).
   - Cases: [Shopify: what went wrong][shp-wrong], [Shopify: how it was checked][shp-checked].
   - Against: Bun merged a whole port as one branch ([Bun][bun-worked]), though built from many agent-sized units, not in one pass.
 - **PLN-12** [stated] Sort targets into archetypes, each with its own prompt, data collection and checks; give rare archetypes a generic starting point instead of dedicated automation.
-  - Old system as oracle: no. Strength: medium. Era: Claude Sonnet 4.5, then Opus 4.6, 2025–2026.
+  - Old system as oracle: no. Strength: weak. Era: Claude Sonnet 4.5, then Opus 4.6, 2025–2026.
   - Cases: [Bloomberg: what worked][bbg-worked], [Bloomberg: what went wrong][bbg-wrong].
   - Against: Airbnb ran one pipeline over all its files and grouped the failures by status afterwards; its case reports no sorting up front ([Airbnb][air-worked]).
 

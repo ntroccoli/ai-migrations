@@ -50,7 +50,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: When generated separately, Intel's agent-written tests worked as well as expert ones as feedback ([Intel][int-worked]).
 - **TST-11** [stated] Test the prompts too: rerun a golden set of before-and-after examples after each prompt edit or model trial; small wording changes swung results.
   - Old system as oracle: no. Strength: weak. Era: GPT-4o, 2024–2025.
-  - Cases: [Zalando: how it was checked][zal-checked].
+  - Cases: [Zalando: how it was checked][zal-checked], [Zalando: what went wrong][zal-wrong].
   - Against: None found.
 - **TST-12** [stated] Check parity on what users and downstream systems see: capture screens and raw events from old and new at the same named points, ignoring values that vary per run.
   - Old system as oracle: yes. Strength: weak. Era: 2025–2026 (models unstated).
@@ -78,4 +78,5 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [spo-practices]: ../cases/2025-11-06-spotify-honk.md#practices-to-copy
 [ubr-checked]: ../cases/2026-04-07-uber-junit4-to-junit5.md#how-it-was-checked
 [zal-checked]: ../cases/2025-02-20-zalando-ui-component-libraries.md#how-it-was-checked
+[zal-wrong]: ../cases/2025-02-20-zalando-ui-component-libraries.md#what-went-wrong
 [k-port-with-equality-tests]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2026-01-03-port-with-equality-tests.md

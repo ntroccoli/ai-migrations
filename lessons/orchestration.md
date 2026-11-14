@@ -7,13 +7,13 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 `[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
 
 - **ORC-1** [stated] Agents sharing one working copy wreck each other's work; give each writer its own worktree, or restrict git to committing its own files.
-  - Old system as oracle: no. Strength: strong. Era: 2026.
+  - Old system as oracle: no. Strength: strong. Era: 2025–2026.
   - Cases: [Bun: what went wrong][bun-wrong], [1Password: what worked][opw-worked], [GitHub: what worked][gh-worked], [Shopify: what worked][shp-worked].
   - Against: One worktree per agent would have filled Bun's disk, so it used a few shared ones with git restricted ([Bun][bun-wrong]).
 - **ORC-2** [stated] Run agents in parallel only on changes that are independent by design; otherwise parallelism adds inconsistency.
   - Old system as oracle: no. Strength: weak. Era: 2026.
   - Cases: [1Password: practices to copy][opw-practices], [Asana: who did what][asa-who].
-  - Against: None found.
+  - Against: Bun ran up to 64 agents at once on units that depended on each other, fed from a queue of compiler errors, and finished ([Bun][bun-numbers]).
 - **ORC-3** [stated] Peer agents on adjacent code need a named coordinator or human tiebreaker, and autonomy must stop at anything outside the agent's own branch.
   - Old system as oracle: no. Strength: weak. Era: 2026 (GPT-5.6 Sol, Opus 4.8 sessions).
   - Cases: [GitHub: what went wrong][gh-wrong], [GitHub: practices to copy][gh-practices].
@@ -31,12 +31,13 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **ORC-6** [stated] Prefer a short leash to a complex multi-agent design where you can: fixed code picks context, order and output place, and the model translates one unit.
   - Old system as oracle: partly. Strength: medium. Era: 2025–2026.
   - Cases: [Intel: what worked][int-worked], [Intel: practices to copy][int-practices], [Bloomberg: what worked][bbg-worked].
-  - Against: Disagree: Bun and GitHub ran fleets of dozens of agents and finished ([Bun][bun-worked]) ([GitHub][gh-worked]), and Shopify split its Shop port across specialised subagents ([Shopify][shp-who]). Asana backs only the first half: a few agents with a loose goal finished, while sub-agents and tracked tickets did worse ([Asana][asa-wrong]).
+  - Against: Disagree: Bun and GitHub ran fleets of dozens of agents and finished ([Bun][bun-worked]) ([GitHub][gh-worked]), and Shopify split its Shop port across specialised subagents ([Shopify][shp-who]). Asana backs a simple design but not the short leash: a few agents with a loose goal, choosing their own files, finished, while sub-agents and tracked tickets did worse ([Asana][asa-wrong]).
 
 [air-worked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-worked
 [asa-who]: ../cases/2026-08-07-asana-enzyme-to-rtl.md#who-did-what
 [asa-wrong]: ../cases/2026-08-07-asana-enzyme-to-rtl.md#what-went-wrong
 [bbg-worked]: ../cases/2026-11-03-bloomberg-python-cpp-uplift.md#what-worked
+[bun-numbers]: ../cases/2026-07-08-bun-zig-to-rust.md#numbers
 [bun-worked]: ../cases/2026-07-08-bun-zig-to-rust.md#what-worked
 [bun-wrong]: ../cases/2026-07-08-bun-zig-to-rust.md#what-went-wrong
 [gh-numbers]: ../cases/2026-09-16-github-copilot-runtime-rust.md#numbers

@@ -34,7 +34,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: no. Strength: medium. Era: 2026.
   - Cases: [Bun: who did what][bun-who], [GitHub: practices to copy][gh-practices].
   - Against: None found.
-- **CST-8** [stated] Missing or broken tests in target repositories shift the cost of checking onto the teams that receive the changes; the central figures leave it out.
+- **CST-8** [stated] Missing or broken tests in target repositories, or checks the pipeline cannot run, shift the cost of checking onto the teams that receive the changes; the central figures leave it out.
   - Old system as oracle: partly. Strength: medium. Era: 2023–2026.
   - Cases: [Spotify: how it was checked][spo-checked], [Google: what went wrong][goo-wrong], [Bloomberg: what went wrong][bbg-wrong].
   - Against: None found.

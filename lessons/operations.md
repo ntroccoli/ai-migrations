@@ -14,10 +14,10 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: no. Strength: weak. Era: 2026.
   - Cases: [Bun: what went wrong][bun-wrong].
   - Against: Bun's limits covered memory, CPU and processes, yet the disk still filled and crashed the machine several times ([Bun][bun-wrong]); no case shows disk quotas in use.
-- **OPS-3** [stated] Make the inner loop fast (module splits, build caches, host I/O) before scaling agents; their time goes mostly to reading, building and testing, not writing.
+- **OPS-3** [stated] Make the inner loop fast (module splits, build caches, host I/O, a headless path into the app) before scaling agents; their time goes mostly to reading, building and testing, not writing.
   - Old system as oracle: no. Strength: strong. Era: 2025–2026.
   - Cases: [GitHub: what went wrong][gh-wrong], [GitHub: numbers][gh-numbers], [Bun: practices to copy][bun-practices], [Shopify: what went wrong][shp-wrong], [Asana: what went wrong][asa-wrong].
-  - Against: At Shopify the slow step was not the build: hot reload did not help, because agents read and drove the app through simulators; its fix is a headless path into the app's logic ([Shopify][shp-worked]).
+  - Against: At Shopify the slow step was not the build: hot reload helped but did not fix it, because agents read and drove the app through simulators; its fix is a headless path into the app's logic ([Shopify][shp-worked]).
 - **OPS-4** [stated] List what the old runtime supplied silently (time zone, environment, process flags) and test every platform you ship; one green platform says little.
   - Old system as oracle: yes. Strength: medium. Era: 2025–2026.
   - Cases: [GitHub: what went wrong][gh-wrong], [Spotify: what went wrong][spo-wrong].
@@ -29,7 +29,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **OPS-6** [stated] Run bulk change jobs, by agent or by rule, as scheduled batches sized to the infrastructure, sort results into status groups, and rerun only what is stuck.
   - Old system as oracle: partly. Strength: strong. Era: 2023–2025.
   - Cases: [Slack: what worked][slk-worked], [Google: what worked][goo-worked], [Airbnb: what worked][air-worked], [Uber: what worked][ubr-worked].
-  - Against: At Bloomberg the job batches did not set the pace: PRs went out in a few bursts while merges came at a steady rate of their own ([Bloomberg][bbg-wrong]).
+  - Against: Batches sized to the infrastructure can still outrun the people receiving them: Bloomberg's PRs went out in a few bursts while merges came at a steady rate of their own ([Bloomberg][bbg-wrong]).
   - Sceptic: tag changed from no to partly. Challenge: the status groups count how many converted old tests pass, so the old behaviour is the oracle. Answer: accepted; Google's groups count remaining sites instead, which needs no oracle.
 - **OPS-7** [ours] Load-test the new code for blocking and resource exhaustion; one port froze its interface on a synchronous call across the bridge.
   - Old system as oracle: partly. Strength: medium. Era: 2026.

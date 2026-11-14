@@ -43,7 +43,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Google: how it was checked][goo-checked], [Google: what went wrong][goo-wrong].
   - Against: Google itself warns that edit distance misses the thinking behind edits, and the snapshot method skips edits made along the way, so it understates people's share ([Google][goo-wrong]).
 - **MSR-10** [stated] A merge rate undercounts unrequested changes: also count targets whose owners rejected the change and then migrated anyway, often reusing it.
-  - Old system as oracle: no. Strength: medium. Era: Claude Sonnet 4.5, then Opus 4.6, 2025–2026.
+  - Old system as oracle: no. Strength: weak. Era: Claude Sonnet 4.5, then Opus 4.6, 2025–2026.
   - Cases: [Bloomberg: what worked][bbg-worked].
   - Against: Bloomberg followed up only the rejected Python PRs, not the far larger group left without a decision ([Bloomberg][bbg-worked]).
 
