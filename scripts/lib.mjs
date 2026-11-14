@@ -108,11 +108,11 @@ export const practices = body => (sections(body).find(s => s.name === 'Practices
   .map(l => l.match(/^- \[(stated|ours)\] (.+) \(\[[^\]]+\]\([^)\s]+\)\)\s*$/)).filter(Boolean)
   .map(m => ({ tag: m[1], text: m[2] }));
 // Content words of a line, for matching a lesson to the practice it rests on: lower case, four
-// letters or more, a plural dropped ("-ies" to "y", then a final "s").
+// letters or more, a final "s" dropped and "ie" read as "y" (dependencies, dependency; cookies, cookie).
 const STOP = new Set(['that', 'this', 'with', 'from', 'when', 'then', 'than', 'each', 'into', 'only', 'have', 'they',
   'their', 'them', 'what', 'which', 'before', 'after', 'every', 'more', 'most', 'some', 'there', 'where', 'while']);
 export const contentWords = s => new Set(s.toLowerCase().split(/[^\p{L}]+/u).filter(w => w.length >= 4 && !STOP.has(w))
-  .map(w => w.replace(/ies$/, 'y').replace(/s$/, '')));
+  .map(w => w.replace(/s$/, '').replace(/ie$/, 'y')));
 // The practice lines closest to a lesson's text (most content words shared); [] when none shares one.
 export function closestPractices(text, lines) {
   const want = contentWords(text);

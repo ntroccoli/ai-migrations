@@ -27,9 +27,11 @@ const words = text => text
   .toLowerCase()
   .match(/[\p{L}\p{N}]+(?:['.,][\p{L}\p{N}]+)*/gu) || [];
 
-// A folder is read recursively, so raw/ with one folder per case can be passed whole.
+// A folder is read recursively, so raw/ with one folder per case can be passed whole; links and
+// junctions inside it are not followed.
 const listSources = p => (statSync(p).isDirectory()
-  ? readdirSync(p).flatMap(f => (statSync(join(p, f)).isDirectory() || /\.(md|txt)$/.test(f) ? listSources(join(p, f)) : []))
+  ? readdirSync(p, { withFileTypes: true }).filter(e => !e.isSymbolicLink()).flatMap(e => (e.isDirectory()
+    ? listSources(join(p, e.name)) : /\.(md|txt)$/.test(e.name) ? [join(p, e.name)] : []))
   : [p]);
 const srcFiles = srcArgs.flatMap(listSources);
 const grams = new Set();

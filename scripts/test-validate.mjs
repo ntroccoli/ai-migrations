@@ -215,6 +215,7 @@ const fixture = (strength, names) => d => {
     + `  - Cases: ${cites}.\n  - Against: None found.\n`;
   const refs = names.map(k => `[fx-${k}]: ../cases/${FIXTURE_CASES[k]}#what-went-wrong`).join('\n');
   const i = t.search(/^\[[a-z0-9-]+\]: /m); // the first reference definition; the lessons end before it
+  if (i < 0) throw new Error('test setup: lessons/team.md has no reference definitions');
   writeFileSync(f, `${t.slice(0, i).replace(/\n+$/, '\n')}${lesson}\n${t.slice(i).replace(/\n*$/, '\n')}${refs}\n`);
 };
 test('fixture lesson at its ceiling passes', 0, fixture('weak', ['airbnb']));
