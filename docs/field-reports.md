@@ -12,7 +12,7 @@ regressions and which miss them.
   foresee it, or did nothing?
 - After a lessons review on a project that is not a migration ([applying the
   lessons](applying-lessons.md)): which lessons held once the changes were in use.
-- At a revisit (step 3 of either route in the README), when the record (`docs/migration-review.md`
+- After a revisit (step 4 of either route in the README, optional), when the record (`docs/migration-review.md`
   or `docs/ai-lessons-review.md`) shows an item that was proven, or stopped holding. If no item
   has met its problem since the baseline, write that in the record with the date and do not
   draft a report yet: run the revisit again later. Items applied with nothing to catch yet go in

@@ -3,6 +3,7 @@
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join, dirname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
 
 // The public repository, owner/name, newest first. To rename it, put the new owner/name first in
 // this one line and run the build: build.mjs writes every URL from the first entry and rewrites the
@@ -280,4 +281,90 @@ export function mayBeOutdated(lesson, metas, today) {
   const t = new Date(`${today}T00:00:00Z`);
   t.setUTCMonth(t.getUTCMonth() - OUTDATED_MONTHS);
   return newest < t.toISOString().slice(0, 10);
+}
+
+// Update log entries and what each added or changed (AGENTS.md "Update log"). Each entry of log.md
+// has a generated changes/<slug>.md: the lesson IDs and checklist questions added, changed or gone
+// since the previous entry, and the fingerprints of the state after it. The newest entry's file is
+// rebuilt from the sources; an older one is frozen, since its state can no longer be rebuilt.
+export const LOG = join(ROOT, 'log.md');
+export const CHANGES_DIR = join(ROOT, 'changes');
+export function logEntries(text) {
+  return text.replace(/\r\n/g, '\n').split(/^(?=## \d{4}-\d{2}-\d{2})/m).slice(1).map(body => {
+    const head = body.split('\n')[0].slice(3).trim();
+    const date = head.slice(0, 10);
+    const title = head.replace(/^\d{4}-\d{2}-\d{2}\s*—\s*/, '');
+    const slug = `${date}-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`;
+    return { head, date, title, slug, body };
+  });
+}
+// The part of a lesson a revisit cares about: its tag and words, oracle, model and strength tags, the
+// cases it cites and its Against line (not the Era, which follows the cases, nor Related view or Sceptic).
+const print = s => createHash('sha256').update(s.replace(/\s+/g, ' ').trim()).digest('hex').slice(0, 8);
+export function lessonPrints(pages) {
+  const out = new Map();
+  for (const p of pages) for (const l of p.lessons) {
+    const m = lessonMeta(l);
+    out.set(l.id, print([l.tag, l.text, m.oracle, m.model, m.strength, casesOf(l, p.refs).sort().join(' '), sub(l, 'Against') || ''].join('\n')));
+  }
+  return out;
+}
+// The checklist's questions, Q1..Qn, each with its whole text (title, Check, Evidence, Lessons).
+export function questionPrints(text) {
+  const out = new Map();
+  let cur = null;
+  for (const l of text.replace(/\r\n/g, '\n').split('\n')) {
+    const q = l.match(/^(\d+)\. \*\*/);
+    if (q) { cur = `Q${q[1]}`; out.set(cur, l); } else if (/^#/.test(l)) cur = null; else if (cur) out.set(cur, `${out.get(cur)}\n${l}`);
+  }
+  for (const [k, v] of out) out.set(k, print(v));
+  return out;
+}
+// Compare two states (Map id -> fingerprint); `before` empty for the oldest entry.
+export function diffPrints(before, after) {
+  const ids = m => [...m.keys()];
+  return {
+    added: ids(after).filter(k => !before.has(k)),
+    changed: ids(after).filter(k => before.has(k) && before.get(k) !== after.get(k)),
+    gone: ids(before).filter(k => !after.has(k)),
+  };
+}
+export const CHANGE_LINES = { 'Added lessons': 'lessons.added', 'Changed lessons': 'lessons.changed', 'Lessons gone': 'lessons.gone',
+  'Added questions': 'questions.added', 'Changed questions': 'questions.changed', 'Questions gone': 'questions.gone' };
+// Read a changes file: its lists and its fingerprints (the state after its entry).
+export function parseChanges(text) {
+  const t = text.replace(/\r\n/g, '\n');
+  const lists = {};
+  for (const label of Object.keys(CHANGE_LINES)) {
+    const m = t.match(new RegExp(`^- ${label}: (.*)$`, 'm'));
+    lists[label] = !m || m[1] === 'none' ? [] : m[1].split(', ').map(s => s.trim());
+  }
+  const state = new Map((t.split(/^## State after this entry$/m)[1] || '').split('\n')
+    .map(l => l.match(/^((?:[A-Z]{3}-|Q)\d+) ([0-9a-f]{8})$/)).filter(Boolean).map(m => [m[1], m[2]]));
+  return { lists, state };
+}
+// Write a changes file. `prev` is the previous entry ({ head, state }) or null for the oldest.
+export function renderChanges(entry, prev, lessons, questions, generated) {
+  const before = prev?.state ?? new Map();
+  const pick = re => new Map([...before].filter(([k]) => re.test(k)));
+  const l = diffPrints(pick(/^[A-Z]{3}-/), lessons), q = diffPrints(pick(/^Q/), questions);
+  const list = xs => xs.length ? xs.join(', ') : 'none';
+  return [
+    generated, '',
+    `# Changes: ${entry.head}`, '',
+    `What this [log.md](../log.md) entry added, changed or removed, ${prev ? `since "${prev.head}"` : 'from nothing (the first entry)'}: ` +
+      'lesson IDs and checklist questions (Q1 is question 1). A revisit reads these lines for every entry newer than ' +
+      'the one its record names, then only the lessons and questions they list.', '',
+    `- Added lessons: ${list(l.added)}`,
+    `- Changed lessons: ${list(l.changed)}`,
+    `- Lessons gone: ${list(l.gone)}`,
+    `- Added questions: ${list(q.added)}`,
+    `- Changed questions: ${list(q.changed)}`,
+    `- Questions gone: ${list(q.gone)}`, '',
+    'A lesson counts as changed when its tag, words, oracle, model or strength tag, cited cases or Against line ' +
+      'changed; a question, when any of its text did.', '',
+    '## State after this entry', '',
+    'Fingerprints (a short hash of each lesson and question) the next entry is compared with.', '',
+    '```text', ...[...lessons, ...questions].map(([k, v]) => `${k} ${v}`), '```', '',
+  ].join('\n');
 }

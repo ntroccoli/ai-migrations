@@ -35,10 +35,26 @@ prompts.
    with several parts, or number its parts 3a, 3b, each with its own checks.
 6. Record: once the owner has chosen, write `docs/ai-lessons-review.md` in the project (format
    below). In a read-only run, write no file; show the record after the report.
-7. Revisit: a later run reads that record first, then only the
-   [log.md](../log.md) entries newer than the one it names. It re-checks open, waiting and
-   stopped-holding items, and lessons a newer entry changed. Date each status change with its
-   event; reopen proven or skipped items only if their check now fails.
+7. Revisit, in a fresh session, when the collection has grown or after a few weeks of work:
+   - Start: compare the log entry the record names (date and title) with the newest one
+     [llms.txt](../llms.txt) names. If they match and no item is due for re-check (nothing
+     waiting, nothing open that later work could show), say so and stop.
+   - Re-check: rerun each item's "Check now" unchanged and look for its "Event that proves it"
+     in the work since; compare with its baseline. Mark each exactly proven, still waiting,
+     stopped holding or not shown (its event cannot be seen yet), with the numbers; in the
+     record, still waiting and not shown stay "waiting for first use". Date each change; reopen
+     proven or skipped items only if their check now fails.
+   - New: for each [log.md](../log.md) entry newer than the record's, read its file in
+     [changes/](../changes/) (lesson IDs and checklist questions added, changed or removed); open
+     only those lessons, and measure them as in step 4.
+   - Lint: list the applied lessons that a newer lesson now contradicts or supersedes, and the
+     record's items whose lesson changed.
+   - Propose only the new or changed lessons, earlier "later" items, applied items that stopped
+     holding and what the lint found, each with do, later or skip. Update the record in its
+     existing layout and name in it the newest log entry read, by date and title.
+   - The too-early rule below holds for the re-check only: new lessons can be proposed before
+     anything has met its problem.
+8. Share what you learned (optional): a field report, as below.
 
 ## Report format
 
@@ -103,10 +119,10 @@ action, or on work outside this session, stays open, and its event says what it 
 applied change whose "Check now" passes is waiting for first use; once later work shows its
 "Event that proves it", it is proven.
 
-## Afterwards
+## Share what you learned (optional)
 
 A [field report](field-reports.md) from this route says which lessons held in a project that is
 not a migration. Draft one only once an item has met its problem since its baseline (proven, or
 stopped holding); until then, write in the record that nothing has happened yet, with the date,
-and revisit later. It tells the maintainer which lessons and oracle tags to re-check against their
+and revisit later (the too-early rule). It tells the maintainer which lessons and oracle tags to re-check against their
 cases; it never changes a lesson by itself.

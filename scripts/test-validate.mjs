@@ -9,7 +9,7 @@ import { ROOT, parseCase, expectedEra, eraText } from './lib.mjs';
 
 const TMP = join(ROOT, '.test-tmp');
 const PARTS = ['scripts', 'cases', 'lessons', 'checklist.md', 'pitfalls.md', 'NOTICE.md', 'index.md', 'llms.txt', 'llms-full.txt',
-  'README.md', 'CONTRIBUTING.md', 'docs', 'LICENSE-CONTENT.md', '.github', 'lychee.toml', 'log.md'];
+  'README.md', 'CONTRIBUTING.md', 'docs', 'changes', 'LICENSE-CONTENT.md', '.github', 'lychee.toml', 'log.md'];
 const ONEPW = '2026-04-20-1password-monolith-refactor.md';
 const INTEL = '2026-08-24-intel-ideas-c-to-rust.md';
 const BUN = '2026-07-08-bun-zig-to-rust.md';
@@ -241,6 +241,8 @@ const fixture = (strength, names, model = 'no') => d => {
   const i = t.search(/^\[[a-z0-9-]+\]: /m); // the first reference definition; the lessons end before it
   if (i < 0) throw new Error('test setup: lessons/team.md has no reference definitions');
   writeFileSync(f, `${t.slice(0, i).replace(/\n+$/, '\n')}${lesson}\n${t.slice(i).replace(/\n*$/, '\n')}${refs}\n`);
+  // The fixture is a new lesson: the newest log entry names it, as the validator asks.
+  edit(join(d, 'log.md'), '- **New lessons:** AGF-9, CTX-11, KNW-4, OVS-5.', '- **New lessons:** AGF-9, CTX-11, KNW-4, OVS-5, TEM-99.');
 };
 test('fixture lesson at its ceiling passes', 0, fixture('weak', ['airbnb']));
 test('medium on one assertion-only case fails', 1, fixture('medium', ['airbnb']),
@@ -293,7 +295,7 @@ test('build --check fails after a new log entry moves a lesson past the line, un
   node(d, 'build.mjs', []);
   newLogEntry(d, '2027-07-09');
   return ['--check'];
-}, null, 'out of date: lessons/index.md', 'build.mjs');
+}, null, 'lessons/index.md', 'build.mjs');
 test('build refuses a log.md without a dated entry', 1,
   d => { writeFileSync(join(d, 'log.md'), '# Update log\n'); return []; }, null, 'log.md needs an entry', 'build.mjs');
 test('build refuses a bad --today', 2, () => ['--today', 'tomorrow'], null, '--today takes a date', 'build.mjs');
@@ -370,6 +372,52 @@ test('build --check fails after hand-editing the README disclosure', 1,
   d => { edit(join(d, 'README.md'), 'Disclosure: the cases', 'Disclosure: some cases'); return ['--check']; }, null, 'out of date: README.md', 'build.mjs');
 test('build refuses a README without its block markers', 1,
   d => { edit(join(d, 'README.md'), '<!-- /contents -->', ''); return []; }, null, 'needs the markers', 'build.mjs');
+
+// log.md: every entry but the oldest lists its new and changed lesson IDs, so a revisit can read only those.
+const LOG_NEW = '- **New lessons:** AGF-9, CTX-11, KNW-4, OVS-5.';
+test('a log entry without its impact part fails', 1,
+  d => newLogEntry(d, '2026-11-15'), null, '2026-11-15 — a test update: needs a "### Checklist and lessons impact" part');
+test('a log entry whose impact part lacks "New lessons" fails', 1,
+  d => edit(join(d, 'log.md'), LOG_NEW, '- **Fresh lessons:** AGF-9.'), null, 'needs a "- **New lessons:**" line');
+test('a log entry naming a lesson that does not exist fails', 1,
+  d => edit(join(d, 'log.md'), LOG_NEW, '- **New lessons:** AGF-99.'), null, '"New lessons" names AGF-99, which no lesson page has');
+test('a log entry with an empty "New lessons" line fails', 1,
+  d => edit(join(d, 'log.md'), LOG_NEW, '- **New lessons:** to come.'), null, '"New lessons" names no lesson ID; write none');
+test('a log entry that leaves out a lesson its changes file adds fails', 1,
+  d => edit(join(d, 'log.md'), LOG_NEW, '- **New lessons:** AGF-9, CTX-11, KNW-4.'), null, 'the impact part misses OVS-5 (listed in changes/2026-11-14-second-update.md)');
+
+// changes/<entry>.md: generated for the newest log entry from the previous entry's frozen state.
+const SLUG = '2027-01-10-a-test-update';
+const changes = (d, slug = SLUG) => readFileSync(join(d, 'changes', `${slug}.md`), 'utf8');
+const impactEntry = (d, { checklist = 'no question changed', added = 'none', changed = 'none' } = {}) =>
+  edit(join(d, 'log.md'), '\n## ', `\n## 2027-01-10 — a test update\n\n- A test entry.\n\n### Checklist and lessons impact\n\n` +
+    `- **Checklist:** ${checklist}.\n- **New lessons:** ${added}.\n- **Changed lessons:** ${changed}.\n\n## `);
+test('a new log entry with nothing changed gets an empty changes file and passes', 0, d => {
+  impactEntry(d); node(d, 'build.mjs', []);
+  if (!/- Added lessons: none\n- Changed lessons: none\n/.test(changes(d))) throw new Error(changes(d).slice(0, 600));
+});
+test('a lesson changed after the newest entry is listed, and the entry must name it', 1, d => {
+  impactEntry(d); edit(L(d, 'review'), '- **REV-2** [stated]', '- **REV-2** [ours]'); node(d, 'build.mjs', []);
+  if (!/^- Changed lessons: REV-2$/m.test(changes(d))) throw new Error(changes(d).slice(0, 600));
+}, null, 'a test update: the impact part misses REV-2');
+test('naming the changed lesson in the entry passes', 0, d => {
+  impactEntry(d, { changed: 'REV-2 (tag)' }); edit(L(d, 'review'), '- **REV-2** [stated]', '- **REV-2** [ours]'); node(d, 'build.mjs', []);
+});
+test('a changed question must be named by number in the Checklist line', 1, d => {
+  impactEntry(d); edit(join(d, 'checklist.md'), '5. **Can the work ship in small units', '5. **Can the work ship in tiny units');
+  node(d, 'build.mjs', []);
+  if (!/^- Changed questions: Q5$/m.test(changes(d))) throw new Error(changes(d).slice(0, 600));
+}, null, 'its "- **Checklist:**" line misses question Q5');
+test('build --check fails after hand-editing the newest changes file', 1,
+  d => { appendFileSync(join(d, 'changes', '2026-11-14-second-update.md'), '\nA hand edit.\n'); return ['--check']; },
+  null, 'out of date: changes/2026-11-14-second-update.md', 'build.mjs');
+test('build refuses a missing changes file of an older entry', 1,
+  d => { rmSync(join(d, 'changes', '2026-11-13-first-update.md')); return []; }, null, 'changes/2026-11-13-first-update.md is missing', 'build.mjs');
+test('an older changes file is frozen: build leaves it as it is', 0, d => {
+  impactEntry(d, { changed: 'REV-2' }); edit(L(d, 'review'), '- **REV-2** [stated]', '- **REV-2** [ours]'); node(d, 'build.mjs', []);
+  if (/- Changed lessons: REV-2\b/.test(changes(d, '2026-11-14-second-update'))) throw new Error('the older file was rebuilt');
+  return ['--check'];
+}, null, null, 'build.mjs');
 
 // pitfalls.md: relative links resolve.
 test('pitfalls broken link fails', 1,

@@ -18,6 +18,7 @@ Moves covered, by the language the code was in before the move: C (Intel), C++ (
 - For any other large piece of AI-driven work, not a migration (README "Learning from the lessons"): follow [docs/applying-lessons.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/applying-lessons.md). Choose lessons from [lessons/evidence.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/evidence.md) (about 36 KB: one line each with tags, strength, cases and the cases against), then open the aspect pages only for the lessons you use.
 - Open a case only when you need its detail. Each has "Who did what", "How it was checked", a Numbers table with the basis of each number, "What went wrong" and "Practices to copy". File format: [AGENTS.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/AGENTS.md).
 - After a review, a migration or a revisit: tell what the checklist or the lessons foresaw and what they missed, in a field report ([how](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/field-reports.md)); show the user the exact text before posting.
+- Revisit: the newest update is "2026-11-14 — second update". If your record names it and nothing is due for re-check, stop. Else, for each [log.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/log.md) entry newer than your record's, read changes/<entry>.md (newest: [2026-11-14-second-update](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/changes/2026-11-14-second-update.md)), the lesson IDs and questions it added, changed or removed.
 - Relative links inside these files resolve against the raw URL of the file that holds them (under https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/).
 
 ## Lessons
@@ -62,5 +63,4 @@ Moves covered, by the language the code was in before the move: C (Intel), C++ (
 
 - [Everything in one file](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms-full.txt): every lesson, every case line, the checklist and the pitfalls, for tools that cannot follow links. About 204 KB (~52k tokens), so prefer the aspect pages when you can.
 - [Pitfalls by kind of move](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/pitfalls.md): what the old stack did implicitly, and seams for moving in steps.
-- [Lessons index](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/index.md): counts, the cases behind each lesson, and where the cases disagree.
-- [Update log](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/log.md): what each update covered and changed; on a revisit, read the entries newer than your record.
+- [Update log](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/log.md): what each update covered and changed, and why.

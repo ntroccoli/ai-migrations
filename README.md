@@ -49,7 +49,7 @@ Open your coding agent (Claude Code, Codex, Cursor, …) in your project and pic
 
 In both, step 1 only reads your project and changes nothing: you get numbered proposals, each
 with a one-word recommendation (do, later or skip) and a reason, and you choose. Run step 1 in a
-fresh session and paste step 2 in that same session. Steps 2 and 3 are optional; run each revisit
+fresh session and paste step 2 in that same session. Steps 2 to 4 are optional; run each revisit
 in a fresh session.
 
 ### Planning a migration
@@ -73,18 +73,27 @@ Apply the proposals you marked "do". Do the work the way this project normally r
 
 To choose yourself, replace the first sentence with "Apply proposals 1, 3 and 5."
 
-#### Step 3: revisit, and tell us what happened
+#### Step 3: revisit later
 
-Not right after step 2: step 2 already runs every check, and nothing has happened since the
-baseline yet. Wait until the problems could have come back: a few weeks of work, about five
-tasks, or the migration under way. Then paste:
+When the collection has grown (llms.txt names a newer log entry than your record) or after a few
+weeks of work, run a revisit in a fresh session. It stops at once if nothing is new or due; else
+it re-checks the record against its baselines, then measures and proposes only what is new since
+your record's log entry. Paste:
 
 ```text
-Read https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms.txt and follow it. Read docs/migration-review.md, then the entries in https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/log.md newer than the one it names. Re-run only the open, waiting and stopped-holding items, and any question whose measurement may have moved or that a newer entry changed. Compare each item with its baseline in the record: how often its problem happened since. Update the record and its log entry. If no item has met its problem since the baseline, write that in the record with the date and do not draft a field report yet; I will run this step again later. Otherwise draft a field report as https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/field-reports.md describes, and show it to me before posting.
+Read https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms.txt and https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/checklist.md and follow its revisit step. Read docs/migration-review.md. Compare the log entry it names (date and title) with the newest entry llms.txt names; if they match and no item is due for re-check, tell me and stop. Re-check each item: rerun its "Check now" unchanged, look for its "Event that proves it" in the work since, compare with its baseline, and mark it exactly "proven", "still waiting", "stopped holding" or "not shown" (its event cannot be seen yet), with the numbers. For each log.md entry newer than the record's, read its changes/ file (the lesson IDs and checklist questions it added, changed or removed); open only those, and measure them; do not judge from memory. List the applied lessons a newer lesson now contradicts or supersedes, and the items whose lesson changed. Propose only the new or changed ones, earlier "later" items, applied items that stopped holding and what that list found, each with exactly one word, do, later or skip, and a reason. Update the record in its existing layout and name in it the newest log.md entry you read, by date and title. Change nothing else until I choose.
 ```
 
+#### Step 4: share what you learned (optional)
+
 A [field report](docs/field-reports.md) says which questions foresaw the problems you hit and
-which missed them; it is how the checklist improves.
+which missed them; it is how the checklist improves. Wait until an item has met its problem since
+its baseline (proven, or stopped holding); until then the record says nothing has happened yet.
+Nothing is posted until you say yes. Paste:
+
+```text
+Read https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/field-reports.md and follow it. Draft a field report from docs/migration-review.md, scrub it, and show me the exact text before posting. If no item has met its problem since its baseline, write that in the record with the date and do not draft a field report yet.
+```
 
 ### Learning from the lessons
 
@@ -107,18 +116,26 @@ Apply the proposals you marked "do". Do the work the way this project normally r
 
 To choose yourself, replace the first sentence with "Apply proposals 1, 3 and 5."
 
-#### Step 3: revisit, and tell us what happened
+#### Step 3: revisit later
 
-Not right after step 2: step 2 already runs every check, and nothing has happened since the
-baseline yet. Wait until the problems could have come back: a few weeks of work or about five
-tasks with the changes in place. Then paste:
+When the collection has grown (llms.txt names a newer log entry than your record) or after a few
+weeks of work, run a revisit in a fresh session. It stops at once if nothing is new or due; else
+it re-checks the record against its baselines, then measures and proposes only what is new since
+your record's log entry. Paste:
 
 ```text
-Read https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/applying-lessons.md and docs/ai-lessons-review.md, then the entries in https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/log.md newer than the one the record names. Re-check the open, waiting and stopped-holding items, each with the event in the work since that shows it, and any lesson a newer entry changed. Compare each item with its baseline in the record: how often its problem happened since. Update the record and its log entry. If no item has met its problem since the baseline, write that in the record with the date and do not draft a field report yet; I will run this step again later. Otherwise draft a field report as https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/field-reports.md describes, naming which lessons held and which did not, and show it to me before posting.
+Read https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms.txt and https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/applying-lessons.md and follow its revisit step. Read docs/ai-lessons-review.md. Compare the log entry it names (date and title) with the newest entry llms.txt names; if they match and no item is due for re-check, tell me and stop. Re-check each item: rerun its "Check now" unchanged, look for its "Event that proves it" in the work since, compare with its baseline, and mark it exactly "proven", "still waiting", "stopped holding" or "not shown" (its event cannot be seen yet), with the numbers. For each log.md entry newer than the record's, read its changes/ file (the lesson IDs it added, changed or removed); open only those, and measure them; do not judge from memory. List the applied lessons a newer lesson now contradicts or supersedes, and the items whose lesson changed. Propose only the new or changed ones, earlier "later" items, applied items that stopped holding and what that list found, each with exactly one word, do, later or skip, and a reason. Update the record in its existing layout and name in it the newest log.md entry you read, by date and title. Change nothing else until I choose.
 ```
 
+#### Step 4: share what you learned (optional)
+
 A field report from this route says which lessons held in a project that is not a migration; it
-tells us which lessons and "Old system as oracle" tags to re-check against their cases.
+tells us which lessons and "Old system as oracle" tags to re-check against their cases. Wait until
+an item has met its problem since its baseline. Nothing is posted until you say yes. Paste:
+
+```text
+Read https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/field-reports.md and follow it. Draft a field report from docs/ai-lessons-review.md, naming which lessons held and which did not, scrub it, and show me the exact text before posting. If no item has met its problem since its baseline, write that in the record with the date and do not draft a field report yet.
+```
 
 ## Contributing
 

@@ -203,10 +203,9 @@ Starting points from one case each, not targets; elsewhere judge "gap" from the 
 9. Record: once the owner has chosen, write `docs/migration-review.md` in the measured repository
    (the one file this checklist adds there; format below). In a read-only run, write no file;
    show the record after the report.
-10. Revisit: a later run reads that record first and re-checks only open, waiting and
-    stopped-holding items, and questions whose measurement may have moved or that a newer
-    `log.md` entry changed. Date each status change with its event; reopen proven or skipped
-    items only if their check now fails.
+10. Revisit as step 7 of [applying the lessons](docs/applying-lessons.md) says (start, re-check,
+    new, lint, propose), with the questions its `changes/` files list as well as the lessons.
+11. Share (optional): a [field report](docs/field-reports.md) once an item has met its problem.
 
 ## Report format
 

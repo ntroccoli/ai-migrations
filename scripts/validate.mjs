@@ -11,7 +11,7 @@ import {
   STATUSES, BASES, REQUIRED, LANGUAGES, SECTIONS, NUMBERS_HEADER, UNITS, SCALES, PITFALLS, CHECKLIST_MAX_BYTES,
   parseCase, listCases, sections, refDefs, linksIn, anchor, practices, closestPractices,
   LESSONS_DIR, LESSON_PAGES, LESSON_MAX_BYTES, LESSON_NOTE, LESSON_LEGEND, KARPATHY_IDEAS, ORACLES, MODEL_DEPENDENCE, STRENGTHS, META_LINE, parseLessonPage, strengthCeiling, lessonMeta,
-  casesOf, expectedEra, eraText, parseEra,
+  casesOf, expectedEra, eraText, parseEra, LOG, CHANGES_DIR, logEntries, parseChanges,
 } from './lib.mjs';
 
 const errors = [];
@@ -467,6 +467,45 @@ function validateChecklist(caseFiles, lessonIds) {
   return { n: qs.length, cited };
 }
 
+// log.md: every entry but the oldest (the first collection) has a "### Checklist and lessons impact"
+// part with "- **New lessons:**" and "- **Changed lessons:**" lines naming lesson IDs, or "none", and
+// it names everything its generated changes/<entry>.md lists: each added or changed lesson ID in
+// those two lines ("every lesson" in the second covers all changed ones), each lesson gone anywhere in
+// the part, and each added, changed or gone question by number in its "- **Checklist:**" line ("every
+// question" covers all). A revisit reads only what these list since its record's entry.
+function validateLog(ids) {
+  if (!existsSync(LOG)) { err('log.md', 'missing'); return; }
+  const entries = logEntries(readFileSync(LOG, 'utf8'));
+  const bullet = (part, label) => part.match(new RegExp(`^- \\*\\*${label}:\\*\\*([\\s\\S]*?)(?=^- \\*\\*|^### |(?![\\s\\S]))`, 'm'))?.[1];
+  const idsIn = s => s.match(/\b[A-Z]{3}-\d+\b/g) || [];
+  for (const e of entries.slice(0, -1)) {
+    const f = join(CHANGES_DIR, `${e.slug}.md`);
+    const lists = existsSync(f) ? parseChanges(readFileSync(f, 'utf8')).lists : null;
+    if (!lists) err('log.md', `${e.head}: no changes/${e.slug}.md; run node scripts/build.mjs`);
+    const impact = e.body.split(/^### Checklist and lessons impact\n/m)[1]?.split(/^### /m)[0];
+    if (impact === undefined) { err('log.md', `${e.head}: needs a "### Checklist and lessons impact" part`); continue; }
+    const gone = new Set(lists?.['Lessons gone'] || []);
+    const named = {};
+    for (const label of ['New lessons', 'Changed lessons']) {
+      const b = bullet(impact, label);
+      if (b === undefined) { err('log.md', `${e.head}: its impact part needs a "- **${label}:**" line (lesson IDs, or none)`); continue; }
+      named[label] = b;
+      if (!idsIn(b).length && !/\bnone\b|\bevery lesson\b/i.test(b)) err('log.md', `${e.head}: "${label}" names no lesson ID; write none`);
+      for (const id of idsIn(b)) if (!ids.has(id) && !gone.has(id)) err('log.md', `${e.head}: "${label}" names ${id}, which no lesson page has`);
+    }
+    if (!lists) continue;
+    const lessonIds = new Set(idsIn(`${named['New lessons'] || ''} ${named['Changed lessons'] || ''}`));
+    const every = /\bevery lesson\b/i.test(named['Changed lessons'] || '');
+    const miss = [...lists['Added lessons'], ...(every ? [] : lists['Changed lessons'])].filter(id => !lessonIds.has(id))
+      .concat([...gone].filter(id => !idsIn(impact).includes(id)));
+    if (miss.length) err('log.md', `${e.head}: the impact part misses ${miss.join(', ')} (listed in changes/${e.slug}.md)`);
+    const checklist = bullet(impact, 'Checklist') || '';
+    const qs = [...lists['Added questions'], ...lists['Changed questions'], ...lists['Questions gone']];
+    const qmiss = /\bevery question\b/i.test(checklist) ? [] : qs.filter(q => !new RegExp(`\\b${q.slice(1)}\\b`).test(checklist));
+    if (qmiss.length) err('log.md', `${e.head}: its "- **Checklist:**" line misses question ${qmiss.join(', ')} (listed in changes/${e.slug}.md)`);
+  }
+}
+
 // pitfalls.md (optional): every relative link resolves.
 function validatePitfalls() {
   if (!existsSync(PITFALLS)) return;
@@ -503,6 +542,7 @@ if (!args.length) {
   const lessons = validateLessons();
   const list = validateChecklist(files, lessons.ids);
   validatePitfalls();
+  validateLog(lessons.ids);
   for (const c of files) if (!lessons.cited.has(c) && !list?.cited.has(c)) err(c, 'no lesson and no checklist question cites this case');
   summary = ` ${lessons.ids.size} lessons valid. checklist.md valid: ${list?.n ?? 0} questions, each citing lessons.`;
 }

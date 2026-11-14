@@ -36,7 +36,7 @@ first.
   comparison, Pokémon's seeded battles), 3 (Spartacus's worktrees where tests could not start), 8
   (Pokémon split files the agent would not open), 9 (ts-rust's first attempt with no stop rule,
   Spartacus's waves) and 12 (ts-rust's list-price token figures); the file grew to 19,856 bytes,
-  under its 20,480-byte cap, after the review fixes to its record format and step 9. No field report was behind any change.
+  under its 20,480-byte cap, after the review fixes to its record format and step 9. Questions 1 and 7 were trimmed in wording only. No field report was behind any change.
 - **New lessons:** AGF-9, CTX-11, KNW-4, OVS-5.
 - **Changed lessons:** strength raised for AGF-6 (to medium); the raises of TST-5 (to strong)
   and REV-11 (to medium) were undone after the outside review, since the Pokémon case does not
@@ -49,7 +49,10 @@ first.
   counter-evidence (KNW-1, PLN-4, REV-11, TEM-5, TST-6) and four state a limit instead (AGF-6,
   REV-3, SEC-3, VER-5); with the new lessons' limits, "None found" lines went from 54 to 53
   (plain ones from 43 to 34). PLN-4, PLN-11 and REV-11 now open their Against with "Disagree:"
-  (PLN-11's cites Bun and the Pokémon port); "Disagree:" lines went from 16 to 19.
+  (PLN-11's cites Bun and the Pokémon port); "Disagree:" lines went from 16 to 19. After the
+  update, every lesson gained the model-ability tag and a derived Era, and the sceptic pass moved
+  oracle tags on REV-5, AGF-3 and AGF-5 ("Lesson tags" below): a revisit from an older record
+  re-reads every lesson once.
 - **By case:**
   - Pokémon: questions 2, 8, 9 and 10; lessons AGF-9, CTX-11, KNW-4 (new), AGF-1,
     TST-5, AGF-6, REV-11, TEM-5, PLN-4, PLN-5, PLN-11, SEC-1, SEC-3, AGF-5, OVS-1, KNW-1, MSR-6,
@@ -75,6 +78,14 @@ first.
   `yes` or `partly` per family; llms.txt and the lessons route say how to use it with a specific
   or new model; the field-report form asks which models ran; Google's model is one name again.
 - **Route fixes:** reports split "Check that proves it" into "Check now" and "Event that proves it", one change per proposal (rows 3a, 3b), unanswered owner questions take the stated default, and `lessons/evidence.md` gives every lesson in one line with its cases for and against.
+- **Revisit and share:** step 3 of both routes stops at once when the record's log entry is the
+  newest and nothing is due; else it re-checks the record against its baselines (proven, still
+  waiting, stopped holding, not shown), reads the generated `changes/` file of each newer entry
+  (lesson IDs and questions added, changed or removed), measures only those, lints the record
+  for applied lessons a newer one contradicts, and updates the record in its existing layout. The
+  field report is an optional step 4. The validator fails when an entry's impact part misses an
+  ID or question its changes file lists; it found questions 1, 4 and 6 (first update) and 1 and 7
+  (this entry) reworded but unnamed, now named above.
 
 ## 2026-11-13 — first update
 
@@ -102,7 +113,8 @@ first.
   question 8 asks for a search of docs and agent instructions that still favour the old stack;
   question 10 asks, when changes land in other teams' code, how many teams own it, whether they
   asked for the move and who carries the deploy risk. New evidence reached questions 2, 3, 5, 7,
-  8, 9, 10 and 12; the file was trimmed to stay under its size limit. No question was added,
+  8, 9, 10 and 12; the file was trimmed to stay under its size limit, which reworded questions 1,
+  4 and 6. No question was added,
   merged or dropped; no field report was behind any change.
 - **New lessons:** PLN-11, PLN-12, TST-11, TST-12, VER-10, VER-11, REV-11, ROL-9, TEM-5, TOL-8,
   TOL-9, TOL-10, CTX-10, OVS-4, MSR-10.

@@ -12,7 +12,7 @@ Layout: `cases/` (one file per case), `lessons/` (one page per aspect), `checkli
 `pitfalls.md`, `docs/field-reports.md` (how readers report what the checklist foresaw),
 `docs/applying-lessons.md` (the lessons route outside a migration: method, report, record); generated
 by `node scripts/build.mjs`, never by hand: `index.md`, `lessons/index.md`, `lessons/evidence.md`, `llms.txt`,
-`llms-full.txt`.
+`llms-full.txt`, `changes/` (one file per log entry).
 
 The maintainer keeps the full source texts, and the source lines behind each lesson, in a private
 archive. Steps marked **maintainer only** need it; an outside contributor skips them.
@@ -262,6 +262,20 @@ reference links (`[Bun][]`, defined once at the end of the file). The validator 
 the size, "Check:", "Evidence:", that each question cites lesson IDs that exist, case links, and
 links in `pitfalls.md`. **Maintainer only:** run `check-copy` on `checklist.md` and `pitfalls.md`
 against all the source texts after changing them.
+
+## Update log
+
+`log.md`, newest entry first, prose for the why. `build.mjs` writes `changes/<date>-<title>.md`
+for each entry: the lesson IDs and checklist questions it added, changed or removed since the
+previous entry, and the fingerprints of the state after it. Only the newest entry's file is
+rebuilt (from the previous file's fingerprints); older ones are frozen and must exist. So open a
+new log entry (its heading first) before changing lessons for an update, or the changes land in
+the previous entry. Every entry but the oldest has a `### Checklist and lessons impact` part with
+`- **New lessons:**` and `- **Changed lessons:**` lines (lesson IDs, or "none"; "every lesson"
+covers all changed ones) and a `- **Checklist:**` line naming changed questions by number. The
+validator fails when the part misses an ID or question its changes file lists. A revisit reads
+the changes files newer than its record's entry, never the whole log; it names entries by date
+and title, since two can share a date.
 
 ## Generated files
 
