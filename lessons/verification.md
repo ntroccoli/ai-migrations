@@ -12,11 +12,11 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: In a memory-safe target, one class of memory bugs does become a compile error ([Bun][bun-checked]), so the compiler is a real but narrow check; Bloomberg calls a clean compile a strong sign of a right change when only build files move, though it still ran the unit tests after the build ([Bloomberg][bbg-worked]).
   - Sceptic: tag changed from no to partly. Challenge: the behaviour losses behind it were found against the old system (end-to-end suites, a seeded comparison, the old email check). Answer: accepted.
 - **VER-2** [stated] Order gates from cheap to costly and drop a candidate at its first failure, with cheap no-change checks (whitespace only, unchanged syntax tree) up front.
-  - Old system as oracle: partly. Depends on model ability: no. Strength: medium. Era: 2025–2026; models: internal version of Gemini, fine-tuned with the DIDACT framework, unstated.
+  - Old system as oracle: partly. Depends on model ability: no. Strength: medium. Era: 2025–2026; models: internal version of Gemini fine-tuned with the DIDACT framework, unstated.
   - Cases: [Google: how it was checked][goo-checked], [Uber: how it was checked][ubr-checked].
   - Against: Airbnb ran the tests before lint and type checks and retried a failed step instead of dropping the file ([Airbnb][air-worked]); Slack and Spotify send failures back to the model ([Slack][slk-worked], [Spotify][spo-checked]).
 - **VER-3** [stated] Retry a failed unit with its latest errors in a fresh prompt, cap the attempts, and hand what remains to people; this fits independent units, such as one file each.
-  - Old system as oracle: partly. Depends on model ability: partly. Strength: strong. Era: 2024–2026; models: internal version of Gemini, fine-tuned with the DIDACT framework, Claude via Claude Code (version unstated), Claude Opus 4.6, Claude Sonnet 4.5, unstated.
+  - Old system as oracle: partly. Depends on model ability: partly. Strength: strong. Era: 2024–2026; models: internal version of Gemini fine-tuned with the DIDACT framework, Claude via Claude Code (version unstated), Claude Opus 4.6, Claude Sonnet 4.5, unstated.
   - Cases: [Airbnb: what worked][air-worked], [Google: who did what][goo-who], [Spotify: numbers][spo-numbers], [Bloomberg: who did what][bbg-who].
   - Against: Google's developers could not tell how many retries a file would need ([Google][goo-wrong]); test feedback helped one model on Intel's battery far more than another ([Intel][int-worked]); Uber neither retried nor handed over files whose tests failed but put them back on the old framework, as diagnosing each was impractical ([Uber][ubr-wrong]); in Bun's port, where units depended on each other, the engineer fixed the workflow prompt instead of handing units to people ([Bun][bun-practices]).
 - **VER-4** [stated] Give the agent one verify tool that picks the right build and test runner and returns short errors, and run it automatically before the agent may finish.
@@ -33,7 +33,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Intel: what worked][int-worked], [GitHub: what went wrong][gh-wrong].
   - Against: At GitHub the agent silenced the schema check with its waiver label and only human review caught it ([GitHub][gh-wrong]); a contract check needs its bypass behind approval.
 - **VER-7** [stated] Define done as an empty list of change sites produced by deterministic tooling and rerun on a schedule, never as the agent's own report.
-  - Old system as oracle: partly. Depends on model ability: partly. Strength: medium. Era: 2025–2026; models: internal version of Gemini, fine-tuned with the DIDACT framework, Claude Sonnet 4.6, unstated.
+  - Old system as oracle: partly. Depends on model ability: partly. Strength: medium. Era: 2025–2026; models: internal version of Gemini fine-tuned with the DIDACT framework, Claude Sonnet 4.6, unstated.
   - Cases: [Google: what worked][goo-worked], [1Password: what worked][opw-worked], [Pokémon: what worked][vjx-worked], [Spartacus: what went wrong][spa-wrong].
   - Against: Google's reference search stops after a set number of hops and can miss sites ([Google][goo-wrong]); the Pokémon port's list came from markers the agent itself wrote, so it misses stubs it left unmarked ([Pokémon][vjx-worked]).
 - **VER-8** [stated] Rank failures by cost: no change is cheap, a red change costs an engineer, a green but wrong change costs trust; aim verification at the last kind.

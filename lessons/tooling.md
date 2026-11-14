@@ -11,21 +11,21 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [1Password: what worked][opw-worked], [Bun: what worked][bun-worked], [Intel: who did what][int-who], [Pokémon: what worked][vjx-worked].
   - Against: Ordering errors persisted at 1Password even with explicit rules in place ([1Password][opw-wrong]).
 - **TOL-2** [stated] Run a rule-based codemod first and give the model its partial output, with a note wherever the rules gave up; it anchors the model.
-  - Old system as oracle: partly. Depends on model ability: yes. Strength: medium. Era: 2024–2025; models: Claude 2.1, internal version of Gemini, fine-tuned with the DIDACT framework.
+  - Old system as oracle: partly. Depends on model ability: yes. Strength: medium. Era: 2024–2025; models: Claude 2.1, internal version of Gemini fine-tuned with the DIDACT framework.
   - Cases: [Slack: what worked][slk-worked], [Google: who did what][goo-who].
   - Against: Uber's recipes made all its rewrites with no model step, and its attempt to have AI migrate several files at once failed ([Uber][ubr-who]).
   - Sceptic: tag changed from no to partly. Challenge: a codemod needs old code to transform, and its gain came together with rendered output captured by running the old tests. Answer: accepted.
 - **TOL-3** [stated] Find change sites with a code index or static analysis, include too many rather than too few, and let the model edit the whole file around each hint.
-  - Old system as oracle: partly. Depends on model ability: partly. Strength: medium. Era: 2025–2026; models: internal version of Gemini, fine-tuned with the DIDACT framework, unstated.
+  - Old system as oracle: partly. Depends on model ability: partly. Strength: medium. Era: 2025–2026; models: internal version of Gemini fine-tuned with the DIDACT framework, unstated.
   - Cases: [Google: what worked][goo-worked], [1Password: what worked][opw-worked].
   - Against: The index can miss sites beyond its hop limit ([Google][goo-wrong]).
   - Sceptic: tag changed from no to partly. Challenge: including too many sites is safe only because regression suites and slow rollouts catch the misses. Answer: accepted.
 - **TOL-4** [stated] Price the rule-based alternative with the upkeep of its rules; hand-written transforms keep growing on long-tail patterns, which is where models pay off.
-  - Old system as oracle: no. Depends on model ability: partly. Strength: medium. Era: 2024–2026; models: Claude 2.1, GPT-4o, internal version of Gemini, fine-tuned with the DIDACT framework, Claude via Claude Code (version unstated).
+  - Old system as oracle: no. Depends on model ability: partly. Strength: medium. Era: 2024–2026; models: Claude 2.1, GPT-4o, internal version of Gemini fine-tuned with the DIDACT framework, Claude via Claude Code (version unstated).
   - Cases: [Spotify: numbers][spo-numbers], [Slack: what went wrong][slk-wrong], [Google: what worked][goo-worked], [Zalando: what worked][zal-worked].
   - Against: Disagree: Uber kept writing recipes for each common build failure and sent failing files back to the old framework, so rules alone carried its long tail while a model attempt failed ([Uber][ubr-wrong]). At Slack the codemod's output still steered the model better than prompt work ([Slack][slk-worked]), so rules stay in the system.
 - **TOL-5** [stated] Keep agents and models behind your own thin interface, log traces from day one, and pin model and settings per run; the best agent changed within a year.
-  - Old system as oracle: no. Depends on model ability: partly. Strength: medium. Era: 2025–2026; models: internal version of Gemini, fine-tuned with the DIDACT framework, Claude via Claude Code (version unstated).
+  - Old system as oracle: no. Depends on model ability: partly. Strength: medium. Era: 2025–2026; models: internal version of Gemini fine-tuned with the DIDACT framework, Claude via Claude Code (version unstated).
   - Cases: [Spotify: what worked][spo-worked], [Google: who did what][goo-who].
   - Against: Disagree: GitHub switched models per slice and mid-session, trading repeatability for fit ([GitHub][gh-worked]).
   - Related view (karpathy-ideas): [plan for intelligence brownouts][k-plan-for-intelligence-brownouts], agrees.

@@ -12,7 +12,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: GitHub's split of the engineer's messages by intent was labelled by an LLM, not checked by a person ([GitHub][gh-numbers]).
   - Related view (karpathy-ideas): [partial autonomy and autonomy slider][k-partial-autonomy-and-autonomy-slider], agrees.
 - **TEM-2** [stated] Count the people behind a one-engineer story (reviewers in many teams, interop, packaging and build specialists) and staff and budget for them.
-  - Old system as oracle: no. Depends on model ability: no. Strength: strong. Era: 2024–2026; models: Claude 2.1, internal version of Gemini, fine-tuned with the DIDACT framework, Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6.
+  - Old system as oracle: no. Depends on model ability: no. Strength: strong. Era: 2024–2026; models: Claude 2.1, internal version of Gemini fine-tuned with the DIDACT framework, Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6.
   - Cases: [GitHub: who did what][gh-who], [Google: who did what][goo-who], [Slack: who did what][slk-who].
   - Against: Bun credits the port to one engineer and names no helpers for it ([Bun][bun-who]), and the Pokémon Showdown port was one person's holiday project ([Pokémon][vjx-who]).
 - **TEM-3** [stated] A central team should own the agent tooling, build it with early adopters, and teach prompt writing; untrained users fell into the same traps.
@@ -20,7 +20,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Spotify: who did what][spo-who], [Spotify: what went wrong][spo-wrong], [Slack: who did what][slk-who].
   - Against: None found.
 - **TEM-4** [stated] Review in two tiers: the migration owner screens each batch, then code owners accept; expect the load to spread over many teams.
-  - Old system as oracle: no. Depends on model ability: no. Strength: medium. Era: 2025–2026; models: internal version of Gemini, fine-tuned with the DIDACT framework, Claude via Claude Code (version unstated), Claude Opus 4.6, Claude Sonnet 4.5.
+  - Old system as oracle: no. Depends on model ability: no. Strength: medium. Era: 2025–2026; models: internal version of Gemini fine-tuned with the DIDACT framework, Claude via Claude Code (version unstated), Claude Opus 4.6, Claude Sonnet 4.5.
   - Cases: [Google: how it was checked][goo-checked], [Spotify: who did what][spo-who], [Bloomberg: who did what][bbg-who].
   - Against: In Bun one engineer merged alone, with no second tier ([Bun][bun-who]).
 - **TEM-5** [stated] Code the model migrates is code the team never wrote; keep owners close to it and teach them the new library, or debugging and incident handling suffer.

@@ -31,6 +31,13 @@ body:
       description: From what to what, as a category, for example "TypeScript service to Rust" or "Enzyme tests to React Testing Library". No names. For a lessons review of a project that is not a migration, write "none (not a migration)".
     validations:
       required: true
+  - type: input
+    id: models
+    attributes:
+      label: Model(s) used
+      description: The models the agents ran on, comma-separated, as their makers name them, for example "Claude Opus 4.6, GPT-5.5". Write "unstated" if you do not know.
+    validations:
+      required: true
   - type: dropdown
     id: size
     attributes:

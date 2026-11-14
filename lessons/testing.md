@@ -29,11 +29,11 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Intel: what worked][int-worked], [Slack: what worked][slk-worked].
   - Against: Full coverage through a library's public functions is often out of reach, and generated tests can be vacuous ([Intel][int-wrong]). The Pokémon port ran both versions live on seeded inputs rather than recording, and does not say the old tests were thin ([Pokémon][vjx-checked]).
 - **TST-6** [stated] Make the baseline green before agents start: fix tests that already fail and make golden files regenerable, or correct changes stall at the gate.
-  - Old system as oracle: yes. Depends on model ability: no. Strength: medium. Era: 2025–2026; models: internal version of Gemini, fine-tuned with the DIDACT framework, Claude via Claude Code (version unstated).
+  - Old system as oracle: yes. Depends on model ability: no. Strength: medium. Era: 2025–2026; models: internal version of Gemini fine-tuned with the DIDACT framework, Claude via Claude Code (version unstated).
   - Cases: [Google: what went wrong][goo-wrong], [Spotify: how it was checked][spo-checked].
   - Against: Spartacus's refined protocol lets an agent go on from a red baseline, noted as an old failure, and stops only when the tests will not start ([Spartacus][spa-checked]).
 - **TST-7** [ours] When widening a data type, test with values beyond the old range; tests with small example values pass even when a truncation survives.
-  - Old system as oracle: partly. Depends on model ability: no. Strength: weak. Era: 2025; models: internal version of Gemini, fine-tuned with the DIDACT framework.
+  - Old system as oracle: partly. Depends on model ability: no. Strength: weak. Era: 2025; models: internal version of Gemini fine-tuned with the DIDACT framework.
   - Cases: [Google: what was migrated][goo-migrated].
   - Against: None found.
 - **TST-8** [ours] When the migrated artefact is itself a test, passing is a weak oracle; also compare test counts, coverage and intent file by file.

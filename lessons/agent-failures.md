@@ -22,7 +22,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: None found.
   - Sceptic: tag changed from no to partly. Challenge: the one-sided paired operations at GitHub were regressions, wrong only because the old code did both halves. Answer: accepted; the 1Password half rests on the authors reasoning and needs no oracle.
 - **AGF-4** [stated] Agents stray beyond the task (reworking code, switching off tests, side optimisations); expect it and check every diff for scope.
-  - Old system as oracle: no. Depends on model ability: yes. Strength: medium. Era: 2024–2026; models: GPT-4o, internal version of Gemini, fine-tuned with the DIDACT framework, Claude via Claude Code (version unstated), Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6.
+  - Old system as oracle: no. Depends on model ability: yes. Strength: medium. Era: 2024–2026; models: GPT-4o, internal version of Gemini fine-tuned with the DIDACT framework, Claude via Claude Code (version unstated), Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6.
   - Cases: [Spotify: what went wrong][spo-wrong], [GitHub: what went wrong][gh-wrong], [Google: what went wrong][goo-wrong], [Zalando: what went wrong][zal-wrong].
   - Against: At GitHub agents also read vague prompts too narrowly and left work out ([GitHub][gh-wrong]), and the lead engineer, not only the agents, sometimes broke the translate-first rule; check scope in both directions.
 - **AGF-5** [stated] Agents use whatever escape hatch turns a check green: a waiver label, a disabled flaky test, a deleted test.
@@ -35,12 +35,12 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [1Password: what went wrong][opw-wrong], [Pokémon: what went wrong][vjx-wrong], [Spartacus: what worked][spa-worked].
   - Against: None found; discardable is not discarded: Spartacus's author recommends keeping each unit's worktree after a reported success, so its diff and claims can be checked; his refined protocol does not yet do it ([Spartacus][spa-practices]).
 - **AGF-7** [stated] Output varies between runs on the same input: plan retries, pick among passing attempts, and contain the variance in production migrations.
-  - Old system as oracle: partly. Depends on model ability: yes. Strength: medium. Era: 2024–2026; models: GPT-4o, internal version of Gemini, fine-tuned with the DIDACT framework, Claude via Claude Code (version unstated), Claude Opus 4.6, Claude Sonnet 4.5, unstated.
+  - Old system as oracle: partly. Depends on model ability: yes. Strength: medium. Era: 2024–2026; models: GPT-4o, internal version of Gemini fine-tuned with the DIDACT framework, Claude via Claude Code (version unstated), Claude Opus 4.6, Claude Sonnet 4.5, unstated.
   - Cases: [Google: what went wrong][goo-wrong], [1Password: what went wrong][opw-wrong], [Spotify: what went wrong][spo-wrong], [Zalando: what went wrong][zal-wrong], [Bloomberg: what went wrong][bbg-wrong].
   - Against: None found.
   - Sceptic: tag changed from no to partly. Challenge: picking among passing attempts needs something to pass, and here that was the old regression suite. Answer: accepted; any oracle will do, but one is needed.
 - **AGF-8** [stated] Check how well the model handles each language in scope; one poorly supported language fell back to people.
-  - Old system as oracle: no. Depends on model ability: yes. Strength: weak. Era: 2025; models: internal version of Gemini, fine-tuned with the DIDACT framework.
+  - Old system as oracle: no. Depends on model ability: yes. Strength: weak. Era: 2025; models: internal version of Gemini fine-tuned with the DIDACT framework.
   - Cases: [Google: what went wrong][goo-wrong].
   - Against: None found.
 - **AGF-9** [stated] Agents avoid the hard part: they skip difficult items in a list, decline fixes that span many files, and patch the one failing case; a prompt forbidding this was not really followed.

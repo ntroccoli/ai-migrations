@@ -71,6 +71,9 @@ first.
 - **Sceptic pass:** of 15 lessons sampled at random among those tagged "Old system as oracle: no",
   2 flipped to partly (REV-5, AGF-3), and AGF-5 with them; 10 model-ability tags moved from no
   to partly.
+- **By model:** `lessons/index.md` groups the cases' models into families with the lessons tagged
+  `yes` or `partly` per family; llms.txt and the lessons route say how to use it with a specific
+  or new model; the field-report form asks which models ran; Google's model is one name again.
 
 ## 2026-11-13 — first update
 

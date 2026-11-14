@@ -11,11 +11,11 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [GitHub: what worked][gh-worked], [GitHub: practices to copy][gh-practices], [Uber: what worked][ubr-worked].
   - Against: Disagree: Bun's author says doing everything at once beats an incremental move, and merged one branch after eleven days ([Bun][bun-worked]); Shopify chose a fresh native build over a gradual move inside the old app ([Shopify][shp-migrated]) and shipped it after about two months of beta ([Shopify][shp-checked]).
 - **ROL-2** [stated] Treat merged and released as separate gates: ship first to a canary or pre-release that few users take, and promote it only after real use.
-  - Old system as oracle: no. Depends on model ability: no. Strength: medium. Era: 2025–2026; models: internal version of Gemini, fine-tuned with the DIDACT framework, Claude Fable 5 (pre-release version), Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6, unstated.
+  - Old system as oracle: no. Depends on model ability: no. Strength: medium. Era: 2025–2026; models: internal version of Gemini fine-tuned with the DIDACT framework, Claude Fable 5 (pre-release version), Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6, unstated.
   - Cases: [Bun: what went wrong][bun-wrong], [GitHub: how it was checked][gh-checked], [Google: what went wrong][goo-wrong].
   - Against: Some GitHub regressions still reached a stable release ([GitHub][gh-checked]).
 - **ROL-3** [stated] Changes that reach many teams' systems still need slow production rollouts watched by their owners; the AI pipeline speeds the code, not this step.
-  - Old system as oracle: no. Depends on model ability: no. Strength: medium. Era: 2025–2026; models: internal version of Gemini, fine-tuned with the DIDACT framework, Claude Opus 4.6, Claude Sonnet 4.5.
+  - Old system as oracle: no. Depends on model ability: no. Strength: medium. Era: 2025–2026; models: internal version of Gemini fine-tuned with the DIDACT framework, Claude Opus 4.6, Claude Sonnet 4.5.
   - Cases: [Google: what went wrong][goo-wrong], [Bloomberg: what went wrong][bbg-wrong].
   - Against: A downstream product took the whole Bun rewrite in one release and barely anyone noticed ([Bun][bun-wrong]).
 - **ROL-4** [stated] Delete the old code in the same change that adds the new; concurrent edits to ported code then surface as rebase conflicts instead of silent losses.

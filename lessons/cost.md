@@ -19,7 +19,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Intel: what worked][int-worked], [GitHub: numbers][gh-numbers], [Airbnb: what went wrong][air-wrong].
   - Against: None found.
 - **CST-4** [ours] Before reusing a published cost, check the model, how it was reached and the price basis; pre-release, internal or partner models give costs others cannot repeat.
-  - Old system as oracle: no. Depends on model ability: no. Strength: medium. Era: 2025–2026; models: internal version of Gemini, fine-tuned with the DIDACT framework, Claude Fable 5 (pre-release version), Claude Opus 4.6, Claude Sonnet 4.6, GPT-5.4, GPT-5.6 Sol, Claude Mythos Preview, GPT 6 Astra, gpt-5.5, Opus 5.5, unstated.
+  - Old system as oracle: no. Depends on model ability: no. Strength: medium. Era: 2025–2026; models: internal version of Gemini fine-tuned with the DIDACT framework, Claude Fable 5 (pre-release version), Claude Opus 4.6, Claude Sonnet 4.6, GPT-5.4, GPT-5.6 Sol, Claude Mythos Preview, GPT 6 Astra, gpt-5.5, Opus 5.5, unstated.
   - Cases: [Bun: who did what][bun-who], [Intel: who did what][int-who], [Google: who did what][goo-who], [Asana: source][asa-source], [ts-rust: numbers][tsr-numbers].
   - Against: None found.
 - **CST-5** [ours] Work out cost per unit inside one case and name the unit; added lines, production lines, symbols and files differ, and tokens do not convert to money across cases.
@@ -35,7 +35,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Bun: who did what][bun-who], [GitHub: practices to copy][gh-practices].
   - Against: None found.
 - **CST-8** [stated] Missing or broken tests in target repositories, or checks the pipeline cannot run, shift the cost of checking onto the teams that receive the changes; the central figures leave it out.
-  - Old system as oracle: partly. Depends on model ability: no. Strength: medium. Era: 2025–2026; models: internal version of Gemini, fine-tuned with the DIDACT framework, Claude via Claude Code (version unstated), Claude Opus 4.6, Claude Sonnet 4.5.
+  - Old system as oracle: partly. Depends on model ability: no. Strength: medium. Era: 2025–2026; models: internal version of Gemini fine-tuned with the DIDACT framework, Claude via Claude Code (version unstated), Claude Opus 4.6, Claude Sonnet 4.5.
   - Cases: [Spotify: how it was checked][spo-checked], [Google: what went wrong][goo-wrong], [Bloomberg: what went wrong][bbg-wrong].
   - Against: None found.
 - **CST-9** [ours] Pipeline and harness costs pay back over many repositories or migrations; a one-off project should reuse a general harness rather than build one.

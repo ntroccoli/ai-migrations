@@ -16,6 +16,11 @@ prompts.
    `partly` where the project already has a check that stands in for an old system. The tag is a
    hint, not a filter: judge each lesson by its own words, and drop those whose words are about
    moving code only (porting, an old system to compare with, shelved rewrites).
+   With a specific or a new model: process lessons (model ability `no`) apply as they are. Start
+   with the `yes` and `partly` lessons whose Era names your model or its family ("By model" in
+   [lessons/index.md](../lessons/index.md)); treat those from other models as things to re-check
+   on yours, not tips. A model newer than every case has no evidence here yet. The lessons hold
+   only what the cases show, never prompting advice.
 3. Open the aspect page of each lesson you use: its "Against" line and its cases show where it
    did not hold, and its strength how far to trust it.
 4. Measure: answer from the repository, its history, logs or CI, with a number, a file or a

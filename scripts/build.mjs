@@ -12,7 +12,7 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join, posix } from 'node:path';
 import {
   ROOT, REPO_SLUG, REPO_SLUGS, LANGUAGES, LESSON_NOTE, LESSON_LEGEND, LESSON_PAGES, listCases, parseCase, loadLessons, lessonMeta, sub, linksIn, refDefs,
-  casesOf, mayBeOutdated, OUTDATED_MONTHS,
+  casesOf, mayBeOutdated, OUTDATED_MONTHS, modelFamily, parseEra,
 } from './lib.mjs';
 
 const check = process.argv.includes('--check');
@@ -117,6 +117,25 @@ const outdated = new Set(pages.flatMap(p => p.lessons.filter(l =>
 const OUTDATED_NOTE = `"May be outdated" marks a lesson about what models can or cannot do (tagged "Depends on model ability: yes") ` +
   `whose most recent case (the later of its publication date and the end of its work) is more than ${OUTDATED_MONTHS} months older than the newest update in the log: newer models may no longer behave so; ` +
   're-check it against recent work before you rely on it.';
+// "By model" (lessons/index.md): each model family the cases name (modelFamily in scripts/lib.mjs; a
+// name with no rule there is its own family), the names behind it, its newest case, and the lessons
+// tagged yes or partly for model ability whose Era names a model of that family.
+const familyOf = n => modelFamily(n) ?? n;
+const families = new Map();
+for (const c of cases) for (const n of named(c).length ? named(c) : ['unstated']) {
+  const f = families.get(familyOf(n)) ?? { names: new Set(), newest: '', lessons: [] };
+  f.names.add(n); if (String(c.meta.date) > f.newest) f.newest = String(c.meta.date);
+  families.set(familyOf(n), f);
+}
+for (const l of all) if (['yes', 'partly'].includes(lessonMeta(l).model)) {
+  for (const fam of new Set((parseEra(lessonMeta(l).era)?.models ?? []).map(familyOf))) families.get(fam)?.lessons.push(l.id);
+}
+const familyRows = [...families].sort(([a, x], [b, y]) => (a === 'unstated') - (b === 'unstated') || y.newest.localeCompare(x.newest) || a.localeCompare(b));
+const NEWEST_CASE = cases.map(c => String(c.meta.date)).sort().at(-1);
+const MODEL_RULE = 'With a specific or a new model: process lessons (model ability: no) apply as they are. Start with the lessons tagged ' +
+  'yes or partly whose Era names your model or its family ("By model" in lessons/index.md); treat those from other models as ' +
+  `things to re-check on yours, not tips. A model newer than every case (newest: ${NEWEST_CASE}) has no evidence here yet. The lessons ` +
+  'hold only what the cases show: no prompting advice.';
 const out = {};
 
 // lessons/index.md
@@ -146,6 +165,14 @@ const out = {};
     '## May be outdated', '',
     OUTDATED_NOTE, '',
     ...(outdated.size ? pages.flatMap(p => p.lessons.filter(l => outdated.has(l.id)).map(l => `- **${l.id}** ([${p.title}](${p.slug}.md)) ${l.text}`)) : ['None at the newest update.']), '',
+    '## By model', '',
+    MODEL_RULE, '',
+    'Families group the model names the cases give by maker, line and major version ("Claude Opus 4.6" and "Opus 4.8" are ' +
+      'Claude Opus 4.x; "GPT-5.4" and "gpt-5.5" are GPT-5.x); a name with a line but no version, and an internal model, ' +
+      'stay apart; unstated covers the cases that name no model. Lessons: those tagged yes or partly for model ability whose ' +
+      'Era names a model of the family. Newest case: the latest publication date among the cases that name it.', '',
+    '| Model family | Names in the cases | Newest case | Lessons (model ability yes or partly) |', '| --- | --- | --- | --- |',
+    ...familyRows.map(([fam, f]) => `| ${fam} | ${[...f.names].join('; ')} | ${f.newest} | ${f.lessons.length}: ${f.lessons.join(', ') || 'none'} |`), '',
     '## Cases behind the lessons', '',
     'Lessons that cite each case, in "Cases" or "Against".', '',
     '| Case | Lessons |', '| --- | --- |',
@@ -235,6 +262,7 @@ out['llms.txt'] = [
     'leaned on the old system; it hints at how far the lesson travels but is not a filter, so judge each lesson by its ' +
     'own words. Each case says how far its claims can be checked and what stake its author has in the tools: weigh it ' +
     'accordingly; a lesson that rests only on cases whose authors sell the tool is never rated strong.', '',
+  MODEL_RULE, '',
   `${OUTDATED_NOTE} ${outdated.size ? `Marked now: ${[...outdated].join(', ')}.` : 'None is marked now.'} A lesson's Era gives the years and the models of its cases.`, '',
   DISCLOSURE, '',
   `Moves covered, by the language the code was in before the move: ${COVERED}`, '',

@@ -11,11 +11,11 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [GitHub: practices to copy][gh-practices], [GitHub: what went wrong][gh-wrong], [Spotify: what went wrong][spo-wrong], [Bun: how it was checked][bun-checked], [Intel: what went wrong][int-wrong], [Pokémon: what went wrong][vjx-wrong].
   - Against: None found.
 - **OVS-2** [stated] Keep the final merge with a person who checks how the agent answered CI and review, not only the diff.
-  - Old system as oracle: no. Depends on model ability: partly. Strength: strong. Era: 2024–2026; models: Claude 2.1, internal version of Gemini, fine-tuned with the DIDACT framework, Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6.
+  - Old system as oracle: no. Depends on model ability: partly. Strength: strong. Era: 2024–2026; models: Claude 2.1, internal version of Gemini fine-tuned with the DIDACT framework, Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6.
   - Cases: [GitHub: how it was checked][gh-checked], [Google: how it was checked][goo-checked], [Slack: who did what][slk-who].
   - Against: Disagree: in Bun no person read every line; the engineer checked the reviewers instead ([Bun][bun-checked]), and an outside critic calls it unreviewed. ts-rust shipped releases whose author says he read none of the code, names no other reviewer, and gates each revision by comparison with the original's output ([ts-rust][tsr-checked]).
 - **OVS-3** [stated] Decide up front where automation stops (a retry cap, a residue size, a category for people) and hand over with the failed attempt as the starting point.
-  - Old system as oracle: no. Depends on model ability: no. Strength: strong. Era: 2024–2026; models: internal version of Gemini, fine-tuned with the DIDACT framework, Claude Opus 4.6, Claude Sonnet 4.5, unstated.
+  - Old system as oracle: no. Depends on model ability: no. Strength: strong. Era: 2024–2026; models: internal version of Gemini fine-tuned with the DIDACT framework, Claude Opus 4.6, Claude Sonnet 4.5, unstated.
   - Cases: [Airbnb: what worked][air-worked], [Airbnb: practices to copy][air-practices], [1Password: practices to copy][opw-practices], [Google: who did what][goo-who], [Bloomberg: who did what][bbg-who], [Bloomberg: what went wrong][bbg-wrong].
   - Against: Uber's stop rule was a revert to the old framework, not a hand-over to people ([Uber][ubr-wrong]).
 - **OVS-4** [stated] Bind each human approval to the exact text approved, such as a hash of the plan, so any later edit to the plan needs a fresh approval.

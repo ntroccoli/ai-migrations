@@ -273,7 +273,10 @@ repository, put the new owner/name first in that line and rebuild; the build rew
 name in `SYNCED` files, `lychee.toml` included), and two blocks in `README.md` (the AI
 disclosure and the current counts) are written between their comment markers. The moves the
 cases cover, in `llms.txt`, come from each case's `from_languages`; nothing is kept by hand.
-`llms-full.txt` carries each reference definition once (its links are inline).
+`llms-full.txt` carries each reference definition once (its links are inline). "By model" in
+`lessons/index.md` groups the cases' `models` into families with `modelFamily` (`scripts/lib.mjs`;
+add a rule there for a new maker) and lists the lessons tagged `yes` or `partly` whose Era names
+each family.
 `node scripts/build.mjs --check` writes nothing and exits 1 when any of them is out of date; it
 must exit 0 before a commit. Never edit these files by hand: change the sources and rebuild.
 

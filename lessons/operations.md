@@ -27,7 +27,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Bun: how it was checked][bun-checked].
   - Against: Disagree: the Zig creator says Bun was not fuzzing before the port, against the post's claim ([Bun][bun-wrong]).
 - **OPS-6** [stated] Run bulk change jobs, by agent or by rule, as scheduled batches sized to the infrastructure, sort results into status groups, and rerun only what is stuck.
-  - Old system as oracle: partly. Depends on model ability: no. Strength: strong. Era: 2024–2026; models: Claude 2.1, internal version of Gemini, fine-tuned with the DIDACT framework, unstated.
+  - Old system as oracle: partly. Depends on model ability: no. Strength: strong. Era: 2024–2026; models: Claude 2.1, internal version of Gemini fine-tuned with the DIDACT framework, unstated.
   - Cases: [Slack: what worked][slk-worked], [Google: what worked][goo-worked], [Airbnb: what worked][air-worked], [Uber: what worked][ubr-worked].
   - Against: Batches sized to the infrastructure can still outrun the people receiving them: Bloomberg's PRs went out in a few bursts while merges came at a steady rate of their own ([Bloomberg][bbg-wrong]).
   - Sceptic: tag changed from no to partly. Challenge: the status groups count how many converted old tests pass, so the old behaviour is the oracle. Answer: accepted; Google's groups count remaining sites instead, which needs no oracle.

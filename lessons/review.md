@@ -20,7 +20,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Bun: what went wrong][bun-wrong], [GitHub: what went wrong][gh-wrong], [Spartacus: what went wrong][spa-wrong].
   - Against: None found; the Spartacus post does not say what its reviewer was told to look for ([Spartacus][spa-wrong]).
 - **REV-4** [stated] Add an automatic scope check that compares each diff with its instruction; agents drift into refactors, switched-off tests and side fixes.
-  - Old system as oracle: no. Depends on model ability: partly. Strength: medium. Era: 2025–2026; models: internal version of Gemini, fine-tuned with the DIDACT framework, Claude via Claude Code (version unstated).
+  - Old system as oracle: no. Depends on model ability: partly. Strength: medium. Era: 2025–2026; models: internal version of Gemini fine-tuned with the DIDACT framework, Claude via Claude Code (version unstated).
   - Cases: [Spotify: what worked][spo-worked], [Google: how it was checked][goo-checked].
   - Against: Spotify's judge has no evaluation yet, so how often it vetoes good work is unknown ([Spotify][spo-wrong]).
   - Related view (karpathy-ideas): [models too agentic state stakes and scope][k-models-too-agentic-state-stakes-and-scope], agrees.
@@ -34,7 +34,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Spotify: what worked][spo-worked], [Slack: who did what][slk-who].
   - Against: None found.
 - **REV-7** [stated] Let people see only changes that already built and passed tests; developers counted that filter as one of the largest gains.
-  - Old system as oracle: partly. Depends on model ability: no. Strength: medium. Era: 2025; models: internal version of Gemini, fine-tuned with the DIDACT framework.
+  - Old system as oracle: partly. Depends on model ability: no. Strength: medium. Era: 2025; models: internal version of Gemini fine-tuned with the DIDACT framework.
   - Cases: [Google: what worked][goo-worked].
   - Against: The green filter also held back correct changes where old tests already failed ([Google][goo-wrong]), and a green change can still be wrong in ways reviewers miss ([Spotify][spo-wrong]).
 - **REV-8** [stated] Audit the reviewers and the fixer: check that AI reviewers flag real differences and that the agent's answers to review comments hold up.
@@ -43,7 +43,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: None found.
   - Sceptic: tag changed from no to partly. Challenge: the audited reviewers compared new code with old code line by line, so "real differences" assumes a reference. Answer: accepted; checking the agent's replies to review comments still holds without one.
 - **REV-9** [stated] Once agents write fast, review, testing and deploy by the owning teams become the bottleneck; plan for that load from the start: reviewer capacity, evidence that eases review, priority.
-  - Old system as oracle: no. Depends on model ability: partly. Strength: strong. Era: 2025–2026; models: internal version of Gemini, fine-tuned with the DIDACT framework, Claude via Claude Code (version unstated), Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6, Claude Opus 4.6, Claude Sonnet 4.5.
+  - Old system as oracle: no. Depends on model ability: partly. Strength: strong. Era: 2025–2026; models: internal version of Gemini fine-tuned with the DIDACT framework, Claude via Claude Code (version unstated), Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6, Claude Opus 4.6, Claude Sonnet 4.5.
   - Cases: [GitHub: what went wrong][gh-wrong], [Google: who did what][goo-who], [Spotify: how it was checked][spo-checked], [Bloomberg: what went wrong][bbg-wrong].
   - Against: At Bloomberg reviewer time was not the whole limit: the moves were low priority and owners carried the deploy risk, so most PRs got no decision; its authors look to more checks inside the pipeline and to runs that owners request ([Bloomberg][bbg-wrong]). At Asana, whose engineers reviewed their own agents' pull requests twice a day, slow lint and CI held the work up, not approval ([Asana][asa-wrong]).
   - Related view (karpathy-ideas): [verification not generation is the bottleneck][k-verification-not-generation-is-the-bottleneck], agrees.

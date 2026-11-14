@@ -18,7 +18,7 @@ people: 3 developers
 cost: unstated
 ai_share: most
 tools: [Kythe, rule-based location categorizers, fuzzy diff application, AST parser, build and regression tests, Critique code review]
-models: [internal version of Gemini, fine-tuned with the DIDACT framework]
+models: [internal version of Gemini fine-tuned with the DIDACT framework]
 period: unstated
 outcome: completed
 status: current

@@ -11,7 +11,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Bun: what worked][bun-worked], [GitHub: what worked][gh-worked], [Airbnb: what worked][air-worked], [Uber: what worked][ubr-worked], [Zalando: how it was checked][zal-checked], [Shopify: how it was checked][shp-checked], [Bloomberg: what worked][bbg-worked], [Pokémon: what worked][vjx-worked].
   - Against: Fixing the instructions did not always hold: the Pokémon port's agent kept hard-coding behaviour after being told not to ([Pokémon][vjx-wrong]), and 1Password's ordering errors persisted under explicit rules ([1Password][opw-wrong]).
 - **KNW-2** [stated] Stamp each unit with its status, tune against the largest failing group using a small sample, then sweep all units again.
-  - Old system as oracle: partly. Depends on model ability: no. Strength: strong. Era: 2024–2026; models: Claude 2.1, internal version of Gemini, fine-tuned with the DIDACT framework, unstated.
+  - Old system as oracle: partly. Depends on model ability: no. Strength: strong. Era: 2024–2026; models: Claude 2.1, internal version of Gemini fine-tuned with the DIDACT framework, unstated.
   - Cases: [Airbnb: what worked][air-worked], [Slack: what worked][slk-worked], [Google: what worked][goo-worked], [Uber: what worked][ubr-worked].
   - Against: None found.
 - **KNW-3** [stated] Keep structured session logs from the start; they later answered where time went and what people did, and became evaluations.

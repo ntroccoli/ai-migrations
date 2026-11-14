@@ -227,7 +227,40 @@ export function expectedEra(metas) {
   if (!models.length || names.includes('unstated')) models.push('unstated');
   return { years: lo === hi ? String(lo) : `${lo}–${hi}`, models };
 }
-export const eraText = e => `${e.years}; models: ${e.models.join(', ')}`;
+// The model family of a model name as a case (or a field report) writes it, for "By model" in
+// lessons/index.md: only obvious families, by maker, line and major version ("Claude Opus 4.6" and
+// "Opus 4.8" are "Claude Opus 4.x"; "gpt-5.5" and "GPT-5.6 Sol" are "GPT-5.x"). A name with a line
+// but no version is "<line> (version unstated)"; an internal model is "<maker> (internal)".
+// `unstated` stays `unstated`. A name whose maker is not in MODEL_FAMILIES returns undefined:
+// build.mjs then keeps the name as its own family, and the field-report collector asks for a fix.
+// Add a rule here when a case or a report names a new maker.
+export const MODEL_FAMILIES = [
+  // Claude: the line (Opus, Sonnet, Haiku, Fable, Mythos), with or without "Claude" before it.
+  [/\b(?:Claude\s+)?(Opus|Sonnet|Haiku|Fable|Mythos)\b(?:\s+(\d+))?/i, m => `Claude ${cap(m[1])} ${m[2] ? `${m[2]}.x` : '(version unstated)'}`],
+  [/\bClaude\s+(\d+)/i, m => `Claude ${m[1]}.x`],
+  [/\bClaude\b/i, () => 'Claude (version unstated)'],
+  [/\bGPT[- ]?(\d+)o\b/i, m => `GPT-${m[1]}o`],
+  [/\bGPT[- ]?(\d+)/i, m => `GPT-${m[1]}.x`],
+  [/\bGPT\b/i, () => 'GPT (version unstated)'],
+  [/\bo(\d)(?:-mini|-pro)?\b/, m => `OpenAI o${m[1]}`],
+  [/\bCodex\b/i, () => 'OpenAI Codex (version unstated)'],
+  [/\binternal\b.*\bGemini\b|\bGemini\b.*\binternal\b/i, () => 'Gemini (internal)'],
+  [/\bGemini\s+(\d+)/i, m => `Gemini ${m[1]}.x`],
+  [/\bGemini\b/i, () => 'Gemini (version unstated)'],
+  [/\bGrok[- ]?(\d+)/i, m => `Grok ${m[1]}.x`],
+  [/\bGrok\b/i, () => 'Grok (version unstated)'],
+  [/\b(Llama|Mistral|Codestral|Devstral|DeepSeek|Qwen|Kimi|GLM)\b[- ]?[Vv]?(\d+)?/i,
+    m => `${OPEN_NAMES.find(x => x.toLowerCase() === m[1].toLowerCase())} ${m[2] ? `${m[2]}.x` : '(version unstated)'}`],
+];
+const OPEN_NAMES = ['Llama', 'Mistral', 'Codestral', 'Devstral', 'DeepSeek', 'Qwen', 'Kimi', 'GLM'];
+const cap = s => s[0].toUpperCase() + s.slice(1).toLowerCase();
+export function modelFamily(name) {
+  const n = String(name ?? '').trim();
+  if (/^unstated$/i.test(n)) return 'unstated';
+  for (const [re, f] of MODEL_FAMILIES) { const m = n.match(re); if (m) return f(m); }
+  return undefined;
+}
+export const eraText = e =>`${e.years}; models: ${e.models.join(', ')}`;
 // An Era value as { years, models }; undefined when it is not "YYYY[–YYYY]; models: a, b".
 export function parseEra(text) {
   const m = (text || '').match(/^(\d{4}(?:–\d{4})?); models: (\S.*)$/);
