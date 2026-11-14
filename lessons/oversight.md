@@ -12,15 +12,21 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: None found.
 - **OVS-2** [stated] Keep the final merge with a person who checks how the agent answered CI and review, not only the diff.
   - Old system as oracle: no. Strength: strong. Era: 2024–2026.
-  - Cases: [GitHub: how it was checked][gh-checked], [Google: how it was checked][goo-checked], [Slack: who did what][slk-who].
+  - Cases: [GitHub: how it was checked][gh-checked], [Google: how it was checked][goo-checked], [Slack: who did what][slk-who], [Shopify: how it was checked][shp-checked].
   - Against: Disagree: in Bun no person read every line; the engineer checked the reviewers instead ([Bun][bun-checked]), and an outside critic calls it unreviewed.
 - **OVS-3** [stated] Decide up front where automation stops (a retry cap, a residue size, a category for people) and hand over with the failed attempt as the starting point.
   - Old system as oracle: no. Strength: strong. Era: 2023–2026.
-  - Cases: [Airbnb: what worked][air-worked], [Airbnb: practices to copy][air-practices], [1Password: practices to copy][opw-practices], [Google: who did what][goo-who].
+  - Cases: [Airbnb: what worked][air-worked], [Airbnb: practices to copy][air-practices], [1Password: practices to copy][opw-practices], [Google: who did what][goo-who], [Bloomberg: who did what][bbg-who], [Bloomberg: what went wrong][bbg-wrong].
   - Against: Uber's stop rule was a revert to the old framework, not a hand-over to people ([Uber][ubr-wrong]).
+- **OVS-4** [stated] Bind each human approval to the exact text approved, such as a hash of the plan, so an agent's later edit to the plan needs a fresh approval.
+  - Old system as oracle: no. Strength: weak. Era: 2025–2026 (models unstated).
+  - Cases: [Shopify: how it was checked][shp-checked].
+  - Against: None found.
 
 [air-practices]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#practices-to-copy
 [air-worked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-worked
+[bbg-who]: ../cases/2026-11-03-bloomberg-python-cpp-uplift.md#who-did-what
+[bbg-wrong]: ../cases/2026-11-03-bloomberg-python-cpp-uplift.md#what-went-wrong
 [bun-checked]: ../cases/2026-07-08-bun-zig-to-rust.md#how-it-was-checked
 [gh-checked]: ../cases/2026-09-16-github-copilot-runtime-rust.md#how-it-was-checked
 [gh-practices]: ../cases/2026-09-16-github-copilot-runtime-rust.md#practices-to-copy
@@ -29,6 +35,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [goo-who]: ../cases/2025-04-13-google-int64-ids.md#who-did-what
 [int-wrong]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#what-went-wrong
 [opw-practices]: ../cases/2026-04-20-1password-monolith-refactor.md#practices-to-copy
+[shp-checked]: ../cases/2026-09-10-shopify-react-native-to-native.md#how-it-was-checked
 [slk-who]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#who-did-what
 [spo-wrong]: ../cases/2025-11-06-spotify-honk.md#what-went-wrong
 [ubr-wrong]: ../cases/2026-04-07-uber-junit4-to-junit5.md#what-went-wrong

@@ -21,9 +21,14 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: None found.
 - **TEM-4** [stated] Review in two tiers: the migration owner screens each batch, then code owners accept; expect the load to spread over many teams.
   - Old system as oracle: no. Strength: medium. Era: 2023–2026.
-  - Cases: [Google: how it was checked][goo-checked], [Spotify: who did what][spo-who].
+  - Cases: [Google: how it was checked][goo-checked], [Spotify: who did what][spo-who], [Bloomberg: who did what][bbg-who].
   - Against: In Bun one engineer merged alone, with no second tier ([Bun][bun-who]).
+- **TEM-5** [stated] Code the model migrates is code the team never wrote; keep owners close to it and teach them the new library, or reviews and debugging suffer.
+  - Old system as oracle: no. Strength: weak. Era: GPT-4o, 2024–2025.
+  - Cases: [Zalando: what went wrong][zal-wrong].
+  - Against: None found.
 
+[bbg-who]: ../cases/2026-11-03-bloomberg-python-cpp-uplift.md#who-did-what
 [bun-who]: ../cases/2026-07-08-bun-zig-to-rust.md#who-did-what
 [gh-numbers]: ../cases/2026-09-16-github-copilot-runtime-rust.md#numbers
 [gh-who]: ../cases/2026-09-16-github-copilot-runtime-rust.md#who-did-what
@@ -32,4 +37,5 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [slk-who]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#who-did-what
 [spo-who]: ../cases/2025-11-06-spotify-honk.md#who-did-what
 [spo-wrong]: ../cases/2025-11-06-spotify-honk.md#what-went-wrong
+[zal-wrong]: ../cases/2025-02-20-zalando-ui-component-libraries.md#what-went-wrong
 [k-partial-autonomy-and-autonomy-slider]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2025-06-17-partial-autonomy-and-autonomy-slider.md

@@ -42,14 +42,15 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [GitHub: how it was checked][gh-checked], [Spotify: who did what][spo-who].
   - Against: None found.
 - **SEC-9** [stated] Isolate each agent run from earlier attempts and reference answers, which it could otherwise read and lean on; decide about network access too.
-  - Old system as oracle: no. Strength: weak. Era: 2026.
-  - Cases: [Intel: who did what][int-who].
+  - Old system as oracle: no. Strength: weak. Era: 2025–2026.
+  - Cases: [Intel: who did what][int-who], [Bloomberg: who did what][bbg-who].
   - Against: None found.
 - **SEC-10** [stated] Never let agents choose the order of schema changes, backfills or ownership of shared tables; one agent's chosen order would have lost data silently.
   - Old system as oracle: no. Strength: weak. Era: 2026 (models unstated).
   - Cases: [1Password: what went wrong][opw-wrong], [1Password: practices to copy][opw-practices].
   - Against: None found.
 
+[bbg-who]: ../cases/2026-11-03-bloomberg-python-cpp-uplift.md#who-did-what
 [bun-wrong]: ../cases/2026-07-08-bun-zig-to-rust.md#what-went-wrong
 [gh-checked]: ../cases/2026-09-16-github-copilot-runtime-rust.md#how-it-was-checked
 [gh-numbers]: ../cases/2026-09-16-github-copilot-runtime-rust.md#numbers

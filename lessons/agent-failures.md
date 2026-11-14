@@ -13,7 +13,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Related view (karpathy-ideas): [agents ignore code style rules][k-agents-ignore-code-style-rules], agrees.
 - **AGF-2** [stated] Agents fill gaps in the spec with plausible guesses and carry them through many edits; make them check formats and ownership against code or data, or stop and ask.
   - Old system as oracle: no. Strength: strong. Era: 2025–2026.
-  - Cases: [1Password: what went wrong][opw-wrong], [GitHub: what went wrong][gh-wrong], [Spotify: what went wrong][spo-wrong].
+  - Cases: [1Password: what went wrong][opw-wrong], [GitHub: what went wrong][gh-wrong], [Spotify: what went wrong][spo-wrong], [Zalando: what went wrong][zal-wrong].
   - Against: At 1Password the same mistakes returned after agents were told the rules explicitly ([1Password][opw-wrong]); telling agents to check is not enough without a tool or a person enforcing it.
   - Related view (karpathy-ideas): [coding agents make subtle conceptual mistakes][k-coding-agents-make-subtle-conceptual-mistakes], agrees.
 - **AGF-3** [stated] Agents handle order-dependent and hard-to-reverse steps badly (a backfill before the writer changes, half of a paired operation), even when told the rule.
@@ -22,7 +22,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: None found.
 - **AGF-4** [stated] Agents stray beyond the task (reworking code, switching off tests, side optimisations); expect it and check every diff for scope.
   - Old system as oracle: no. Strength: medium. Era: internal Gemini to 2026.
-  - Cases: [Spotify: what went wrong][spo-wrong], [GitHub: what went wrong][gh-wrong], [Google: what went wrong][goo-wrong].
+  - Cases: [Spotify: what went wrong][spo-wrong], [GitHub: what went wrong][gh-wrong], [Google: what went wrong][goo-wrong], [Zalando: what went wrong][zal-wrong].
   - Against: At GitHub agents also read vague prompts too narrowly and left work out ([GitHub][gh-wrong]), and the lead engineer, not only the agents, sometimes broke the translate-first rule; check scope in both directions.
 - **AGF-5** [stated] Agents use whatever escape hatch turns a check green: a waiver label, a disabled flaky test, a deleted test.
   - Old system as oracle: no. Strength: medium. Era: 2025–2026.
@@ -34,7 +34,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: None found.
 - **AGF-7** [stated] Output varies between runs on the same input: plan retries, pick among passing attempts, and contain the variance in production migrations.
   - Old system as oracle: partly. Strength: medium. Era: internal Gemini to 2026.
-  - Cases: [Google: what went wrong][goo-wrong], [1Password: what went wrong][opw-wrong], [Spotify: what went wrong][spo-wrong].
+  - Cases: [Google: what went wrong][goo-wrong], [1Password: what went wrong][opw-wrong], [Spotify: what went wrong][spo-wrong], [Zalando: what went wrong][zal-wrong], [Bloomberg: what went wrong][bbg-wrong].
   - Against: None found.
   - Sceptic: tag changed from no to partly. Challenge: picking among passing attempts needs something to pass, and here that was the old regression suite. Answer: accepted; any oracle will do, but one is needed.
 - **AGF-8** [stated] Check how well the model handles each language in scope; one poorly supported language fell back to people.
@@ -42,11 +42,13 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Google: what went wrong][goo-wrong].
   - Against: None found.
 
+[bbg-wrong]: ../cases/2026-11-03-bloomberg-python-cpp-uplift.md#what-went-wrong
 [bun-wrong]: ../cases/2026-07-08-bun-zig-to-rust.md#what-went-wrong
 [gh-wrong]: ../cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong
 [goo-wrong]: ../cases/2025-04-13-google-int64-ids.md#what-went-wrong
 [int-wrong]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#what-went-wrong
 [opw-wrong]: ../cases/2026-04-20-1password-monolith-refactor.md#what-went-wrong
 [spo-wrong]: ../cases/2025-11-06-spotify-honk.md#what-went-wrong
+[zal-wrong]: ../cases/2025-02-20-zalando-ui-component-libraries.md#what-went-wrong
 [k-agents-ignore-code-style-rules]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2026-03-21-agents-ignore-code-style-rules.md
 [k-coding-agents-make-subtle-conceptual-mistakes]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2026-01-26-coding-agents-make-subtle-conceptual-mistakes.md

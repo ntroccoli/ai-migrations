@@ -26,10 +26,10 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **PLN-5** [stated] Translate first and redesign later: keep behaviour the same during the move so that any failure points at the port, not at a deliberate change.
   - Old system as oracle: yes. Strength: medium. Era: 2026.
   - Cases: [GitHub: practices to copy][gh-practices], [Bun: what worked][bun-worked].
-  - Against: Disagree: Intel aims for idiomatic data structures at translation time ([Intel][int-practices]), and GitHub's own review prompt asked for idiomatic, optimised code during the port.
+  - Against: Disagree: Intel aims for idiomatic data structures at translation time ([Intel][int-practices]), and GitHub's own review prompt asked for idiomatic, optimised code during the port. Shopify rebuilt each app from scratch and retired or simplified some screens during the move ([Shopify][shp-migrated]).
 - **PLN-6** [stated] Set expectations per class of work: bounded, repetitive edits gain a lot; work with ordering, schema or shared-state constraints gains far less.
   - Old system as oracle: no. Strength: medium. Era: 2026 (models unstated).
-  - Cases: [1Password: what worked][opw-worked], [1Password: what went wrong][opw-wrong], [Spotify: numbers][spo-numbers].
+  - Cases: [1Password: what worked][opw-worked], [1Password: what went wrong][opw-wrong], [Spotify: numbers][spo-numbers], [Zalando: what went wrong][zal-wrong].
   - Against: Uber's repetitive test-framework move did not work with generative AI over several files at once, which the authors put down to scale and in-house test patterns ([Uber][ubr-wrong]); the 1Password post is the only one to compare both classes in one team.
   - Related view (karpathy-ideas): [coding agents weak on novel code][k-coding-agents-weak-on-novel-code], agrees.
 - **PLN-7** [ours] Reopen rewrites shelved for cost, since agents change the price; but weigh them against doing nothing, not against a manual rewrite nobody would fund.
@@ -38,20 +38,31 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: Slack had no do-nothing option: the old library blocked a framework upgrade ([Slack][slk-context]); and service extraction at 1Password gained only modestly ([1Password][opw-wrong]).
 - **PLN-8** [stated] Leave out segments you cannot specify or verify (non-standard repositories, unsupported platforms, languages the model handles poorly) instead of forcing one approach on all.
   - Old system as oracle: no. Strength: medium. Era: 2023–2026.
-  - Cases: [Spotify: what went wrong][spo-wrong], [Google: what went wrong][goo-wrong], [Uber: what worked][ubr-worked].
-  - Against: None found.
+  - Cases: [Spotify: what went wrong][spo-wrong], [Google: what went wrong][goo-wrong], [Uber: what worked][ubr-worked], [Bloomberg: what worked][bbg-worked].
+  - Against: Bloomberg did not leave its rare archetypes out: each got a generic starting-point PR, labelled as such, for its owners to finish ([Bloomberg][bbg-wrong]).
 - **PLN-9** [ours] Plan for a partial outcome and a stop rule: no published case here was abandoned, so success odds read from such cases are inflated.
   - Old system as oracle: no. Strength: medium. Era: all.
   - Cases: [Slack: what went wrong][slk-wrong], [1Password: what went wrong][opw-wrong], [Spotify: what went wrong][spo-wrong], [Airbnb: what went wrong][air-wrong].
   - Against: Uber reports an AI attempt that failed and was dropped, a first in this collection, though it names no model, size or date ([Uber][ubr-wrong]); the migrations themselves are all survivors.
 - **PLN-10** [stated] Measure how often each pattern (runner, rule, base class) is used across the code base, and build the transforms or prompts around the most used first.
-  - Old system as oracle: no. Strength: weak. Era: unstated.
-  - Cases: [Uber: what worked][ubr-worked].
+  - Old system as oracle: no. Strength: medium. Era: unstated; Claude Sonnet 4.5, then Opus 4.6, 2025–2026.
+  - Cases: [Uber: what worked][ubr-worked], [Bloomberg: what worked][bbg-worked].
   - Against: None found.
+- **PLN-11** [stated] Do not port a whole app in one pass, even from specs gathered first; it gave code nobody could maintain. Port in small ordered slices a person can review quickly.
+  - Old system as oracle: partly. Strength: weak. Era: 2025–2026 (models unstated).
+  - Cases: [Shopify: what went wrong][shp-wrong], [Shopify: how it was checked][shp-checked].
+  - Against: Bun merged a whole port as one branch ([Bun][bun-worked]), though built from many agent-sized units, not in one pass.
+- **PLN-12** [stated] Sort targets into archetypes, each with its own prompt, data collection and checks; give rare archetypes a generic starting point instead of dedicated automation.
+  - Old system as oracle: no. Strength: medium. Era: Claude Sonnet 4.5, then Opus 4.6, 2025–2026.
+  - Cases: [Bloomberg: what worked][bbg-worked], [Bloomberg: what went wrong][bbg-wrong].
+  - Against: Airbnb ran one pipeline over all its files and grouped the failures by status afterwards; its case reports no sorting up front ([Airbnb][air-worked]).
 
 [air-numbers]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#numbers
 [air-who]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#who-did-what
+[air-worked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-worked
 [air-wrong]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-went-wrong
+[bbg-worked]: ../cases/2026-11-03-bloomberg-python-cpp-uplift.md#what-worked
+[bbg-wrong]: ../cases/2026-11-03-bloomberg-python-cpp-uplift.md#what-went-wrong
 [bun-numbers]: ../cases/2026-07-08-bun-zig-to-rust.md#numbers
 [bun-worked]: ../cases/2026-07-08-bun-zig-to-rust.md#what-worked
 [bun-wrong]: ../cases/2026-07-08-bun-zig-to-rust.md#what-went-wrong
@@ -65,10 +76,14 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [int-who]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#who-did-what
 [opw-worked]: ../cases/2026-04-20-1password-monolith-refactor.md#what-worked
 [opw-wrong]: ../cases/2026-04-20-1password-monolith-refactor.md#what-went-wrong
+[shp-checked]: ../cases/2026-09-10-shopify-react-native-to-native.md#how-it-was-checked
+[shp-migrated]: ../cases/2026-09-10-shopify-react-native-to-native.md#what-was-migrated
+[shp-wrong]: ../cases/2026-09-10-shopify-react-native-to-native.md#what-went-wrong
 [slk-context]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#context
 [slk-wrong]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#what-went-wrong
 [spo-numbers]: ../cases/2025-11-06-spotify-honk.md#numbers
 [spo-wrong]: ../cases/2025-11-06-spotify-honk.md#what-went-wrong
 [ubr-worked]: ../cases/2026-04-07-uber-junit4-to-junit5.md#what-worked
 [ubr-wrong]: ../cases/2026-04-07-uber-junit4-to-junit5.md#what-went-wrong
+[zal-wrong]: ../cases/2025-02-20-zalando-ui-component-libraries.md#what-went-wrong
 [k-coding-agents-weak-on-novel-code]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2025-10-17-coding-agents-weak-on-novel-code.md

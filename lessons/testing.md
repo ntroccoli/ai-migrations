@@ -37,9 +37,9 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Google: what was migrated][goo-migrated].
   - Against: None found.
 - **TST-8** [ours] When the migrated artefact is itself a test, passing is a weak oracle; also compare test counts, coverage and intent file by file.
-  - Old system as oracle: yes. Strength: weak. Era: 2023–2024.
-  - Cases: [Slack: practices to copy][slk-practices], [Airbnb: how it was checked][air-checked], [Uber: how it was checked][ubr-checked].
-  - Against: None found; Airbnb says coverage and intent were kept but shows no method.
+  - Old system as oracle: yes. Strength: weak. Era: 2023–2026.
+  - Cases: [Slack: practices to copy][slk-practices], [Airbnb: how it was checked][air-checked], [Uber: how it was checked][ubr-checked], [Asana: how it was checked][asa-checked].
+  - Against: None found; Airbnb says coverage and intent were kept, and Asana that coverage rose, but neither shows a method or figures.
 - **TST-9** [stated] Treat performance as part of the contract: benchmark end to end against a deterministic local stand-in for slow services, and count slowdowns as regressions.
   - Old system as oracle: yes. Strength: medium. Era: 2026.
   - Cases: [GitHub: what went wrong][gh-wrong], [GitHub: numbers][gh-numbers].
@@ -48,8 +48,17 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: no. Strength: weak. Era: 2026.
   - Cases: [Intel: what went wrong][int-wrong], [Intel: practices to copy][int-practices].
   - Against: When generated separately, Intel's agent-written tests worked as well as expert ones as feedback ([Intel][int-worked]).
+- **TST-11** [stated] Test the prompts too: rerun a golden set of before-and-after examples after each prompt edit or model trial; small wording changes swung results.
+  - Old system as oracle: no. Strength: weak. Era: GPT-4o, 2024–2025.
+  - Cases: [Zalando: how it was checked][zal-checked].
+  - Against: None found.
+- **TST-12** [stated] Check parity on what users and downstream systems see: capture screens and raw events from old and new at the same named points, ignoring values that vary per run.
+  - Old system as oracle: yes. Strength: weak. Era: 2025–2026 (models unstated).
+  - Cases: [Shopify: how it was checked][shp-checked].
+  - Against: Shopify does not say how far parity reached beyond the flows engineers ran ([Shopify][shp-wrong]).
 
 [air-checked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#how-it-was-checked
+[asa-checked]: ../cases/2026-08-07-asana-enzyme-to-rtl.md#how-it-was-checked
 [bun-checked]: ../cases/2026-07-08-bun-zig-to-rust.md#how-it-was-checked
 [bun-wrong]: ../cases/2026-07-08-bun-zig-to-rust.md#what-went-wrong
 [gh-checked]: ../cases/2026-09-16-github-copilot-runtime-rust.md#how-it-was-checked
@@ -61,9 +70,12 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [int-practices]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#practices-to-copy
 [int-worked]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#what-worked
 [int-wrong]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#what-went-wrong
+[shp-checked]: ../cases/2026-09-10-shopify-react-native-to-native.md#how-it-was-checked
+[shp-wrong]: ../cases/2026-09-10-shopify-react-native-to-native.md#what-went-wrong
 [slk-practices]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#practices-to-copy
 [slk-worked]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#what-worked
 [spo-checked]: ../cases/2025-11-06-spotify-honk.md#how-it-was-checked
 [spo-practices]: ../cases/2025-11-06-spotify-honk.md#practices-to-copy
 [ubr-checked]: ../cases/2026-04-07-uber-junit4-to-junit5.md#how-it-was-checked
+[zal-checked]: ../cases/2025-02-20-zalando-ui-component-libraries.md#how-it-was-checked
 [k-port-with-equality-tests]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2026-01-03-port-with-equality-tests.md

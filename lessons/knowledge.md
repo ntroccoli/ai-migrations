@@ -8,7 +8,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 
 - **KNW-1** [stated] When a failure recurs, fix what generates the code (prompt, reviewer rule, skill, evaluation, harness), not only the output; the second time is the trigger.
   - Old system as oracle: no. Strength: strong. Era: 2024–2026.
-  - Cases: [Bun: what worked][bun-worked], [GitHub: what worked][gh-worked], [Airbnb: what worked][air-worked], [Uber: what worked][ubr-worked].
+  - Cases: [Bun: what worked][bun-worked], [GitHub: what worked][gh-worked], [Airbnb: what worked][air-worked], [Uber: what worked][ubr-worked], [Zalando: how it was checked][zal-checked], [Shopify: how it was checked][shp-checked], [Bloomberg: what worked][bbg-worked].
   - Against: None found.
 - **KNW-2** [stated] Stamp each unit with its status, tune against the largest failing group using a small sample, then sweep all units again.
   - Old system as oracle: partly. Strength: strong. Era: 2023–2025.
@@ -20,9 +20,12 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: GitHub's split of the engineer's messages by intent was labelled by an LLM, not checked by a person ([GitHub][gh-numbers]).
 
 [air-worked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-worked
+[bbg-worked]: ../cases/2026-11-03-bloomberg-python-cpp-uplift.md#what-worked
 [bun-worked]: ../cases/2026-07-08-bun-zig-to-rust.md#what-worked
 [gh-numbers]: ../cases/2026-09-16-github-copilot-runtime-rust.md#numbers
 [gh-worked]: ../cases/2026-09-16-github-copilot-runtime-rust.md#what-worked
 [goo-worked]: ../cases/2025-04-13-google-int64-ids.md#what-worked
+[shp-checked]: ../cases/2026-09-10-shopify-react-native-to-native.md#how-it-was-checked
 [slk-worked]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#what-worked
 [ubr-worked]: ../cases/2026-04-07-uber-junit4-to-junit5.md#what-worked
+[zal-checked]: ../cases/2025-02-20-zalando-ui-component-libraries.md#how-it-was-checked

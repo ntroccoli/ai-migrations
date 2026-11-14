@@ -9,7 +9,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **CST-1** [stated] Long agent runs are affordable only with high prompt-cache reuse: keep a stable prompt prefix and track the hit rate and each kind of token.
   - Old system as oracle: no. Strength: medium. Era: 2026.
   - Cases: [GitHub: numbers][gh-numbers], [GitHub: what worked][gh-worked], [Bun: numbers][bun-numbers].
-  - Against: None found.
+  - Against: With a model call per file, Zalando put its API bill under $40 per repository before any cache discount ([Zalando][zal-numbers]); the cache matters most for long agent runs. Zalando still ordered its prompt for caching ([Zalando][zal-worked]).
 - **CST-2** [ours] Ask for the full bill: tokens at the price paid, people's hours by role, compute and CI, review, and the work after merge; most sources give one piece.
   - Old system as oracle: no. Strength: strong. Era: 2024–2026.
   - Cases: [GitHub: numbers][gh-numbers], [Bun: numbers][bun-numbers], [Airbnb: what went wrong][air-wrong], [Spotify: what went wrong][spo-wrong].
@@ -20,13 +20,13 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: None found.
 - **CST-4** [ours] Before reusing a published cost, check the model, how it was reached and the price basis; pre-release, internal or partner models give costs others cannot repeat.
   - Old system as oracle: no. Strength: medium. Era: model-specific by definition.
-  - Cases: [Bun: who did what][bun-who], [Intel: who did what][int-who], [Google: who did what][goo-who].
+  - Cases: [Bun: who did what][bun-who], [Intel: who did what][int-who], [Google: who did what][goo-who], [Asana: source][asa-source].
   - Against: None found.
 - **CST-5** [ours] Work out cost per unit inside one case and name the unit; added lines, production lines, symbols and files differ, and tokens do not convert to money across cases.
   - Old system as oracle: no. Strength: medium. Era: 2026.
   - Cases: [Bun: numbers][bun-numbers], [GitHub: numbers][gh-numbers], [Intel: numbers][int-numbers].
   - Against: None found.
-- **CST-6** [ours] Count the work after merge (regression fixes, security rounds, fuzzing, clean-up and speed work) as part of the cost of the migration.
+- **CST-6** [ours] Count the work after merge (regression fixes, security rounds, fuzzing, clean-up and speed work) in what the migration cost.
   - Old system as oracle: no. Strength: medium. Era: 2026.
   - Cases: [Bun: what went wrong][bun-wrong], [GitHub: what went wrong][gh-wrong].
   - Against: None found.
@@ -36,7 +36,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: None found.
 - **CST-8** [stated] Missing or broken tests in target repositories shift the cost of checking onto the teams that receive the changes; the central figures leave it out.
   - Old system as oracle: partly. Strength: medium. Era: 2023–2026.
-  - Cases: [Spotify: how it was checked][spo-checked], [Google: what went wrong][goo-wrong].
+  - Cases: [Spotify: how it was checked][spo-checked], [Google: what went wrong][goo-wrong], [Bloomberg: what went wrong][bbg-wrong].
   - Against: None found.
 - **CST-9** [ours] Pipeline and harness costs pay back over many repositories or migrations; a one-off project should reuse a general harness rather than build one.
   - Old system as oracle: no. Strength: weak. Era: 2025–2026.
@@ -45,6 +45,8 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 
 [air-who]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#who-did-what
 [air-wrong]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-went-wrong
+[asa-source]: ../cases/2026-08-07-asana-enzyme-to-rtl.md#source
+[bbg-wrong]: ../cases/2026-11-03-bloomberg-python-cpp-uplift.md#what-went-wrong
 [bun-numbers]: ../cases/2026-07-08-bun-zig-to-rust.md#numbers
 [bun-who]: ../cases/2026-07-08-bun-zig-to-rust.md#who-did-what
 [bun-wrong]: ../cases/2026-07-08-bun-zig-to-rust.md#what-went-wrong
@@ -62,3 +64,5 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [spo-numbers]: ../cases/2025-11-06-spotify-honk.md#numbers
 [spo-worked]: ../cases/2025-11-06-spotify-honk.md#what-worked
 [spo-wrong]: ../cases/2025-11-06-spotify-honk.md#what-went-wrong
+[zal-numbers]: ../cases/2025-02-20-zalando-ui-component-libraries.md#numbers
+[zal-worked]: ../cases/2025-02-20-zalando-ui-component-libraries.md#what-worked

@@ -9,15 +9,15 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **OPS-1** [stated] Parallel agents saturate CPU, disk and I/O: size the machine first, let one agent build at a time through a lease, and push full test runs to CI.
   - Old system as oracle: no. Strength: medium. Era: 2026.
   - Cases: [GitHub: what went wrong][gh-wrong], [Bun: what went wrong][bun-wrong].
-  - Against: None found.
+  - Against: At Asana, CI results that differed from local checks, with a slow lint step, were where people had to step in most ([Asana][asa-wrong]): pushing runs to CI helps only if CI matches local runs.
 - **OPS-2** [stated] Contain heavy tests with operating-system limits (control groups, process namespaces, disk quotas); asking the agent to be careful contains nothing.
   - Old system as oracle: no. Strength: weak. Era: 2026.
   - Cases: [Bun: what went wrong][bun-wrong].
   - Against: Bun's limits covered memory, CPU and processes, yet the disk still filled and crashed the machine several times ([Bun][bun-wrong]); no case shows disk quotas in use.
 - **OPS-3** [stated] Make the inner loop fast (module splits, build caches, host I/O) before scaling agents; their time goes mostly to reading, building and testing, not writing.
-  - Old system as oracle: no. Strength: medium. Era: 2026.
-  - Cases: [GitHub: what went wrong][gh-wrong], [GitHub: numbers][gh-numbers], [Bun: practices to copy][bun-practices].
-  - Against: None found.
+  - Old system as oracle: no. Strength: strong. Era: 2025–2026.
+  - Cases: [GitHub: what went wrong][gh-wrong], [GitHub: numbers][gh-numbers], [Bun: practices to copy][bun-practices], [Shopify: what went wrong][shp-wrong], [Asana: what went wrong][asa-wrong].
+  - Against: At Shopify the slow step was not the build: hot reload did not help, because agents read and drove the app through simulators; its fix is a headless path into the app's logic ([Shopify][shp-worked]).
 - **OPS-4** [stated] List what the old runtime supplied silently (time zone, environment, process flags) and test every platform you ship; one green platform says little.
   - Old system as oracle: yes. Strength: medium. Era: 2025–2026.
   - Cases: [GitHub: what went wrong][gh-wrong], [Spotify: what went wrong][spo-wrong].
@@ -29,7 +29,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **OPS-6** [stated] Run bulk change jobs, by agent or by rule, as scheduled batches sized to the infrastructure, sort results into status groups, and rerun only what is stuck.
   - Old system as oracle: partly. Strength: strong. Era: 2023–2025.
   - Cases: [Slack: what worked][slk-worked], [Google: what worked][goo-worked], [Airbnb: what worked][air-worked], [Uber: what worked][ubr-worked].
-  - Against: None found.
+  - Against: At Bloomberg the job batches did not set the pace: PRs went out in a few bursts while merges came at a steady rate of their own ([Bloomberg][bbg-wrong]).
   - Sceptic: tag changed from no to partly. Challenge: the status groups count how many converted old tests pass, so the old behaviour is the oracle. Answer: accepted; Google's groups count remaining sites instead, which needs no oracle.
 - **OPS-7** [ours] Load-test the new code for blocking and resource exhaustion; one port froze its interface on a synchronous call across the bridge.
   - Old system as oracle: partly. Strength: medium. Era: 2026.
@@ -37,12 +37,16 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: None found.
 
 [air-worked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-worked
+[asa-wrong]: ../cases/2026-08-07-asana-enzyme-to-rtl.md#what-went-wrong
+[bbg-wrong]: ../cases/2026-11-03-bloomberg-python-cpp-uplift.md#what-went-wrong
 [bun-checked]: ../cases/2026-07-08-bun-zig-to-rust.md#how-it-was-checked
 [bun-practices]: ../cases/2026-07-08-bun-zig-to-rust.md#practices-to-copy
 [bun-wrong]: ../cases/2026-07-08-bun-zig-to-rust.md#what-went-wrong
 [gh-numbers]: ../cases/2026-09-16-github-copilot-runtime-rust.md#numbers
 [gh-wrong]: ../cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong
 [goo-worked]: ../cases/2025-04-13-google-int64-ids.md#what-worked
+[shp-worked]: ../cases/2026-09-10-shopify-react-native-to-native.md#what-worked
+[shp-wrong]: ../cases/2026-09-10-shopify-react-native-to-native.md#what-went-wrong
 [slk-worked]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#what-worked
 [spo-wrong]: ../cases/2025-11-06-spotify-honk.md#what-went-wrong
 [ubr-worked]: ../cases/2026-04-07-uber-junit4-to-junit5.md#what-worked

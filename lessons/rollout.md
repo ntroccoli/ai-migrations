@@ -9,14 +9,14 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **ROL-1** [stated] Swap one component per change inside normal releases, old and new in one tree joined by a temporary bridge, so the main branch can always ship.
   - Old system as oracle: partly. Strength: medium. Era: 2026.
   - Cases: [GitHub: what worked][gh-worked], [GitHub: practices to copy][gh-practices], [Uber: what worked][ubr-worked].
-  - Against: Disagree: Bun's author says doing everything at once beats an incremental move, and merged one branch after eleven days ([Bun][bun-worked]).
+  - Against: Disagree: Bun's author says doing everything at once beats an incremental move, and merged one branch after eleven days ([Bun][bun-worked]); Shopify chose a fresh native build over a gradual move inside the old app ([Shopify][shp-migrated]) and released it whole after a beta ([Shopify][shp-checked]).
 - **ROL-2** [stated] Treat merged and released as separate gates: ship first to a canary or pre-release that few users take, and promote it only after real use.
   - Old system as oracle: no. Strength: medium. Era: 2024–2026.
   - Cases: [Bun: what went wrong][bun-wrong], [GitHub: how it was checked][gh-checked], [Google: what went wrong][goo-wrong].
   - Against: Some GitHub regressions still reached a stable release ([GitHub][gh-checked]).
 - **ROL-3** [stated] Changes that reach many teams' systems still need slow production rollouts watched by their owners; the AI pipeline speeds the code, not this step.
-  - Old system as oracle: no. Strength: medium. Era: internal Gemini.
-  - Cases: [Google: what went wrong][goo-wrong].
+  - Old system as oracle: no. Strength: medium. Era: internal Gemini; Claude Sonnet 4.5, then Opus 4.6, 2025–2026.
+  - Cases: [Google: what went wrong][goo-wrong], [Bloomberg: what went wrong][bbg-wrong].
   - Against: A downstream product took the whole Bun rewrite in one release and barely anyone noticed ([Bun][bun-wrong]).
 - **ROL-4** [stated] Delete the old code in the same change that adds the new; concurrent edits to ported code then surface as rebase conflicts instead of silent losses.
   - Old system as oracle: no. Strength: weak. Era: 2026.
@@ -38,7 +38,12 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: yes. Strength: weak. Era: unstated.
   - Cases: [Uber: what went wrong][ubr-wrong], [Uber: what worked][ubr-worked].
   - Against: None found; Uber does not say how many units stayed on the old framework ([Uber][ubr-wrong]).
+- **ROL-9** [stated] Unrequested changes of low priority mostly sit undecided; let owners commit to the generated branch, and consider generating hard-to-check moves only when owners ask.
+  - Old system as oracle: no. Strength: weak. Era: Claude Sonnet 4.5, then Opus 4.6, 2025–2026.
+  - Cases: [Bloomberg: what went wrong][bbg-wrong].
+  - Against: None found; both remedies are plans the authors have not yet tried.
 
+[bbg-wrong]: ../cases/2026-11-03-bloomberg-python-cpp-uplift.md#what-went-wrong
 [bun-worked]: ../cases/2026-07-08-bun-zig-to-rust.md#what-worked
 [bun-wrong]: ../cases/2026-07-08-bun-zig-to-rust.md#what-went-wrong
 [gh-checked]: ../cases/2026-09-16-github-copilot-runtime-rust.md#how-it-was-checked
@@ -47,5 +52,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [gh-worked]: ../cases/2026-09-16-github-copilot-runtime-rust.md#what-worked
 [gh-wrong]: ../cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong
 [goo-wrong]: ../cases/2025-04-13-google-int64-ids.md#what-went-wrong
+[shp-checked]: ../cases/2026-09-10-shopify-react-native-to-native.md#how-it-was-checked
+[shp-migrated]: ../cases/2026-09-10-shopify-react-native-to-native.md#what-was-migrated
 [ubr-worked]: ../cases/2026-04-07-uber-junit4-to-junit5.md#what-worked
 [ubr-wrong]: ../cases/2026-04-07-uber-junit4-to-junit5.md#what-went-wrong

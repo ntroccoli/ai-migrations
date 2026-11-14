@@ -14,7 +14,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **REV-2** [stated] Split the review: agents and tests do the exhaustive old-against-new comparison; people spend their attention on architecture, contracts and flagged risk.
   - Old system as oracle: partly. Strength: medium. Era: 2026.
   - Cases: [GitHub: who did what][gh-who], [Bun: how it was checked][bun-checked].
-  - Against: Disagree: at Slack and Google a person checked every change before merge ([Slack][slk-who]) ([Google][goo-checked]); in Bun no person read every line.
+  - Against: Disagree: at Slack and Google a person checked every change before merge ([Slack][slk-who]) ([Google][goo-checked]), and Shopify puts a person's approval on every checkpoint ([Shopify][shp-checked]); in Bun no person read every line.
 - **REV-3** [ours] Give reviewers a written list of constructs that read the same in both languages but behave differently: assertions, eager defaults, falsy checks, number types.
   - Old system as oracle: yes. Strength: medium. Era: 2026.
   - Cases: [Bun: what went wrong][bun-wrong], [GitHub: what went wrong][gh-wrong].
@@ -42,16 +42,22 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: None found.
   - Sceptic: tag changed from no to partly. Challenge: the audited reviewers compared new code with old code line by line, so "real differences" assumes a reference. Answer: accepted; checking the agent's replies to review comments still holds without one.
 - **REV-9** [stated] Once agents write fast, waiting for approval becomes the bottleneck; plan reviewer capacity across the owning teams from the start.
-  - Old system as oracle: no. Strength: medium. Era: 2023–2026.
-  - Cases: [GitHub: what went wrong][gh-wrong], [Google: who did what][goo-who], [Spotify: how it was checked][spo-checked].
-  - Against: None found.
+  - Old system as oracle: no. Strength: strong. Era: 2023–2026.
+  - Cases: [GitHub: what went wrong][gh-wrong], [Google: who did what][goo-who], [Spotify: how it was checked][spo-checked], [Bloomberg: what went wrong][bbg-wrong].
+  - Against: At Bloomberg reviewer time was not the whole limit: the moves were low priority and owners carried the deploy risk, so most PRs got no decision; its authors look to more checks inside the pipeline and to runs that owners request ([Bloomberg][bbg-wrong]). At Asana, whose engineers reviewed their own agents' pull requests twice a day, slow lint and CI held the work up, not approval ([Asana][asa-wrong]).
   - Related view (karpathy-ideas): [verification not generation is the bottleneck][k-verification-not-generation-is-the-bottleneck], agrees.
 - **REV-10** [ours] Grade a small sample of converted code against hand-converted versions with a rubric; pass rates say nothing about readability or idiom.
   - Old system as oracle: yes. Strength: weak. Era: Claude 2.1, 2024.
   - Cases: [Slack: how it was checked][slk-checked].
   - Against: Airbnb reports intent and coverage kept, with no quality grading ([Airbnb][air-checked]).
+- **REV-11** [stated] Code that meets the feature requirements can still duplicate logic, drift from the architecture or run slowly; keep reviewers who know the target platform.
+  - Old system as oracle: no. Strength: weak. Era: 2025–2026 (models unstated).
+  - Cases: [Shopify: what went wrong][shp-wrong].
+  - Against: None found.
 
 [air-checked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#how-it-was-checked
+[asa-wrong]: ../cases/2026-08-07-asana-enzyme-to-rtl.md#what-went-wrong
+[bbg-wrong]: ../cases/2026-11-03-bloomberg-python-cpp-uplift.md#what-went-wrong
 [bun-checked]: ../cases/2026-07-08-bun-zig-to-rust.md#how-it-was-checked
 [bun-worked]: ../cases/2026-07-08-bun-zig-to-rust.md#what-worked
 [bun-wrong]: ../cases/2026-07-08-bun-zig-to-rust.md#what-went-wrong
@@ -63,6 +69,8 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [goo-who]: ../cases/2025-04-13-google-int64-ids.md#who-did-what
 [goo-worked]: ../cases/2025-04-13-google-int64-ids.md#what-worked
 [goo-wrong]: ../cases/2025-04-13-google-int64-ids.md#what-went-wrong
+[shp-checked]: ../cases/2026-09-10-shopify-react-native-to-native.md#how-it-was-checked
+[shp-wrong]: ../cases/2026-09-10-shopify-react-native-to-native.md#what-went-wrong
 [slk-checked]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#how-it-was-checked
 [slk-who]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#who-did-what
 [spo-checked]: ../cases/2025-11-06-spotify-honk.md#how-it-was-checked
