@@ -10,7 +10,9 @@ prompts.
 
 1. Run it in a fresh session on the project, changing nothing there.
 2. Read the one-line list of every lesson at the end of [lessons/index.md](../lessons/index.md);
-   each line ends with the lesson's oracle tag and strength. Start from lessons tagged `no`, and
+   each line ends with the lesson's oracle tag, its model-ability tag and strength, and "may be
+   outdated" on a lesson about model limits whose cases are over a year old: re-check those
+   against recent work. Start from lessons tagged oracle `no`, and
    `partly` where the project already has a check that stands in for an old system. The tag is a
    hint, not a filter: judge each lesson by its own words, and drop those whose words are about
    moving code only (porting, an old system to compare with, shelved rewrites).

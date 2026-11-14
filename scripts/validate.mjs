@@ -10,7 +10,8 @@ import {
   CASES_DIR, CHECKLIST, NOTICE, SOURCE_TYPES, KINDS, AI_SHARES, RELATIONS, EVIDENCE, OUTCOMES,
   STATUSES, BASES, REQUIRED, LANGUAGES, SECTIONS, NUMBERS_HEADER, UNITS, SCALES, PITFALLS, CHECKLIST_MAX_BYTES,
   parseCase, listCases, sections, refDefs, linksIn, anchor, practices, closestPractices,
-  LESSONS_DIR, LESSON_PAGES, LESSON_MAX_BYTES, LESSON_NOTE, LESSON_LEGEND, KARPATHY_IDEAS, ORACLES, STRENGTHS, parseLessonPage, strengthCeiling, lessonMeta,
+  LESSONS_DIR, LESSON_PAGES, LESSON_MAX_BYTES, LESSON_NOTE, LESSON_LEGEND, KARPATHY_IDEAS, ORACLES, MODEL_DEPENDENCE, STRENGTHS, META_LINE, parseLessonPage, strengthCeiling, lessonMeta,
+  casesOf, expectedEra, eraText, parseEra,
 } from './lib.mjs';
 
 const errors = [];
@@ -370,11 +371,21 @@ function validateLessons() {
       for (const s of l.subs) {
         if (!s.text) e(s.line, `${l.id}: "${s.label}" is empty`);
         if (s.label === 'Old system as oracle') {
-          const m = s.text.match(/^(\w+)\. Strength: (\w+)\. Era: (.+)\.$/);
-          if (!m) e(s.line, `${l.id}: write "Old system as oracle: ${ORACLES.join('|')}. Strength: ${STRENGTHS.join('|')}. Era: ...."`);
+          const m = s.text.match(META_LINE);
+          if (!m) e(s.line, `${l.id}: write "Old system as oracle: ${ORACLES.join('|')}. Depends on model ability: ${MODEL_DEPENDENCE.join('|')}. Strength: ${STRENGTHS.join('|')}. Era: YYYY[–YYYY]; models: ...."`);
           else {
             if (!ORACLES.includes(m[1])) e(s.line, `${l.id}: oracle must be one of ${ORACLES.join(', ')}`);
-            if (!STRENGTHS.includes(m[2])) e(s.line, `${l.id}: strength must be one of ${STRENGTHS.join(', ')}`);
+            if (!MODEL_DEPENDENCE.includes(m[2])) e(s.line, `${l.id}: "Depends on model ability" must be one of ${MODEL_DEPENDENCE.join(', ')}`);
+            if (!STRENGTHS.includes(m[3])) e(s.line, `${l.id}: strength must be one of ${STRENGTHS.join(', ')}`);
+            // Era: one comparable form, and exactly the years and models of the cases in "Cases".
+            const era = parseEra(m[4]);
+            const metas = casesOf(l, page.refs).map(f => sectionsOf(f) && caseMetas.get(f)).filter(Boolean); // a missing case is reported under "Cases"
+            if (!era) e(s.line, `${l.id}: write the Era as "YYYY" or "YYYY–YYYY" (en dash), then "; models: " and the models as the cases name them, or unstated`);
+            else if (metas.length) {
+              const want = expectedEra(metas);
+              const same = era.years === want.years && era.models.length === want.models.length && want.models.every(x => era.models.includes(x));
+              if (!same) e(s.line, `${l.id}: the Era must give the years and models of the cases in "Cases": "Era: ${eraText(want)}."`);
+            }
           }
         } else if (s.label === 'Cases' || s.label === 'Against') {
           const links = linksIn(s.text, page.refs);

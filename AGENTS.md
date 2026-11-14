@@ -181,7 +181,7 @@ one-paragraph intro (used in the index and `llms.txt`), the evidence note (the e
 
 ```markdown
 - **TST-1** [stated] One line in our own words, at most 200 characters, no number.
-  - Old system as oracle: yes. Strength: strong. Era: 2026.
+  - Old system as oracle: yes. Depends on model ability: no. Strength: strong. Era: 2026; models: Claude Fable 5 (pre-release version), unstated.
   - Cases: [Bun: how it was checked][bun-checked], [GitHub: how it was checked][gh-checked].
   - Against: counter-evidence from other cases with links ([Bun][bun-wrong]), or "None found."
   - Related view (karpathy-ideas): [port with equality tests][k-port-with-equality-tests], agrees.
@@ -197,14 +197,29 @@ Rules (all checked by `node scripts/validate.mjs`; one broken-copy test each):
   cites only practices, the practice line closest to it (most content words shared,
   `closestPractices` in `scripts/lib.mjs`) must be `[stated]` too, since an `[ours]` practice is
   our inference. Failing that, cite the section the practice comes from, or tag the lesson `[ours]`.
-- Sub-items in this order: "Old system as oracle: yes|partly|no. Strength: strong|medium|weak.
-  Era: <models and period>.", "Cases:" (at least one link), "Against:" (never empty; start it
+- Sub-items in this order: "Old system as oracle: yes|partly|no. Depends on model ability:
+  yes|partly|no. Strength: strong|medium|weak. Era: YYYY[–YYYY]; models: <list>.", "Cases:" (at least one link), "Against:" (never empty; start it
   with "Disagree:" for a real split between cases, which the index lists; when it gives only a
   limit of the cases already cited, start it "None found;" and state the limit), then optional
   "Related view (karpathy-ideas):" and "Sceptic:".
 - "Old system as oracle": does the lesson's evidence rely on the old system (its tests, outputs,
   users' reports) to tell right from wrong. It says where the evidence came from, not where the
   lesson applies.
+- "Depends on model ability": `yes` when the lesson states what models or agents can or cannot
+  do (a failure mode, what they handle well or badly); `partly` when it is a process whose need
+  comes from such a behaviour (a check, a rule, a tool built because agents do something); `no`
+  when it holds whatever the model. Lessons about model limits age fast, process lessons barely;
+  newer models still fail in old ways, so the cases decide the tag, not assumptions.
+- "Era": the years from the `period` of each case in "Cases" (its `date` when the period is
+  `unstated`), as `YYYY` or `YYYY–YYYY` (en dash), then "; models: " and every model those cases
+  name, exactly as they name it, with `unstated` when any of them names none (`expectedEra` in
+  `scripts/lib.mjs`; the validator prints the expected value). Era is what makes lessons comparable
+  in time, so it is derived, never written freely.
+- "May be outdated": `build.mjs` marks, in `lessons/index.md` and `llms.txt`, every lesson tagged
+  `yes` whose most recent case in "Cases" (the later of its `date` and the end of its `period`)
+  is more than 12 months (`OUTDATED_MONTHS`) older than the build date (`--today YYYY-MM-DD` to
+  set it). The date is not written, so `build.mjs --check` fails only when a lesson crosses the
+  line: rebuild, and re-check that lesson against newer cases.
 - "Strength" is capped by the cases in "Cases" (`strengthCeiling` in `scripts/lib.mjs`):
   `strong` needs two or more cases, or one whose `evidence` is `shown-in-source` or
   `independent-data`, and at least one case whose `author_relation` is not `seller-of-tool`;
@@ -219,7 +234,7 @@ Rules (all checked by `node scripts/validate.mjs`; one broken-copy test each):
 - "Related view" links one idea file under
   `https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/` and ends with `, agrees.` or
   `, contradicts: why.`; it copies nothing from that project, and only where the match is clear.
-- Every number carries a unit (the Era is not checked); no quoted span over four words; every
+- Every number carries a unit (the Era is exempt); no quoted span over four words; every
   relative link resolves; a page stays at or under 20 KB (20,480 bytes).
 - Every case is cited by at least one lesson or checklist question.
 
@@ -229,7 +244,7 @@ every changed lesson page against all the source texts.
 
 Upkeep: a new case comes with its lesson edits (new lessons, new citations, new "Against" lines,
 strength changes), and the build is rerun. A sceptic pass from time to time challenges `no`
-oracle tags, `[stated]` tags and "None found" lines against the cases they cite, and checks that
+oracle tags, `no` model-ability tags on lessons about agent behaviour, `[stated]` tags and "None found" lines against the cases they cite, and checks that
 the case which lifts a lesson to `strong` really supports it.
 
 ## Checklist

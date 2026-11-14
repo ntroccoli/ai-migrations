@@ -5,7 +5,7 @@
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync, existsSync, appendFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { ROOT } from './lib.mjs';
+import { ROOT, parseCase, expectedEra, eraText } from './lib.mjs';
 
 const TMP = join(ROOT, '.test-tmp');
 const PARTS = ['scripts', 'cases', 'lessons', 'checklist.md', 'pitfalls.md', 'NOTICE.md', 'index.md', 'llms.txt', 'llms-full.txt',
@@ -129,9 +129,30 @@ test('lesson sub-items out of order fails', 1, d => {
 test('unknown sub-item fails', 1,
   d => edit(L(d, 'review'), '  - Against: None found.\n', '  - Against: None found.\n  - Note: an extra line.\n'), null, 'sub-items must be, in order');
 test('bad oracle value fails', 1,
-  d => edit(L(d, 'review'), 'Old system as oracle: partly. Strength: medium.', 'Old system as oracle: maybe. Strength: medium.'), null, 'REV-1: oracle must be one of');
+  d => edit(L(d, 'review'), 'Old system as oracle: partly. Depends', 'Old system as oracle: maybe. Depends'), null, 'REV-1: oracle must be one of');
 test('bad strength value fails', 1,
-  d => edit(L(d, 'review'), 'Old system as oracle: partly. Strength: medium.', 'Old system as oracle: partly. Strength: huge.'), null, 'REV-1: strength must be one of');
+  d => edit(L(d, 'review'), 'ability: partly. Strength: medium. Era: 2026;', 'ability: partly. Strength: huge. Era: 2026;'), null, 'REV-1: strength must be one of');
+// "Depends on model ability" and the Era (AGENTS.md "Lessons").
+test('bad model-ability value fails', 1,
+  d => edit(L(d, 'review'), 'Depends on model ability: partly. Strength: medium. Era: 2026;', 'Depends on model ability: maybe. Strength: medium. Era: 2026;'),
+  null, 'REV-1: "Depends on model ability" must be one of');
+test('lesson without the model-ability tag fails', 1,
+  d => edit(L(d, 'review'), 'Old system as oracle: partly. Depends on model ability: partly. Strength', 'Old system as oracle: partly. Strength'),
+  null, 'REV-1: write "Old system as oracle:');
+test('Era in free form fails', 1, d => {
+  const p = L(d, 'review');
+  writeFileSync(p, readFileSync(p, 'utf8').replace(/(\*\*REV-1\*\*[^\n]*\n[^\n]*Era: )[^\n]*/, '$1all model eras.'));
+}, null, 'REV-1: write the Era as "YYYY" or "YYYY–YYYY"');
+test('Era whose years do not match its cases fails', 1,
+  d => edit(L(d, 'review'), 'Strength: medium. Era: 2026; models: Claude Fable 5', 'Strength: medium. Era: 2025–2026; models: Claude Fable 5'),
+  null, 'REV-1: the Era must give the years and models of the cases in "Cases": "Era: 2026; models: ');
+test('Era missing a model its cases name fails', 1,
+  d => edit(L(d, 'review'), 'Era: 2026; models: Claude Fable 5 (pre-release version), Claude Opus 4.8,', 'Era: 2026; models: Claude Fable 5 (pre-release version),'),
+  null, 'REV-1: the Era must give the years and models');
+test('Era with the same models in another order passes', 0, d => {
+  const p = L(d, 'review');
+  writeFileSync(p, readFileSync(p, 'utf8').replace(/(\*\*REV-1\*\*[^\n]*\n[^\n]*Era: 2026; models: )([^\n]*)\./, (_, a, m) => `${a}${m.split(', ').reverse().join(', ')}.`));
+});
 test('"Cases" with no link fails', 1, d => {
   const p = L(d, 'review');
   writeFileSync(p, readFileSync(p, 'utf8').replace(/\n {2}- Cases: [^\n]*/, '\n  - Cases: Bun, GitHub.'));
@@ -207,11 +228,14 @@ const FIXTURE_CASES = {
   slack: '2024-05-22-slack-enzyme-to-rtl.md', // user-of-tool, shown-in-source
   uber: '2026-04-07-uber-junit4-to-junit5.md', // contrast case (ai_share: little), user-of-tool
 };
-const fixture = (strength, names) => d => {
+// The fixture's Era is computed from the cases it cites, so these tests test the strength alone.
+const fixture = (strength, names, model = 'no') => d => {
   const f = L(d, 'team');
   const t = readFileSync(f, 'utf8').replace(/\r\n/g, '\n');
   const cites = names.map(k => `[Fixture ${k}][fx-${k}]`).join(', ');
-  const lesson = `- **TEM-99** [ours] A fixture lesson for the strength tests.\n  - Old system as oracle: no. Strength: ${strength}. Era: 2026.\n`
+  const era = eraText(expectedEra(names.map(k => parseCase(caseFile(d, FIXTURE_CASES[k])).meta)));
+  const lesson = `- **TEM-99** [ours] A fixture lesson for the strength tests.\n`
+    + `  - Old system as oracle: no. Depends on model ability: ${model}. Strength: ${strength}. Era: ${era}.\n`
     + `  - Cases: ${cites}.\n  - Against: None found.\n`;
   const refs = names.map(k => `[fx-${k}]: ../cases/${FIXTURE_CASES[k]}#what-went-wrong`).join('\n');
   const i = t.search(/^\[[a-z0-9-]+\]: /m); // the first reference definition; the lessons end before it
@@ -227,6 +251,37 @@ test('strong on two cases, one not from a seller, passes', 0, fixture('strong', 
 test('a contrast case does not raise a lesson to strong', 1, fixture('strong', ['bun', 'github', 'uber']),
   null, 'TEM-99: strength strong needs more evidence; its cases allow at most medium');
 test('one case that shows its data, not from a seller, allows strong', 0, fixture('strong', ['slack']));
+test('fixture Era years that miss a cited case fail', 1, d => {
+  fixture('strong', ['bun', 'slack'])(d);
+  const p = L(d, 'team');
+  writeFileSync(p, readFileSync(p, 'utf8').replace(/(\*\*TEM-99\*\*[^\n]*\n[^\n]*Era: )2024–2026;/, '$12026;'));
+}, null, 'TEM-99: the Era must give the years and models of the cases in "Cases": "Era: 2024–2026; models: Claude 2.1,');
+
+// "May be outdated" (build.mjs): a lesson tagged yes for model ability whose most recent case is more than
+// OUTDATED_MONTHS old at the build date. Bun is dated 2026-07-08 (work 2026-05); --today fixes the date.
+const outdatedRun = (model, today) => d => {
+  fixture('medium', ['bun'], model)(d);
+  const r = node(d, 'build.mjs', ['--today', today]);
+  if (r.status !== 0) throw new Error(r.stdout + r.stderr);
+  return { index: readFileSync(join(d, 'lessons', 'index.md'), 'utf8'), llms: readFileSync(join(d, 'llms.txt'), 'utf8') };
+};
+const marked = o => /\*\*TEM-99\*\*[^\n]*may be outdated\)/.test(o.index) && /Marked now: [^\n]*TEM-99/.test(o.llms)
+  && /^## May be outdated\n(?:(?!## )[^\n]*\n)*- \*\*TEM-99\*\*/m.test(o.index);
+test('a model-dependent lesson with an old newest case is marked may be outdated', 0, d => {
+  if (!marked(outdatedRun('yes', '2027-07-09')(d))) throw new Error('TEM-99 not marked in lessons/index.md and llms.txt');
+  return ['--check', '--today', '2027-07-09'];
+}, null, null, 'build.mjs');
+test('a model-dependent lesson with a recent case is not marked', 0, d => {
+  if (marked(outdatedRun('yes', '2027-07-07')(d))) throw new Error('TEM-99 marked although its case is under a year old');
+});
+test('a lesson tagged partly is never marked', 0, d => {
+  if (marked(outdatedRun('partly', '2030-01-01')(d))) throw new Error('TEM-99 marked although not tagged yes');
+});
+test('build --check fails once a lesson crosses the line until rebuilt', 1, d => {
+  outdatedRun('yes', '2027-07-07')(d);
+  return ['--check', '--today', '2027-07-09'];
+}, null, 'out of date: lessons/index.md', 'build.mjs');
+test('build refuses a bad --today', 2, () => ['--today', 'tomorrow'], null, '--today takes a date', 'build.mjs');
 
 // build.mjs --check: generated files must match the sources.
 test('build --check passes on the repository', 0, () => ['--check'], null, null, 'build.mjs');
@@ -237,7 +292,11 @@ test('build --check fails after a lesson change without a rebuild', 1,
 test('build refuses a case that does not parse', 1,
   d => { edit(caseFile(d, BUN), 'kind: language\n', 'kind language\n'); return []; }, null, 'cannot build', 'build.mjs');
 test('build refuses a lesson without its oracle line', 1,
-  d => { edit(L(d, 'review'), '  - Old system as oracle: partly. Strength: medium. Era: 2026.\n  - Cases: [GitHub: who did what]', '  - Cases: [GitHub: who did what]'); return []; }, null, 'REV-2: no "Old system as oracle" line', 'build.mjs');
+  d => {
+    const p = L(d, 'review');
+    writeFileSync(p, readFileSync(p, 'utf8').replace(/\n {2}- Old system as oracle: [^\n]*(?=\n {2}- Cases: \[GitHub: who did what\])/, ''));
+    return [];
+  }, null, 'REV-2: no "Old system as oracle" line', 'build.mjs');
 test('build --check fails after a from_languages change (llms.txt "Moves covered")', 1,
   d => { edit(caseFile(d, INTEL), 'from_languages: [C]', 'from_languages: [C, Python]'); return ['--check']; }, null, 'out of date: llms.txt', 'build.mjs');
 test('llms-full.txt carries each reference definition once', 0, d => {

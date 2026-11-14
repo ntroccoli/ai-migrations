@@ -133,9 +133,15 @@ export const LESSON_MAX_BYTES = 20 * 1024; // an agent reads a page whole
 export const LESSON_NOTE = 'Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.';
 // Every lesson page holds this legend as its own paragraph, after the evidence note; validate.mjs
 // matches it, and build.mjs repeats it in lessons/index.md and llms-full.txt.
-export const LESSON_LEGEND = "`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. \"Old system as oracle\" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. \"Strength\", capped by the cases in \"Cases\" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.";
+export const LESSON_LEGEND = "`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. \"Old system as oracle\" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. \"Depends on model ability\" (`yes`, `partly`, `no`): `yes` when the lesson states what models or agents can or cannot do, `partly` when it is a process whose need comes from such a behaviour, `no` when it holds whatever the model; the index marks a `yes` lesson whose newest case is over a year old as possibly outdated. \"Era\": the years the cited cases ran (their publication year when they give no period) and the models they name, `unstated` when one names none. \"Strength\", capped by the cases in \"Cases\" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.";
 export const KARPATHY_IDEAS = 'https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/';
 export const ORACLES = ['yes', 'partly', 'no'];
+// "Depends on model ability": the lesson states what models or agents can or cannot do (yes), is a
+// process whose need comes from such a behaviour (partly), or holds whatever the model (no).
+export const MODEL_DEPENDENCE = ['yes', 'partly', 'no'];
+// A lesson tagged `yes` whose newest case in "Cases" was published more than this many months before
+// the build date is marked "may be outdated" in lessons/index.md and llms.txt.
+export const OUTDATED_MONTHS = 12;
 export const STRENGTHS = ['strong', 'medium', 'weak'];
 // The highest strength the cases in a lesson's "Cases" line allow (AGENTS.md "Lessons"): `strong`
 // needs two or more cases, or one whose source shows its data (`evidence` other than
@@ -198,8 +204,47 @@ export function loadLessons(dir = LESSONS_DIR) {
 }
 // The value of one sub-item of a lesson, by label.
 export const sub = (lesson, label) => lesson.subs.find(s => s.label === label)?.text;
-// Oracle and strength from the first sub-item.
+// The first sub-item: "Old system as oracle: no. Depends on model ability: yes. Strength: medium.
+// Era: 2025–2026; models: Claude Opus 4.6, unstated."
+export const META_LINE = /^(\w+)\. Depends on model ability: (\w+)\. Strength: (\w+)\. Era: (.+)\.$/;
 export function lessonMeta(lesson) {
-  const m = (sub(lesson, 'Old system as oracle') || '').match(/^(\w+)\. Strength: (\w+)\. Era: (.+)\.$/);
-  return m ? { oracle: m[1], strength: m[2], era: m[3] } : {};
+  const m = (sub(lesson, 'Old system as oracle') || '').match(META_LINE);
+  return m ? { oracle: m[1], model: m[2], strength: m[3], era: m[4] } : {};
+}
+// The case files a lesson's "Cases" line links (`refs` resolves reference links).
+export const casesOf = (lesson, refs) => [...new Set(linksIn(sub(lesson, 'Cases') || '', refs)
+  .map(x => x.target?.match(/^\.\.\/cases\/([^#/\s]+\.md)#/)?.[1]).filter(Boolean))];
+// The Era a lesson must carry, from the front matter of the cases in its "Cases" line: the years
+// from each case's `period` (its `date` when the period is unstated), as `YYYY` or `YYYY–YYYY`,
+// then the models exactly as the cases name them, oldest case first, with `unstated` last when any
+// case names none. Returns { years, models } (models: an array).
+export function expectedEra(metas) {
+  metas = [...metas].sort((a, b) => String(a.date).localeCompare(String(b.date)));
+  const ys = metas.flatMap(m => String(m.period && m.period !== 'unstated' ? m.period : m.date).match(/\d{4}/g) || []).map(Number);
+  const lo = Math.min(...ys), hi = Math.max(...ys);
+  const names = metas.flatMap(m => [m.models].flat()).filter(Boolean);
+  const models = [...new Set(names.filter(x => x !== 'unstated'))];
+  if (!models.length || names.includes('unstated')) models.push('unstated');
+  return { years: lo === hi ? String(lo) : `${lo}–${hi}`, models };
+}
+export const eraText = e => `${e.years}; models: ${e.models.join(', ')}`;
+// An Era value as { years, models }; undefined when it is not "YYYY[–YYYY]; models: a, b".
+export function parseEra(text) {
+  const m = (text || '').match(/^(\d{4}(?:–\d{4})?); models: (\S.*)$/);
+  return m ? { years: m[1], models: m[2].split(', ') } : undefined;
+}
+// How recent a case is: the later of its publication `date` and the end of its `period` (a series is
+// dated by its first part, so its work can run past that date). Partial dates compare as prefixes:
+// "2026-04" sorts after "2025-11-14" and before "2026-04-01".
+export const caseRecency = m => [String(m.date), m.period && m.period !== 'unstated' ? String(m.period).split('..').at(-1) : '']
+  .sort().at(-1);
+// "May be outdated": tagged `yes` for model ability, and the most recent case in "Cases"
+// (caseRecency) is more than OUTDATED_MONTHS months before `today` (YYYY-MM-DD). `metas`: those
+// cases' front matter.
+export function mayBeOutdated(lesson, metas, today) {
+  if (lessonMeta(lesson).model !== 'yes' || !metas.length) return false;
+  const newest = metas.map(caseRecency).sort().at(-1);
+  const t = new Date(`${today}T00:00:00Z`);
+  t.setUTCMonth(t.getUTCMonth() - OUTDATED_MONTHS);
+  return newest < t.toISOString().slice(0, 10);
 }

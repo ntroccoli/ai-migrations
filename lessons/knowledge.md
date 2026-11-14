@@ -4,22 +4,22 @@ Turning failures and logs into lasting improvements.
 
 Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
-`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
+`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Depends on model ability" (`yes`, `partly`, `no`): `yes` when the lesson states what models or agents can or cannot do, `partly` when it is a process whose need comes from such a behaviour, `no` when it holds whatever the model; the index marks a `yes` lesson whose newest case is over a year old as possibly outdated. "Era": the years the cited cases ran (their publication year when they give no period) and the models they name, `unstated` when one names none. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
 
 - **KNW-1** [stated] When a failure recurs, fix what generates the code (prompt, reviewer rule, skill, evaluation, harness), not only the output; the second time is the trigger.
-  - Old system as oracle: no. Strength: strong. Era: 2024–2026.
+  - Old system as oracle: no. Depends on model ability: no. Strength: strong. Era: 2024–2026; models: GPT-4o, Claude Fable 5 (pre-release version), Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6, Claude Opus 4.6, Claude Sonnet 4.5, unstated.
   - Cases: [Bun: what worked][bun-worked], [GitHub: what worked][gh-worked], [Airbnb: what worked][air-worked], [Uber: what worked][ubr-worked], [Zalando: how it was checked][zal-checked], [Shopify: how it was checked][shp-checked], [Bloomberg: what worked][bbg-worked], [Pokémon: what worked][vjx-worked].
   - Against: Fixing the instructions did not always hold: the Pokémon port's agent kept hard-coding behaviour after being told not to ([Pokémon][vjx-wrong]), and 1Password's ordering errors persisted under explicit rules ([1Password][opw-wrong]).
 - **KNW-2** [stated] Stamp each unit with its status, tune against the largest failing group using a small sample, then sweep all units again.
-  - Old system as oracle: partly. Strength: strong. Era: 2023–2025.
+  - Old system as oracle: partly. Depends on model ability: no. Strength: strong. Era: 2024–2026; models: Claude 2.1, internal version of Gemini, fine-tuned with the DIDACT framework, unstated.
   - Cases: [Airbnb: what worked][air-worked], [Slack: what worked][slk-worked], [Google: what worked][goo-worked], [Uber: what worked][ubr-worked].
   - Against: None found.
 - **KNW-3** [stated] Keep structured session logs from the start; they later answered where time went and what people did, and became evaluations.
-  - Old system as oracle: no. Strength: medium. Era: 2026.
+  - Old system as oracle: no. Depends on model ability: no. Strength: medium. Era: 2026; models: Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6.
   - Cases: [GitHub: numbers][gh-numbers], [GitHub: what worked][gh-worked].
   - Against: GitHub's split of the engineer's messages by intent was labelled by an LLM, not checked by a person ([GitHub][gh-numbers]).
 - **KNW-4** [stated] A compacted or fresh session forgets what the last one learned; keep the method in files it rereads (instructions, one debug script) and find work by search, not a growing notes file.
-  - Old system as oracle: no. Strength: weak. Era: Claude Code (model unstated), 2025–2026.
+  - Old system as oracle: no. Depends on model ability: partly. Strength: weak. Era: 2025–2026; models: unstated.
   - Cases: [Pokémon: what went wrong][vjx-wrong], [Pokémon: what worked][vjx-worked].
   - Against: None found; one author's account, with no measure of how much time the files saved, and a search finds only the markers the agent wrote, not stubs it left unmarked ([Pokémon][vjx-worked]).
 

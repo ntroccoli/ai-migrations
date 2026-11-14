@@ -4,14 +4,21 @@
 // repository URL and the AI disclosure.
 // Usage: node scripts/build.mjs          write the files
 //        node scripts/build.mjs --check  write nothing; exit 1 if any generated file is out of date
+//        --today YYYY-MM-DD             the build date for the "may be outdated" mark (default: today, UTC).
+// The mark depends on the build date, so a lesson can cross the line between two builds: --check then
+// fails until someone rebuilds, which is the reminder to re-check that lesson.
 // The case files and lesson pages are the source of truth; never edit the generated files by hand.
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join, posix } from 'node:path';
 import {
   ROOT, REPO_SLUG, REPO_SLUGS, LANGUAGES, LESSON_NOTE, LESSON_LEGEND, LESSON_PAGES, listCases, parseCase, loadLessons, lessonMeta, sub, linksIn, refDefs,
+  casesOf, mayBeOutdated, OUTDATED_MONTHS,
 } from './lib.mjs';
 
 const check = process.argv.includes('--check');
+const ti = process.argv.indexOf('--today');
+const TODAY = ti > 0 ? process.argv[ti + 1] : new Date().toISOString().slice(0, 10);
+if (!/^\d{4}-\d{2}-\d{2}$/.test(TODAY || '')) { console.error('--today takes a date, YYYY-MM-DD'); process.exit(2); }
 const REPO = `https://github.com/${REPO_SLUG}`;
 const RAW_BASE = `https://raw.githubusercontent.com/${REPO_SLUG}/main`;
 // Hand-written files that name this repository: the build rewrites any older slug in REPO_SLUGS
@@ -71,6 +78,7 @@ const count = lessons => {
     stated: by(l => l.tag, 'stated'), ours: by(l => l.tag, 'ours'),
     yes: by(l => lessonMeta(l).oracle, 'yes'), partly: by(l => lessonMeta(l).oracle, 'partly'),
     no: by(l => lessonMeta(l).oracle, 'no'),
+    mYes: by(l => lessonMeta(l).model, 'yes'), mPartly: by(l => lessonMeta(l).model, 'partly'), mNo: by(l => lessonMeta(l).model, 'no'),
   };
 };
 const prefixOf = p => p.lessons[0]?.id.split('-')[0] ?? '';
@@ -99,6 +107,14 @@ for (const p of pages) for (const l of p.lessons) {
   for (const f of files) caseUse.get(f)?.push(l.id);
 }
 
+// "May be outdated" (AGENTS.md "Lessons"): tagged yes for model ability, newest case in "Cases" older than
+// OUTDATED_MONTHS at the build date. The date itself is never written, so a rebuild on another day changes nothing
+// unless a lesson crosses the line.
+const outdated = new Set(pages.flatMap(p => p.lessons.filter(l =>
+  mayBeOutdated(l, casesOf(l, p.refs).map(f => caseByFile.get(f)?.meta).filter(Boolean), TODAY)).map(l => l.id)));
+const OUTDATED_NOTE = `"May be outdated" marks a lesson about what models can or cannot do (tagged "Depends on model ability: yes") ` +
+  `whose most recent case (the later of its publication date and the end of its work) is more than ${OUTDATED_MONTHS} months older than the last build: newer models may no longer behave so; ` +
+  're-check it against recent work before you rely on it.';
 const out = {};
 
 // lessons/index.md
@@ -106,7 +122,7 @@ const out = {};
   const t = count(all);
   const rows = pages.map(p => {
     const c = count(p.lessons);
-    return `| [${p.title}](${p.slug}.md) | ${prefixOf(p)} | ${c.n} | ${c.stated} | ${c.ours} | ${c.yes} | ${c.partly} | ${c.no} |`;
+    return `| [${p.title}](${p.slug}.md) | ${prefixOf(p)} | ${c.n} | ${c.stated} | ${c.ours} | ${c.yes} | ${c.partly} | ${c.no} | ${c.mYes} | ${c.mPartly} | ${c.mNo} |`;
   });
   const disagree = pages.flatMap(p => p.lessons.filter(l => /^Disagree:/.test(sub(l, 'Against') || ''))
     .map(l => `- **${l.id}** ([${p.title}](${p.slug}.md)) ${l.text}`));
@@ -120,10 +136,14 @@ const out = {};
     LESSON_NOTE, '',
     LEGEND, '',
     '## Aspects', '',
-    '| Aspect | Prefix | Lessons | stated | ours | oracle yes | partly | no |',
-    '| --- | --- | --- | --- | --- | --- | --- | --- |',
+    '| Aspect | Prefix | Lessons | stated | ours | oracle yes | partly | no | model yes | partly | no |',
+    '| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |',
     ...rows,
-    `| **All** | | ${t.n} | ${t.stated} | ${t.ours} | ${t.yes} | ${t.partly} | ${t.no} |`, '',
+    `| **All** | | ${t.n} | ${t.stated} | ${t.ours} | ${t.yes} | ${t.partly} | ${t.no} | ${t.mYes} | ${t.mPartly} | ${t.mNo} |`, '',
+    '"Model" counts the "Depends on model ability" tag.', '',
+    '## May be outdated', '',
+    OUTDATED_NOTE, '',
+    ...(outdated.size ? pages.flatMap(p => p.lessons.filter(l => outdated.has(l.id)).map(l => `- **${l.id}** ([${p.title}](${p.slug}.md)) ${l.text}`)) : ['None at the last build.']), '',
     '## Cases behind the lessons', '',
     'Lessons that cite each case, in "Cases" or "Against".', '',
     '| Case | Lessons |', '| --- | --- |',
@@ -132,9 +152,10 @@ const out = {};
     ...(disagree.length ? disagree : ['None recorded.']), '',
     '## Every lesson in one line', '',
     'To find the lessons that fit work other than a migration, scan this list, then open the pages of the lessons ' +
-      'that fit. Each line: ID, tag, the lesson, then its oracle tag and strength.', '',
+      'that fit. Each line: ID, tag, the lesson, then its oracle tag, its model-ability tag, its strength, and "may be outdated" where it applies.', '',
     ...pages.flatMap(p => [`### [${p.title}](${p.slug}.md)`, '',
-      ...p.lessons.map(l => `- **${l.id}** [${l.tag}] ${l.text} (oracle: ${lessonMeta(l).oracle}; ${lessonMeta(l).strength})`), '']),
+      ...p.lessons.map(l => `- **${l.id}** [${l.tag}] ${l.text} (oracle: ${lessonMeta(l).oracle}; model: ${lessonMeta(l).model}; ` +
+        `${lessonMeta(l).strength}${outdated.has(l.id) ? '; may be outdated' : ''})`), '']),
   ].join('\n');
 }
 
@@ -212,6 +233,7 @@ out['llms.txt'] = [
     'leaned on the old system; it hints at how far the lesson travels but is not a filter, so judge each lesson by its ' +
     'own words. Each case says how far its claims can be checked and what stake its author has in the tools: weigh it ' +
     'accordingly; a lesson that rests only on cases whose authors sell the tool is never rated strong.', '',
+  `${OUTDATED_NOTE} ${outdated.size ? `Marked now: ${[...outdated].join(', ')}.` : 'None is marked now.'} A lesson's Era gives the years and the models of its cases.`, '',
   DISCLOSURE, '',
   `Moves covered, by the language the code was in before the move: ${COVERED}`, '',
   '## How to use', '',
@@ -219,7 +241,7 @@ out['llms.txt'] = [
     'question has a Check to measure and cites lesson IDs; open only the lessons and cases behind a gap.',
   '- For any other large piece of AI-driven work, not a migration (README "Learning from the lessons"): follow ' +
     `[docs/applying-lessons.md](${RAW_BASE}/docs/applying-lessons.md). It starts from the one-line list of every lesson at the end of ` +
-    `[lessons/index.md](${RAW_BASE}/lessons/index.md) (about ${indexKB} KB), where each line shows its oracle tag and strength, ` +
+    `[lessons/index.md](${RAW_BASE}/lessons/index.md) (about ${indexKB} KB), where each line shows its oracle tag, model-ability tag and strength, ` +
     'then opens the aspect pages of the lessons that fit (each lesson there has its cases, the evidence against it, and its oracle and strength).',
   `- Open a case only when you need its detail. Each has "Who did what", "How it was checked", a Numbers table with ` +
     `the basis of each number, "What went wrong" and "Practices to copy". File format: [AGENTS.md](${RAW_BASE}/AGENTS.md).`,
@@ -230,7 +252,7 @@ out['llms.txt'] = [
   ...pages.map(p => {
     const c = count(p.lessons);
     return `- [${p.title}](${RAW_BASE}/lessons/${p.slug}.md): ${c.n} lessons, ${prefixOf(p)}-n (${c.stated} stated, ` +
-      `${c.ours} ours; oracle: ${c.yes} yes, ${c.partly} partly, ${c.no} no). ${p.intro}`;
+      `${c.ours} ours; oracle: ${c.yes} yes, ${c.partly} partly, ${c.no} no; model ability: ${c.mYes} yes, ${c.mPartly} partly, ${c.mNo} no). ${p.intro}`;
   }), '',
   '## Cases', '',
   ...cases.map(c => caseLine(c, `${RAW_BASE}/cases/`)), '',

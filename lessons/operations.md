@@ -4,35 +4,35 @@ Running many agents on real machines, and keeping the result healthy after merge
 
 Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
-`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
+`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Depends on model ability" (`yes`, `partly`, `no`): `yes` when the lesson states what models or agents can or cannot do, `partly` when it is a process whose need comes from such a behaviour, `no` when it holds whatever the model; the index marks a `yes` lesson whose newest case is over a year old as possibly outdated. "Era": the years the cited cases ran (their publication year when they give no period) and the models they name, `unstated` when one names none. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
 
 - **OPS-1** [stated] Parallel agents saturate CPU, disk and I/O: size the machine first, let one agent build at a time through a lease, and push full test runs to CI.
-  - Old system as oracle: no. Strength: medium. Era: 2026.
+  - Old system as oracle: no. Depends on model ability: no. Strength: medium. Era: 2026; models: Claude Fable 5 (pre-release version), Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6, unstated.
   - Cases: [GitHub: what went wrong][gh-wrong], [Bun: what went wrong][bun-wrong].
   - Against: At Asana, CI results that differed from local checks, with a slow lint step, were where people had to step in most ([Asana][asa-wrong]): pushing runs to CI helps only if CI matches local runs.
 - **OPS-2** [stated] Contain heavy tests with operating-system limits (control groups, process namespaces, disk quotas); asking the agent to be careful contains nothing.
-  - Old system as oracle: no. Strength: weak. Era: 2026.
+  - Old system as oracle: no. Depends on model ability: partly. Strength: weak. Era: 2026; models: Claude Sonnet 4.6, Claude Fable 5 (pre-release version), unstated.
   - Cases: [Bun: what went wrong][bun-wrong], [Spartacus: what went wrong][spa-wrong].
   - Against: Bun's limits covered memory, CPU and processes, yet the disk still filled and crashed the machine several times ([Bun][bun-wrong]); no case shows disk quotas in use.
 - **OPS-3** [stated] Make the inner loop fast (module splits, build caches, host I/O) before scaling agents; their time goes mostly to reading, building and testing, not writing.
-  - Old system as oracle: no. Strength: strong. Era: 2025–2026.
+  - Old system as oracle: no. Depends on model ability: partly. Strength: strong. Era: 2025–2026; models: Claude Fable 5 (pre-release version), Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6, unstated.
   - Cases: [GitHub: what went wrong][gh-wrong], [GitHub: numbers][gh-numbers], [Bun: practices to copy][bun-practices], [Shopify: what went wrong][shp-wrong], [Asana: what went wrong][asa-wrong].
   - Against: At Shopify the slow step was not the build: hot reload helped but did not fix it, because agents read and drove the app through simulators; its fix is a headless path into the app's logic ([Shopify][shp-worked]).
 - **OPS-4** [stated] List what the old runtime supplied silently (time zone, environment, process flags) and test every platform you ship; one green platform says little.
-  - Old system as oracle: yes. Strength: medium. Era: 2025–2026.
+  - Old system as oracle: yes. Depends on model ability: no. Strength: medium. Era: 2025–2026; models: Claude via Claude Code (version unstated), Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6.
   - Cases: [GitHub: what went wrong][gh-wrong], [Spotify: what went wrong][spo-wrong].
   - Against: None found.
 - **OPS-5** [stated] Keep hardening after merge: repeated security review, round-the-clock fuzzing and leak tracking, with people reviewing the fixes they produce.
-  - Old system as oracle: no. Strength: weak. Era: 2026.
+  - Old system as oracle: no. Depends on model ability: no. Strength: weak. Era: 2026; models: Claude Fable 5 (pre-release version), unstated.
   - Cases: [Bun: how it was checked][bun-checked].
   - Against: Disagree: the Zig creator says Bun was not fuzzing before the port, against the post's claim ([Bun][bun-wrong]).
 - **OPS-6** [stated] Run bulk change jobs, by agent or by rule, as scheduled batches sized to the infrastructure, sort results into status groups, and rerun only what is stuck.
-  - Old system as oracle: partly. Strength: strong. Era: 2023–2025.
+  - Old system as oracle: partly. Depends on model ability: no. Strength: strong. Era: 2024–2026; models: Claude 2.1, internal version of Gemini, fine-tuned with the DIDACT framework, unstated.
   - Cases: [Slack: what worked][slk-worked], [Google: what worked][goo-worked], [Airbnb: what worked][air-worked], [Uber: what worked][ubr-worked].
   - Against: Batches sized to the infrastructure can still outrun the people receiving them: Bloomberg's PRs went out in a few bursts while merges came at a steady rate of their own ([Bloomberg][bbg-wrong]).
   - Sceptic: tag changed from no to partly. Challenge: the status groups count how many converted old tests pass, so the old behaviour is the oracle. Answer: accepted; Google's groups count remaining sites instead, which needs no oracle.
 - **OPS-7** [ours] Load-test the new code for blocking and resource exhaustion; one port froze its interface on a synchronous call across the bridge.
-  - Old system as oracle: partly. Strength: medium. Era: 2026.
+  - Old system as oracle: partly. Depends on model ability: no. Strength: medium. Era: 2026; models: Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6.
   - Cases: [GitHub: what went wrong][gh-wrong].
   - Against: None found.
 
