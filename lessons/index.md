@@ -14,7 +14,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | [Planning and scoping](planning.md) | PLN | 12 | 10 | 2 | 1 | 2 | 9 |
 | [Testing and oracles](testing.md) | TST | 12 | 8 | 4 | 8 | 2 | 2 |
-| [Verification loops and gates](verification.md) | VER | 11 | 11 | 0 | 1 | 7 | 3 |
+| [Verification loops and gates](verification.md) | VER | 11 | 11 | 0 | 1 | 8 | 2 |
 | [Code review](review.md) | REV | 11 | 8 | 3 | 2 | 4 | 5 |
 | [Release and rollout](rollout.md) | ROL | 9 | 8 | 1 | 1 | 2 | 6 |
 | [Machines and operations](operations.md) | OPS | 7 | 6 | 1 | 1 | 2 | 4 |
@@ -22,13 +22,13 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 | [Cost](cost.md) | CST | 9 | 2 | 7 | 0 | 1 | 8 |
 | [Team and roles](team.md) | TEM | 5 | 5 | 0 | 0 | 0 | 5 |
 | [Rule-based tools and AI](tooling.md) | TOL | 10 | 10 | 0 | 0 | 5 | 5 |
-| [Context and prompts](context.md) | CTX | 10 | 10 | 0 | 1 | 2 | 7 |
+| [Context and prompts](context.md) | CTX | 11 | 11 | 0 | 1 | 2 | 8 |
 | [Many agents at once](orchestration.md) | ORC | 6 | 6 | 0 | 0 | 2 | 4 |
-| [Agent failure modes](agent-failures.md) | AGF | 8 | 7 | 1 | 0 | 1 | 7 |
-| [Human oversight](oversight.md) | OVS | 4 | 4 | 0 | 0 | 1 | 3 |
-| [Knowledge capture](knowledge.md) | KNW | 3 | 3 | 0 | 0 | 1 | 2 |
-| [Measuring and reading results](measurement.md) | MSR | 10 | 4 | 6 | 0 | 2 | 8 |
-| **All** | | 137 | 109 | 28 | 15 | 37 | 85 |
+| [Agent failure modes](agent-failures.md) | AGF | 9 | 8 | 1 | 0 | 1 | 8 |
+| [Human oversight](oversight.md) | OVS | 5 | 5 | 0 | 0 | 1 | 4 |
+| [Knowledge capture](knowledge.md) | KNW | 4 | 4 | 0 | 0 | 1 | 3 |
+| [Measuring and reading results](measurement.md) | MSR | 10 | 4 | 6 | 0 | 3 | 7 |
+| **All** | | 141 | 113 | 28 | 15 | 39 | 87 |
 
 ## Cases behind the lessons
 
@@ -37,13 +37,16 @@ Lessons that cite each case, in "Cases" or "Against".
 | Case | Lessons |
 | --- | --- |
 | [Bloomberg](../cases/2026-11-03-bloomberg-python-cpp-uplift.md) | 25: PLN-8, PLN-10, PLN-12, VER-1, VER-3, VER-8, VER-10, VER-11, REV-9, ROL-3, ROL-9, OPS-6, SEC-9, CST-8, TEM-4, TOL-9, TOL-10, CTX-2, ORC-6, AGF-7, OVS-3, KNW-1, MSR-2, MSR-8, MSR-10 |
+| [Ping.gg](../cases/2026-10-07-ping-tsgo-to-rust.md) | 10: PLN-5, PLN-9, TST-1, TST-2, REV-2, CST-2, CST-4, TEM-5, OVS-2, MSR-6 |
 | [GitHub](../cases/2026-09-16-github-copilot-runtime-rust.md) | 63: PLN-1, PLN-2, PLN-3, PLN-4, PLN-5, PLN-7, TST-1, TST-2, TST-3, TST-9, VER-1, VER-4, VER-6, VER-8, REV-1, REV-2, REV-3, REV-5, REV-8, REV-9, ROL-1, ROL-2, ROL-4, ROL-5, ROL-6, ROL-7, OPS-1, OPS-3, OPS-4, OPS-7, SEC-2, SEC-4, SEC-7, SEC-8, CST-1, CST-2, CST-3, CST-5, CST-6, CST-7, TEM-1, TEM-2, TOL-5, TOL-6, CTX-4, CTX-6, ORC-1, ORC-3, ORC-4, ORC-5, ORC-6, AGF-2, AGF-3, AGF-4, AGF-5, OVS-1, OVS-2, KNW-1, KNW-3, MSR-3, MSR-4, MSR-5, MSR-6 |
 | [Shopify](../cases/2026-09-10-shopify-react-native-to-native.md) | 15: PLN-5, PLN-11, TST-12, VER-10, REV-2, REV-11, ROL-1, OPS-3, TOL-6, TOL-8, CTX-2, ORC-1, ORC-6, OVS-4, KNW-1 |
 | [Intel](../cases/2026-08-24-intel-ideas-c-to-rust.md) | 22: PLN-4, PLN-5, TST-2, TST-5, TST-10, VER-1, VER-3, VER-6, VER-9, SEC-4, SEC-5, SEC-9, CST-3, CST-4, CST-5, TOL-1, CTX-9, ORC-6, AGF-1, OVS-1, MSR-3, MSR-7 |
 | [Asana](../cases/2026-08-07-asana-enzyme-to-rtl.md) | 12: TST-8, REV-9, OPS-1, OPS-3, CST-4, CTX-1, CTX-3, CTX-6, CTX-8, CTX-10, ORC-2, ORC-6 |
 | [Bun](../cases/2026-07-08-bun-zig-to-rust.md) | 55: PLN-1, PLN-2, PLN-5, PLN-7, PLN-11, TST-1, TST-3, TST-4, VER-1, VER-3, VER-5, VER-10, REV-1, REV-2, REV-3, REV-5, REV-8, ROL-1, ROL-2, ROL-3, OPS-1, OPS-2, OPS-3, OPS-5, SEC-1, SEC-2, SEC-3, SEC-4, SEC-6, CST-1, CST-2, CST-4, CST-5, CST-6, CST-7, TEM-1, TEM-2, TEM-4, TOL-1, ORC-1, ORC-2, ORC-4, ORC-5, ORC-6, AGF-1, OVS-1, OVS-2, KNW-1, MSR-1, MSR-3, MSR-4, MSR-5, MSR-6, MSR-7, MSR-8 |
-| [1Password](../cases/2026-04-20-1password-monolith-refactor.md) | 22: PLN-2, PLN-4, PLN-6, PLN-7, PLN-9, VER-7, SEC-10, TOL-1, TOL-3, CTX-4, CTX-8, ORC-1, ORC-2, AGF-2, AGF-3, AGF-6, AGF-7, OVS-3, MSR-1, MSR-3, MSR-7, MSR-8 |
+| [1Password](../cases/2026-04-20-1password-monolith-refactor.md) | 23: PLN-2, PLN-4, PLN-6, PLN-7, PLN-9, VER-7, SEC-10, TOL-1, TOL-3, CTX-4, CTX-8, ORC-1, ORC-2, AGF-2, AGF-3, AGF-6, AGF-7, OVS-3, KNW-1, MSR-1, MSR-3, MSR-7, MSR-8 |
+| [Lutz Leonhardt](../cases/2026-04-13-lutz-leonhardt-spartacus-signal-forms.md) | 13: PLN-1, TST-2, TST-6, VER-1, VER-5, VER-7, REV-3, REV-5, OPS-2, ORC-1, AGF-6, OVS-5, MSR-2 |
 | [Uber](../cases/2026-04-07-uber-junit4-to-junit5.md) | 19: PLN-2, PLN-6, PLN-8, PLN-9, PLN-10, TST-8, VER-2, VER-3, ROL-1, ROL-8, OPS-6, TOL-2, TOL-4, TOL-7, OVS-3, KNW-1, KNW-2, MSR-7, MSR-8 |
+| [Christopher Chedeau (personal project)](../cases/2026-01-25-vjeux-pokemon-showdown-rust.md) | 22: PLN-4, PLN-5, PLN-11, TST-5, VER-1, VER-7, REV-11, SEC-1, SEC-3, TEM-1, TEM-2, TEM-5, TOL-1, CTX-11, AGF-1, AGF-5, AGF-6, AGF-9, OVS-1, KNW-1, KNW-4, MSR-6 |
 | [Spotify](../cases/2025-11-06-spotify-honk.md) | 47: PLN-6, PLN-8, PLN-9, TST-2, TST-6, VER-1, VER-2, VER-3, VER-4, VER-8, VER-9, VER-10, REV-4, REV-5, REV-6, REV-7, REV-9, OPS-4, SEC-1, SEC-2, SEC-3, SEC-8, CST-2, CST-8, CST-9, TEM-3, TEM-4, TOL-4, TOL-5, TOL-6, CTX-1, CTX-3, CTX-4, CTX-5, CTX-6, CTX-7, CTX-8, AGF-2, AGF-4, AGF-5, AGF-7, OVS-1, MSR-1, MSR-2, MSR-3, MSR-6, MSR-8 |
 | [Google](../cases/2025-04-13-google-int64-ids.md) | 35: PLN-1, PLN-8, TST-2, TST-6, TST-7, VER-2, VER-3, VER-7, VER-10, REV-2, REV-4, REV-7, REV-9, ROL-2, ROL-3, OPS-6, CST-4, CST-8, TEM-2, TEM-4, TOL-2, TOL-3, TOL-4, TOL-5, AGF-4, AGF-7, AGF-8, OVS-2, OVS-3, KNW-2, MSR-1, MSR-3, MSR-7, MSR-8, MSR-9 |
 | [Airbnb](../cases/2025-04-01-airbnb-enzyme-to-rtl.md) | 24: PLN-1, PLN-2, PLN-3, PLN-9, PLN-12, TST-8, VER-2, VER-3, REV-10, OPS-6, CST-2, CST-3, CST-9, TOL-6, TOL-7, CTX-1, CTX-9, ORC-4, OVS-3, KNW-1, KNW-2, MSR-1, MSR-2, MSR-5 |
@@ -53,6 +56,7 @@ Lessons that cite each case, in "Cases" or "Against".
 ## Where the cases disagree
 
 - **PLN-5** ([Planning and scoping](planning.md)) Translate first and redesign later: keep behaviour the same during the move so that any failure points at the port, not at a deliberate change.
+- **PLN-11** ([Planning and scoping](planning.md)) Do not port a whole app in one pass, even from specs gathered first; Shopify's author says that gives code nobody can maintain. Port in small ordered slices a person can review quickly.
 - **VER-10** ([Verification loops and gates](verification.md)) Where one change repeats across many targets, keep the pass/fail gates deterministic as the model writes more; an error a model-run gate lets through can spread to every target.
 - **REV-2** ([Code review](review.md)) Split the review: agents and tests do the exhaustive old-against-new comparison; people spend their attention on architecture, contracts and flagged risk.
 - **ROL-1** ([Release and rollout](rollout.md)) Swap one component per change inside normal releases, old and new in one tree joined by a temporary bridge, so the main branch can always ship.
@@ -85,7 +89,7 @@ To find the lessons that fit work other than a migration, scan this list, then o
 - **PLN-8** [stated] Leave out segments you cannot specify or verify (non-standard repositories, unsupported platforms, languages the model handles poorly) instead of forcing one approach on all. (oracle: no; medium)
 - **PLN-9** [ours] Plan for a partial outcome and a stop rule: no published case here was abandoned, so success odds read from such cases are inflated. (oracle: no; medium)
 - **PLN-10** [stated] Measure how often each pattern (runner, rule, base class) is used and how automatable it is, and build the transforms or prompts with the best return first. (oracle: no; medium)
-- **PLN-11** [stated] Do not port a whole app in one pass, even from specs gathered first; the author says that gives code nobody can maintain. Port in small ordered slices a person can review quickly. (oracle: partly; weak)
+- **PLN-11** [stated] Do not port a whole app in one pass, even from specs gathered first; Shopify's author says that gives code nobody can maintain. Port in small ordered slices a person can review quickly. (oracle: partly; weak)
 - **PLN-12** [stated] Sort targets into archetypes, each with its own prompt, data collection and checks; give rare archetypes a generic starting point instead of dedicated automation. (oracle: no; weak)
 
 ### [Testing and oracles](testing.md)
@@ -94,7 +98,7 @@ To find the lessons that fit work other than a migration, scan this list, then o
 - **TST-2** [stated] Before the move starts, make sure tests cover the behaviour that matters and that agents can run them; the gaps were where missing-feature regressions came from. (oracle: yes; medium)
 - **TST-3** [stated] Equivalence with the old system is not correctness: a faithful port carries the old bugs, and tests can assert the wrong behaviour with confidence. (oracle: yes; medium)
 - **TST-4** [ours] Run the oracle on the build configuration you ship; debug-only assertions and checks hid regressions that appeared only in release builds. (oracle: partly; weak)
-- **TST-5** [stated] Where the old system has thin tests, record its inputs and outputs (or have a separate agent write equivalence tests) and replay them against the new code. (oracle: yes; medium)
+- **TST-5** [stated] Where the old system has thin tests, record its inputs and outputs (or have a separate agent write equivalence tests) and replay them against the new code. (oracle: yes; strong)
 - **TST-6** [stated] Make the baseline green before agents start: fix tests that already fail and make golden files regenerable, or correct changes stall at the gate. (oracle: yes; medium)
 - **TST-7** [ours] When widening a data type, test with values beyond the old range; tests with small example values pass even when a truncation survives. (oracle: partly; weak)
 - **TST-8** [ours] When the migrated artefact is itself a test, passing is a weak oracle; also compare test counts, coverage and intent file by file. (oracle: yes; weak)
@@ -105,7 +109,7 @@ To find the lessons that fit work other than a migration, scan this list, then o
 
 ### [Verification loops and gates](verification.md)
 
-- **VER-1** [stated] A clean compile or a green CI run shows the parts fit together, not that behaviour survived; plan a behavioural check after it. (oracle: no; strong)
+- **VER-1** [stated] A clean compile or a green CI run shows the parts fit together, not that behaviour survived; plan a behavioural check after it. (oracle: partly; strong)
 - **VER-2** [stated] Order gates from cheap to costly and drop a candidate at its first failure, with cheap no-change checks (whitespace only, unchanged syntax tree) up front. (oracle: partly; medium)
 - **VER-3** [stated] Retry a failed unit with its latest errors in a fresh prompt, cap the attempts, and hand what remains to people; this fits independent units, such as one file each. (oracle: partly; strong)
 - **VER-4** [stated] Give the agent one verify tool that picks the right build and test runner and returns short errors, and run it automatically before the agent may finish. (oracle: partly; weak)
@@ -121,7 +125,7 @@ To find the lessons that fit work other than a migration, scan this list, then o
 
 - **REV-1** [stated] Never let the writing agent review its own change; use two or more reviewers in fresh contexts that see only the diff and are told to find faults. (oracle: partly; medium)
 - **REV-2** [stated] Split the review: agents and tests do the exhaustive old-against-new comparison; people spend their attention on architecture, contracts and flagged risk. (oracle: partly; medium)
-- **REV-3** [ours] Give reviewers a written list of constructs that read the same in both languages but behave differently: assertions, eager defaults, falsy checks, number types. (oracle: yes; medium)
+- **REV-3** [ours] Give reviewers a written list of constructs that read the same in old and new code but behave differently: assertions, eager defaults, falsy checks, number types, built-in validators. (oracle: yes; medium)
 - **REV-4** [stated] Add an automatic scope check that compares each diff with its instruction; agents drift into refactors, switched-off tests and side fixes. (oracle: no; medium)
 - **REV-5** [ours] Treat LLM reviewers and judges as unmeasured until you know their miss rate; veto counts and showcase catches say nothing about what got through. (oracle: no; medium)
 - **REV-6** [stated] Have the tool leave an inline note with a guide link at each spot it deliberately left for a person, so reviewers find the judgement calls fast. (oracle: no; medium)
@@ -129,7 +133,7 @@ To find the lessons that fit work other than a migration, scan this list, then o
 - **REV-8** [stated] Audit the reviewers and the fixer: check that AI reviewers flag real differences and that the agent's answers to review comments hold up. (oracle: partly; medium)
 - **REV-9** [stated] Once agents write fast, review, testing and deploy by the owning teams become the bottleneck; plan for that load from the start: reviewer capacity, evidence that eases review, priority. (oracle: no; strong)
 - **REV-10** [ours] Grade a small sample of converted code against hand-converted versions with a rubric; pass rates say nothing about readability or idiom. (oracle: yes; weak)
-- **REV-11** [stated] Code that meets the feature requirements can still duplicate logic, drift from the architecture or run slowly; keep reviewers who know the target platform. (oracle: no; weak)
+- **REV-11** [stated] Code that meets the feature requirements can still duplicate logic, drift from the architecture or run slowly; keep reviewers who know the target platform. (oracle: no; medium)
 
 ### [Release and rollout](rollout.md)
 
@@ -211,6 +215,7 @@ To find the lessons that fit work other than a migration, scan this list, then o
 - **CTX-8** [stated] Fit the prompt to the agent: a weak home-built loop needed step-by-step lists, while a stronger agent did better with the end state and room to plan. (oracle: no; weak)
 - **CTX-9** [stated] When the context budget is small, choose context by fixed rules: full bodies of nearby functions, signatures for the rest, the hardest callers first. (oracle: partly; medium)
 - **CTX-10** [stated] Agents learn from the repository as it stands: fix docs and agent guidance that still favour the old library, and awkward examples, or they spread. (oracle: no; weak)
+- **CTX-11** [stated] Keep each unit small enough for the agent to read whole, such as one function per file in the target; very long files were refused or read in loose chunks and filled the context. (oracle: no; weak)
 
 ### [Many agents at once](orchestration.md)
 
@@ -228,9 +233,10 @@ To find the lessons that fit work other than a migration, scan this list, then o
 - **AGF-3** [stated] Agents handle order-dependent and hard-to-reverse steps badly (a backfill before the writer changes, half of a paired operation), even when told the rule. (oracle: no; medium)
 - **AGF-4** [stated] Agents stray beyond the task (reworking code, switching off tests, side optimisations); expect it and check every diff for scope. (oracle: no; medium)
 - **AGF-5** [stated] Agents use whatever escape hatch turns a check green: a waiver label, a disabled flaky test, a deleted test. (oracle: no; medium)
-- **AGF-6** [ours] Make each agent session discardable as a unit; one unchecked assumption forced a whole session to be rolled back. (oracle: no; weak)
+- **AGF-6** [ours] Make each agent session discardable as a unit; one unchecked assumption forced a whole session to be rolled back. (oracle: no; medium)
 - **AGF-7** [stated] Output varies between runs on the same input: plan retries, pick among passing attempts, and contain the variance in production migrations. (oracle: partly; medium)
 - **AGF-8** [stated] Check how well the model handles each language in scope; one poorly supported language fell back to people. (oracle: no; weak)
+- **AGF-9** [stated] Agents avoid the hard part: they skip difficult items in a list, decline fixes that span many files, and patch the one failing case; a prompt forbidding this was not really followed. (oracle: no; weak)
 
 ### [Human oversight](oversight.md)
 
@@ -238,12 +244,14 @@ To find the lessons that fit work other than a migration, scan this list, then o
 - **OVS-2** [stated] Keep the final merge with a person who checks how the agent answered CI and review, not only the diff. (oracle: no; strong)
 - **OVS-3** [stated] Decide up front where automation stops (a retry cap, a residue size, a category for people) and hand over with the failed attempt as the starting point. (oracle: no; strong)
 - **OVS-4** [stated] Bind each human approval to the exact text approved, such as a hash of the plan, so any later edit to the plan needs a fresh approval. (oracle: no; weak)
+- **OVS-5** [stated] Run agents in small mixed waves and make the orchestrator stop for a person's approval between them, so one systematic mistake cannot spread to every target. (oracle: no; weak)
 
 ### [Knowledge capture](knowledge.md)
 
 - **KNW-1** [stated] When a failure recurs, fix what generates the code (prompt, reviewer rule, skill, evaluation, harness), not only the output; the second time is the trigger. (oracle: no; strong)
 - **KNW-2** [stated] Stamp each unit with its status, tune against the largest failing group using a small sample, then sweep all units again. (oracle: partly; strong)
 - **KNW-3** [stated] Keep structured session logs from the start; they later answered where time went and what people did, and became evaluations. (oracle: no; medium)
+- **KNW-4** [stated] A compacted or fresh session forgets what the last one learned; keep the method in files it rereads (instructions, one debug script) and find work by search, not a growing notes file. (oracle: no; weak)
 
 ### [Measuring and reading results](measurement.md)
 
@@ -252,7 +260,7 @@ To find the lessons that fit work other than a migration, scan this list, then o
 - **MSR-3** [ours] Weigh each source by the author's stake in the tool (seller, owner, partner); none of the cases had outside measurement. (oracle: no; medium)
 - **MSR-4** [stated] Credit a gain to the migration only after separating it from work that landed in the same window (other speed work, linker changes, unrelated fixes). (oracle: partly; medium)
 - **MSR-5** [stated] Escaped defects are unknown by nature: publish known regressions as a floor, grouped by cause, and use a before-and-after proxy labelled as a proxy. (oracle: partly; medium)
-- **MSR-6** [ours] Activity numbers (lines per minute, commits, merged changes) are not progress; track verified behaviour or the shrinking list of remaining sites. (oracle: no; medium)
+- **MSR-6** [ours] Activity numbers (lines per minute, commits, merged changes) are not progress; track verified behaviour or the shrinking list of remaining sites. (oracle: partly; medium)
 - **MSR-7** [ours] Re-date a lesson before reusing it: early negative results, and results from pre-release or restricted models, may not hold for the models you use. (oracle: no; medium)
 - **MSR-8** [ours] Do not credit the model with work the deterministic tools did: finding sites, building manifests and codemods were often the hard part. (oracle: no; strong)
 - **MSR-9** [stated] If you will claim savings, measure people's share from file snapshots or logs from day one; estimates from the tool's own builders are biased. (oracle: no; medium)

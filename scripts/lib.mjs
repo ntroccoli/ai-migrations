@@ -58,6 +58,7 @@ export const UNITS = new Set(`
   people person engineer developer team user product language sdk app application screen
   character word example comment review lifecycle window event
   method task rule instruction zone office symbol project library cent
+  seed battle thread
 `.trim().split(/\s+/));
 // Words that may sit between a number and its unit without being units themselves.
 export const SCALES = new Set(['thousand', 'million', 'billion', 'k', 'm', 'b']);

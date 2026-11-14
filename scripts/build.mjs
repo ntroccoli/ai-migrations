@@ -75,7 +75,7 @@ const prefixOf = p => p.lessons[0]?.id.split('-')[0] ?? '';
 const all = pages.flatMap(p => p.lessons);
 const LEGEND = LESSON_LEGEND;
 // Who wrote the text, and which cases involve the maker of the model that wrote it.
-const claude = cases.filter(c => [c.meta.models].flat().some(m => /Claude/.test(m)));
+const claude = cases.filter(c => [c.meta.models].flat().some(m => /\b(Claude|Opus|Sonnet|Haiku)\b/.test(m)));
 const noModels = cases.filter(c => [c.meta.models].flat().every(m => !m || m === 'unstated'));
 const DISCLOSURE = 'Disclosure: the cases and lessons are drafted by Claude, an Anthropic model, and reviewed by the ' +
   `maintainer. ${noModels.length ? 'At least ' : ''}${claude.length} of the ${cases.length} cases used Claude models (${claude.map(c => c.meta.company).join(', ')}` +

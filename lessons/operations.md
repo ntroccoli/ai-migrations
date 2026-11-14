@@ -12,7 +12,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: At Asana, CI results that differed from local checks, with a slow lint step, were where people had to step in most ([Asana][asa-wrong]): pushing runs to CI helps only if CI matches local runs.
 - **OPS-2** [stated] Contain heavy tests with operating-system limits (control groups, process namespaces, disk quotas); asking the agent to be careful contains nothing.
   - Old system as oracle: no. Strength: weak. Era: 2026.
-  - Cases: [Bun: what went wrong][bun-wrong].
+  - Cases: [Bun: what went wrong][bun-wrong], [Spartacus: what went wrong][spa-wrong].
   - Against: Bun's limits covered memory, CPU and processes, yet the disk still filled and crashed the machine several times ([Bun][bun-wrong]); no case shows disk quotas in use.
 - **OPS-3** [stated] Make the inner loop fast (module splits, build caches, host I/O) before scaling agents; their time goes mostly to reading, building and testing, not writing.
   - Old system as oracle: no. Strength: strong. Era: 2025–2026.
@@ -48,5 +48,6 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [shp-worked]: ../cases/2026-09-10-shopify-react-native-to-native.md#what-worked
 [shp-wrong]: ../cases/2026-09-10-shopify-react-native-to-native.md#what-went-wrong
 [slk-worked]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#what-worked
+[spa-wrong]: ../cases/2026-04-13-lutz-leonhardt-spartacus-signal-forms.md#what-went-wrong
 [spo-wrong]: ../cases/2025-11-06-spotify-honk.md#what-went-wrong
 [ubr-worked]: ../cases/2026-04-07-uber-junit4-to-junit5.md#what-worked

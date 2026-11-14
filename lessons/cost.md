@@ -12,7 +12,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: With a model call per file, Zalando put its API bill under $40 per repository before any cache discount ([Zalando][zal-numbers]); the cache matters most for long agent runs. Zalando still ordered its prompt for caching ([Zalando][zal-worked]).
 - **CST-2** [ours] Ask for the full bill: tokens at the price paid, people's hours by role, compute and CI, review, and the work after merge; most sources give one piece.
   - Old system as oracle: no. Strength: strong. Era: 2024–2026.
-  - Cases: [GitHub: numbers][gh-numbers], [Bun: numbers][bun-numbers], [Airbnb: what went wrong][air-wrong], [Spotify: what went wrong][spo-wrong].
+  - Cases: [GitHub: numbers][gh-numbers], [Bun: numbers][bun-numbers], [Airbnb: what went wrong][air-wrong], [Spotify: what went wrong][spo-wrong], [ts-rust: numbers][tsr-numbers].
   - Against: GitHub gives the fullest token breakdown in the set ([GitHub][gh-numbers]).
 - **CST-3** [ours] Expect cost per unit to have a long tail; report median and mean, and size the budget for hub components and hard files.
   - Old system as oracle: no. Strength: medium. Era: 2024–2026.
@@ -20,7 +20,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: None found.
 - **CST-4** [ours] Before reusing a published cost, check the model, how it was reached and the price basis; pre-release, internal or partner models give costs others cannot repeat.
   - Old system as oracle: no. Strength: medium. Era: model-specific by definition.
-  - Cases: [Bun: who did what][bun-who], [Intel: who did what][int-who], [Google: who did what][goo-who], [Asana: source][asa-source].
+  - Cases: [Bun: who did what][bun-who], [Intel: who did what][int-who], [Google: who did what][goo-who], [Asana: source][asa-source], [ts-rust: numbers][tsr-numbers].
   - Against: None found.
 - **CST-5** [ours] Work out cost per unit inside one case and name the unit; added lines, production lines, symbols and files differ, and tokens do not convert to money across cases.
   - Old system as oracle: no. Strength: medium. Era: 2026.
@@ -64,5 +64,6 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [spo-numbers]: ../cases/2025-11-06-spotify-honk.md#numbers
 [spo-worked]: ../cases/2025-11-06-spotify-honk.md#what-worked
 [spo-wrong]: ../cases/2025-11-06-spotify-honk.md#what-went-wrong
+[tsr-numbers]: ../cases/2026-10-07-ping-tsgo-to-rust.md#numbers
 [zal-numbers]: ../cases/2025-02-20-zalando-ui-component-libraries.md#numbers
 [zal-worked]: ../cases/2025-02-20-zalando-ui-component-libraries.md#what-worked

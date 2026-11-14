@@ -8,7 +8,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 
 - **PLN-1** [stated] Pilot the whole pipeline (build, CI, review, packaging, release) on a few easy, well-tested units, and settle the conventions before fanning out to the rest.
   - Old system as oracle: partly. Strength: strong. Era: 2023–2026, all model eras.
-  - Cases: [Bun: what worked][bun-worked], [GitHub: what worked][gh-worked], [Google: what worked][goo-worked], [Airbnb: who did what][air-who].
+  - Cases: [Bun: what worked][bun-worked], [GitHub: what worked][gh-worked], [Google: what worked][goo-worked], [Airbnb: who did what][air-who], [Spartacus: what worked][spa-worked], [Spartacus: what went wrong][spa-wrong].
   - Against: Bun's three-file trial did not reveal the clash between agents sharing one checkout that hit minutes into the full run ([Bun][bun-wrong]).
   - Sceptic: tag changed from no to partly. Challenge: the pilot units were picked because strong old tests covered them, so the pilot was safe thanks to the old oracle. Answer: accepted; in new work, pick pilot units you can test first.
 - **PLN-2** [stated] Expect most of the effort to go into specs, porting guides, manifests and tooling before the bulk run; schedule and staff that phase, not only execution.
@@ -22,10 +22,10 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **PLN-4** [stated] Order the slices along the dependency graph, leaves first and the most connected hub last, and approach the hub from one direction only.
   - Old system as oracle: no. Strength: medium. Era: 2026.
   - Cases: [GitHub: what worked][gh-worked], [GitHub: what went wrong][gh-wrong], [Intel: who did what][int-who], [1Password: what worked][opw-worked].
-  - Against: None found.
+  - Against: The Pokémon Showdown port went through methods in list order with no working slices and joined them only at the end, then fixed what diverged from the old engine ([vjeux][vjx-worked]); with a full old-engine oracle, order mattered less.
 - **PLN-5** [stated] Translate first and redesign later: keep behaviour the same during the move so that any failure points at the port, not at a deliberate change.
-  - Old system as oracle: yes. Strength: medium. Era: 2026.
-  - Cases: [GitHub: practices to copy][gh-practices], [Bun: what worked][bun-worked].
+  - Old system as oracle: yes. Strength: medium. Era: 2025–2026.
+  - Cases: [GitHub: practices to copy][gh-practices], [Bun: what worked][bun-worked], [vjeux: what was migrated][vjx-migrated], [ts-rust: what was migrated][tsr-migrated].
   - Against: Disagree: Intel aims for idiomatic data structures at translation time ([Intel][int-practices]), and GitHub's own review prompt asked for idiomatic, optimised code during the port. Shopify retired or simplified some Shop screens during the move, though each checkpoint still had to match the running old app ([Shopify][shp-migrated], [checkpoints][shp-checked]).
 - **PLN-6** [stated] Set expectations per class of work: bounded, repetitive edits gain a lot; work with ordering, schema or shared-state constraints gains far less.
   - Old system as oracle: no. Strength: medium. Era: GPT-4o, 2024–2025; 2026 (models unstated).
@@ -42,16 +42,16 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: Bloomberg did not leave its rare archetypes out: each got a generic starting-point PR, labelled as such, for its owners to finish ([Bloomberg][bbg-wrong]).
 - **PLN-9** [ours] Plan for a partial outcome and a stop rule: no published case here was abandoned, so success odds read from such cases are inflated.
   - Old system as oracle: no. Strength: medium. Era: all.
-  - Cases: [Slack: what went wrong][slk-wrong], [1Password: what went wrong][opw-wrong], [Spotify: what went wrong][spo-wrong], [Airbnb: what went wrong][air-wrong].
-  - Against: Uber reports an AI attempt that failed and was dropped, a first in this collection, though it names no model, size or date ([Uber][ubr-wrong]); the migrations themselves are all survivors.
+  - Cases: [Slack: what went wrong][slk-wrong], [1Password: what went wrong][opw-wrong], [Spotify: what went wrong][spo-wrong], [Airbnb: what went wrong][air-wrong], [ts-rust: what went wrong][tsr-wrong].
+  - Against: Uber reports an AI attempt that failed and was dropped, a first in this collection, though it names no model, size or date ([Uber][ubr-wrong]); ts-rust reports a first attempt that ran for months below its target before a restart replaced its code, with no stop rule stated ([ts-rust][tsr-wrong]); the migrations themselves are all survivors.
 - **PLN-10** [stated] Measure how often each pattern (runner, rule, base class) is used and how automatable it is, and build the transforms or prompts with the best return first.
   - Old system as oracle: no. Strength: medium. Era: unstated; Claude Sonnet 4.5, then Opus 4.6, 2025–2026.
   - Cases: [Uber: what worked][ubr-worked], [Bloomberg: what worked][bbg-worked].
   - Against: None found; Bloomberg's authors say easier archetypes may have gone first, which can inflate early success rates ([Bloomberg][bbg-wrong]).
-- **PLN-11** [stated] Do not port a whole app in one pass, even from specs gathered first; the author says that gives code nobody can maintain. Port in small ordered slices a person can review quickly.
+- **PLN-11** [stated] Do not port a whole app in one pass, even from specs gathered first; Shopify's author says that gives code nobody can maintain. Port in small ordered slices a person can review quickly.
   - Old system as oracle: partly. Strength: weak. Era: 2025–2026 (models unstated).
-  - Cases: [Shopify: what went wrong][shp-wrong], [Shopify: how it was checked][shp-checked].
-  - Against: Bun merged a whole port as one branch ([Bun][bun-worked]), though built from many agent-sized units, not in one pass.
+  - Cases: [Shopify: what went wrong][shp-wrong], [Shopify: how it was checked][shp-checked], [vjeux: what went wrong][vjx-wrong].
+  - Against: Disagree: Bun merged a whole port as one branch ([Bun][bun-worked]), though built from many agent-sized units, not in one pass. The Pokémon Showdown port ported every method before running any of it and joined them once, arguing that growing it slice by slice would relearn settled design ([vjeux][vjx-worked]).
 - **PLN-12** [stated] Sort targets into archetypes, each with its own prompt, data collection and checks; give rare archetypes a generic starting point instead of dedicated automation.
   - Old system as oracle: no. Strength: weak. Era: Claude Sonnet 4.5, then Opus 4.6, 2025–2026.
   - Cases: [Bloomberg: what worked][bbg-worked], [Bloomberg: what went wrong][bbg-wrong].
@@ -81,9 +81,16 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [shp-wrong]: ../cases/2026-09-10-shopify-react-native-to-native.md#what-went-wrong
 [slk-context]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#context
 [slk-wrong]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#what-went-wrong
+[spa-worked]: ../cases/2026-04-13-lutz-leonhardt-spartacus-signal-forms.md#what-worked
+[spa-wrong]: ../cases/2026-04-13-lutz-leonhardt-spartacus-signal-forms.md#what-went-wrong
 [spo-numbers]: ../cases/2025-11-06-spotify-honk.md#numbers
 [spo-wrong]: ../cases/2025-11-06-spotify-honk.md#what-went-wrong
+[tsr-migrated]: ../cases/2026-10-07-ping-tsgo-to-rust.md#what-was-migrated
+[tsr-wrong]: ../cases/2026-10-07-ping-tsgo-to-rust.md#what-went-wrong
 [ubr-worked]: ../cases/2026-04-07-uber-junit4-to-junit5.md#what-worked
 [ubr-wrong]: ../cases/2026-04-07-uber-junit4-to-junit5.md#what-went-wrong
+[vjx-migrated]: ../cases/2026-01-25-vjeux-pokemon-showdown-rust.md#what-was-migrated
+[vjx-worked]: ../cases/2026-01-25-vjeux-pokemon-showdown-rust.md#what-worked
+[vjx-wrong]: ../cases/2026-01-25-vjeux-pokemon-showdown-rust.md#what-went-wrong
 [zal-wrong]: ../cases/2025-02-20-zalando-ui-component-libraries.md#what-went-wrong
 [k-coding-agents-weak-on-novel-code]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2025-10-17-coding-agents-weak-on-novel-code.md

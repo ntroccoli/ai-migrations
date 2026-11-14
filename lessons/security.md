@@ -9,7 +9,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **SEC-1** [stated] Run unattended agents in a minimal sandbox with an allowlist of commands; pushing, merging and talking to people belong to the surrounding infrastructure.
   - Old system as oracle: no. Strength: weak. Era: Claude Code, 2025–2026.
   - Cases: [Spotify: what worked][spo-worked], [Spotify: practices to copy][spo-practices].
-  - Against: Bun's agents committed and pushed themselves and the project still finished ([Bun][bun-wrong]).
+  - Against: Bun's agents committed and pushed themselves and the project still finished ([Bun][bun-wrong]). One author found the sandbox blocked pushing and an antivirus stopped each new build, and worked around both (a local server running git, builds in Docker, every prompt approved) to keep his agent running; he reports no harm ([vjeux][vjx-wrong]).
   - Related view (karpathy-ideas): [agent security is the wild west][k-agent-security-is-the-wild-west], agrees.
 - **SEC-2** [stated] Whatever the harness exposes may get used unasked (an unlisted skill, git commands, a peer's worktree); remove what the task does not need.
   - Old system as oracle: no. Strength: medium. Era: 2025–2026.
@@ -18,7 +18,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **SEC-3** [ours] Block destructive repository and system commands in the tool layer, not with a prompt rule, which only arrives after the damage.
   - Old system as oracle: no. Strength: medium. Era: 2025–2026.
   - Cases: [Bun: what went wrong][bun-wrong], [Spotify: practices to copy][spo-practices].
-  - Against: None found.
+  - Against: One author ran an agent for weeks on his own computer with every prompt approved by a key-press script and reports no damage ([vjeux][vjx-wrong]); one unharmed run is a small sample.
 - **SEC-4** [stated] After a port into a memory-safe language, count where unsafe code sits, allow it only at foreign and system boundaries, and have the compiler forbid it elsewhere.
   - Old system as oracle: no. Strength: medium. Era: 2026.
   - Cases: [GitHub: numbers][gh-numbers], [Bun: what went wrong][bun-wrong], [Intel: practices to copy][int-practices].
@@ -64,5 +64,6 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [spo-who]: ../cases/2025-11-06-spotify-honk.md#who-did-what
 [spo-worked]: ../cases/2025-11-06-spotify-honk.md#what-worked
 [spo-wrong]: ../cases/2025-11-06-spotify-honk.md#what-went-wrong
+[vjx-wrong]: ../cases/2026-01-25-vjeux-pokemon-showdown-rust.md#what-went-wrong
 [k-agent-security-is-the-wild-west]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2025-06-16-agent-security-is-the-wild-west.md
 [k-rethink-dependencies-supply-chain]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2026-03-24-rethink-dependencies-supply-chain.md

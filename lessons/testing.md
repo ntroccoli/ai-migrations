@@ -8,12 +8,12 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 
 - **TST-1** [stated] Use a black-box suite that does not depend on the implementation language as the oracle, and run it unchanged against the old code and the new.
   - Old system as oracle: yes. Strength: medium. Era: 2026.
-  - Cases: [Bun: how it was checked][bun-checked], [GitHub: how it was checked][gh-checked].
+  - Cases: [Bun: how it was checked][bun-checked], [GitHub: how it was checked][gh-checked], [ts-rust: how it was checked][tsr-checked].
   - Against: An outside critic asks why a suite that let the old bugs through should vet the new code ([Bun][bun-wrong]); Bun still shipped known regressions after a fully green run.
   - Related view (karpathy-ideas): [port with equality tests][k-port-with-equality-tests], agrees.
 - **TST-2** [stated] Before the move starts, make sure tests cover the behaviour that matters and that agents can run them; the gaps were where missing-feature regressions came from.
   - Old system as oracle: yes. Strength: medium. Era: 2025–2026.
-  - Cases: [GitHub: what went wrong][gh-wrong], [Spotify: practices to copy][spo-practices].
+  - Cases: [GitHub: what went wrong][gh-wrong], [Spotify: practices to copy][spo-practices], [ts-rust: what went wrong][tsr-wrong], [Spartacus: what went wrong][spa-wrong].
   - Against: Google leaned on the owning teams' existing regression suites and slow rollouts rather than new tests ([Google][goo-checked]); Intel left the tests out on purpose and got a build that crashed ([Intel][int-wrong]).
 - **TST-3** [stated] Equivalence with the old system is not correctness: a faithful port carries the old bugs, and tests can assert the wrong behaviour with confidence.
   - Old system as oracle: yes. Strength: medium. Era: 2026.
@@ -25,13 +25,13 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Bun: what went wrong][bun-wrong].
   - Against: None found.
 - **TST-5** [stated] Where the old system has thin tests, record its inputs and outputs (or have a separate agent write equivalence tests) and replay them against the new code.
-  - Old system as oracle: yes. Strength: medium. Era: 2024 (Claude 2.1), 2026 (Claude Mythos Preview).
-  - Cases: [Intel: what worked][int-worked], [Slack: what worked][slk-worked].
-  - Against: Full coverage through a library's public functions is often out of reach, and generated tests can be vacuous ([Intel][int-wrong]).
+  - Old system as oracle: yes. Strength: strong. Era: 2024 (Claude 2.1), 2025–2026 (model unstated), 2026 (Claude Mythos Preview).
+  - Cases: [Intel: what worked][int-worked], [Slack: what worked][slk-worked], [vjeux: how it was checked][vjx-checked].
+  - Against: Full coverage through a library's public functions is often out of reach, and generated tests can be vacuous ([Intel][int-wrong]). The Pokémon port ran both versions live on seeded inputs rather than recording, and does not say the old tests were thin ([vjeux][vjx-checked]).
 - **TST-6** [stated] Make the baseline green before agents start: fix tests that already fail and make golden files regenerable, or correct changes stall at the gate.
   - Old system as oracle: yes. Strength: medium. Era: internal Gemini, period unstated.
   - Cases: [Google: what went wrong][goo-wrong], [Spotify: how it was checked][spo-checked].
-  - Against: None found.
+  - Against: Spartacus's refined protocol lets an agent go on from a red baseline, noted as an old failure, and stops only when the tests will not start ([Spartacus][spa-checked]).
 - **TST-7** [ours] When widening a data type, test with values beyond the old range; tests with small example values pass even when a truncation survives.
   - Old system as oracle: partly. Strength: weak. Era: internal Gemini.
   - Cases: [Google: what was migrated][goo-migrated].
@@ -74,9 +74,14 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [shp-wrong]: ../cases/2026-09-10-shopify-react-native-to-native.md#what-went-wrong
 [slk-practices]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#practices-to-copy
 [slk-worked]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#what-worked
+[spa-checked]: ../cases/2026-04-13-lutz-leonhardt-spartacus-signal-forms.md#how-it-was-checked
+[spa-wrong]: ../cases/2026-04-13-lutz-leonhardt-spartacus-signal-forms.md#what-went-wrong
 [spo-checked]: ../cases/2025-11-06-spotify-honk.md#how-it-was-checked
 [spo-practices]: ../cases/2025-11-06-spotify-honk.md#practices-to-copy
+[tsr-checked]: ../cases/2026-10-07-ping-tsgo-to-rust.md#how-it-was-checked
+[tsr-wrong]: ../cases/2026-10-07-ping-tsgo-to-rust.md#what-went-wrong
 [ubr-checked]: ../cases/2026-04-07-uber-junit4-to-junit5.md#how-it-was-checked
+[vjx-checked]: ../cases/2026-01-25-vjeux-pokemon-showdown-rust.md#how-it-was-checked
 [zal-checked]: ../cases/2025-02-20-zalando-ui-component-libraries.md#how-it-was-checked
 [zal-wrong]: ../cases/2025-02-20-zalando-ui-component-libraries.md#what-went-wrong
 [k-port-with-equality-tests]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2026-01-03-port-with-equality-tests.md

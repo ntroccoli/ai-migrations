@@ -48,6 +48,10 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: no. Strength: weak. Era: Codex agents (model unstated), source 2026.
   - Cases: [Asana: what went wrong][asa-wrong].
   - Against: None found.
+- **CTX-11** [stated] Keep each unit small enough for the agent to read whole, such as one function per file in the target; very long files were refused or read in loose chunks and filled the context.
+  - Old system as oracle: no. Strength: weak. Era: Claude Code (model unstated), 2025–2026.
+  - Cases: [vjeux: what worked][vjx-worked], [vjeux: what went wrong][vjx-wrong].
+  - Against: None found; the author did not split the original's files, for fear of changing behaviour, so only half the pair was split.
 
 [air-worked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-worked
 [asa-worked]: ../cases/2026-08-07-asana-enzyme-to-rtl.md#what-worked
@@ -66,6 +70,8 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [spo-practices]: ../cases/2025-11-06-spotify-honk.md#practices-to-copy
 [spo-worked]: ../cases/2025-11-06-spotify-honk.md#what-worked
 [spo-wrong]: ../cases/2025-11-06-spotify-honk.md#what-went-wrong
+[vjx-worked]: ../cases/2026-01-25-vjeux-pokemon-showdown-rust.md#what-worked
+[vjx-wrong]: ../cases/2026-01-25-vjeux-pokemon-showdown-rust.md#what-went-wrong
 [zal-numbers]: ../cases/2025-02-20-zalando-ui-component-libraries.md#numbers
 [zal-worked]: ../cases/2025-02-20-zalando-ui-component-libraries.md#what-worked
 [zal-wrong]: ../cases/2025-02-20-zalando-ui-component-libraries.md#what-went-wrong

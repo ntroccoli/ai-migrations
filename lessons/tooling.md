@@ -7,8 +7,8 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 `[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
 
 - **TOL-1** [stated] Have agents build deterministic tools (analysers, call-site manifests, porting guides, ownership tables), review those, then bind later agent work to them.
-  - Old system as oracle: no. Strength: strong. Era: 2026.
-  - Cases: [1Password: what worked][opw-worked], [Bun: what worked][bun-worked], [Intel: who did what][int-who].
+  - Old system as oracle: no. Strength: strong. Era: 2025–2026.
+  - Cases: [1Password: what worked][opw-worked], [Bun: what worked][bun-worked], [Intel: who did what][int-who], [vjeux: what worked][vjx-worked].
   - Against: Ordering errors persisted at 1Password even with explicit rules in place ([1Password][opw-wrong]).
 - **TOL-2** [stated] Run a rule-based codemod first and give the model its partial output, with a note wherever the rules gave up; it anchors the model.
   - Old system as oracle: partly. Strength: medium. Era: Claude 2.1, 2024; internal Gemini.
@@ -73,6 +73,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [ubr-who]: ../cases/2026-04-07-uber-junit4-to-junit5.md#who-did-what
 [ubr-worked]: ../cases/2026-04-07-uber-junit4-to-junit5.md#what-worked
 [ubr-wrong]: ../cases/2026-04-07-uber-junit4-to-junit5.md#what-went-wrong
+[vjx-worked]: ../cases/2026-01-25-vjeux-pokemon-showdown-rust.md#what-worked
 [zal-worked]: ../cases/2025-02-20-zalando-ui-component-libraries.md#what-worked
 [k-agents-ignore-code-style-rules]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2026-03-21-agents-ignore-code-style-rules.md
 [k-plan-for-intelligence-brownouts]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2026-03-11-plan-for-intelligence-brownouts.md

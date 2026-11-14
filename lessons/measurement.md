@@ -12,7 +12,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: Google's estimate at least agrees with its measured shares of model-made edits ([Google][goo-numbers]).
 - **MSR-2** [ours] For every success rate ask out of what (attempted, opened, merged, dropped from scope), and report each measure with its base; bases differed several-fold.
   - Old system as oracle: no. Strength: strong. Era: all.
-  - Cases: [Spotify: what went wrong][spo-wrong], [Slack: how it was checked][slk-checked], [Zalando: how it was checked][zal-checked], [Bloomberg: how it was checked][bbg-checked].
+  - Cases: [Spotify: what went wrong][spo-wrong], [Slack: how it was checked][slk-checked], [Zalando: how it was checked][zal-checked], [Bloomberg: how it was checked][bbg-checked], [Spartacus: what went wrong][spa-wrong].
   - Against: Airbnb's main rate covers its whole file set ([Airbnb][air-numbers]).
 - **MSR-3** [ours] Weigh each source by the author's stake in the tool (seller, owner, partner); none of the cases had outside measurement.
   - Old system as oracle: no. Strength: medium. Era: all.
@@ -27,9 +27,10 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [GitHub: what went wrong][gh-wrong], [Bun: what went wrong][bun-wrong].
   - Against: Airbnb reports no defects after merge at all, which is missing data, not evidence ([Airbnb][air-wrong]).
 - **MSR-6** [ours] Activity numbers (lines per minute, commits, merged changes) are not progress; track verified behaviour or the shrinking list of remaining sites.
-  - Old system as oracle: no. Strength: medium. Era: all.
-  - Cases: [Bun: numbers][bun-numbers], [Spotify: numbers][spo-numbers], [GitHub: what went wrong][gh-wrong].
+  - Old system as oracle: partly. Strength: medium. Era: all.
+  - Cases: [Bun: numbers][bun-numbers], [Spotify: numbers][spo-numbers], [GitHub: what went wrong][gh-wrong], [vjeux: how it was checked][vjx-checked], [ts-rust: what went wrong][tsr-wrong].
   - Against: None found.
+  - Sceptic: tag changed from no to partly. Challenge: the verified behaviour it points to was measured against the old system (compatibility with Go, pass rates against the old engine). Answer: accepted.
 - **MSR-7** [ours] Re-date a lesson before reusing it: early negative results, and results from pre-release or restricted models, may not hold for the models you use.
   - Old system as oracle: no. Strength: medium. Era: Claude 2.1 (2024) to pre-release models (2026).
   - Cases: [Slack: who did what][slk-who], [Bun: who did what][bun-who], [Intel: who did what][int-who], [Google: what went wrong][goo-wrong], [Uber: what went wrong][ubr-wrong].
@@ -68,10 +69,13 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [slk-checked]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#how-it-was-checked
 [slk-numbers]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#numbers
 [slk-who]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#who-did-what
+[spa-wrong]: ../cases/2026-04-13-lutz-leonhardt-spartacus-signal-forms.md#what-went-wrong
 [spo-context]: ../cases/2025-11-06-spotify-honk.md#context
 [spo-numbers]: ../cases/2025-11-06-spotify-honk.md#numbers
 [spo-who]: ../cases/2025-11-06-spotify-honk.md#who-did-what
 [spo-wrong]: ../cases/2025-11-06-spotify-honk.md#what-went-wrong
+[tsr-wrong]: ../cases/2026-10-07-ping-tsgo-to-rust.md#what-went-wrong
 [ubr-who]: ../cases/2026-04-07-uber-junit4-to-junit5.md#who-did-what
 [ubr-wrong]: ../cases/2026-04-07-uber-junit4-to-junit5.md#what-went-wrong
+[vjx-checked]: ../cases/2026-01-25-vjeux-pokemon-showdown-rust.md#how-it-was-checked
 [zal-checked]: ../cases/2025-02-20-zalando-ui-component-libraries.md#how-it-was-checked

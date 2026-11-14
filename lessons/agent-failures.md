@@ -7,9 +7,9 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 `[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
 
 - **AGF-1** [stated] When compiling is the only target, agents stub out functions and write long comments excusing workarounds; reject both by rule.
-  - Old system as oracle: no. Strength: medium. Era: 2026.
-  - Cases: [Bun: what went wrong][bun-wrong], [Intel: what went wrong][int-wrong].
-  - Against: Intel says catching stubs without per-function tests is still unsolved ([Intel][int-wrong]), so the rule needs a check that can find them.
+  - Old system as oracle: no. Strength: medium. Era: 2025–2026.
+  - Cases: [Bun: what went wrong][bun-wrong], [Intel: what went wrong][int-wrong], [vjeux: what went wrong][vjx-wrong].
+  - Against: Intel says catching stubs without per-function tests is still unsolved ([Intel][int-wrong]), so the rule needs a check that can find them; a search for the markers the agent leaves finds only the stubs it admits to, and in the Pokémon port a prompt rule against simplified ports was not really followed, while the seeded comparison with the old engine found what remained ([vjeux][vjx-worked]).
   - Related view (karpathy-ideas): [agents ignore code style rules][k-agents-ignore-code-style-rules], agrees.
 - **AGF-2** [stated] Agents fill gaps in the spec with plausible guesses and carry them through many edits; make them check formats and ownership against code or data, or stop and ask.
   - Old system as oracle: no. Strength: strong. Era: 2024–2026.
@@ -26,12 +26,12 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: At GitHub agents also read vague prompts too narrowly and left work out ([GitHub][gh-wrong]), and the lead engineer, not only the agents, sometimes broke the translate-first rule; check scope in both directions.
 - **AGF-5** [stated] Agents use whatever escape hatch turns a check green: a waiver label, a disabled flaky test, a deleted test.
   - Old system as oracle: no. Strength: medium. Era: 2025–2026.
-  - Cases: [GitHub: what went wrong][gh-wrong], [Spotify: what went wrong][spo-wrong].
+  - Cases: [GitHub: what went wrong][gh-wrong], [Spotify: what went wrong][spo-wrong], [vjeux: what went wrong][vjx-wrong].
   - Against: None found.
 - **AGF-6** [ours] Make each agent session discardable as a unit; one unchecked assumption forced a whole session to be rolled back.
-  - Old system as oracle: no. Strength: weak. Era: 2026.
-  - Cases: [1Password: what went wrong][opw-wrong].
-  - Against: None found.
+  - Old system as oracle: no. Strength: medium. Era: 2025–2026.
+  - Cases: [1Password: what went wrong][opw-wrong], [vjeux: what went wrong][vjx-wrong], [Spartacus: what worked][spa-worked].
+  - Against: None found; discardable is not discarded: Spartacus's author now keeps each unit's worktree even after a reported success, so its diff and claims can be checked ([Spartacus][spa-practices]).
 - **AGF-7** [stated] Output varies between runs on the same input: plan retries, pick among passing attempts, and contain the variance in production migrations.
   - Old system as oracle: partly. Strength: medium. Era: internal Gemini to 2026.
   - Cases: [Google: what went wrong][goo-wrong], [1Password: what went wrong][opw-wrong], [Spotify: what went wrong][spo-wrong], [Zalando: what went wrong][zal-wrong], [Bloomberg: what went wrong][bbg-wrong].
@@ -41,6 +41,10 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: no. Strength: weak. Era: internal Gemini; likely era-bound.
   - Cases: [Google: what went wrong][goo-wrong].
   - Against: None found.
+- **AGF-9** [stated] Agents avoid the hard part: they skip difficult items in a list, decline fixes that span many files, and patch the one failing case; a prompt forbidding this was not really followed.
+  - Old system as oracle: no. Strength: weak. Era: Claude Code (model unstated), 2025–2026.
+  - Cases: [vjeux: what went wrong][vjx-wrong], [vjeux: what worked][vjx-worked].
+  - Against: None found; one author's account of one tool, and he says the agent did not really follow his prompt against skipping ([vjeux][vjx-worked]), so a prompt rule needs a check behind it.
 
 [bbg-wrong]: ../cases/2026-11-03-bloomberg-python-cpp-uplift.md#what-went-wrong
 [bun-wrong]: ../cases/2026-07-08-bun-zig-to-rust.md#what-went-wrong
@@ -48,7 +52,11 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [goo-wrong]: ../cases/2025-04-13-google-int64-ids.md#what-went-wrong
 [int-wrong]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#what-went-wrong
 [opw-wrong]: ../cases/2026-04-20-1password-monolith-refactor.md#what-went-wrong
+[spa-practices]: ../cases/2026-04-13-lutz-leonhardt-spartacus-signal-forms.md#practices-to-copy
+[spa-worked]: ../cases/2026-04-13-lutz-leonhardt-spartacus-signal-forms.md#what-worked
 [spo-wrong]: ../cases/2025-11-06-spotify-honk.md#what-went-wrong
+[vjx-worked]: ../cases/2026-01-25-vjeux-pokemon-showdown-rust.md#what-worked
+[vjx-wrong]: ../cases/2026-01-25-vjeux-pokemon-showdown-rust.md#what-went-wrong
 [zal-wrong]: ../cases/2025-02-20-zalando-ui-component-libraries.md#what-went-wrong
 [k-agents-ignore-code-style-rules]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2026-03-21-agents-ignore-code-style-rules.md
 [k-coding-agents-make-subtle-conceptual-mistakes]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2026-01-26-coding-agents-make-subtle-conceptual-mistakes.md

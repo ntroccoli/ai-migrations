@@ -15,10 +15,12 @@ does underneath them.
   platform behaviour the old runtime supplied silently, such as a Windows window flag. [GitHub][]
 - Paired operations (open and close, subscribe and unsubscribe) ported on one side only;
   lifecycle and ordering. [GitHub][]
-- (ours) Locale; typed arrays and float width; exceptions against error values; garbage-collected
-  object graphs and shared mutable references against ownership; callbacks and closures held across
-  frames; an event loop against threads; `undefined`, `null` and absent fields in parsed JSON;
-  DOM or `window` access.
+- Objects that point at each other, which ownership rules turn into copies, indices or callbacks;
+  loosely typed return values that need new types; optional arguments that must all be spelled
+  out. [Pokémon Showdown][]
+- (ours) Locale; typed arrays and float width; exceptions against error values; shared mutable
+  references against ownership; callbacks and closures held across frames; an event loop against
+  threads; `undefined`, `null` and absent fields in parsed JSON; DOM or `window` access.
 
 ## Python to a compiled language (ours; no case covers it)
 
@@ -113,9 +115,13 @@ does underneath them.
 - A wrong dependency choice that builds and passes smoke checks, then fails only once deployed;
   the pipeline also never ran some targets' unit tests. [Bloomberg][]
 
-## A library or framework version upgrade (ours)
+## A library or framework upgrade, or a move to its newer API
 
-- Removed or deprecated APIs; changed defaults; behaviour changes listed only in the release notes
+- Built-ins that replace an old check but accept different input (Angular's email pattern for
+  the project's own; plain required for must-be-true on a checkbox); code that changes validators or errors
+  imperatively, which the new API rejects; side effects inside checks that now run at another
+  time. [Spartacus][]
+- (ours) Removed or deprecated APIs; changed defaults; behaviour changes listed only in the release notes
   between the two versions (read them all, not only the latest); transitive dependencies that
   now conflict; generated code or configuration that must be regenerated.
 
@@ -165,3 +171,5 @@ where a case is linked):
 [Shopify]: cases/2026-09-10-shopify-react-native-to-native.md
 [Bloomberg]: cases/2026-11-03-bloomberg-python-cpp-uplift.md
 [Asana]: cases/2026-08-07-asana-enzyme-to-rtl.md
+[Pokémon Showdown]: cases/2026-01-25-vjeux-pokemon-showdown-rust.md
+[Spartacus]: cases/2026-04-13-lutz-leonhardt-spartacus-signal-forms.md

@@ -8,8 +8,8 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 
 - **KNW-1** [stated] When a failure recurs, fix what generates the code (prompt, reviewer rule, skill, evaluation, harness), not only the output; the second time is the trigger.
   - Old system as oracle: no. Strength: strong. Era: 2024–2026.
-  - Cases: [Bun: what worked][bun-worked], [GitHub: what worked][gh-worked], [Airbnb: what worked][air-worked], [Uber: what worked][ubr-worked], [Zalando: how it was checked][zal-checked], [Shopify: how it was checked][shp-checked], [Bloomberg: what worked][bbg-worked].
-  - Against: None found.
+  - Cases: [Bun: what worked][bun-worked], [GitHub: what worked][gh-worked], [Airbnb: what worked][air-worked], [Uber: what worked][ubr-worked], [Zalando: how it was checked][zal-checked], [Shopify: how it was checked][shp-checked], [Bloomberg: what worked][bbg-worked], [vjeux: what worked][vjx-worked].
+  - Against: Fixing the instructions did not always hold: the Pokémon port's agent kept hard-coding behaviour after being told not to ([vjeux][vjx-wrong]), and 1Password's ordering errors persisted under explicit rules ([1Password][opw-wrong]).
 - **KNW-2** [stated] Stamp each unit with its status, tune against the largest failing group using a small sample, then sweep all units again.
   - Old system as oracle: partly. Strength: strong. Era: 2023–2025.
   - Cases: [Airbnb: what worked][air-worked], [Slack: what worked][slk-worked], [Google: what worked][goo-worked], [Uber: what worked][ubr-worked].
@@ -18,6 +18,10 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: no. Strength: medium. Era: 2026.
   - Cases: [GitHub: numbers][gh-numbers], [GitHub: what worked][gh-worked].
   - Against: GitHub's split of the engineer's messages by intent was labelled by an LLM, not checked by a person ([GitHub][gh-numbers]).
+- **KNW-4** [stated] A compacted or fresh session forgets what the last one learned; keep the method in files it rereads (instructions, one debug script) and find work by search, not a growing notes file.
+  - Old system as oracle: no. Strength: weak. Era: Claude Code (model unstated), 2025–2026.
+  - Cases: [vjeux: what went wrong][vjx-wrong], [vjeux: what worked][vjx-worked].
+  - Against: None found; one author's account, with no measure of how much time the files saved.
 
 [air-worked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-worked
 [bbg-worked]: ../cases/2026-11-03-bloomberg-python-cpp-uplift.md#what-worked
@@ -25,7 +29,10 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [gh-numbers]: ../cases/2026-09-16-github-copilot-runtime-rust.md#numbers
 [gh-worked]: ../cases/2026-09-16-github-copilot-runtime-rust.md#what-worked
 [goo-worked]: ../cases/2025-04-13-google-int64-ids.md#what-worked
+[opw-wrong]: ../cases/2026-04-20-1password-monolith-refactor.md#what-went-wrong
 [shp-checked]: ../cases/2026-09-10-shopify-react-native-to-native.md#how-it-was-checked
 [slk-worked]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#what-worked
 [ubr-worked]: ../cases/2026-04-07-uber-junit4-to-junit5.md#what-worked
+[vjx-worked]: ../cases/2026-01-25-vjeux-pokemon-showdown-rust.md#what-worked
+[vjx-wrong]: ../cases/2026-01-25-vjeux-pokemon-showdown-rust.md#what-went-wrong
 [zal-checked]: ../cases/2025-02-20-zalando-ui-component-libraries.md#how-it-was-checked

@@ -14,11 +14,11 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **REV-2** [stated] Split the review: agents and tests do the exhaustive old-against-new comparison; people spend their attention on architecture, contracts and flagged risk.
   - Old system as oracle: partly. Strength: medium. Era: 2026.
   - Cases: [GitHub: who did what][gh-who], [Bun: how it was checked][bun-checked].
-  - Against: Disagree: at Slack and Google a person checked every change before merge ([Slack][slk-who]) ([Google][goo-checked]), and Shopify puts a person's approval on every checkpoint ([Shopify][shp-checked]); in Bun no person read every line. Zalando had a person review every change, and one wrong data change still got through ([Zalando][zal-wrong]).
-- **REV-3** [ours] Give reviewers a written list of constructs that read the same in both languages but behave differently: assertions, eager defaults, falsy checks, number types.
+  - Against: Disagree: at Slack and Google a person checked every change before merge ([Slack][slk-who]) ([Google][goo-checked]), and Shopify puts a person's approval on every checkpoint ([Shopify][shp-checked]); in Bun no person read every line. Zalando had a person review every change, and one wrong data change still got through ([Zalando][zal-wrong]). In ts-rust the author says he read none of the code, and no other reviewer is named ([ts-rust][tsr-who]).
+- **REV-3** [ours] Give reviewers a written list of constructs that read the same in old and new code but behave differently: assertions, eager defaults, falsy checks, number types, built-in validators.
   - Old system as oracle: yes. Strength: medium. Era: 2026.
-  - Cases: [Bun: what went wrong][bun-wrong], [GitHub: what went wrong][gh-wrong].
-  - Against: None found.
+  - Cases: [Bun: what went wrong][bun-wrong], [GitHub: what went wrong][gh-wrong], [Spartacus: what went wrong][spa-wrong].
+  - Against: None found; the Spartacus post does not say what its reviewer was told to look for ([Spartacus][spa-wrong]).
 - **REV-4** [stated] Add an automatic scope check that compares each diff with its instruction; agents drift into refactors, switched-off tests and side fixes.
   - Old system as oracle: no. Strength: medium. Era: Claude Code, 2025; internal Gemini.
   - Cases: [Spotify: what worked][spo-worked], [Google: how it was checked][goo-checked].
@@ -26,7 +26,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Related view (karpathy-ideas): [models too agentic state stakes and scope][k-models-too-agentic-state-stakes-and-scope], agrees.
 - **REV-5** [ours] Treat LLM reviewers and judges as unmeasured until you know their miss rate; veto counts and showcase catches say nothing about what got through.
   - Old system as oracle: no. Strength: medium. Era: 2025–2026.
-  - Cases: [Spotify: what went wrong][spo-wrong], [Bun: how it was checked][bun-checked].
+  - Cases: [Spotify: what went wrong][spo-wrong], [Bun: how it was checked][bun-checked], [Spartacus: what went wrong][spa-wrong].
   - Against: GitHub turned its session logs into evaluations, a start on measuring ([GitHub][gh-worked]).
 - **REV-6** [stated] Have the tool leave an inline note with a guide link at each spot it deliberately left for a person, so reviewers find the judgement calls fast.
   - Old system as oracle: no. Strength: medium. Era: Claude 2.1, 2024; Claude Code, 2025–2026.
@@ -51,9 +51,9 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Slack: how it was checked][slk-checked].
   - Against: Airbnb reports intent and coverage kept, with no quality grading ([Airbnb][air-checked]).
 - **REV-11** [stated] Code that meets the feature requirements can still duplicate logic, drift from the architecture or run slowly; keep reviewers who know the target platform.
-  - Old system as oracle: no. Strength: weak. Era: 2025–2026 (models unstated).
-  - Cases: [Shopify: what went wrong][shp-wrong].
-  - Against: None found.
+  - Old system as oracle: no. Strength: medium. Era: 2025–2026 (models unstated).
+  - Cases: [Shopify: what went wrong][shp-wrong], [vjeux: what went wrong][vjx-wrong].
+  - Against: None found; in the Pokémon port an engineer who had never written Rust spotted the hard-coded behaviour, and only the speed work needed Rust expertise ([vjeux][vjx-wrong]).
 
 [air-checked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#how-it-was-checked
 [asa-wrong]: ../cases/2026-08-07-asana-enzyme-to-rtl.md#what-went-wrong
@@ -73,9 +73,12 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [shp-wrong]: ../cases/2026-09-10-shopify-react-native-to-native.md#what-went-wrong
 [slk-checked]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#how-it-was-checked
 [slk-who]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#who-did-what
+[spa-wrong]: ../cases/2026-04-13-lutz-leonhardt-spartacus-signal-forms.md#what-went-wrong
 [spo-checked]: ../cases/2025-11-06-spotify-honk.md#how-it-was-checked
 [spo-worked]: ../cases/2025-11-06-spotify-honk.md#what-worked
 [spo-wrong]: ../cases/2025-11-06-spotify-honk.md#what-went-wrong
+[tsr-who]: ../cases/2026-10-07-ping-tsgo-to-rust.md#who-did-what
+[vjx-wrong]: ../cases/2026-01-25-vjeux-pokemon-showdown-rust.md#what-went-wrong
 [zal-wrong]: ../cases/2025-02-20-zalando-ui-component-libraries.md#what-went-wrong
 [k-llm-council-anonymous-peer-review]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2025-11-22-llm-council-anonymous-peer-review.md
 [k-models-too-agentic-state-stakes-and-scope]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2025-08-09-models-too-agentic-state-stakes-and-scope.md
