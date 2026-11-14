@@ -1,7 +1,7 @@
 ---
 title: Christopher Chedeau moves the Pokémon Showdown battle engine off TypeScript onto Rust with Claude Code
 date: 2026-01-25
-company: Christopher Chedeau (personal project)
+company: Christopher Chedeau
 summary: One engineer had Claude Code write about 100k lines of Rust in a month, checked against the original on millions of seeded battles; no Rust written by hand.
 source_url: https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html
 also: [https://github.com/vjeux/pokemon-showdown-rs]
@@ -42,7 +42,9 @@ weeks, 80 divergent battles left in the earliest 2.4 million seeds, and a speed-
 A first-person post on Christopher Chedeau's personal blog, dated 2026-01-25 by the site's
 publishing data. The author used Claude Code; nothing in the post or the repository shows a stake in the tool, and the port is a holiday project,
 not a company product. The post shows screenshots of the agent's work, test summaries and a timing
-run, and links the public repository, which holds the code, the test scripts and the result files
+run: the 1,018 failing seeds with their 99.96% pass rate and the 3.5x timing are Claude Code
+output, and the 480 of 500 seeds a results-file diff; the post labels only the 1,000 tests figure
+as Claude's. It links the public repository, which holds the code, the test scripts and the result files
 ([repository](https://github.com/vjeux/pokemon-showdown-rs)). It names no model and no cost.
 
 ## What was migrated
@@ -94,9 +96,9 @@ who knows Rust reviewed the code
 | one fix about every 20 minutes | average rate at which the agent fixed divergences | reported | [post](https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html) |
 | 100 to 2.4 million seeds | growing batches of seeded battles compared | reported | [post](https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html) |
 | 80 seeds, 0.003% | battles still diverging among the earliest 2.4 million seeds | reported | [post](https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html) |
-| 1,018 seeds, 99.96% | failing seeds and pass rate over 2.4 million seeds in an undated screenshot | measured | [post](https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html) |
+| 1,018 seeds, 99.96% | failing seeds and pass rate over 2.4 million seeds in an undated screenshot of Claude Code output | measured | [post](https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html) |
 | 480 of 500 seeds | battles passing in the 500-seed results file in a screenshot | measured | [post](https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html) |
-| 3.5x | speed of Rust over the original on 2,000 seeds with 10 threads each (7.2 seconds against ~25 seconds) | measured | [post](https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html) |
+| 3.5x | speed of Rust over the original on 2,000 seeds with 10 threads each (7.2 seconds against ~25 seconds), in a screenshot of Claude Code output | measured | [post](https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html) |
 | 1,000 tests | regression tests passing in one of Claude's summaries | reported | [post](https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html) |
 | 5 seconds | interval of the key press that approved every prompt | reported | [post](https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html) |
 | 10 years | time the original had already been refined | reported | [post](https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html) |
@@ -125,7 +127,8 @@ who knows Rust reviewed the code
 - A results file committed after each run let the author follow progress from GitHub.
 - Overnight jobs ran on short, strict prompts: go item by item, in order, never skip a hard item,
   build missing infrastructure, keep the code compiling, commit after each unit, and look for the
-  same mistake elsewhere once one is fixed. The author notes the agent did not really follow them.
+  same mistake elsewhere once one is fixed. The author notes the agent did not really follow the
+  conversion prompt.
 - The port was 3.5x faster than the original in a parallel run on 2,000 seeds
   ([source](https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html)).
 
@@ -165,7 +168,7 @@ who knows Rust reviewed the code
   a known looping technique could not be made to work; pop-ups stole focus; and a crash of Claude
   Code stopped runs on a handful of nights
   ([source](https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html)).
-- Not finished: 80 seeds still diverged among the earliest 2.4 million seeds, the author could not
+- Divergences remain: 80 seeds still diverged among the earliest 2.4 million seeds, the author could not
   say how many issues remained, and the battle AI that motivated the port was never built
   ([source](https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html)). The README calls the port under active development, with move, ability and
   item callbacks still to implement, and covers only Generation 9 random battles
@@ -173,15 +176,16 @@ who knows Rust reviewed the code
 - **Not reported:** the model; token use or cost; the author's hours; any review of the Rust by
   someone who knows the language; how the two failure counts (80 seeds in the text, 1,018 seeds in a
   screenshot, both over 2.4 million seeds) relate; why the duration reads 4 weeks, a month and two
-  weeks in different places (the repository's commits span about 5 weeks); and coverage beyond the random battles the harness generates
-  ([source](https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html)).
+  weeks in different places; and coverage beyond the random battles the harness generates
+  ([source](https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html)). By our count, the repository's commits span about 5 weeks
+  ([repository](https://github.com/vjeux/pokemon-showdown-rs)).
 
 ## Practices to copy
 
 - [stated] Generate the scaffold with a script, not the agent: put each original method as a comment next to its target stub, so the reference text is exact. ([Giving it structure, Porting](https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html))
 - [stated] Split the target into one file per method so the agent can read each unit whole without chunking or early compaction. ([Litte Islands](https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html))
 - [stated] When the original already settled its design, port every unit first and integrate once, instead of growing simple versions step by step. ([Build everything before testing](https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html))
-- [stated] Compare old and new on seeded, reproducible runs step by step, and widen the batch of seeds as the failures thin out. ([End-to-end test](https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html))
+- [stated] Compare old and new on seeded, reproducible runs step by step, and widen the batch of seeds as the failures thin out. ([The long slog](https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html))
 - [stated] Turn the agent's useful debugging into one shared script and a line in its instructions file, so each new session starts investigating at once. ([Giving it structure, Integration](https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html))
 - [stated] Keep the work list in the code as searchable markers rather than in one growing to-do file. ([Todos](https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html))
 - [stated] Tell the agent that a specific fix calls for a search for the same fault elsewhere, and for the larger fix behind it. ([Fixing](https://blog.vjeux.com/2026/analysis/porting-100k-lines-from-typescript-to-rust-using-claude-code-in-a-month.html))
@@ -201,7 +205,7 @@ who knows Rust reviewed the code
 
 - A personal open-source project, not a company product: the original simulator is maintained by
   others, and the Rust port lives in the author's public repository, which held 4,828 commits on
-  its main branch when we read it on 2026-11-14
+  its default branch, master, when we read it on 2026-11-14
   ([repository](https://github.com/vjeux/pokemon-showdown-rs)).
 - The author was prompted by a public goal, from an engineer at a large software company, of one
   engineer porting a million lines in a month with AI and algorithms

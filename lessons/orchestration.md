@@ -9,7 +9,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **ORC-1** [stated] Agents sharing one working copy wreck each other's work; give each writer its own worktree, or restrict git to committing its own files.
   - Old system as oracle: no. Strength: strong. Era: 2025–2026.
   - Cases: [Bun: what went wrong][bun-wrong], [1Password: what worked][opw-worked], [GitHub: what worked][gh-worked], [Shopify: what worked][shp-worked], [Spartacus: what worked][spa-worked].
-  - Against: One worktree per agent would have filled Bun's disk, so it used a few shared ones with git restricted ([Bun][bun-wrong]).
+  - Against: One worktree per agent would have filled Bun's disk, so it used a few shared ones with git restricted ([Bun][bun-wrong]). Separate worktrees each checked alone hid a break between two Spartacus components that showed only after merging ([Spartacus][spa-wrong]).
 - **ORC-2** [stated] Run agents in parallel only on changes that are independent by design; otherwise parallelism adds inconsistency.
   - Old system as oracle: no. Strength: weak. Era: 2026.
   - Cases: [1Password: practices to copy][opw-practices], [Asana: what went wrong][asa-wrong], [Bun: what went wrong][bun-wrong].
@@ -49,4 +49,5 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [shp-who]: ../cases/2026-09-10-shopify-react-native-to-native.md#who-did-what
 [shp-worked]: ../cases/2026-09-10-shopify-react-native-to-native.md#what-worked
 [spa-worked]: ../cases/2026-04-13-lutz-leonhardt-spartacus-signal-forms.md#what-worked
+[spa-wrong]: ../cases/2026-04-13-lutz-leonhardt-spartacus-signal-forms.md#what-went-wrong
 [k-delegate-long-tasks-decompose-well]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2026-02-25-delegate-long-tasks-decompose-well.md

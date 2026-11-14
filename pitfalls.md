@@ -17,7 +17,7 @@ does underneath them.
   lifecycle and ordering. [GitHub][]
 - Objects that point at each other, which ownership rules turn into copies, indices or callbacks;
   loosely typed return values that need new types; optional arguments that must all be spelled
-  out. [Pokémon Showdown][]
+  out. [Pokémon][]
 - (ours) Locale; typed arrays and float width; exceptions against error values; shared mutable
   references against ownership; callbacks and closures held across frames; an event loop against
   threads; `undefined`, `null` and absent fields in parsed JSON; DOM or `window` access.
@@ -171,5 +171,5 @@ where a case is linked):
 [Shopify]: cases/2026-09-10-shopify-react-native-to-native.md
 [Bloomberg]: cases/2026-11-03-bloomberg-python-cpp-uplift.md
 [Asana]: cases/2026-08-07-asana-enzyme-to-rtl.md
-[Pokémon Showdown]: cases/2026-01-25-vjeux-pokemon-showdown-rust.md
+[Pokémon]: cases/2026-01-25-vjeux-pokemon-showdown-rust.md
 [Spartacus]: cases/2026-04-13-lutz-leonhardt-spartacus-signal-forms.md

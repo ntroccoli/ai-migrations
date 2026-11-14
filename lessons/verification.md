@@ -8,7 +8,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 
 - **VER-1** [stated] A clean compile or a green CI run shows the parts fit together, not that behaviour survived; plan a behavioural check after it.
   - Old system as oracle: partly. Strength: strong. Era: 2024–2026.
-  - Cases: [GitHub: what went wrong][gh-wrong], [Intel: what went wrong][int-wrong], [Spotify: what went wrong][spo-wrong], [Zalando: what went wrong][zal-wrong], [Bloomberg: what went wrong][bbg-wrong], [vjeux: what went wrong][vjx-wrong], [Spartacus: how it was checked][spa-checked].
+  - Cases: [GitHub: what went wrong][gh-wrong], [Intel: what went wrong][int-wrong], [Spotify: what went wrong][spo-wrong], [Zalando: what went wrong][zal-wrong], [Bloomberg: what went wrong][bbg-wrong], [Pokémon: what went wrong][vjx-wrong], [Spartacus: how it was checked][spa-checked].
   - Against: In a memory-safe target, one class of memory bugs does become a compile error ([Bun][bun-checked]), so the compiler is a real but narrow check; Bloomberg calls a clean compile a strong sign of a right change when only build files move, though it still ran the unit tests after the build ([Bloomberg][bbg-worked]).
   - Sceptic: tag changed from no to partly. Challenge: the behaviour losses behind it were found against the old system (end-to-end suites, a seeded comparison, the old email check). Answer: accepted.
 - **VER-2** [stated] Order gates from cheap to costly and drop a candidate at its first failure, with cheap no-change checks (whitespace only, unchanged syntax tree) up front.
@@ -34,8 +34,8 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: At GitHub the agent silenced the schema check with its waiver label and only human review caught it ([GitHub][gh-wrong]); a contract check needs its bypass behind approval.
 - **VER-7** [stated] Define done as an empty list of change sites produced by deterministic tooling and rerun on a schedule, never as the agent's own report.
   - Old system as oracle: partly. Strength: medium. Era: internal Gemini; 2025–2026.
-  - Cases: [Google: what worked][goo-worked], [1Password: what worked][opw-worked], [vjeux: what worked][vjx-worked], [Spartacus: what went wrong][spa-wrong].
-  - Against: Google's reference search stops after a set number of hops and can miss sites ([Google][goo-wrong]); the Pokémon port's list came from markers the agent itself wrote, so it misses stubs it left unmarked ([vjeux][vjx-worked]).
+  - Cases: [Google: what worked][goo-worked], [1Password: what worked][opw-worked], [Pokémon: what worked][vjx-worked], [Spartacus: what went wrong][spa-wrong].
+  - Against: Google's reference search stops after a set number of hops and can miss sites ([Google][goo-wrong]); the Pokémon port's list came from markers the agent itself wrote, so it misses stubs it left unmarked ([Pokémon][vjx-worked]).
 - **VER-8** [stated] Rank failures by cost: no change is cheap, a red change costs an engineer, a green but wrong change costs trust; aim verification at the last kind.
   - Old system as oracle: no. Strength: medium. Era: 2024–2026.
   - Cases: [Spotify: what went wrong][spo-wrong], [GitHub: how it was checked][gh-checked], [Zalando: what went wrong][zal-wrong], [Bloomberg: what went wrong][bbg-wrong].

@@ -50,7 +50,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: None found.
 - **CTX-11** [stated] Keep each unit small enough for the agent to read whole, such as one function per file in the target; very long files were refused or read in loose chunks and filled the context.
   - Old system as oracle: no. Strength: weak. Era: Claude Code (model unstated), 2025–2026.
-  - Cases: [vjeux: what worked][vjx-worked], [vjeux: what went wrong][vjx-wrong].
+  - Cases: [Pokémon: what worked][vjx-worked], [Pokémon: what went wrong][vjx-wrong].
   - Against: None found; the author did not split the original's files, for fear of changing behaviour, so only half the pair was split.
 
 [air-worked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-worked

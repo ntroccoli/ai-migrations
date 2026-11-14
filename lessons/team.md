@@ -8,13 +8,13 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 
 - **TEM-1** [stated] The lead engineer's job becomes running the control loop: framing slices, challenging design, pushing for completeness, deciding every merge.
   - Old system as oracle: no. Strength: medium. Era: 2025–2026.
-  - Cases: [GitHub: numbers][gh-numbers], [GitHub: who did what][gh-who], [Bun: who did what][bun-who], [vjeux: who did what][vjx-who].
+  - Cases: [GitHub: numbers][gh-numbers], [GitHub: who did what][gh-who], [Bun: who did what][bun-who], [Pokémon: who did what][vjx-who].
   - Against: GitHub's split of the engineer's messages by intent was labelled by an LLM, not checked by a person ([GitHub][gh-numbers]).
   - Related view (karpathy-ideas): [partial autonomy and autonomy slider][k-partial-autonomy-and-autonomy-slider], agrees.
 - **TEM-2** [stated] Count the people behind a one-engineer story (reviewers in many teams, interop, packaging and build specialists) and staff and budget for them.
   - Old system as oracle: no. Strength: strong. Era: 2023–2026.
   - Cases: [GitHub: who did what][gh-who], [Google: who did what][goo-who], [Slack: who did what][slk-who].
-  - Against: Bun credits the port to one engineer and names no helpers for it ([Bun][bun-who]), and the Pokémon Showdown port was one person's holiday project ([vjeux][vjx-who]).
+  - Against: Bun credits the port to one engineer and names no helpers for it ([Bun][bun-who]), and the Pokémon Showdown port was one person's holiday project ([Pokémon][vjx-who]).
 - **TEM-3** [stated] A central team should own the agent tooling, build it with early adopters, and teach prompt writing; untrained users fell into the same traps.
   - Old system as oracle: no. Strength: medium. Era: Claude 2.1, 2024; Claude Code, 2025.
   - Cases: [Spotify: who did what][spo-who], [Spotify: what went wrong][spo-wrong], [Slack: who did what][slk-who].
@@ -26,7 +26,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **TEM-5** [stated] Code the model migrates is code the team never wrote; keep owners close to it and teach them the new library, or debugging and incident handling suffer.
   - Old system as oracle: no. Strength: weak. Era: GPT-4o, 2024–2025.
   - Cases: [Zalando: what went wrong][zal-wrong].
-  - Against: ts-rust's author says he read none of the ported code and left the fixing to agents; it reports no incident either way, so the case neither shows nor rules out the cost ([ts-rust][tsr-who]). In the Pokémon port the agent debugged on its own though the owner had never written Rust; his gap showed only in judging speed work ([vjeux][vjx-wrong]).
+  - Against: ts-rust's author says he read none of the ported code and left the fixing to agents; it reports no incident either way, so the case neither shows nor rules out the cost ([ts-rust][tsr-who]). In the Pokémon port the agent debugged on its own though the owner had never written Rust; the one gap he reports was in judging speed work ([Pokémon][vjx-wrong]).
 
 [bbg-who]: ../cases/2026-11-03-bloomberg-python-cpp-uplift.md#who-did-what
 [bun-who]: ../cases/2026-07-08-bun-zig-to-rust.md#who-did-what

@@ -8,7 +8,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 
 - **TOL-1** [stated] Have agents build deterministic tools (analysers, call-site manifests, porting guides, ownership tables), review those, then bind later agent work to them.
   - Old system as oracle: no. Strength: strong. Era: 2025–2026.
-  - Cases: [1Password: what worked][opw-worked], [Bun: what worked][bun-worked], [Intel: who did what][int-who], [vjeux: what worked][vjx-worked].
+  - Cases: [1Password: what worked][opw-worked], [Bun: what worked][bun-worked], [Intel: who did what][int-who], [Pokémon: what worked][vjx-worked].
   - Against: Ordering errors persisted at 1Password even with explicit rules in place ([1Password][opw-wrong]).
 - **TOL-2** [stated] Run a rule-based codemod first and give the model its partial output, with a note wherever the rules gave up; it anchors the model.
   - Old system as oracle: partly. Strength: medium. Era: Claude 2.1, 2024; internal Gemini.

@@ -51,9 +51,9 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Slack: how it was checked][slk-checked].
   - Against: Airbnb reports intent and coverage kept, with no quality grading ([Airbnb][air-checked]).
 - **REV-11** [stated] Code that meets the feature requirements can still duplicate logic, drift from the architecture or run slowly; keep reviewers who know the target platform.
-  - Old system as oracle: no. Strength: medium. Era: 2025–2026 (models unstated).
-  - Cases: [Shopify: what went wrong][shp-wrong], [vjeux: what went wrong][vjx-wrong].
-  - Against: None found; in the Pokémon port an engineer who had never written Rust spotted the hard-coded behaviour, and only the speed work needed Rust expertise ([vjeux][vjx-wrong]).
+  - Old system as oracle: no. Strength: weak. Era: 2025–2026 (models unstated).
+  - Cases: [Shopify: what went wrong][shp-wrong], [Pokémon: what went wrong][vjx-wrong].
+  - Against: Disagree: in the Pokémon port an engineer who had never written Rust spotted the hard-coded behaviour; only the speed work needed Rust expertise ([Pokémon][vjx-wrong]).
 
 [air-checked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#how-it-was-checked
 [asa-wrong]: ../cases/2026-08-07-asana-enzyme-to-rtl.md#what-went-wrong

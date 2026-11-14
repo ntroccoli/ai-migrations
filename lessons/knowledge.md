@@ -8,8 +8,8 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 
 - **KNW-1** [stated] When a failure recurs, fix what generates the code (prompt, reviewer rule, skill, evaluation, harness), not only the output; the second time is the trigger.
   - Old system as oracle: no. Strength: strong. Era: 2024–2026.
-  - Cases: [Bun: what worked][bun-worked], [GitHub: what worked][gh-worked], [Airbnb: what worked][air-worked], [Uber: what worked][ubr-worked], [Zalando: how it was checked][zal-checked], [Shopify: how it was checked][shp-checked], [Bloomberg: what worked][bbg-worked], [vjeux: what worked][vjx-worked].
-  - Against: Fixing the instructions did not always hold: the Pokémon port's agent kept hard-coding behaviour after being told not to ([vjeux][vjx-wrong]), and 1Password's ordering errors persisted under explicit rules ([1Password][opw-wrong]).
+  - Cases: [Bun: what worked][bun-worked], [GitHub: what worked][gh-worked], [Airbnb: what worked][air-worked], [Uber: what worked][ubr-worked], [Zalando: how it was checked][zal-checked], [Shopify: how it was checked][shp-checked], [Bloomberg: what worked][bbg-worked], [Pokémon: what worked][vjx-worked].
+  - Against: Fixing the instructions did not always hold: the Pokémon port's agent kept hard-coding behaviour after being told not to ([Pokémon][vjx-wrong]), and 1Password's ordering errors persisted under explicit rules ([1Password][opw-wrong]).
 - **KNW-2** [stated] Stamp each unit with its status, tune against the largest failing group using a small sample, then sweep all units again.
   - Old system as oracle: partly. Strength: strong. Era: 2023–2025.
   - Cases: [Airbnb: what worked][air-worked], [Slack: what worked][slk-worked], [Google: what worked][goo-worked], [Uber: what worked][ubr-worked].
@@ -20,8 +20,8 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: GitHub's split of the engineer's messages by intent was labelled by an LLM, not checked by a person ([GitHub][gh-numbers]).
 - **KNW-4** [stated] A compacted or fresh session forgets what the last one learned; keep the method in files it rereads (instructions, one debug script) and find work by search, not a growing notes file.
   - Old system as oracle: no. Strength: weak. Era: Claude Code (model unstated), 2025–2026.
-  - Cases: [vjeux: what went wrong][vjx-wrong], [vjeux: what worked][vjx-worked].
-  - Against: None found; one author's account, with no measure of how much time the files saved.
+  - Cases: [Pokémon: what went wrong][vjx-wrong], [Pokémon: what worked][vjx-worked].
+  - Against: None found; one author's account, with no measure of how much time the files saved, and a search finds only the markers the agent wrote, not stubs it left unmarked ([Pokémon][vjx-worked]).
 
 [air-worked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-worked
 [bbg-worked]: ../cases/2026-11-03-bloomberg-python-cpp-uplift.md#what-worked

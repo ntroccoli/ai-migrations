@@ -25,9 +25,9 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Bun: what went wrong][bun-wrong].
   - Against: None found.
 - **TST-5** [stated] Where the old system has thin tests, record its inputs and outputs (or have a separate agent write equivalence tests) and replay them against the new code.
-  - Old system as oracle: yes. Strength: strong. Era: 2024 (Claude 2.1), 2025–2026 (model unstated), 2026 (Claude Mythos Preview).
-  - Cases: [Intel: what worked][int-worked], [Slack: what worked][slk-worked], [vjeux: how it was checked][vjx-checked].
-  - Against: Full coverage through a library's public functions is often out of reach, and generated tests can be vacuous ([Intel][int-wrong]). The Pokémon port ran both versions live on seeded inputs rather than recording, and does not say the old tests were thin ([vjeux][vjx-checked]).
+  - Old system as oracle: yes. Strength: medium. Era: 2024 (Claude 2.1), 2026 (Claude Mythos Preview).
+  - Cases: [Intel: what worked][int-worked], [Slack: what worked][slk-worked].
+  - Against: Full coverage through a library's public functions is often out of reach, and generated tests can be vacuous ([Intel][int-wrong]). The Pokémon port ran both versions live on seeded inputs rather than recording, and does not say the old tests were thin ([Pokémon][vjx-checked]).
 - **TST-6** [stated] Make the baseline green before agents start: fix tests that already fail and make golden files regenerable, or correct changes stall at the gate.
   - Old system as oracle: yes. Strength: medium. Era: internal Gemini, period unstated.
   - Cases: [Google: what went wrong][goo-wrong], [Spotify: how it was checked][spo-checked].

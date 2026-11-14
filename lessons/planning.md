@@ -22,10 +22,10 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **PLN-4** [stated] Order the slices along the dependency graph, leaves first and the most connected hub last, and approach the hub from one direction only.
   - Old system as oracle: no. Strength: medium. Era: 2026.
   - Cases: [GitHub: what worked][gh-worked], [GitHub: what went wrong][gh-wrong], [Intel: who did what][int-who], [1Password: what worked][opw-worked].
-  - Against: The Pokémon Showdown port went through methods in list order with no working slices and joined them only at the end, then fixed what diverged from the old engine ([vjeux][vjx-worked]); with a full old-engine oracle, order mattered less.
+  - Against: Disagree: the Pokémon Showdown port went through methods in list order with no working slices and joined them only at the end, then fixed what diverged from the old engine ([Pokémon][vjx-worked]); our reading is that a full old-engine oracle made the order matter less.
 - **PLN-5** [stated] Translate first and redesign later: keep behaviour the same during the move so that any failure points at the port, not at a deliberate change.
   - Old system as oracle: yes. Strength: medium. Era: 2025–2026.
-  - Cases: [GitHub: practices to copy][gh-practices], [Bun: what worked][bun-worked], [vjeux: what was migrated][vjx-migrated], [ts-rust: what was migrated][tsr-migrated].
+  - Cases: [GitHub: practices to copy][gh-practices], [Bun: what worked][bun-worked], [Pokémon: what was migrated][vjx-migrated], [ts-rust: what was migrated][tsr-migrated].
   - Against: Disagree: Intel aims for idiomatic data structures at translation time ([Intel][int-practices]), and GitHub's own review prompt asked for idiomatic, optimised code during the port. Shopify retired or simplified some Shop screens during the move, though each checkpoint still had to match the running old app ([Shopify][shp-migrated], [checkpoints][shp-checked]).
 - **PLN-6** [stated] Set expectations per class of work: bounded, repetitive edits gain a lot; work with ordering, schema or shared-state constraints gains far less.
   - Old system as oracle: no. Strength: medium. Era: GPT-4o, 2024–2025; 2026 (models unstated).
@@ -40,7 +40,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: no. Strength: medium. Era: 2023–2026.
   - Cases: [Spotify: what went wrong][spo-wrong], [Google: what went wrong][goo-wrong], [Uber: what worked][ubr-worked], [Bloomberg: what worked][bbg-worked].
   - Against: Bloomberg did not leave its rare archetypes out: each got a generic starting-point PR, labelled as such, for its owners to finish ([Bloomberg][bbg-wrong]).
-- **PLN-9** [ours] Plan for a partial outcome and a stop rule: no published case here was abandoned, so success odds read from such cases are inflated.
+- **PLN-9** [ours] Plan for a partial outcome and a stop rule: abandoned attempts appear here only inside stories that end in a success, so success odds read from such cases are inflated.
   - Old system as oracle: no. Strength: medium. Era: all.
   - Cases: [Slack: what went wrong][slk-wrong], [1Password: what went wrong][opw-wrong], [Spotify: what went wrong][spo-wrong], [Airbnb: what went wrong][air-wrong], [ts-rust: what went wrong][tsr-wrong].
   - Against: Uber reports an AI attempt that failed and was dropped, a first in this collection, though it names no model, size or date ([Uber][ubr-wrong]); ts-rust reports a first attempt that ran for months below its target before a restart replaced its code, with no stop rule stated ([ts-rust][tsr-wrong]); the migrations themselves are all survivors.
@@ -50,8 +50,8 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: None found; Bloomberg's authors say easier archetypes may have gone first, which can inflate early success rates ([Bloomberg][bbg-wrong]).
 - **PLN-11** [stated] Do not port a whole app in one pass, even from specs gathered first; Shopify's author says that gives code nobody can maintain. Port in small ordered slices a person can review quickly.
   - Old system as oracle: partly. Strength: weak. Era: 2025–2026 (models unstated).
-  - Cases: [Shopify: what went wrong][shp-wrong], [Shopify: how it was checked][shp-checked], [vjeux: what went wrong][vjx-wrong].
-  - Against: Disagree: Bun merged a whole port as one branch ([Bun][bun-worked]), though built from many agent-sized units, not in one pass. The Pokémon Showdown port ported every method before running any of it and joined them once, arguing that growing it slice by slice would relearn settled design ([vjeux][vjx-worked]).
+  - Cases: [Shopify: what went wrong][shp-wrong], [Shopify: how it was checked][shp-checked], [Pokémon: what went wrong][vjx-wrong].
+  - Against: Disagree: Bun merged a whole port as one branch ([Bun][bun-worked]), though built from many agent-sized units, not in one pass. After its failed one-shot attempt (cited above), the same Pokémon Showdown port ported every method before running any of it and joined them once, arguing that growing it slice by slice would relearn settled design ([Pokémon][vjx-worked]).
 - **PLN-12** [stated] Sort targets into archetypes, each with its own prompt, data collection and checks; give rare archetypes a generic starting point instead of dedicated automation.
   - Old system as oracle: no. Strength: weak. Era: Claude Sonnet 4.5, then Opus 4.6, 2025–2026.
   - Cases: [Bloomberg: what worked][bbg-worked], [Bloomberg: what went wrong][bbg-wrong].

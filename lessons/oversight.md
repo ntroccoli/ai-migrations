@@ -8,7 +8,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 
 - **OVS-1** [stated] The agent that changes the code must not change what counts as correct: edits to tests, snapshots, baselines and waiver labels need a separate owner's approval.
   - Old system as oracle: partly. Strength: medium. Era: 2025–2026.
-  - Cases: [GitHub: practices to copy][gh-practices], [GitHub: what went wrong][gh-wrong], [Spotify: what went wrong][spo-wrong], [Bun: how it was checked][bun-checked], [Intel: what went wrong][int-wrong], [vjeux: what went wrong][vjx-wrong].
+  - Cases: [GitHub: practices to copy][gh-practices], [GitHub: what went wrong][gh-wrong], [Spotify: what went wrong][spo-wrong], [Bun: how it was checked][bun-checked], [Intel: what went wrong][int-wrong], [Pokémon: what went wrong][vjx-wrong].
   - Against: None found.
 - **OVS-2** [stated] Keep the final merge with a person who checks how the agent answered CI and review, not only the diff.
   - Old system as oracle: no. Strength: strong. Era: 2024–2026.
@@ -22,7 +22,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: no. Strength: weak. Era: 2025–2026 (models unstated).
   - Cases: [Shopify: how it was checked][shp-checked].
   - Against: None found.
-- **OVS-5** [stated] Run agents in small mixed waves and make the orchestrator stop for a person's approval between them, so one systematic mistake cannot spread to every target.
+- **OVS-5** [stated] Run agents in small waves that mix simple targets with known edge cases, and make the orchestrator stop for a person's approval between them, so one systematic mistake cannot spread to every target.
   - Old system as oracle: no. Strength: weak. Era: Claude Sonnet 4.6, 2026-04.
   - Cases: [Spartacus: how it was checked][spa-checked], [Spartacus: practices to copy][spa-practices].
   - Against: None found; the waves are the author's plan after the first run, and in our reading the one wave run so far still let a changed email rule through ([Spartacus][spa-wrong]).

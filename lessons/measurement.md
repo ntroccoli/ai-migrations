@@ -28,7 +28,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: Airbnb reports no defects after merge at all, which is missing data, not evidence ([Airbnb][air-wrong]).
 - **MSR-6** [ours] Activity numbers (lines per minute, commits, merged changes) are not progress; track verified behaviour or the shrinking list of remaining sites.
   - Old system as oracle: partly. Strength: medium. Era: all.
-  - Cases: [Bun: numbers][bun-numbers], [Spotify: numbers][spo-numbers], [GitHub: what went wrong][gh-wrong], [vjeux: how it was checked][vjx-checked], [ts-rust: what went wrong][tsr-wrong].
+  - Cases: [Bun: numbers][bun-numbers], [Spotify: numbers][spo-numbers], [GitHub: what went wrong][gh-wrong], [Pokémon: how it was checked][vjx-checked], [ts-rust: what went wrong][tsr-wrong].
   - Against: None found.
   - Sceptic: tag changed from no to partly. Challenge: the verified behaviour it points to was measured against the old system (compatibility with Go, pass rates against the old engine). Answer: accepted.
 - **MSR-7** [ours] Re-date a lesson before reusing it: early negative results, and results from pre-release or restricted models, may not hold for the models you use.

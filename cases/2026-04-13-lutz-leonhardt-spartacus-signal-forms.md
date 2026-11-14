@@ -1,5 +1,5 @@
 ---
-title: Lutz Leonhardt moves 44 Angular form components in a Spartacus fork to Signal Forms
+title: Lutz Leonhardt starts moving 44 Angular form components in a Spartacus fork to Signal Forms
 date: 2026-04-13
 company: Lutz Leonhardt
 summary: Claude Code sub-agents in worktrees moved Angular forms to Signal Forms, 34 of 44 marked done; a review found untested successes and silent rule changes.
@@ -25,16 +25,15 @@ status: current
 superseded_by:
 ---
 
-# Lutz Leonhardt moves 44 Angular form components in a Spartacus fork to Signal Forms
+# Lutz Leonhardt starts moving 44 Angular form components in a Spartacus fork to Signal Forms
 
 A developer used Claude Code to move 44 form components in a personal fork of SAP Spartacus, an
 open-source Angular storefront, from Reactive Forms to the Signal Forms interop control. After two
 hand migrations the author wrote a playbook; an orchestrator agent then gave each component to a sub-agent
-in its own git worktree. In one evening 34 components were marked successful (2 components of them by hand), 5
-components failed and 5 components were skipped. A later adversarial review showed that "success" had often meant only a clean compile:
-tests had not run in several worktrees, and one agent had quietly altered the set of email addresses a
-form accepts. The author would now add a second-model review and run small waves, each with test
-gates and a person's sign-off; the refined protocol so far adds the waves, test gates and stop ([source](https://dev.to/lutz_leonhardt/i-used-ai-agents-to-migrate-44-angular-components-the-review-changed-my-mind-4pop)).
+in its own git worktree. The post counts 34 components successful; the plan counts the 2 hand migrations among them,
+so the agents did 32 components in one evening; 5 components failed and 5 components were skipped. A later adversarial review found that "success" often meant only a clean compile: tests
+had not run in several worktrees, and one agent quietly changed which email addresses a form accepts. The author would now add a second-model review and run small waves, each with test
+gates and a person's sign-off ([source](https://dev.to/lutz_leonhardt/i-used-ai-agents-to-migrate-44-angular-components-the-review-changed-my-mind-4pop)); the refined protocol adds all but that review ([protocol](https://github.com/lutzleonhardt/spartacus/blob/feature/signal-forms-migration-v2/SignalFormMigration/goal.md)).
 
 ## Source
 
@@ -48,9 +47,11 @@ not in SAP's repository: it is not SAP's migration and the pull request targets 
 `develop` branch. The author sells no AI tool; the post names two review tools only as examples.
 Because the repository shows the plan and commits behind the post's counts, the evidence is
 `shown-in-source`, though most per-component logs hold only a status and the test list in the pull
-request is self-reported. The model comes from the commits: the sub-agents' commits (30 of 96 commits)
-carry a co-author line for Claude Sonnet 4.6, from their prompt template; the orchestrator's model is
-not stated ([PR](https://github.com/lutzleonhardt/spartacus/pull/1)).
+request is self-reported. The per-component logs and the plan's statuses were written by the
+agents; who wrote the pull request's description is not stated; the review comments on it come
+from the Codex and Qodo bots. The model comes from our count of the pull request's commits, not
+from its text: the sub-agents' commits (30 of 96 commits) carry a co-author line for Claude
+Sonnet 4.6, from their prompt template; the orchestrator's model is not stated ([PR](https://github.com/lutzleonhardt/spartacus/pull/1)).
 
 ## What was migrated
 
@@ -76,8 +77,8 @@ of scope, since this first stage has no signal equivalent for it
 - **Rule-based tools:** git worktrees for isolation, the TypeScript compiler as the first run's
   real gate, and Nx test runs where the worktree allowed them.
 - **People:** the author migrated the first two components by hand, wrote the three files that
-  steered the agents (protocol, playbook, plan), committed a build fix after the run without the AI
-  co-author line, and decided what
+  steered the agents (protocol, playbook, plan), committed a build fix after the run (in our reading of
+  the commits, without the AI co-author line), and decided what
   changes for the second protocol.
 
 ## How it was checked
@@ -99,7 +100,7 @@ orchestrator stops after each wave for a person
 | Number | What it counts | Basis | Source |
 | --- | --- | --- | --- |
 | 44 components | components targeted | reported | [post](https://dev.to/lutz_leonhardt/i-used-ai-agents-to-migrate-44-angular-components-the-review-changed-my-mind-4pop#initial-results) |
-| 34 components | completed the first run and merged automatically | reported | [post](https://dev.to/lutz_leonhardt/i-used-ai-agents-to-migrate-44-angular-components-the-review-changed-my-mind-4pop#initial-results) |
+| 34 components | marked successful after the first run (the first run's plan, in the [PR](https://github.com/lutzleonhardt/spartacus/pull/1), counts the 2 hand migrations among them) | reported | [post](https://dev.to/lutz_leonhardt/i-used-ai-agents-to-migrate-44-angular-components-the-review-changed-my-mind-4pop#initial-results) |
 | 5 components | failed during the migration | reported | [post](https://dev.to/lutz_leonhardt/i-used-ai-agents-to-migrate-44-angular-components-the-review-changed-my-mind-4pop#initial-results) |
 | 5 components | skipped because they use `FormArray` | reported | [post](https://dev.to/lutz_leonhardt/i-used-ai-agents-to-migrate-44-angular-components-the-review-changed-my-mind-4pop#initial-results) |
 | 77% | first-run automation rate over all targets | reported | [post](https://dev.to/lutz_leonhardt/i-used-ai-agents-to-migrate-44-angular-components-the-review-changed-my-mind-4pop#initial-results) |
@@ -116,7 +117,7 @@ orchestrator stops after each wave for a person
 - Two hand migrations first surfaced a pitfall that turned into a core rule (a `required` HTML
   attribute makes Angular try to change the control's validators, which the new control rejects),
   and the author wrote such rules into a playbook aimed at a fellow developer; a commit during the
-  run added that rule to the playbook again after an agent failed on it ([PR](https://github.com/lutzleonhardt/spartacus/pull/1),
+  run added the required-attribute lesson to the playbook ([PR](https://github.com/lutzleonhardt/spartacus/pull/1),
   [source](https://dev.to/lutz_leonhardt/i-used-ai-agents-to-migrate-44-angular-components-the-review-changed-my-mind-4pop#the-first-two-manual-migrations)).
 - A separate sub-agent for each component, each in its own worktree branched from the feature branch, let
   agents edit, test and commit without touching each other; successes were merged, failures
@@ -124,9 +125,10 @@ orchestrator stops after each wave for a person
   ([source](https://dev.to/lutz_leonhardt/i-used-ai-agents-to-migrate-44-angular-components-the-review-changed-my-mind-4pop#the-orchestrator-architecture)).
 - A plan file with a status per component served the orchestrator as its state machine
   ([source](https://dev.to/lutz_leonhardt/i-used-ai-agents-to-migrate-44-angular-components-the-review-changed-my-mind-4pop#the-three-artifacts)).
-- The mechanical part scaled: 34 components in one evening, and the 5 failed components all pointed at one
-  API boundary
-  ([source](https://dev.to/lutz_leonhardt/i-used-ai-agents-to-migrate-44-angular-components-the-review-changed-my-mind-4pop#initial-results)).
+- The mechanical part scaled: the agents did 32 components in one evening (the plan counts
+  the 2 hand migrations among the post's 34 components), and the 5 failed components all pointed at one API
+  boundary
+  ([source](https://dev.to/lutz_leonhardt/i-used-ai-agents-to-migrate-44-angular-components-the-review-changed-my-mind-4pop#initial-results), [PR](https://github.com/lutzleonhardt/spartacus/pull/1)).
 - The adversarial review caught two semantic changes that unit tests had not
   ([source](https://dev.to/lutz_leonhardt/i-used-ai-agents-to-migrate-44-angular-components-the-review-changed-my-mind-4pop#what-the-review-changed)).
 
@@ -153,10 +155,12 @@ orchestrator stops after each wave for a person
   was done, and some agents ignored the cap
   ([source](https://dev.to/lutz_leonhardt/i-used-ai-agents-to-migrate-44-angular-components-the-review-changed-my-mind-4pop#what-i-would-do-differently-today)). That cap is in the second protocol; the
   first one capped compile fixes and turns without progress
-  ([protocol](https://github.com/lutzleonhardt/spartacus/blob/feature/signal-forms-migration-v2/SignalFormMigration/goal.md)).
+  ([protocol](https://github.com/lutzleonhardt/spartacus/blob/feature/signal-forms-migration-v2/SignalFormMigration/goal.md)), and its playbook allowed 2 fix-and-retest attempts per error
+  ([PR](https://github.com/lutzleonhardt/spartacus/pull/1)).
 - The review bots on the pull request flagged more that the post does not mention: a terms and
   conditions checkbox moved from a must-be-true check to a plain required one, which lets an
-  unchecked box pass, in 3 checkout components; a constructor call that no longer compiled; and 2 components
+  unchecked box pass, in 3 checkout components (Qodo's summary shows the same control in a
+  fourth); a constructor call that no longer compiled; and 2 components
   still enabling and disabling form controls imperatively, which can throw at runtime. The broken call was in
   a component the pull request lists as passing its tests: each worktree was checked alone, and the
   break between two components showed only after merging. A build fix followed 5 days after the
@@ -176,13 +180,13 @@ orchestrator stops after each wave for a person
   with the side effect, also green; whether the timing problem is gone is not shown. That wave left
   one of 4 components in progress, and its plan summary was not updated
   ([plan](https://github.com/lutzleonhardt/spartacus/blob/feature/signal-forms-migration-v2/SignalFormMigration/Plan.md)).
-- The refined protocol follows only part of the post's advice: it still merges and deletes a
-  worktree on success, keeps the test-run cap in the prompt, and has no second-model review step
+- The refined protocol follows only part of the post's advice: on success it still merges the
+  worktree's branch and deletes the branch, keeps the test-run cap in the prompt, and has no second-model review step
   ([protocol](https://github.com/lutzleonhardt/spartacus/blob/feature/signal-forms-migration-v2/SignalFormMigration/goal.md)).
 - **Not reported:** cost or token use; which model ran the adversarial review and how many false
   alarms it raised; the author's review time; whether the review's findings and two of the three bot findings were fixed; the orchestrator's model; any test
-  beyond unit tests (no end-to-end or browser checks); the pull request is still open and nothing
-  reached SAP's repository or production.
+  beyond unit tests (no end-to-end or browser checks); whether anything reached SAP's repository
+  or production (the pull request was still open when we read it on 2026-11-14).
 
 ## Practices to copy
 
