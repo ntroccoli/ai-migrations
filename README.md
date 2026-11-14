@@ -67,6 +67,15 @@ Read docs/migration-review.md and https://raw.githubusercontent.com/ntroccoli/ai
 A [field report](docs/field-reports.md) says which questions foresaw the problems you hit and
 which missed them; it is how the checklist improves.
 
+### Not migrating? Tips for any large AI project
+
+Many lessons describe how AI agents behave on large work, not only in migrations. Those tagged
+"Old system as oracle: no" carry over as they are. To compare them with how your project works:
+
+```text
+Read https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms.txt and follow its route for large AI-driven work that is not a migration. Use only lessons tagged "Old system as oracle: no", or "partly" where this project already has a substitute check. Compare them with how this project's agents and sessions work today. Change nothing: give numbered proposals, each with the lesson ID, what the project does now, the change, its cost, and the check that would prove it.
+```
+
 ## Contributing
 
 Corrections are welcome: a wrong number, a broken link, a summary that misreads its source. Open
