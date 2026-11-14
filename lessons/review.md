@@ -4,55 +4,53 @@ How agent-written changes were reviewed, by agents and by people.
 
 Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
-`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Depends on model ability" (`yes`, `partly`, `no`): `yes` when the lesson states what models or agents can or cannot do, `partly` when it is a process whose need comes from such a behaviour, `no` when it holds whatever the model; the index marks a `yes` lesson whose newest case is over a year old as possibly outdated. "Era": the years the cited cases ran (their publication year when they give no period) and the models they name, `unstated` when one names none. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
+`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Depends on model ability" (`yes`, `partly`, `no`): `yes` when the lesson states what models or agents can or cannot do, `partly` when it is a process whose need comes from such a behaviour, `no` when it holds whatever the model; the index marks a `yes` lesson whose newest case is over a year old as possibly outdated. "Era": the years the cited cases ran (their publication year when they give no period), then the newest model family: the family of the most recent cited case that names a model (its highest version when it names several), `unstated` when none names one; each case lists all its models. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
 
 - **REV-1** [stated] Never let the writing agent review its own change; use two or more reviewers in fresh contexts that see only the diff and are told to find faults.
-  - Old system as oracle: partly. Depends on model ability: partly. Strength: medium. Era: 2026; models: Claude Fable 5 (pre-release version), Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6, unstated.
+  - Old system as oracle: partly. Depends on model ability: partly. Strength: medium. Era: 2026; newest: Claude Opus 5.x.
   - Cases: [Bun: how it was checked][bun-checked], [Bun: what worked][bun-worked], [GitHub: practices to copy][gh-practices].
   - Against: No source measures how much these reviewers miss; an outside critic calls the Bun merge unreviewed ([Bun][bun-wrong]).
   - Related view (karpathy-ideas): [llm council anonymous peer review][k-llm-council-anonymous-peer-review], agrees.
 - **REV-2** [stated] Split the review: agents and tests do the exhaustive old-against-new comparison; people spend their attention on architecture, contracts and flagged risk.
-  - Old system as oracle: partly. Depends on model ability: partly. Strength: medium. Era: 2026; models: Claude Fable 5 (pre-release version), Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6, unstated.
+  - Old system as oracle: partly. Depends on model ability: partly. Strength: medium. Era: 2026; newest: Claude Opus 5.x.
   - Cases: [GitHub: who did what][gh-who], [Bun: how it was checked][bun-checked].
   - Against: Disagree: at Slack and Google a person checked every change before merge ([Slack][slk-who]) ([Google][goo-checked]), and Shopify puts a person's approval on every checkpoint ([Shopify][shp-checked]); in Bun no person read every line. Zalando had a person review every change, and one wrong data change still got through ([Zalando][zal-wrong]). In ts-rust the author says he read none of the code, and no other reviewer is named ([ts-rust][tsr-who]).
 - **REV-3** [ours] Give reviewers a written list of constructs that read the same in old and new code but behave differently: assertions, eager defaults, falsy checks, number types, built-in validators.
-  - Old system as oracle: yes. Depends on model ability: partly. Strength: medium. Era: 2026; models: Claude Sonnet 4.6, Claude Fable 5 (pre-release version), Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6, unstated.
+  - Old system as oracle: yes. Depends on model ability: partly. Strength: medium. Era: 2026; newest: Claude Opus 5.x.
   - Cases: [Bun: what went wrong][bun-wrong], [GitHub: what went wrong][gh-wrong], [Spartacus: what went wrong][spa-wrong].
   - Against: None found; the Spartacus post does not say what its reviewer was told to look for ([Spartacus][spa-wrong]).
 - **REV-4** [stated] Add an automatic scope check that compares each diff with its instruction; agents drift into refactors, switched-off tests and side fixes.
-  - Old system as oracle: no. Depends on model ability: partly. Strength: medium. Era: 2025–2026; models: internal version of Gemini fine-tuned with the DIDACT framework, Claude via Claude Code (version unstated).
+  - Old system as oracle: no. Depends on model ability: partly. Strength: medium. Era: 2025–2026; newest: Claude (version unstated).
   - Cases: [Spotify: what worked][spo-worked], [Google: how it was checked][goo-checked].
   - Against: Spotify's judge has no evaluation yet, so how often it vetoes good work is unknown ([Spotify][spo-wrong]).
   - Related view (karpathy-ideas): [models too agentic state stakes and scope][k-models-too-agentic-state-stakes-and-scope], agrees.
 - **REV-5** [ours] Treat LLM reviewers and judges as unmeasured until you know their miss rate; veto counts and showcase catches say nothing about what got through.
-  - Old system as oracle: partly. Depends on model ability: no. Strength: medium. Era: 2025–2026; models: Claude via Claude Code (version unstated), Claude Sonnet 4.6, Claude Fable 5 (pre-release version), unstated.
+  - Old system as oracle: partly. Depends on model ability: no. Strength: medium. Era: 2025–2026; newest: Claude Fable 5.x.
   - Cases: [Spotify: what went wrong][spo-wrong], [Bun: how it was checked][bun-checked], [Spartacus: what went wrong][spa-wrong].
   - Against: GitHub turned its session logs into evaluations, a start on measuring ([GitHub][gh-worked]).
-  - Sceptic: tag changed from no to partly. Challenge: the misses it shows (Spartacus validators, Bun reviewers judged by differences from the Zig) count as wrong only against the old code. Answer: accepted; measuring a judge needs a reference, here the old system.
 - **REV-6** [stated] Have the tool leave an inline note with a guide link at each spot it deliberately left for a person, so reviewers find the judgement calls fast.
-  - Old system as oracle: no. Depends on model ability: no. Strength: medium. Era: 2024–2026; models: Claude 2.1, Claude via Claude Code (version unstated).
+  - Old system as oracle: no. Depends on model ability: no. Strength: medium. Era: 2024–2026; newest: Claude (version unstated).
   - Cases: [Spotify: what worked][spo-worked], [Slack: who did what][slk-who].
   - Against: None found.
 - **REV-7** [stated] Let people see only changes that already built and passed tests; developers counted that filter as one of the largest gains.
-  - Old system as oracle: partly. Depends on model ability: no. Strength: medium. Era: 2025; models: internal version of Gemini fine-tuned with the DIDACT framework.
+  - Old system as oracle: partly. Depends on model ability: no. Strength: medium. Era: 2025; newest: Gemini (internal).
   - Cases: [Google: what worked][goo-worked].
   - Against: The green filter also held back correct changes where old tests already failed ([Google][goo-wrong]), and a green change can still be wrong in ways reviewers miss ([Spotify][spo-wrong]).
 - **REV-8** [stated] Audit the reviewers and the fixer: check that AI reviewers flag real differences and that the agent's answers to review comments hold up.
-  - Old system as oracle: partly. Depends on model ability: partly. Strength: medium. Era: 2026; models: Claude Fable 5 (pre-release version), Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6, unstated.
+  - Old system as oracle: partly. Depends on model ability: partly. Strength: medium. Era: 2026; newest: Claude Opus 5.x.
   - Cases: [Bun: how it was checked][bun-checked], [GitHub: what went wrong][gh-wrong].
   - Against: None found.
-  - Sceptic: tag changed from no to partly. Challenge: the audited reviewers compared new code with old code line by line, so "real differences" assumes a reference. Answer: accepted; checking the agent's replies to review comments still holds without one.
 - **REV-9** [stated] Once agents write fast, review, testing and deploy by the owning teams become the bottleneck; plan for that load from the start: reviewer capacity, evidence that eases review, priority.
-  - Old system as oracle: no. Depends on model ability: partly. Strength: strong. Era: 2025–2026; models: internal version of Gemini fine-tuned with the DIDACT framework, Claude via Claude Code (version unstated), Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6, Claude Opus 4.6, Claude Sonnet 4.5.
+  - Old system as oracle: no. Depends on model ability: partly. Strength: strong. Era: 2025–2026; newest: Claude Opus 4.x.
   - Cases: [GitHub: what went wrong][gh-wrong], [Google: who did what][goo-who], [Spotify: how it was checked][spo-checked], [Bloomberg: what went wrong][bbg-wrong].
   - Against: At Bloomberg reviewer time was not the whole limit: the moves were low priority and owners carried the deploy risk, so most PRs got no decision; its authors look to more checks inside the pipeline and to runs that owners request ([Bloomberg][bbg-wrong]). At Asana, whose engineers reviewed their own agents' pull requests twice a day, slow lint and CI held the work up, not approval ([Asana][asa-wrong]).
   - Related view (karpathy-ideas): [verification not generation is the bottleneck][k-verification-not-generation-is-the-bottleneck], agrees.
 - **REV-10** [ours] Grade a small sample of converted code against hand-converted versions with a rubric; pass rates say nothing about readability or idiom.
-  - Old system as oracle: yes. Depends on model ability: no. Strength: weak. Era: 2024; models: Claude 2.1.
+  - Old system as oracle: yes. Depends on model ability: no. Strength: weak. Era: 2024; newest: Claude 2.x.
   - Cases: [Slack: how it was checked][slk-checked].
   - Against: Airbnb reports intent and coverage kept, with no quality grading ([Airbnb][air-checked]).
 - **REV-11** [stated] Code that meets the feature requirements can still duplicate logic, drift from the architecture or run slowly; keep reviewers who know the target platform.
-  - Old system as oracle: no. Depends on model ability: partly. Strength: weak. Era: 2025–2026; models: unstated.
+  - Old system as oracle: no. Depends on model ability: partly. Strength: weak. Era: 2025–2026; newest: unstated.
   - Cases: [Shopify: what went wrong][shp-wrong], [Pokémon: what went wrong][vjx-wrong].
   - Against: Disagree: in the Pokémon port an engineer who had never written Rust spotted the hard-coded behaviour; only the speed work needed Rust expertise ([Pokémon][vjx-wrong]).
 

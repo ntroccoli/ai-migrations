@@ -2,7 +2,7 @@
 
 # Lesson evidence in one line each
 
-141 lessons. To choose lessons: scan this file, then open the aspect page (the heading link) only for the lessons you use; it holds the full "Against" line, the Era (years and models) and the legend. Each line: ID, tag (stated by a source, or ours), the lesson, then oracle (does the evidence rely on the old system), model (does it depend on model ability), strength, "may be outdated" where it applies, the cases it cites, and the cases its "Against" line cites.
+141 lessons. This is the one file that lists every lesson (besides llms-full.txt, which holds everything). To choose lessons: scan this file, then open the aspect page (the heading link) only for the lessons you use; it holds the full "Against" line, the Era (years and newest model family) and the legend. Each line: ID, tag (stated by a source, or ours), the lesson, then oracle (does the evidence rely on the old system), model (does it depend on model ability), strength, "may be outdated" where it applies, the cases it cites, and the cases its "Against" line cites.
 
 ## [Planning and scoping](planning.md)
 

@@ -301,7 +301,7 @@ function brokenLinks(text, dir) {
 // One page per aspect (LESSON_PAGES). Returns the lesson IDs (ID -> page file) and the case files
 // the lessons cite, in "Cases" or "Against".
 const ID = /^([A-Z]{3})-[1-9]\d*$/;
-const SUBS = /^Old system as oracle\|Cases\|Against(\|Related view)?(\|Sceptic)*$/;
+const SUBS = /^Old system as oracle\|Cases\|Against(\|Related view)?$/;
 const caseSections = new Map(); // case file -> Set of section anchors
 const caseMetas = new Map(); // case file -> front matter
 const casePractices = new Map(); // case file -> its "Practices to copy" lines, [{ tag, text }]
@@ -367,24 +367,26 @@ function validateLessons() {
       if (checkUnits(l.text).need) e(l.line, `${l.id}: lesson text holds a number; put numbers in the cases`);
 
       const labels = l.subs.map(s => s.label).join('|');
-      if (!SUBS.test(labels)) e(l.line, `${l.id}: sub-items must be, in order: Old system as oracle, Cases, Against, optional Related view, optional Sceptic (found: ${labels || 'none'})`);
+      // Sceptic notes live in the maintainer's private archive (lessons-raw), keyed by lesson ID; the
+      // tag they changed is what the page shows.
+      if (l.subs.some(s => s.label === 'Sceptic')) e(l.line, `${l.id}: a "Sceptic:" line belongs in the private archive, not on the page; the tag it changed stays here`);
+      else if (!SUBS.test(labels)) e(l.line, `${l.id}: sub-items must be, in order: Old system as oracle, Cases, Against, optional Related view (found: ${labels || 'none'})`);
       for (const s of l.subs) {
         if (!s.text) e(s.line, `${l.id}: "${s.label}" is empty`);
         if (s.label === 'Old system as oracle') {
           const m = s.text.match(META_LINE);
-          if (!m) e(s.line, `${l.id}: write "Old system as oracle: ${ORACLES.join('|')}. Depends on model ability: ${MODEL_DEPENDENCE.join('|')}. Strength: ${STRENGTHS.join('|')}. Era: YYYY[–YYYY]; models: ...."`);
+          if (!m) e(s.line, `${l.id}: write "Old system as oracle: ${ORACLES.join('|')}. Depends on model ability: ${MODEL_DEPENDENCE.join('|')}. Strength: ${STRENGTHS.join('|')}. Era: YYYY[–YYYY]; newest: <model family>."`);
           else {
             if (!ORACLES.includes(m[1])) e(s.line, `${l.id}: oracle must be one of ${ORACLES.join(', ')}`);
             if (!MODEL_DEPENDENCE.includes(m[2])) e(s.line, `${l.id}: "Depends on model ability" must be one of ${MODEL_DEPENDENCE.join(', ')}`);
             if (!STRENGTHS.includes(m[3])) e(s.line, `${l.id}: strength must be one of ${STRENGTHS.join(', ')}`);
-            // Era: one comparable form, and exactly the years and models of the cases in "Cases".
+            // Era: one comparable form, exactly the years and the newest model family of the cases in "Cases".
             const era = parseEra(m[4]);
             const metas = casesOf(l, page.refs).map(f => sectionsOf(f) && caseMetas.get(f)).filter(Boolean); // a missing case is reported under "Cases"
-            if (!era) e(s.line, `${l.id}: write the Era as "YYYY" or "YYYY–YYYY" (en dash), then "; models: " and the models as the cases name them, or unstated`);
+            if (!era) e(s.line, `${l.id}: write the Era as "YYYY" or "YYYY–YYYY" (en dash), then "; newest: " and the newest model family of its cases, or unstated`);
             else if (metas.length) {
               const want = expectedEra(metas);
-              const same = era.years === want.years && era.models.length === want.models.length && want.models.every(x => era.models.includes(x));
-              if (!same) e(s.line, `${l.id}: the Era must give the years and models of the cases in "Cases": "Era: ${eraText(want)}."`);
+              if (era.years !== want.years || era.newest !== want.newest) e(s.line, `${l.id}: the Era must give the years and the newest model family of the cases in "Cases": "Era: ${eraText(want)}."`);
             }
           }
         } else if (s.label === 'Cases' || s.label === 'Against') {

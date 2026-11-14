@@ -4,52 +4,52 @@ What goes into the model's context, and how prompts are written.
 
 Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
-`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Depends on model ability" (`yes`, `partly`, `no`): `yes` when the lesson states what models or agents can or cannot do, `partly` when it is a process whose need comes from such a behaviour, `no` when it holds whatever the model; the index marks a `yes` lesson whose newest case is over a year old as possibly outdated. "Era": the years the cited cases ran (their publication year when they give no period) and the models they name, `unstated` when one names none. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
+`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Depends on model ability" (`yes`, `partly`, `no`): `yes` when the lesson states what models or agents can or cannot do, `partly` when it is a process whose need comes from such a behaviour, `no` when it holds whatever the model; the index marks a `yes` lesson whose newest case is over a year old as possibly outdated. "Era": the years the cited cases ran (their publication year when they give no period), then the newest model family: the family of the most recent cited case that names a model (its highest version when it names several), `unstated` when none names one; each case lists all its models. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
 
 - **CTX-1** [stated] Choosing the right context (nearby files, good examples, runtime data, exact mapping tables) moved results more than polishing the prompt wording.
-  - Old system as oracle: partly. Depends on model ability: yes. Strength: strong. Era: 2024–2026; models: Claude 2.1, GPT-4o, Claude via Claude Code (version unstated), unstated.
+  - Old system as oracle: partly. Depends on model ability: yes. Strength: strong. Era: 2024–2026; newest: Claude (version unstated).
   - Cases: [Airbnb: what worked][air-worked], [Slack: what went wrong][slk-wrong], [Spotify: what worked][spo-worked], [Zalando: what worked][zal-worked], [Asana: what worked][asa-worked].
   - Against: Disagree: Spotify treats prompt writing as the hard skill users lack ([Spotify][spo-wrong]). Zalando credits a system prompt and clearer wording as well as mappings and examples ([Zalando][zal-worked]). Asana found a richer setup (a long conventions prompt, a notes file) did worse than a short goal on a well-kept code base ([Asana][asa-wrong]).
   - Related view (karpathy-ideas): [context engineering][k-context-engineering], agrees.
 - **CTX-2** [stated] Give the model the runtime facts a person would look at, such as the rendered output of each test, not only the source file.
-  - Old system as oracle: yes. Depends on model ability: partly. Strength: medium. Era: 2024–2026; models: Claude 2.1, GPT-4o, Claude Opus 4.6, Claude Sonnet 4.5, unstated.
+  - Old system as oracle: yes. Depends on model ability: partly. Strength: medium. Era: 2024–2026; newest: Claude Opus 4.x.
   - Cases: [Slack: what worked][slk-worked], [Slack: practices to copy][slk-practices], [Zalando: what went wrong][zal-wrong], [Shopify: what worked][shp-worked], [Bloomberg: what worked][bbg-worked].
   - Against: None found.
 - **CTX-3** [stated] Write field and API mappings out explicitly, such as in tables, and have a person check them against what each side means; a guide adapted from the human one, and mappings by name, went wrong.
-  - Old system as oracle: no. Depends on model ability: partly. Strength: medium. Era: 2024–2026; models: GPT-4o, Claude via Claude Code (version unstated).
+  - Old system as oracle: no. Depends on model ability: partly. Strength: medium. Era: 2024–2026; newest: Claude (version unstated).
   - Cases: [Spotify: what worked][spo-worked], [Spotify: practices to copy][spo-practices], [Zalando: what went wrong][zal-wrong].
   - Against: At Asana a much longer written guide to the target's conventions made results worse, and the code base's own examples sufficed ([Asana][asa-wrong]); more text was not better.
 - **CTX-4** [stated] State the whole end state, its preconditions and when not to act; agents read vague goals narrowly and leave parts of the work out of scope.
-  - Old system as oracle: no. Depends on model ability: partly. Strength: medium. Era: 2024–2026; models: GPT-4o, Claude via Claude Code (version unstated), Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6, unstated.
+  - Old system as oracle: no. Depends on model ability: partly. Strength: medium. Era: 2024–2026; newest: Claude Opus 5.x.
   - Cases: [GitHub: what went wrong][gh-wrong], [Spotify: practices to copy][spo-practices], [1Password: practices to copy][opw-practices], [Zalando: what went wrong][zal-wrong].
   - Against: At 1Password the same ordering mistakes came back after the agents were told explicitly about order and constraints ([1Password][opw-wrong]): a clear statement is not enough on its own.
   - Related view (karpathy-ideas): [success criteria not steps][k-success-criteria-not-steps], agrees.
 - **CTX-5** [stated] Put one change in each prompt; prompts bundling several changes ran out of context or stopped halfway.
-  - Old system as oracle: no. Depends on model ability: yes. Strength: weak. Era: 2024–2026; models: GPT-4o, Claude via Claude Code (version unstated).
+  - Old system as oracle: no. Depends on model ability: yes. Strength: weak. Era: 2024–2026; newest: Claude (version unstated).
   - Cases: [Spotify: what went wrong][spo-wrong], [Spotify: practices to copy][spo-practices], [Zalando: what went wrong][zal-wrong].
   - Against: Zalando put about three components in each prompt and held accuracy by capping the prompt's size instead ([Zalando][zal-numbers], [grouping][zal-worked]); the limit may be context size, not the number of changes.
 - **CTX-6** [stated] Prefer large, static, version-controlled prompts and few tools for predictability; letting the agent fetch context through many tools adds variance.
-  - Old system as oracle: no. Depends on model ability: yes. Strength: weak. Era: 2025–2026; models: Claude via Claude Code (version unstated).
+  - Old system as oracle: no. Depends on model ability: yes. Strength: weak. Era: 2025–2026; newest: Claude (version unstated).
   - Cases: [Spotify: what worked][spo-worked].
   - Against: Disagree: Spotify is now letting its agent gather context itself ([Spotify][spo-wrong]), and GitHub ran broad tool sets and finished ([GitHub][gh-worked]). Large prompts also hurt: a longer conventions prompt made Asana's results worse ([Asana][asa-wrong]), and Zalando's accuracy fell as its prompts grew ([Zalando][zal-wrong]).
 - **CTX-7** [stated] Ask the agent after each session what its prompt lacked, and fold the answer into the next version of the prompt.
-  - Old system as oracle: no. Depends on model ability: partly. Strength: weak. Era: 2025–2026; models: Claude via Claude Code (version unstated).
+  - Old system as oracle: no. Depends on model ability: partly. Strength: weak. Era: 2025–2026; newest: Claude (version unstated).
   - Cases: [Spotify: practices to copy][spo-practices].
   - Against: None found.
 - **CTX-8** [stated] Fit the prompt to the agent: a weak home-built loop needed step-by-step lists, while a stronger agent did better with the end state and room to plan.
-  - Old system as oracle: no. Depends on model ability: yes. Strength: weak. Era: 2025–2026; models: Claude via Claude Code (version unstated), unstated.
+  - Old system as oracle: no. Depends on model ability: yes. Strength: weak. Era: 2025–2026; newest: Claude (version unstated).
   - Cases: [Spotify: what worked][spo-worked], [Asana: what worked][asa-worked], [Asana: what went wrong][asa-wrong].
   - Against: Asana credits its code base (the target library chosen years before, test helpers, conventions, examples) more than its prompt or its agent, so it does not isolate the agent ([Asana][asa-worked]); 1Password's templates and playbook show step detail still helps on bounded edits ([1Password][opw-worked]).
 - **CTX-9** [stated] When the context budget is small, choose context by fixed rules: full bodies of nearby functions, signatures for the rest, the hardest callers first.
-  - Old system as oracle: partly. Depends on model ability: partly. Strength: medium. Era: 2026; models: Claude Opus 4.6, Claude Sonnet 4.6, GPT-5.4, GPT-5.6 Sol, Claude Mythos Preview.
+  - Old system as oracle: partly. Depends on model ability: partly. Strength: medium. Era: 2026; newest: GPT-5.x.
   - Cases: [Intel: practices to copy][int-practices].
   - Against: Airbnb, with a large context budget, filled prompts with dozens of related files, also chosen by rules ([Airbnb][air-worked]); the lesson is for small budgets.
 - **CTX-10** [stated] Agents learn from the repository as it stands: fix docs and agent guidance that still favour the old library, and awkward examples, or they spread.
-  - Old system as oracle: no. Depends on model ability: partly. Strength: weak. Era: 2026; models: unstated.
+  - Old system as oracle: no. Depends on model ability: partly. Strength: weak. Era: 2026; newest: unstated.
   - Cases: [Asana: what went wrong][asa-wrong].
   - Against: None found.
 - **CTX-11** [stated] Keep each unit small enough for the agent to read whole, such as one function per file in the target; very long files were refused or read in loose chunks and filled the context.
-  - Old system as oracle: no. Depends on model ability: yes. Strength: weak. Era: 2025–2026; models: unstated.
+  - Old system as oracle: no. Depends on model ability: yes. Strength: weak. Era: 2025–2026; newest: unstated.
   - Cases: [Pokémon: what worked][vjx-worked], [Pokémon: what went wrong][vjx-wrong].
   - Against: None found; the author did not split the original's files, for fear of changing behaviour, so only half the pair was split.
 

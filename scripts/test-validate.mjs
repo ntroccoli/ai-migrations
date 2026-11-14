@@ -144,15 +144,30 @@ test('Era in free form fails', 1, d => {
   writeFileSync(p, readFileSync(p, 'utf8').replace(/(\*\*REV-1\*\*[^\n]*\n[^\n]*Era: )[^\n]*/, '$1all model eras.'));
 }, null, 'REV-1: write the Era as "YYYY" or "YYYY–YYYY"');
 test('Era whose years do not match its cases fails', 1,
-  d => edit(L(d, 'review'), 'Strength: medium. Era: 2026; models: Claude Fable 5', 'Strength: medium. Era: 2025–2026; models: Claude Fable 5'),
-  null, 'REV-1: the Era must give the years and models of the cases in "Cases": "Era: 2026; models: ');
-test('Era missing a model its cases name fails', 1,
-  d => edit(L(d, 'review'), 'Era: 2026; models: Claude Fable 5 (pre-release version), Claude Opus 4.8,', 'Era: 2026; models: Claude Fable 5 (pre-release version),'),
-  null, 'REV-1: the Era must give the years and models');
-test('Era with the same models in another order passes', 0, d => {
-  const p = L(d, 'review');
-  writeFileSync(p, readFileSync(p, 'utf8').replace(/(\*\*REV-1\*\*[^\n]*\n[^\n]*Era: 2026; models: )([^\n]*)\./, (_, a, m) => `${a}${m.split(', ').reverse().join(', ')}.`));
-});
+  d => edit(L(d, 'review'), 'Strength: medium. Era: 2026; newest: Claude Opus 5.x.', 'Strength: medium. Era: 2025–2026; newest: Claude Opus 5.x.'),
+  null, 'REV-1: the Era must give the years and the newest model family of the cases in "Cases": "Era: 2026; newest: Claude Opus 5.x."');
+test('Era naming another family than the newest fails', 1,
+  d => edit(L(d, 'review'), 'Strength: medium. Era: 2026; newest: Claude Opus 5.x.', 'Strength: medium. Era: 2026; newest: Claude Opus 4.x.'),
+  null, 'REV-1: the Era must give the years and the newest model family');
+test('Era in the old long form (every model) fails', 1,
+  d => edit(L(d, 'review'), 'Era: 2026; newest: Claude Opus 5.x.', 'Era: 2026; models: Claude Opus 4.8, Claude Opus 5.'),
+  null, 'REV-1: write the Era as "YYYY" or "YYYY–YYYY" (en dash), then "; newest: "');
+// The newest family: the most recent cited case that names a model; its highest version on several.
+const metaOf = f => parseCase(join(ROOT, 'cases', f)).meta;
+for (const [names, want] of [
+  [['2024-05-22-slack-enzyme-to-rtl.md', BUN], '2024–2026; newest: Claude Fable 5.x'], // Bun is the newer case
+  [[BUN, '2026-09-16-github-copilot-runtime-rust.md'], '2026; newest: Claude Opus 5.x'], // Opus 4.8 and 5 listed: 5; a tie with GPT-5.x keeps the first listed
+  [['2026-10-07-ping-tsgo-to-rust.md'], '2026; newest: GPT-6.x'],
+  [['2025-04-01-airbnb-enzyme-to-rtl.md', ONEPW], '2024–2026; newest: unstated'], // no case names a model
+]) {
+  const got = eraText(expectedEra(names.map(metaOf)));
+  const ok = got === want;
+  console.log(`${ok ? 'ok  ' : 'FAIL'} expectedEra of ${names.join(' + ')}`);
+  if (!ok) failed.push(`expectedEra of ${names.join(' + ')}: wanted "${want}", got "${got}"`);
+}
+// Sceptic notes live in the private archive; the page keeps only the tag they changed.
+test('a "Sceptic:" line on a lesson page fails', 1,
+  d => edit(L(d, 'review'), '  - Against: None found.\n', '  - Against: None found.\n  - Sceptic: tag kept.\n'), null, 'a "Sceptic:" line belongs in the private archive');
 test('"Cases" with no link fails', 1, d => {
   const p = L(d, 'review');
   writeFileSync(p, readFileSync(p, 'utf8').replace(/\n {2}- Cases: [^\n]*/, '\n  - Cases: Bun, GitHub.'));
@@ -257,7 +272,7 @@ test('fixture Era years that miss a cited case fail', 1, d => {
   fixture('strong', ['bun', 'slack'])(d);
   const p = L(d, 'team');
   writeFileSync(p, readFileSync(p, 'utf8').replace(/(\*\*TEM-99\*\*[^\n]*\n[^\n]*Era: )2024–2026;/, '$12026;'));
-}, null, 'TEM-99: the Era must give the years and models of the cases in "Cases": "Era: 2024–2026; models: Claude 2.1,');
+}, null, 'TEM-99: the Era must give the years and the newest model family of the cases in "Cases": "Era: 2024–2026; newest: Claude Fable 5.x."');
 
 // "May be outdated" (build.mjs): a lesson tagged yes for model ability whose most recent case is more than
 // OUTDATED_MONTHS old at the reference date. Bun is dated 2026-07-08 (work 2026-05); --today fixes the date.
@@ -265,9 +280,11 @@ const outdatedRun = (model, today) => d => {
   fixture('medium', ['bun'], model)(d);
   const r = node(d, 'build.mjs', ['--today', today]);
   if (r.status !== 0) throw new Error(r.stdout + r.stderr);
-  return { index: readFileSync(join(d, 'lessons', 'index.md'), 'utf8'), llms: readFileSync(join(d, 'llms.txt'), 'utf8') };
+  return generated(d);
 };
-const marked = o => /\*\*TEM-99\*\*[^\n]*may be outdated\)/.test(o.index) && /Marked now: [^\n]*TEM-99/.test(o.llms)
+const generated = d => Object.fromEntries([['index', 'lessons/index.md'], ['llms', 'llms.txt'], ['evidence', 'lessons/evidence.md']]
+  .map(([k, f]) => [k, readFileSync(join(d, f), 'utf8')]));
+const marked = o => /^- \*\*TEM-99\*\*[^\n]*; may be outdated\. Cases:/m.test(o.evidence) && /Marked now: [^\n]*TEM-99/.test(o.llms)
   && /^## May be outdated\n(?:(?!## )[^\n]*\n)*- \*\*TEM-99\*\*/m.test(o.index);
 test('a model-dependent lesson with an old newest case is marked may be outdated', 0, d => {
   if (!marked(outdatedRun('yes', '2027-07-09')(d))) throw new Error('TEM-99 not marked in lessons/index.md and llms.txt');
@@ -285,7 +302,7 @@ test('the reference date is the newest log entry', 0, d => {
   fixture('medium', ['bun'], 'yes')(d);
   newLogEntry(d, '2027-07-09');
   node(d, 'build.mjs', []);
-  const o = { index: readFileSync(join(d, 'lessons', 'index.md'), 'utf8'), llms: readFileSync(join(d, 'llms.txt'), 'utf8') };
+  const o = generated(d);
   if (!marked(o)) throw new Error('TEM-99 not marked at the log date 2027-07-09');
   return ['--check'];
 }, null, null, 'build.mjs');
@@ -349,6 +366,13 @@ test('evidence.md shortens a Disagree line to its case names', 0, d => {
   if (!line.endsWith('Against: disagree: Airbnb.')) throw new Error(`line: ${line}`);
   return ['--check'];
 }, null, null, 'build.mjs');
+// One agent route (llms.txt, then evidence.md, then a page): no other short file lists every lesson.
+test('lessons/index.md and llms.txt do not list every lesson', 0, d => {
+  const o = generated(d);
+  const total = (o.evidence.match(/^- \*\*[A-Z]{3}-\d+\*\*/gm) || []).length;
+  const inIndex = (o.index.match(/^- \*\*[A-Z]{3}-\d+\*\*/gm) || []).length, inLlms = (o.llms.match(/\*\*[A-Z]{3}-\d+\*\*/g) || []).length;
+  if (!total || inIndex >= total / 2 || inLlms) throw new Error(`lesson lines: index ${inIndex}, llms.txt ${inLlms}, of ${total}`);
+});
 test('build --check fails after hand-editing lessons/evidence.md', 1,
   d => { appendFileSync(join(d, 'lessons', 'evidence.md'), '\nA hand edit.\n'); return ['--check']; }, null, 'out of date: lessons/evidence.md', 'build.mjs');
 test('a stray page in lessons/ still fails although evidence.md is skipped', 1,

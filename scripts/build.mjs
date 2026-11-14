@@ -12,7 +12,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { join, posix, dirname } from 'node:path';
 import {
   ROOT, REPO_SLUG, REPO_SLUGS, LANGUAGES, LESSON_NOTE, LESSON_LEGEND, LESSON_PAGES, listCases, parseCase, loadLessons, lessonMeta, sub, linksIn, refDefs,
-  casesOf, mayBeOutdated, OUTDATED_MONTHS, modelFamily, parseEra, CHECKLIST, CHANGES_DIR, logEntries, lessonPrints, questionPrints,
+  casesOf, mayBeOutdated, OUTDATED_MONTHS, modelFamily, CHECKLIST, CHANGES_DIR, logEntries, lessonPrints, questionPrints,
   renderChanges, parseChanges,
 } from './lib.mjs';
 
@@ -120,7 +120,8 @@ const OUTDATED_NOTE = `"May be outdated" marks a lesson about what models can or
   're-check it against recent work before you rely on it.';
 // "By model" (lessons/index.md): each model family the cases name (modelFamily in scripts/lib.mjs; a
 // name with no rule there is its own family), the names behind it, its newest case, and the lessons
-// tagged yes or partly for model ability whose Era names a model of that family.
+// tagged yes or partly for model ability whose cited cases ("Cases") name a model of that family. It
+// reads the cases, not the Era, which gives only the newest family.
 const familyOf = n => modelFamily(n) ?? n;
 const families = new Map();
 for (const c of cases) for (const n of named(c).length ? named(c) : ['unstated']) {
@@ -128,13 +129,14 @@ for (const c of cases) for (const n of named(c).length ? named(c) : ['unstated']
   f.names.add(n); if (String(c.meta.date) > f.newest) f.newest = String(c.meta.date);
   families.set(familyOf(n), f);
 }
-for (const l of all) if (['yes', 'partly'].includes(lessonMeta(l).model)) {
-  for (const fam of new Set((parseEra(lessonMeta(l).era)?.models ?? []).map(familyOf))) families.get(fam)?.lessons.push(l.id);
+for (const p of pages) for (const l of p.lessons) if (['yes', 'partly'].includes(lessonMeta(l).model)) {
+  const cited = casesOf(l, p.refs).map(f => caseByFile.get(f)).filter(Boolean);
+  for (const fam of new Set(cited.flatMap(c => [c.meta.models].flat().filter(Boolean).map(familyOf)))) families.get(fam)?.lessons.push(l.id);
 }
 const familyRows = [...families].sort(([a, x], [b, y]) => (a === 'unstated') - (b === 'unstated') || y.newest.localeCompare(x.newest) || a.localeCompare(b));
 const NEWEST_CASE = cases.map(c => String(c.meta.date)).sort().at(-1);
 const MODEL_RULE = 'With a specific or a new model: process lessons (model ability: no) apply as they are. Start with the lessons tagged ' +
-  'yes or partly whose Era names your model or its family ("By model" in lessons/index.md); treat those from other models as ' +
+  'yes or partly whose cases name your model or its family ("By model" in lessons/index.md); treat those from other models as ' +
   `things to re-check on yours, not tips. A model newer than every case (newest: ${NEWEST_CASE}) has no evidence here yet. The lessons ` +
   'hold only what the cases show: no prompting advice.';
 const out = {};
@@ -169,9 +171,10 @@ out[`changes/${NEWEST.slug}.md`] = renderChanges(NEWEST, prevEntry, lessonPrints
     'Lessons for large engineering work done with AI agents, drawn from the case studies in [the case index](../index.md). Each ' +
       'lesson is one line in our own words with a stable ID (the prefix names its page), the cases behind it, the ' +
       'evidence against it, and whether it needs the old system as its oracle. The [checklist](../checklist.md) cites ' +
-      'lessons by ID.', '',
+      'lessons by ID. This page is a table of contents: to choose lessons, read [evidence.md](evidence.md) (one line ' +
+      'per lesson), then open an aspect page only for the lessons you use.', '',
     LESSON_NOTE, '',
-    LEGEND, '',
+    'The legend of the tags, the Era and the strength rule heads every aspect page.', '',
     '## Aspects', '',
     '| Aspect | Prefix | Lessons | stated | ours | oracle yes | partly | no | model yes | partly | no |',
     '| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |',
@@ -186,22 +189,11 @@ out[`changes/${NEWEST.slug}.md`] = renderChanges(NEWEST, prevEntry, lessonPrints
     'Families group the model names the cases give by maker, line and major version ("Claude Opus 4.6" and "Opus 4.8" are ' +
       'Claude Opus 4.x; "GPT-5.4" and "gpt-5.5" are GPT-5.x); a name with a line but no version, and an internal model, ' +
       'stay apart; unstated covers the cases that name no model. Lessons: those tagged yes or partly for model ability whose ' +
-      'Era names a model of the family. Newest case: the latest publication date among the cases that name it.', '',
+      'cited cases name a model of the family (a lesson\'s Era names only the newest). Newest case: the latest publication date among the cases that name it.', '',
     '| Model family | Names in the cases | Newest case | Lessons (model ability yes or partly) |', '| --- | --- | --- | --- |',
     ...familyRows.map(([fam, f]) => `| ${fam} | ${[...f.names].join('; ')} | ${f.newest} | ${f.lessons.length}: ${f.lessons.join(', ') || 'none'} |`), '',
-    '## Cases behind the lessons', '',
-    'Lessons that cite each case, in "Cases" or "Against".', '',
-    '| Case | Lessons |', '| --- | --- |',
-    ...cases.map(c => `| [${c.meta.company}](../cases/${c.file}) | ${caseUse.get(c.file).length}: ${caseUse.get(c.file).join(', ') || 'none'} |`), '',
     '## Where the cases disagree', '',
     ...(disagree.length ? disagree : ['None recorded.']), '',
-    '## Every lesson in one line', '',
-    'To find the lessons that fit work other than a migration, scan this list, then open the pages of the lessons ' +
-      'that fit. Each line: ID, tag, the lesson, then its oracle tag, its model-ability tag, its strength, and "may be outdated" where it applies. ' +
-      '[evidence.md](evidence.md) gives the same lines with the cases for and against each lesson.', '',
-    ...pages.flatMap(p => [`### [${p.title}](${p.slug}.md)`, '',
-      ...p.lessons.map(l => `- **${l.id}** [${l.tag}] ${l.text} (oracle: ${lessonMeta(l).oracle}; model: ${lessonMeta(l).model}; ` +
-        `${lessonMeta(l).strength}${outdated.has(l.id) ? '; may be outdated' : ''})`), '']),
   ].join('\n');
 }
 
@@ -218,8 +210,9 @@ const shortAgainst = (text, refs) => {
 out['lessons/evidence.md'] = [
   GENERATED, '',
   '# Lesson evidence in one line each', '',
-  `${all.length} lessons. To choose lessons: scan this file, then open the aspect page (the heading link) only for the ` +
-    'lessons you use; it holds the full "Against" line, the Era (years and models) and the legend. Each line: ID, tag ' +
+  `${all.length} lessons. This is the one file that lists every lesson (besides llms-full.txt, which holds everything). ` +
+    'To choose lessons: scan this file, then open the aspect page (the heading link) only for the ' +
+    'lessons you use; it holds the full "Against" line, the Era (years and newest model family) and the legend. Each line: ID, tag ' +
     '(stated by a source, or ours), the lesson, then oracle (does the evidence rely on the old system), model (does it ' +
     'depend on model ability), strength, "may be outdated" where it applies, the cases it cites, and the cases its ' +
     '"Against" line cites.', '',
@@ -307,16 +300,16 @@ out['llms.txt'] = [
     'own words. Each case says how far its claims can be checked and what stake its author has in the tools: weigh it ' +
     'accordingly; a lesson that rests only on cases whose authors sell the tool is never rated strong.', '',
   MODEL_RULE, '',
-  `${OUTDATED_NOTE} ${outdated.size ? `Marked now: ${[...outdated].join(', ')}.` : 'None is marked now.'} A lesson's Era gives the years and the models of its cases.`, '',
+  `${OUTDATED_NOTE} ${outdated.size ? `Marked now: ${[...outdated].join(', ')}.` : 'None is marked now.'} A lesson's Era gives the years of its cases and the newest model family among them.`, '',
   DISCLOSURE, '',
   `Moves covered, by the language the code was in before the move: ${COVERED}`, '',
   '## How to use', '',
   `- Before a migration or a large restructuring: run the [checklist](${RAW_BASE}/checklist.md) on the repository and change nothing. Each ` +
     'question has a Check to measure and cites lesson IDs; open only the lessons and cases behind a gap.',
-  '- For any other large piece of AI-driven work, not a migration (README "Learning from the lessons"): follow ' +
-    `[docs/applying-lessons.md](${RAW_BASE}/docs/applying-lessons.md). Choose lessons from ` +
-    `[lessons/evidence.md](${RAW_BASE}/lessons/evidence.md) (about ${evidenceKB} KB: one line each with tags, strength, cases and the cases against), ` +
-    'then open the aspect pages only for the lessons you use.',
+  `- Lessons, one route: read [lessons/evidence.md](${RAW_BASE}/lessons/evidence.md) (about ${evidenceKB} KB, the only file ` +
+    'besides llms-full.txt that lists every lesson: one line each with tags, strength, cases and the cases against), then ' +
+    'open an aspect page only for the lessons you use. For a large piece of AI-driven work that is not a migration (README ' +
+    `"Learning from the lessons"), follow [docs/applying-lessons.md](${RAW_BASE}/docs/applying-lessons.md).`,
   `- Open a case only when you need its detail. Each has "Who did what", "How it was checked", a Numbers table with ` +
     `the basis of each number, "What went wrong" and "Practices to copy". File format: [AGENTS.md](${RAW_BASE}/AGENTS.md).`,
   `- After a review, a migration or a revisit: tell what the checklist or the lessons foresaw and what they missed, ` +
@@ -326,17 +319,15 @@ out['llms.txt'] = [
     'the lesson IDs and questions it added, changed or removed.',
   `- Relative links inside these files resolve against the raw URL of the file that holds them (under ${RAW_BASE}/).`, '',
   '## Lessons', '',
-  ...pages.map(p => {
-    const c = count(p.lessons);
-    return `- [${p.title}](${RAW_BASE}/lessons/${p.slug}.md): ${c.n} lessons, ${prefixOf(p)}-n (${c.stated} stated, ` +
-      `${c.ours} ours; oracle: ${c.yes} yes, ${c.partly} partly, ${c.no} no; model ability: ${c.mYes} yes, ${c.mPartly} partly, ${c.mNo} no). ${p.intro}`;
-  }), '',
+  `The aspect pages (tag counts per page: [lessons/index.md](${RAW_BASE}/lessons/index.md)). Choose lessons in ` +
+    `[lessons/evidence.md](${RAW_BASE}/lessons/evidence.md) first; open a page only for the lessons you use.`, '',
+  ...pages.map(p => `- [${p.title}](${RAW_BASE}/lessons/${p.slug}.md): ${p.lessons.length} lessons, ${prefixOf(p)}-n. ${p.intro}`), '',
   '## Cases', '',
   ...cases.map(c => caseLine(c, `${RAW_BASE}/cases/`)), '',
   '## Optional', '',
-  `- [Everything in one file](${RAW_BASE}/llms-full.txt): every lesson, every case line, the checklist and the ` +
-    `pitfalls, for tools that cannot follow links. About ${fullKB} KB (~${fullKTokens}k tokens), so prefer the ` +
-    'aspect pages when you can.',
+  `- [Everything in one file](${RAW_BASE}/llms-full.txt): the single opt-in file that holds everything (every lesson ` +
+    'with its sub-items, every case line, the checklist and the pitfalls), for tools that cannot follow links. About ' +
+    `${fullKB} KB (~${fullKTokens}k tokens): otherwise follow the route above.`,
   `- [Pitfalls by kind of move](${RAW_BASE}/pitfalls.md): what the old stack did implicitly, and seams for moving in steps.`,
   `- [Update log](${RAW_BASE}/log.md): what each update covered and changed, and why.`, '',
 ].join('\n');

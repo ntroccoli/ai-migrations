@@ -4,56 +4,56 @@ What tells you the new code is right, and where those oracles fail.
 
 Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
-`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Depends on model ability" (`yes`, `partly`, `no`): `yes` when the lesson states what models or agents can or cannot do, `partly` when it is a process whose need comes from such a behaviour, `no` when it holds whatever the model; the index marks a `yes` lesson whose newest case is over a year old as possibly outdated. "Era": the years the cited cases ran (their publication year when they give no period) and the models they name, `unstated` when one names none. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
+`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. "Old system as oracle" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. "Depends on model ability" (`yes`, `partly`, `no`): `yes` when the lesson states what models or agents can or cannot do, `partly` when it is a process whose need comes from such a behaviour, `no` when it holds whatever the model; the index marks a `yes` lesson whose newest case is over a year old as possibly outdated. "Era": the years the cited cases ran (their publication year when they give no period), then the newest model family: the family of the most recent cited case that names a model (its highest version when it names several), `unstated` when none names one; each case lists all its models. "Strength", capped by the cases in "Cases" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.
 
 - **TST-1** [stated] Use a black-box suite that does not depend on the implementation language as the oracle, and run it unchanged against the old code and the new.
-  - Old system as oracle: yes. Depends on model ability: no. Strength: medium. Era: 2026; models: Claude Fable 5 (pre-release version), Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6, GPT 6 Astra, gpt-5.5, Opus 5.5, unstated.
+  - Old system as oracle: yes. Depends on model ability: no. Strength: medium. Era: 2026; newest: GPT-6.x.
   - Cases: [Bun: how it was checked][bun-checked], [GitHub: how it was checked][gh-checked], [ts-rust: how it was checked][tsr-checked].
   - Against: An outside critic asks why a suite that let the old bugs through should vet the new code ([Bun][bun-wrong]); Bun still shipped known regressions after a fully green run.
   - Related view (karpathy-ideas): [port with equality tests][k-port-with-equality-tests], agrees.
 - **TST-2** [stated] Before the move starts, make sure tests cover the behaviour that matters and that agents can run them; the gaps were where missing-feature regressions came from.
-  - Old system as oracle: yes. Depends on model ability: no. Strength: medium. Era: 2025–2026; models: Claude via Claude Code (version unstated), Claude Sonnet 4.6, Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6, GPT 6 Astra, gpt-5.5, Opus 5.5.
+  - Old system as oracle: yes. Depends on model ability: no. Strength: medium. Era: 2025–2026; newest: GPT-6.x.
   - Cases: [GitHub: what went wrong][gh-wrong], [Spotify: practices to copy][spo-practices], [ts-rust: what went wrong][tsr-wrong], [Spartacus: what went wrong][spa-wrong].
   - Against: Google leaned on the owning teams' existing regression suites and slow rollouts rather than new tests ([Google][goo-checked]); Intel left the tests out on purpose and got a build that crashed ([Intel][int-wrong]).
 - **TST-3** [stated] Equivalence with the old system is not correctness: a faithful port carries the old bugs, and tests can assert the wrong behaviour with confidence.
-  - Old system as oracle: yes. Depends on model ability: no. Strength: medium. Era: 2026; models: Claude Fable 5 (pre-release version), Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6, unstated.
+  - Old system as oracle: yes. Depends on model ability: no. Strength: medium. Era: 2026; newest: Claude Opus 5.x.
   - Cases: [Bun: what went wrong][bun-wrong], [GitHub: what went wrong][gh-wrong].
   - Against: The Bun rewrite also fixed many bugs that the old code had ([Bun][bun-wrong]), so a port is not only a copy of old defects.
   - Related view (karpathy-ideas): [port with equality tests][k-port-with-equality-tests], contradicts: equality with the reference also carries the reference's bugs and its wrong tests into the port.
 - **TST-4** [ours] Run the oracle on the build configuration you ship; debug-only assertions and checks hid regressions that appeared only in release builds.
-  - Old system as oracle: partly. Depends on model ability: no. Strength: weak. Era: 2026; models: Claude Fable 5 (pre-release version), unstated.
+  - Old system as oracle: partly. Depends on model ability: no. Strength: weak. Era: 2026; newest: Claude Fable 5.x.
   - Cases: [Bun: what went wrong][bun-wrong].
   - Against: None found.
 - **TST-5** [stated] Where the old system has thin tests, record its inputs and outputs (or have a separate agent write equivalence tests) and replay them against the new code.
-  - Old system as oracle: yes. Depends on model ability: no. Strength: medium. Era: 2024–2026; models: Claude 2.1, Claude Opus 4.6, Claude Sonnet 4.6, GPT-5.4, GPT-5.6 Sol, Claude Mythos Preview.
+  - Old system as oracle: yes. Depends on model ability: no. Strength: medium. Era: 2024–2026; newest: GPT-5.x.
   - Cases: [Intel: what worked][int-worked], [Slack: what worked][slk-worked].
   - Against: Full coverage through a library's public functions is often out of reach, and generated tests can be vacuous ([Intel][int-wrong]). The Pokémon port ran both versions live on seeded inputs rather than recording, and does not say the old tests were thin ([Pokémon][vjx-checked]).
 - **TST-6** [stated] Make the baseline green before agents start: fix tests that already fail and make golden files regenerable, or correct changes stall at the gate.
-  - Old system as oracle: yes. Depends on model ability: no. Strength: medium. Era: 2025–2026; models: internal version of Gemini fine-tuned with the DIDACT framework, Claude via Claude Code (version unstated).
+  - Old system as oracle: yes. Depends on model ability: no. Strength: medium. Era: 2025–2026; newest: Claude (version unstated).
   - Cases: [Google: what went wrong][goo-wrong], [Spotify: how it was checked][spo-checked].
   - Against: Spartacus's refined protocol lets an agent go on from a red baseline, noted as an old failure, and stops only when the tests will not start ([Spartacus][spa-checked]).
 - **TST-7** [ours] When widening a data type, test with values beyond the old range; tests with small example values pass even when a truncation survives.
-  - Old system as oracle: partly. Depends on model ability: no. Strength: weak. Era: 2025; models: internal version of Gemini fine-tuned with the DIDACT framework.
+  - Old system as oracle: partly. Depends on model ability: no. Strength: weak. Era: 2025; newest: Gemini (internal).
   - Cases: [Google: what was migrated][goo-migrated].
   - Against: None found.
 - **TST-8** [ours] When the migrated artefact is itself a test, passing is a weak oracle; also compare test counts, coverage and intent file by file.
-  - Old system as oracle: yes. Depends on model ability: no. Strength: weak. Era: 2024–2026; models: Claude 2.1, unstated.
+  - Old system as oracle: yes. Depends on model ability: no. Strength: weak. Era: 2024–2026; newest: Claude 2.x.
   - Cases: [Slack: practices to copy][slk-practices], [Airbnb: how it was checked][air-checked], [Uber: how it was checked][ubr-checked], [Asana: how it was checked][asa-checked].
   - Against: None found; Airbnb says coverage and intent were kept, and Asana that coverage rose, but neither shows a method or figures.
 - **TST-9** [stated] Treat performance as part of the contract: benchmark end to end against a deterministic local stand-in for slow services, and count slowdowns as regressions.
-  - Old system as oracle: yes. Depends on model ability: no. Strength: medium. Era: 2026; models: Claude Opus 4.8, Claude Opus 5, GPT-5.6 Sol, GPT-5.5, Claude Haiku 4.5, Claude Sonnet, Gemini 3.1 Pro, Grok 4.6.
+  - Old system as oracle: yes. Depends on model ability: no. Strength: medium. Era: 2026; newest: Claude Opus 5.x.
   - Cases: [GitHub: what went wrong][gh-wrong], [GitHub: numbers][gh-numbers].
   - Against: GitHub's own before-and-after mixes in other changes from the same months, which the author flags.
 - **TST-10** [ours] Keep the agent that writes code apart from the one that writes its tests; one generation producing both invites checks that cannot fail.
-  - Old system as oracle: no. Depends on model ability: partly. Strength: weak. Era: 2026; models: Claude Opus 4.6, Claude Sonnet 4.6, GPT-5.4, GPT-5.6 Sol, Claude Mythos Preview.
+  - Old system as oracle: no. Depends on model ability: partly. Strength: weak. Era: 2026; newest: GPT-5.x.
   - Cases: [Intel: what went wrong][int-wrong], [Intel: practices to copy][int-practices].
   - Against: When generated separately, Intel's agent-written tests worked as well as expert ones as feedback ([Intel][int-worked]).
 - **TST-11** [stated] Test the prompts too: rerun a golden set of before-and-after examples after each prompt edit or model trial; small wording changes swung results.
-  - Old system as oracle: no. Depends on model ability: partly. Strength: weak. Era: 2024–2025; models: GPT-4o.
+  - Old system as oracle: no. Depends on model ability: partly. Strength: weak. Era: 2024–2025; newest: GPT-4o.
   - Cases: [Zalando: how it was checked][zal-checked], [Zalando: what went wrong][zal-wrong].
   - Against: None found.
 - **TST-12** [stated] Check parity on what users and downstream systems see: capture screens and raw events from old and new at the same named points, ignoring values that vary per run.
-  - Old system as oracle: yes. Depends on model ability: no. Strength: weak. Era: 2024–2026; models: GPT-4o, unstated.
+  - Old system as oracle: yes. Depends on model ability: no. Strength: weak. Era: 2024–2026; newest: GPT-4o.
   - Cases: [Shopify: how it was checked][shp-checked], [Zalando: how it was checked][zal-checked].
   - Against: None found; Zalando calls for visual testing without saying how it compared the two, and Shopify does not say how far parity reached beyond the flows engineers ran ([Shopify][shp-wrong]).
 

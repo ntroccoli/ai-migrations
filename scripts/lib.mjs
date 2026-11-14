@@ -134,7 +134,7 @@ export const LESSON_MAX_BYTES = 20 * 1024; // an agent reads a page whole
 export const LESSON_NOTE = 'Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.';
 // Every lesson page holds this legend as its own paragraph, after the evidence note; validate.mjs
 // matches it, and build.mjs repeats it in lessons/index.md and llms-full.txt.
-export const LESSON_LEGEND = "`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. \"Old system as oracle\" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. \"Depends on model ability\" (`yes`, `partly`, `no`): `yes` when the lesson states what models or agents can or cannot do, `partly` when it is a process whose need comes from such a behaviour, `no` when it holds whatever the model; the index marks a `yes` lesson whose newest case is over a year old as possibly outdated. \"Era\": the years the cited cases ran (their publication year when they give no period) and the models they name, `unstated` when one names none. \"Strength\", capped by the cases in \"Cases\" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.";
+export const LESSON_LEGEND = "`[stated]`: a source says it or reports it as what worked or failed. `[ours]`: our inference from what a source reports. \"Old system as oracle\" (`yes`, `partly`, `no`): does the evidence rely on the old system (its tests, its outputs, its users' reports) to tell right from wrong; it says where the evidence came from, not where the lesson applies. \"Depends on model ability\" (`yes`, `partly`, `no`): `yes` when the lesson states what models or agents can or cannot do, `partly` when it is a process whose need comes from such a behaviour, `no` when it holds whatever the model; the index marks a `yes` lesson whose newest case is over a year old as possibly outdated. \"Era\": the years the cited cases ran (their publication year when they give no period), then the newest model family: the family of the most recent cited case that names a model (its highest version when it names several), `unstated` when none names one; each case lists all its models. \"Strength\", capped by the cases in \"Cases\" (the validator checks it): `strong` needs two or more cases, or one whose source shows its data, and at least one case whose author does not sell the tool; `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a seller's case weighs less: a lesson that rests only on such cases is at most `medium`.";
 export const KARPATHY_IDEAS = 'https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/';
 export const ORACLES = ['yes', 'partly', 'no'];
 // "Depends on model ability": the lesson states what models or agents can or cannot do (yes), is a
@@ -174,7 +174,11 @@ export const linksIn = (text, refs) => [
 // each lesson is { id, tag, text, line, subs: [{ label, text, line }] } and `stray` lists lines
 // inside the lesson list that are neither lessons, sub-items, blank lines nor reference definitions.
 export function parseLessonPage(path) {
-  const text = readFileSync(path, 'utf8').replace(/^﻿/, '').replace(/\r\n/g, '\n');
+  return parseLessonText(readFileSync(path, 'utf8'), path);
+}
+// The same from text in memory (the private archive's apply-proposals.mjs parses edited pages).
+export function parseLessonText(raw, path) {
+  const text = raw.replace(/^﻿/, '').replace(/\r\n/g, '\n');
   const lines = text.split('\n');
   const slug = basename(path, '.md');
   const page = { slug, file: `lessons/${slug}.md`, path, text, lines, title: '', intro: '', refs: refDefs(lines), lessons: [], stray: [] };
@@ -206,7 +210,7 @@ export function loadLessons(dir = LESSONS_DIR) {
 // The value of one sub-item of a lesson, by label.
 export const sub = (lesson, label) => lesson.subs.find(s => s.label === label)?.text;
 // The first sub-item: "Old system as oracle: no. Depends on model ability: yes. Strength: medium.
-// Era: 2025–2026; models: Claude Opus 4.6, unstated."
+// Era: 2025–2026; newest: Claude Opus 4.x."
 export const META_LINE = /^(\w+)\. Depends on model ability: (\w+)\. Strength: (\w+)\. Era: (.+)\.$/;
 export function lessonMeta(lesson) {
   const m = (sub(lesson, 'Old system as oracle') || '').match(META_LINE);
@@ -215,18 +219,25 @@ export function lessonMeta(lesson) {
 // The case files a lesson's "Cases" line links (`refs` resolves reference links).
 export const casesOf = (lesson, refs) => [...new Set(linksIn(sub(lesson, 'Cases') || '', refs)
   .map(x => x.target?.match(/^\.\.\/cases\/([^#/\s]+\.md)#/)?.[1]).filter(Boolean))];
+// The models a case names (`unstated` left out).
+export const namedModels = m => [m.models].flat().filter(x => x && x !== 'unstated');
 // The Era a lesson must carry, from the front matter of the cases in its "Cases" line: the years
 // from each case's `period` (its `date` when the period is unstated), as `YYYY` or `YYYY–YYYY`,
-// then the models exactly as the cases name them, oldest case first, with `unstated` last when any
-// case names none. Returns { years, models } (models: an array).
+// and the newest model family: the family (modelFamily) of the most recent case (caseRecency, then
+// date) that names a model; when it names several, the one with the highest version number, the
+// first listed on a tie; `unstated` when no case names a model. The full model lists stay in the
+// cases. Returns { years, newest }.
 export function expectedEra(metas) {
-  metas = [...metas].sort((a, b) => String(a.date).localeCompare(String(b.date)));
   const ys = metas.flatMap(m => String(m.period && m.period !== 'unstated' ? m.period : m.date).match(/\d{4}/g) || []).map(Number);
   const lo = Math.min(...ys), hi = Math.max(...ys);
-  const names = metas.flatMap(m => [m.models].flat()).filter(Boolean);
-  const models = [...new Set(names.filter(x => x !== 'unstated'))];
-  if (!models.length || names.includes('unstated')) models.push('unstated');
-  return { years: lo === hi ? String(lo) : `${lo}–${hi}`, models };
+  const named = metas.filter(m => namedModels(m).length)
+    .sort((a, b) => caseRecency(b).localeCompare(caseRecency(a)) || String(b.date).localeCompare(String(a.date)));
+  let newest = 'unstated';
+  if (named.length) {
+    const version = f => Number(f.match(/(\d+)(?:\.x|o)?$/)?.[1] ?? -1);
+    newest = namedModels(named[0]).map(n => modelFamily(n) ?? n).reduce((best, f) => (version(f) > version(best) ? f : best));
+  }
+  return { years: lo === hi ? String(lo) : `${lo}–${hi}`, newest };
 }
 // The model family of a model name as a case (or a field report) writes it, for "By model" in
 // lessons/index.md: only obvious families, by maker, line and major version ("Claude Opus 4.6" and
@@ -261,11 +272,11 @@ export function modelFamily(name) {
   for (const [re, f] of MODEL_FAMILIES) { const m = n.match(re); if (m) return f(m); }
   return undefined;
 }
-export const eraText = e =>`${e.years}; models: ${e.models.join(', ')}`;
-// An Era value as { years, models }; undefined when it is not "YYYY[–YYYY]; models: a, b".
+export const eraText = e => `${e.years}; newest: ${e.newest}`;
+// An Era value as { years, newest }; undefined when it is not "YYYY[–YYYY]; newest: <family>".
 export function parseEra(text) {
-  const m = (text || '').match(/^(\d{4}(?:–\d{4})?); models: (\S.*)$/);
-  return m ? { years: m[1], models: m[2].split(', ') } : undefined;
+  const m = (text || '').match(/^(\d{4}(?:–\d{4})?); newest: (\S.*)$/);
+  return m ? { years: m[1], newest: m[2] } : undefined;
 }
 // How recent a case is: the later of its publication `date` and the end of its `period` (a series is
 // dated by its first part, so its work can run past that date). Partial dates compare as prefixes:
@@ -299,7 +310,7 @@ export function logEntries(text) {
   });
 }
 // The part of a lesson a revisit cares about: its tag and words, oracle, model and strength tags, the
-// cases it cites and its Against line (not the Era, which follows the cases, nor Related view or Sceptic).
+// cases it cites and its Against line (not the Era, which follows the cases, nor Related view).
 const print = s => createHash('sha256').update(s.replace(/\s+/g, ' ').trim()).digest('hex').slice(0, 8);
 export function lessonPrints(pages) {
   const out = new Map();

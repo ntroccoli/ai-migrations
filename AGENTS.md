@@ -176,17 +176,16 @@ case.
 
 One page per aspect in `lessons/` (`testing.md`, `review.md`, ...), listed in order in
 `LESSON_PAGES` (`scripts/lib.mjs`). The pages are the source of truth; `lessons/index.md` (counts,
-the cases behind each lesson, where cases disagree) is generated. A page is a `# Title`, a
+"By model", "May be outdated", where cases disagree) and `lessons/evidence.md` are generated. A page is a `# Title`, a
 one-paragraph intro (used in the index and `llms.txt`), the evidence note (the exact sentence in
 `LESSON_NOTE`), a legend, the lessons, then the reference definitions of its links:
 
 ```markdown
 - **TST-1** [stated] One line in our own words, at most 200 characters, no number.
-  - Old system as oracle: yes. Depends on model ability: no. Strength: strong. Era: 2026; models: Claude Fable 5 (pre-release version), unstated.
+  - Old system as oracle: yes. Depends on model ability: no. Strength: strong. Era: 2026; newest: Claude Opus 5.x.
   - Cases: [Bun: how it was checked][bun-checked], [GitHub: how it was checked][gh-checked].
   - Against: counter-evidence from other cases with links ([Bun][bun-wrong]), or "None found."
   - Related view (karpathy-ideas): [port with equality tests][k-port-with-equality-tests], agrees.
-  - Sceptic: what a sceptic pass challenged and the answer (optional, may repeat).
 ```
 
 Rules (all checked by `node scripts/validate.mjs`; one broken-copy test each):
@@ -199,10 +198,11 @@ Rules (all checked by `node scripts/validate.mjs`; one broken-copy test each):
   `closestPractices` in `scripts/lib.mjs`) must be `[stated]` too, since an `[ours]` practice is
   our inference. Failing that, cite the section the practice comes from, or tag the lesson `[ours]`.
 - Sub-items in this order: "Old system as oracle: yes|partly|no. Depends on model ability:
-  yes|partly|no. Strength: strong|medium|weak. Era: YYYY[–YYYY]; models: <list>.", "Cases:" (at least one link), "Against:" (never empty; start it
+  yes|partly|no. Strength: strong|medium|weak. Era: YYYY[–YYYY]; newest: <model family>.", "Cases:" (at least one link), "Against:" (never empty; start it
   with "Disagree:" for a real split between cases, which the index lists; when it gives only a
   limit of the cases already cited, start it "None found;" and state the limit), then optional
-  "Related view (karpathy-ideas):" and "Sceptic:".
+  "Related view (karpathy-ideas):". No "Sceptic:" line: what a sceptic pass challenged is kept in the
+  private archive by lesson ID (**maintainer only**); the page shows the tag it changed.
 - "Old system as oracle": does the lesson's evidence rely on the old system (its tests, outputs,
   users' reports) to tell right from wrong. It says where the evidence came from, not where the
   lesson applies.
@@ -212,11 +212,14 @@ Rules (all checked by `node scripts/validate.mjs`; one broken-copy test each):
   when it holds whatever the model. Lessons about model limits age fast, process lessons barely;
   newer models still fail in old ways, so the cases decide the tag, not assumptions.
 - "Era": the years from the `period` of each case in "Cases" (its `date` when the period is
-  `unstated`), as `YYYY` or `YYYY–YYYY` (en dash), then "; models: " and every model those cases
-  name, exactly as they name it, with `unstated` when any of them names none (`expectedEra` in
-  `scripts/lib.mjs`; the validator prints the expected value). Era is what makes lessons comparable
+  `unstated`), as `YYYY` or `YYYY–YYYY` (en dash), then "; newest: " and the newest model family:
+  the family (`modelFamily`) of the most recent cited case that names a model (the later of its
+  `date` and the end of its `period`), its highest version when it names several (the first listed
+  on a tie), `unstated` when no cited case names one (`expectedEra` in `scripts/lib.mjs`; the
+  validator prints the expected value). The full model lists stay in the cases; "By model" and
+  "may be outdated" read the cited cases, never the Era text. Era is what makes lessons comparable
   in time, so it is derived, never written freely.
-- "May be outdated": `build.mjs` marks, in `lessons/index.md` and `llms.txt`, every lesson tagged
+- "May be outdated": `build.mjs` marks, in `lessons/index.md`, `lessons/evidence.md` and `llms.txt`, every lesson tagged
   `yes` whose most recent case in "Cases" (the later of its `date` and the end of its `period`)
   is more than 12 months (`OUTDATED_MONTHS`) older than the date of the newest `log.md` entry,
   never today's date, so the output never changes by itself (`--today YYYY-MM-DD` is for tests
@@ -247,7 +250,7 @@ every changed lesson page against all the source texts.
 Upkeep: a new case comes with its lesson edits (new lessons, new citations, new "Against" lines,
 strength changes), and the build is rerun. A sceptic pass from time to time challenges `no`
 oracle tags, `no` model-ability tags on lessons about agent behaviour, `[stated]` tags and "None found" lines against the cases they cite, and checks that
-the case which lifts a lesson to `strong` really supports it.
+the case which lifts a lesson to `strong` really supports it; its notes go to the private archive.
 
 ## Checklist
 
@@ -279,11 +282,13 @@ and title, since two can share a date.
 
 ## Generated files
 
-`node scripts/build.mjs` writes `index.md` (one line per case, newest first), `lessons/index.md`,
-`lessons/evidence.md` (one line per lesson: tag, the lesson, oracle, model and strength tags, the
-"may be outdated" mark, the cases it cites and those its "Against" cites; what an agent reads to
-choose lessons), `llms.txt` (entry point for agents: how to use, one line per lesson page and per case) and
-`llms-full.txt` (every lesson and case line, the checklist and the pitfalls in one file) from the
+`node scripts/build.mjs` writes `index.md` (one line per case, newest first), `lessons/index.md`
+(a short table of contents for people: aspect pages with counts, "May be outdated", "By model",
+where cases disagree; no list of every lesson), `lessons/evidence.md` (one line per lesson: tag,
+the lesson, oracle, model and strength tags, the "may be outdated" mark, the cases it cites and
+those its "Against" cites), `llms.txt` (entry point for agents: how to use, one line per lesson
+page and per case) and `llms-full.txt` (the single opt-in file with everything: every lesson and
+case line, the checklist and the pitfalls) from the
 case files, lesson pages, `checklist.md` and `pitfalls.md`. It also keeps hand-written files in
 step: every URL to this repository comes from `REPO_SLUGS` in `scripts/lib.mjs` (to rename the
 repository, put the new owner/name first in that line and rebuild; the build rewrites the old
@@ -292,8 +297,13 @@ disclosure and the current counts) are written between their comment markers. Th
 cases cover, in `llms.txt`, come from each case's `from_languages`; nothing is kept by hand.
 `llms-full.txt` carries each reference definition once (its links are inline). "By model" in
 `lessons/index.md` groups the cases' `models` into families with `modelFamily` (`scripts/lib.mjs`;
-add a rule there for a new maker) and lists the lessons tagged `yes` or `partly` whose Era names
-each family.
+add a rule there for a new maker) and lists the lessons tagged `yes` or `partly` whose cited cases
+name each family.
+
+Reading cost drives this layout: what an agent reads at the start is paid on every run. One agent
+route: `llms.txt`, then `lessons/evidence.md`, then an aspect page only for the lessons used. Only
+`lessons/evidence.md` and `llms-full.txt` list every lesson; keep it so (a test checks the index
+and `llms.txt`).
 `node scripts/build.mjs --check` writes nothing and exits 1 when any of them is out of date; it
 must exit 0 before a commit. Never edit these files by hand: change the sources and rebuild.
 
