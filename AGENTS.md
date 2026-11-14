@@ -196,7 +196,8 @@ Rules (all checked by `node scripts/validate.mjs`; one broken-copy test each):
   our inference. Failing that, cite the section the practice comes from, or tag the lesson `[ours]`.
 - Sub-items in this order: "Old system as oracle: yes|partly|no. Strength: strong|medium|weak.
   Era: <models and period>.", "Cases:" (at least one link), "Against:" (never empty; start it
-  with "Disagree:" for a real split between cases, which the index lists), then optional
+  with "Disagree:" for a real split between cases, which the index lists; when it gives only a
+  limit of the cases already cited, start it "None found;" and state the limit), then optional
   "Related view (karpathy-ideas):" and "Sceptic:".
 - "Old system as oracle": does the lesson's evidence rely on the old system (its tests, outputs,
   users' reports) to tell right from wrong. It says where the evidence came from, not where the

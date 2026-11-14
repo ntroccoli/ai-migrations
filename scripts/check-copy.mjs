@@ -27,7 +27,7 @@ const words = text => text
   .toLowerCase()
   .match(/[\p{L}\p{N}]+(?:['.,][\p{L}\p{N}]+)*/gu) || [];
 
-// A folder is read recursively, so raw/ with one folder per case can be passed whole; links and
+// A folder is read recursively, so a folder of source texts can be passed whole; links and
 // junctions inside it are not followed.
 const listSources = p => (statSync(p).isDirectory()
   ? readdirSync(p, { withFileTypes: true }).filter(e => !e.isSymbolicLink()).flatMap(e => (e.isDirectory()
