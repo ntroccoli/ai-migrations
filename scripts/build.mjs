@@ -181,12 +181,40 @@ const out = {};
     ...(disagree.length ? disagree : ['None recorded.']), '',
     '## Every lesson in one line', '',
     'To find the lessons that fit work other than a migration, scan this list, then open the pages of the lessons ' +
-      'that fit. Each line: ID, tag, the lesson, then its oracle tag, its model-ability tag, its strength, and "may be outdated" where it applies.', '',
+      'that fit. Each line: ID, tag, the lesson, then its oracle tag, its model-ability tag, its strength, and "may be outdated" where it applies. ' +
+      '[evidence.md](evidence.md) gives the same lines with the cases for and against each lesson.', '',
     ...pages.flatMap(p => [`### [${p.title}](${p.slug}.md)`, '',
       ...p.lessons.map(l => `- **${l.id}** [${l.tag}] ${l.text} (oracle: ${lessonMeta(l).oracle}; model: ${lessonMeta(l).model}; ` +
         `${lessonMeta(l).strength}${outdated.has(l.id) ? '; may be outdated' : ''})`), '']),
   ].join('\n');
 }
+
+// lessons/evidence.md: one line per lesson with only what choosing it needs (AGENTS.md "Generated
+// files"): tags, strength, the "may be outdated" mark, the cases it cites and those its "Against" cites.
+const companiesIn = (text, refs) => [...new Set(linksIn(text || '', refs).map(x => caseByFile.get(caseFileOf(x.target))?.meta.company)
+  .filter(Boolean))];
+const shortAgainst = (text, refs) => {
+  const names = companiesIn(text, refs);
+  if (/^Disagree:/.test(text || '')) return `disagree: ${names.join(', ') || 'see page'}`;
+  if (/^None found/.test(text || '')) return names.length ? `none found; a limit from ${names.join(', ')}` : 'none found';
+  return names.join(', ') || 'no case linked, see page';
+};
+out['lessons/evidence.md'] = [
+  GENERATED, '',
+  '# Lesson evidence in one line each', '',
+  `${all.length} lessons. To choose lessons: scan this file, then open the aspect page (the heading link) only for the ` +
+    'lessons you use; it holds the full "Against" line, the Era (years and models) and the legend. Each line: ID, tag ' +
+    '(stated by a source, or ours), the lesson, then oracle (does the evidence rely on the old system), model (does it ' +
+    'depend on model ability), strength, "may be outdated" where it applies, the cases it cites, and the cases its ' +
+    '"Against" line cites.', '',
+  ...pages.flatMap(p => [`## [${p.title}](${p.slug}.md)`, '',
+    ...p.lessons.map(l => {
+      const m = lessonMeta(l);
+      return `- **${l.id}** [${l.tag}] ${l.text} Oracle ${m.oracle}; model ${m.model}; ${m.strength}` +
+        `${outdated.has(l.id) ? '; may be outdated' : ''}. Cases: ${companiesIn(sub(l, 'Cases'), p.refs).join(', ')}. ` +
+        `Against: ${shortAgainst(sub(l, 'Against'), p.refs)}.`;
+    }), '']),
+].join('\n');
 
 // index.md
 out['index.md'] = [
@@ -249,7 +277,7 @@ const embed = rel => {
 }
 const fullKB = Math.round(Buffer.byteLength(out['llms-full.txt'], 'utf8') / 1024);
 const fullKTokens = Math.round(Buffer.byteLength(out['llms-full.txt'], 'utf8') / 4000);
-const indexKB = Math.round(Buffer.byteLength(out['lessons/index.md'], 'utf8') / 1024);
+const evidenceKB = Math.round(Buffer.byteLength(out['lessons/evidence.md'], 'utf8') / 1024);
 
 // llms.txt (https://llmstxt.org)
 out['llms.txt'] = [
@@ -270,9 +298,9 @@ out['llms.txt'] = [
   `- Before a migration or a large restructuring: run the [checklist](${RAW_BASE}/checklist.md) on the repository and change nothing. Each ` +
     'question has a Check to measure and cites lesson IDs; open only the lessons and cases behind a gap.',
   '- For any other large piece of AI-driven work, not a migration (README "Learning from the lessons"): follow ' +
-    `[docs/applying-lessons.md](${RAW_BASE}/docs/applying-lessons.md). It starts from the one-line list of every lesson at the end of ` +
-    `[lessons/index.md](${RAW_BASE}/lessons/index.md) (about ${indexKB} KB), where each line shows its oracle tag, model-ability tag and strength, ` +
-    'then opens the aspect pages of the lessons that fit (each lesson there has its cases, the evidence against it, and its oracle and strength).',
+    `[docs/applying-lessons.md](${RAW_BASE}/docs/applying-lessons.md). Choose lessons from ` +
+    `[lessons/evidence.md](${RAW_BASE}/lessons/evidence.md) (about ${evidenceKB} KB: one line each with tags, strength, cases and the cases against), ` +
+    'then open the aspect pages only for the lessons you use.',
   `- Open a case only when you need its detail. Each has "Who did what", "How it was checked", a Numbers table with ` +
     `the basis of each number, "What went wrong" and "Practices to copy". File format: [AGENTS.md](${RAW_BASE}/AGENTS.md).`,
   `- After a review, a migration or a revisit: tell what the checklist or the lessons foresaw and what they missed, ` +

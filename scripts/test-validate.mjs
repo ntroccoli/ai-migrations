@@ -2,7 +2,7 @@
 // Broken-copy tests for scripts/validate.mjs: copy the repository's cases, checklist and scripts
 // into .test-tmp/ (git-ignored), break one thing per test, and check the validator's exit code.
 // Usage: node scripts/test-validate.mjs   (exit 1 when a test fails; .test-tmp/ is removed)
-import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync, existsSync, appendFileSync } from 'node:fs';
+import { cpSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync, existsSync, appendFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { ROOT, parseCase, expectedEra, eraText } from './lib.mjs';
@@ -323,6 +323,34 @@ test('llms-full.txt carries each reference definition once', 0, d => {
 }, null, null, 'build.mjs');
 test('build --check fails after hand-editing lessons/index.md', 1,
   d => { appendFileSync(join(d, 'lessons', 'index.md'), '\nA hand edit.\n'); return ['--check']; }, null, 'out of date: lessons/index.md', 'build.mjs');
+
+// lessons/evidence.md: one line per lesson, with tags, strength, cases and the cases its Against cites.
+const evidenceOf = d => { node(d, 'build.mjs', []); return readFileSync(join(d, 'lessons', 'evidence.md'), 'utf8'); };
+test('evidence.md has one line per lesson', 0, d => {
+  const lessons = readdirSync(join(d, 'lessons')).filter(f => !['index.md', 'evidence.md'].includes(f))
+    .reduce((s, f) => s + (readFileSync(join(d, 'lessons', f), 'utf8').match(/^- \*\*[A-Z]{3}-\d+\*\*/gm) || []).length, 0);
+  const lines = (evidenceOf(d).match(/^- \*\*[A-Z]{3}-\d+\*\*/gm) || []).length;
+  if (!lessons || lines !== lessons) throw new Error(`evidence.md: ${lines} lines for ${lessons} lessons`);
+  return ['--check'];
+}, null, null, 'build.mjs');
+test('evidence.md gives a lesson its tags, cases and "none found"', 0, d => {
+  fixture('strong', ['bun', 'slack'])(d);
+  const line = evidenceOf(d).match(/^- \*\*TEM-99\*\*.*$/m)?.[0] || '';
+  if (!line.endsWith('Oracle no; model no; strong. Cases: Bun, Slack. Against: none found.')) throw new Error(`line: ${line}`);
+  return ['--check'];
+}, null, null, 'build.mjs');
+test('evidence.md shortens a Disagree line to its case names', 0, d => {
+  fixture('strong', ['bun', 'slack'])(d);
+  edit(L(d, 'team'), '[fx-slack].\n  - Against: None found.\n', '[fx-slack].\n  - Against: Disagree: Airbnb saw otherwise ([Fixture airbnb][fx-airbnb]).\n');
+  appendFileSync(L(d, 'team'), `[fx-airbnb]: ../cases/${FIXTURE_CASES.airbnb}#what-went-wrong\n`);
+  const line = evidenceOf(d).match(/^- \*\*TEM-99\*\*.*$/m)?.[0] || '';
+  if (!line.endsWith('Against: disagree: Airbnb.')) throw new Error(`line: ${line}`);
+  return ['--check'];
+}, null, null, 'build.mjs');
+test('build --check fails after hand-editing lessons/evidence.md', 1,
+  d => { appendFileSync(join(d, 'lessons', 'evidence.md'), '\nA hand edit.\n'); return ['--check']; }, null, 'out of date: lessons/evidence.md', 'build.mjs');
+test('a stray page in lessons/ still fails although evidence.md is skipped', 1,
+  d => writeFileSync(join(d, 'lessons', 'stray.md'), '# Stray\n'), null, 'lessons/stray.md: not listed in LESSON_PAGES');
 
 // Synced hand-written files: one repository slug, README's generated blocks.
 const rename = d => edit(join(d, 'scripts', 'lib.mjs'), 'export const REPO_SLUGS = [', "export const REPO_SLUGS = ['someone/new-name', ");

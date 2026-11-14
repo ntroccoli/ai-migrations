@@ -111,7 +111,7 @@ Lessons that cite each case, in "Cases" or "Against".
 
 ## Every lesson in one line
 
-To find the lessons that fit work other than a migration, scan this list, then open the pages of the lessons that fit. Each line: ID, tag, the lesson, then its oracle tag, its model-ability tag, its strength, and "may be outdated" where it applies.
+To find the lessons that fit work other than a migration, scan this list, then open the pages of the lessons that fit. Each line: ID, tag, the lesson, then its oracle tag, its model-ability tag, its strength, and "may be outdated" where it applies. [evidence.md](evidence.md) gives the same lines with the cases for and against each lesson.
 
 ### [Planning and scoping](planning.md)
 

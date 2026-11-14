@@ -74,6 +74,7 @@ first.
 - **By model:** `lessons/index.md` groups the cases' models into families with the lessons tagged
   `yes` or `partly` per family; llms.txt and the lessons route say how to use it with a specific
   or new model; the field-report form asks which models ran; Google's model is one name again.
+- **Route fixes:** reports split "Check that proves it" into "Check now" and "Event that proves it", one change per proposal (rows 3a, 3b), unanswered owner questions take the stated default, and `lessons/evidence.md` gives every lesson in one line with its cases for and against.
 
 ## 2026-11-13 — first update
 

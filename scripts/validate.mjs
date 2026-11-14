@@ -321,7 +321,7 @@ function validateLessons() {
   const cited = new Set();
   const prefixes = new Map();
   if (!existsSync(LESSONS_DIR)) { err('lessons/', 'missing'); return { ids, cited }; }
-  const present = readdirSync(LESSONS_DIR).filter(f => f.endsWith('.md') && f !== 'index.md').map(f => basename(f, '.md'));
+  const present = readdirSync(LESSONS_DIR).filter(f => f.endsWith('.md') && !['index.md', 'evidence.md'].includes(f)).map(f => basename(f, '.md'));
   for (const s of present) if (!LESSON_PAGES.includes(s)) err(`lessons/${s}.md`, 'not listed in LESSON_PAGES (scripts/lib.mjs)');
   for (const s of LESSON_PAGES) if (!present.includes(s)) err(`lessons/${s}.md`, 'listed in LESSON_PAGES but missing');
 

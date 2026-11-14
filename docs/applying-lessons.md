@@ -8,11 +8,14 @@ prompts.
 
 ## How to run it
 
-1. Run it in a fresh session on the project, changing nothing there.
-2. Read the one-line list of every lesson at the end of [lessons/index.md](../lessons/index.md);
-   each line ends with the lesson's oracle tag, its model-ability tag and strength, and "may be
-   outdated" on a lesson about model limits whose cases are over a year old: re-check those
-   against recent work. Start from lessons tagged oracle `no`, and
+1. Run it in a fresh session on the project, changing nothing there. If the session that did the
+   work is still running, first ask it to write an events file with counts of what went wrong in
+   its coordination (lost messages, reruns, requests outside its scope), each figure labelled
+   "recorded"; measure everything else from the repository.
+2. Choose lessons from [lessons/evidence.md](../lessons/evidence.md), one line each: the lesson,
+   its oracle tag, model-ability tag and strength, "may be outdated" on a lesson about model
+   limits whose cases are over a year old (re-check those against recent work), the cases it
+   cites and the cases its "Against" line cites. Start from lessons tagged oracle `no`, and
    `partly` where the project already has a check that stands in for an old system. The tag is a
    hint, not a filter: judge each lesson by its own words, and drop those whose words are about
    moving code only (porting, an old system to compare with, shelved rewrites).
@@ -21,12 +24,15 @@ prompts.
    [lessons/index.md](../lessons/index.md)); treat those from other models as things to re-check
    on yours, not tips. A model newer than every case has no evidence here yet. The lessons hold
    only what the cases show, never prompting advice.
-3. Open the aspect page of each lesson you use: its "Against" line and its cases show where it
-   did not hold, and its strength how far to trust it.
+3. Open the aspect page only for the lessons you use: its full "Against" line and its cases show
+   where it did not hold, and its Era which models and years it rests on.
 4. Measure: answer from the repository, its history, logs or CI, with a number, a file or a
    command's output, not from memory. A check you may not run: write the exact command and mark
-   it "not run" with the reason. A fact only the owner knows: mark it "ask the owner".
-5. Report as below and wait for the owner's choice.
+   it "not run" with the reason. A fact only the owner knows: mark it "ask the owner" and state
+   the default you will assume; if the owner does not answer, assume it, write the assumption in
+   the record, and go on (the owner can overturn it later).
+5. Report as below and wait for the owner's choice. One change per proposal: split a proposal
+   with several parts, or number its parts 3a, 3b, each with its own checks.
 6. Record: once the owner has chosen, write `docs/ai-lessons-review.md` in the project (format
    below). In a read-only run, write no file; show the record after the report.
 7. Revisit: a later run reads that record first, then only the
@@ -50,7 +56,7 @@ Work measured: <what agents do here: sessions, tasks, reviews, tests, releases>.
 - <lesson ID>: `<exact command>` — <why it was not run>.
 
 ## Ask the owner
-- <lesson ID>: <question>.
+- <lesson ID>: <question>. Default if unanswered: <what you will assume>.
 
 ## Proposals
 
@@ -61,7 +67,8 @@ Work measured: <what agents do here: sessions, tasks, reviews, tests, releases>.
    Depends on: <proposal numbers, or none>.
    Cost: S | M | L (S under a day of agent work, M a few days, L a week or more).
    Recommendation: do | later | skip (one word), with a one-line reason.
-   Check that proves it: <command, count or event to watch>.
+   Check now: <a command or count that passes once the change is applied>.
+   Event that proves it: <what later work must show for the change to have held>.
 2. ...
 ```
 
@@ -78,7 +85,12 @@ Log entry: <date and title of the newest log.md entry this review covered>.
 | # | Lesson | Proposal | Baseline | Status | Event that shows it | Date |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1 | <ID> | <one line> | <how often, evidence> | <status> | <commit, test run, count or incident> | <YYYY-MM-DD> |
+| 3a | <ID> | <one part of a bundled proposal> | ... | ... | ... | ... |
 ```
+
+One status per row: a proposal with parts gets a row per part (3a, 3b...), each with its own status
+and event. Assumed owner answers go under the table, one line each: "Assumed: <question> —
+<default>, <date>".
 
 Baseline: written before any change, how often the proposal's problem happened so far, with the
 evidence (a count from the history, logs or incidents), marked "(recorded)" when it comes from notes
@@ -87,9 +99,9 @@ rather than a fresh count; a revisit compares the work since with it.
 Status uses the checklist's words: open, proven, waiting for first use, stopped holding,
 skipped. A proposal marked "later" is open; one the owner declined is skipped; an applied change
 whose check failed stays open, and its event names the failed check. A "do" that waits on an owner
-answer, or on work outside this session, stays open, and its event says what it waits on. An
-applied change whose check passed is waiting for first use until an event in later work
-shows it held; then it is proven.
+action, or on work outside this session, stays open, and its event says what it waits on. An
+applied change whose "Check now" passes is waiting for first use; once later work shows its
+"Event that proves it", it is proven.
 
 ## Afterwards
 

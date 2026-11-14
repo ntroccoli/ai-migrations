@@ -11,7 +11,8 @@ company names describe the subject only.
 Layout: `cases/` (one file per case), `lessons/` (one page per aspect), `checklist.md`,
 `pitfalls.md`, `docs/field-reports.md` (how readers report what the checklist foresaw),
 `docs/applying-lessons.md` (the lessons route outside a migration: method, report, record); generated
-by `node scripts/build.mjs`, never by hand: `index.md`, `lessons/index.md`, `llms.txt`, `llms-full.txt`.
+by `node scripts/build.mjs`, never by hand: `index.md`, `lessons/index.md`, `lessons/evidence.md`, `llms.txt`,
+`llms-full.txt`.
 
 The maintainer keeps the full source texts, and the source lines behind each lesson, in a private
 archive. Steps marked **maintainer only** need it; an outside contributor skips them.
@@ -265,7 +266,9 @@ against all the source texts after changing them.
 ## Generated files
 
 `node scripts/build.mjs` writes `index.md` (one line per case, newest first), `lessons/index.md`,
-`llms.txt` (entry point for agents: how to use, one line per lesson page and per case) and
+`lessons/evidence.md` (one line per lesson: tag, the lesson, oracle, model and strength tags, the
+"may be outdated" mark, the cases it cites and those its "Against" cites; what an agent reads to
+choose lessons), `llms.txt` (entry point for agents: how to use, one line per lesson page and per case) and
 `llms-full.txt` (every lesson and case line, the checklist and the pitfalls in one file) from the
 case files, lesson pages, `checklist.md` and `pitfalls.md`. It also keeps hand-written files in
 step: every URL to this repository comes from `REPO_SLUGS` in `scripts/lib.mjs` (to rename the

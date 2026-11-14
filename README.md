@@ -68,7 +68,7 @@ project.
 To accept the agent's recommendations, paste:
 
 ```text
-Apply the proposals you marked "do". Do the work the way this project normally runs work (yourself, or by briefing workers). Before changing anything, write the record https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/checklist.md defines in docs/migration-review.md with each chosen proposal's baseline: how often its problem has happened so far, with the evidence. For each proposal, first state the check that proves it; it is done only when that check passes. Then complete the record, with every proposal, including the later and skipped ones, and the newest entry of https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/log.md this review covered.
+Apply the proposals you marked "do". Do the work the way this project normally runs work (yourself, or by briefing workers). Before changing anything, write the record https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/checklist.md defines in docs/migration-review.md with each chosen proposal's baseline: how often its problem has happened so far, with the evidence. For each proposal, first state its "Check now" and its "Event that proves it"; it is applied when the check now passes (waiting for first use), proven only once later work shows the event. Where the owner left a question unanswered, assume the default the report states and record the assumption. Then complete the record, with every proposal, including the later and skipped ones, and the newest entry of https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/log.md this review covered.
 ```
 
 To choose yourself, replace the first sentence with "Apply proposals 1, 3 and 5."
@@ -102,7 +102,7 @@ project.
 To accept the agent's recommendations, paste:
 
 ```text
-Apply the proposals you marked "do". Do the work the way this project normally runs work (yourself, or by briefing workers). Before changing anything, write the record https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/applying-lessons.md defines in docs/ai-lessons-review.md with each chosen proposal's baseline: how often its problem has happened so far, with the evidence. For each proposal, first state the check that proves it; it is done only when that check passes. Then complete the record, with every proposal, including the later and skipped ones, and the newest entry of https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/log.md this review covered.
+Apply the proposals you marked "do". Do the work the way this project normally runs work (yourself, or by briefing workers). Before changing anything, write the record https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/applying-lessons.md defines in docs/ai-lessons-review.md with each chosen proposal's baseline: how often its problem has happened so far, with the evidence. For each proposal, first state its "Check now" and its "Event that proves it"; it is applied when the check now passes (waiting for first use), proven only once later work shows the event. Where the owner left a question unanswered, assume the default the report states and record the assumption. Then complete the record, with every proposal, including the later and skipped ones, and the newest entry of https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/log.md this review covered.
 ```
 
 To choose yourself, replace the first sentence with "Apply proposals 1, 3 and 5."

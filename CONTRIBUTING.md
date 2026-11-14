@@ -23,7 +23,7 @@ requests from outside contributors are not accepted yet.
 - Summaries in our own words. At most one quote per file, 15 words or fewer, attributed, linked
   and listed in [NOTICE.md](NOTICE.md).
 - Every number carries its unit and links to its source; inferences are marked as ours.
-- `index.md`, `lessons/index.md`, `llms.txt` and `llms-full.txt` are generated: change the
+- `index.md`, `lessons/index.md`, `lessons/evidence.md`, `llms.txt` and `llms-full.txt` are generated: change the
   sources, run `node scripts/build.mjs`, then `npm run check:all` (validator, generated files
   and the validator's tests; Node.js 20 or later) and
   `npx markdownlint-cli2@0.24.0 "**/*.md"`. Both must pass.

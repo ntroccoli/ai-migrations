@@ -190,8 +190,8 @@ Starting points from one case each, not targets; elsewhere judge "gap" from the 
 2. Measure first: answer each Check with a number, file or command output, not from memory.
 3. A check you may not run: write the exact command, mark it "not run" with the reason, never
    guess its result. Logs or CI history count if you name their source.
-4. A fact only the owner knows (review time, budget, approval of a new stack): write the question
-   and mark it "ask the owner".
+4. A fact only the owner knows (review time, budget, approval of a new stack): write the question,
+   mark it "ask the owner" and state a default; unanswered, assume it, note it in the record, go on.
 5. Mark each question "gap", "partial gap", "no gap" or "not applicable yet", with the
    measurement.
 6. Base proposals on the Evidence lines and, if you can, the cited lessons (their "Against"
@@ -199,7 +199,7 @@ Starting points from one case each, not targets; elsewhere judge "gap" from the 
    Compare numbers across cases only in matching units.
 7. Order proposals by what blocks the rest: blockers first (a "no" on question 1 is the usual
    one), then what others depend on (the oracle, the baseline, the end state), then the rest.
-8. Report as below and wait for the owner's choice.
+8. Report as below and wait for the owner's choice. One change per proposal (or parts 3a, 3b).
 9. Record: once the owner has chosen, write `docs/migration-review.md` in the measured repository
    (the one file this checklist adds there; format below). In a read-only run, write no file;
    show the record after the report.
@@ -223,7 +223,7 @@ Go / no-go: go | go after the blockers | no-go — <one line why>.
 - Q<n>: `<exact command>` — <why it was not run>.
 
 ## Ask the owner
-- Q<n>: <question>.
+- Q<n>: <question>. Default: <assumed if unanswered>.
 
 ## No gap
 - Q<n> <question>: <measurement>.
@@ -242,7 +242,8 @@ Go / no-go: go | go after the blockers | no-go — <one line why>.
    Depends on: <proposal numbers, or none>.
    Cost: S | M | L (S under a day of agent work, M a few days, L a week or more).
    Recommendation: do | later | skip (one word), with a one-line reason.
-   Check that proves it: <command or count to rerun>.
+   Check now: <command or count that passes once applied>.
+   Event that proves it: <what later work must show>.
 2. ...
 ```
 
@@ -259,11 +260,12 @@ Log entry: <date and title of the newest log.md entry this review covered>.
 | 1 | Q<n> | <one line> | <how often, evidence> | <status> | <commit, test run or number> | <YYYY-MM-DD> |
 ```
 
-Status is one of: open, proven, waiting for first use, stopped holding, skipped. A proposal
-marked "later" is open; one the owner declined is skipped; an applied change whose check failed
-stays open, and its event names the failed check. An applied change whose check passed is waiting for first use until an event in later work
-shows it held; then it is proven. Baseline: written before any change, how
-often the problem happened so far, with evidence; a revisit compares with it. Outside a migration, the lessons route keeps a
+One status per row (a proposal's parts: rows 3a, 3b): open, proven, waiting for first use,
+stopped holding, skipped. "Later" is open; declined is skipped; a failed "Check now" stays open,
+its event naming it. A passed "Check now" is waiting for first use; its "Event that proves it",
+seen in later work, makes it proven. Assumed owner answers: one line each under the table.
+Baseline: written before any change, how often the problem happened so far, with evidence; a
+revisit compares with it. Outside a migration, the lessons route keeps a
 record of the same shape: [docs/applying-lessons.md](docs/applying-lessons.md).
 
 [GitHub]: cases/2026-09-16-github-copilot-runtime-rust.md
