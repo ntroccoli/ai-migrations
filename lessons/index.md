@@ -17,7 +17,7 @@ The legend of the tags, the Era and the strength rule heads every aspect page.
 | [Verification loops and gates](verification.md) | VER | 11 | 11 | 0 | 1 | 8 | 2 | 0 | 4 | 7 |
 | [Code review](review.md) | REV | 11 | 8 | 3 | 1 | 5 | 5 | 0 | 7 | 4 |
 | [Release and rollout](rollout.md) | ROL | 11 | 10 | 1 | 1 | 3 | 7 | 0 | 1 | 10 |
-| [Machines and operations](operations.md) | OPS | 8 | 7 | 1 | 1 | 2 | 5 | 0 | 2 | 6 |
+| [Machines and operations](operations.md) | OPS | 8 | 6 | 2 | 1 | 2 | 5 | 0 | 2 | 6 |
 | [Security](security.md) | SEC | 10 | 7 | 3 | 0 | 3 | 7 | 0 | 6 | 4 |
 | [Cost](cost.md) | CST | 9 | 2 | 7 | 0 | 1 | 8 | 0 | 0 | 9 |
 | [Team and roles](team.md) | TEM | 6 | 6 | 0 | 0 | 0 | 6 | 0 | 3 | 3 |
@@ -28,7 +28,7 @@ The legend of the tags, the Era and the strength rule heads every aspect page.
 | [Human oversight](oversight.md) | OVS | 5 | 5 | 0 | 0 | 1 | 4 | 0 | 3 | 2 |
 | [Knowledge capture](knowledge.md) | KNW | 5 | 5 | 0 | 0 | 1 | 4 | 0 | 2 | 3 |
 | [Measuring and reading results](measurement.md) | MSR | 10 | 4 | 6 | 0 | 3 | 7 | 0 | 1 | 9 |
-| **All** | | 152 | 124 | 28 | 15 | 44 | 93 | 15 | 63 | 74 |
+| **All** | | 152 | 123 | 29 | 15 | 44 | 93 | 15 | 63 | 74 |
 
 "Model" counts the "Depends on model ability" tag.
 
@@ -62,13 +62,13 @@ Families group the model names the cases give by maker, line and major version (
 | Gemini (internal) | internal version of Gemini fine-tuned with the DIDACT framework | 2025-04-13 | 14: PLN-8, VER-3, VER-7, REV-4, REV-9, TOL-2, TOL-3, TOL-4, TOL-5, AGF-4, AGF-7, AGF-8, OVS-2, MSR-7 |
 | GPT-4o | GPT-4o | 2025-02-20 | 11: PLN-6, TST-11, TOL-4, CTX-1, CTX-2, CTX-3, CTX-4, CTX-5, AGF-2, AGF-4, AGF-7 |
 | Claude 2.x | Claude 2.1 | 2024-05-22 | 9: TST-5, TEM-3, TOL-2, TOL-4, TOL-6, CTX-1, CTX-2, OVS-2, MSR-7 |
-| unstated | unstated | 2026-09-10 | 46: PLN-6, PLN-7, PLN-8, PLN-10, PLN-11, PLN-13, VER-3, VER-7, REV-1, REV-2, REV-3, REV-8, REV-11, OPS-2, OPS-3, SEC-2, SEC-3, SEC-10, TEM-1, TOL-1, TOL-3, TOL-6, TOL-7, TOL-8, CTX-1, CTX-2, CTX-4, CTX-5, CTX-8, CTX-10, CTX-11, CTX-12, CTX-13, ORC-1, ORC-2, AGF-1, AGF-2, AGF-3, AGF-5, AGF-6, AGF-7, AGF-9, OVS-1, KNW-4, KNW-5, MSR-7 |
+| unstated | unstated | 2026-09-10 | 44: PLN-6, PLN-7, PLN-8, PLN-10, PLN-11, PLN-13, VER-3, VER-7, REV-1, REV-2, REV-3, REV-8, REV-11, OPS-2, OPS-3, SEC-2, SEC-3, SEC-10, TEM-1, TOL-1, TOL-3, TOL-6, TOL-7, TOL-8, CTX-1, CTX-2, CTX-4, CTX-8, CTX-10, CTX-11, CTX-13, ORC-1, ORC-2, AGF-1, AGF-2, AGF-3, AGF-5, AGF-6, AGF-7, AGF-9, OVS-1, KNW-4, KNW-5, MSR-7 |
 
 ## Where the cases disagree
 
 Lessons whose "Against" line opens with "Disagree:", a real split between cases; each one's line is in [evidence.md](evidence.md).
 
-- [Planning and scoping](planning.md): PLN-4, PLN-5, PLN-11
+- [Planning and scoping](planning.md): PLN-4, PLN-5, PLN-11, PLN-13
 - [Verification loops and gates](verification.md): VER-10
 - [Code review](review.md): REV-2, REV-11
 - [Release and rollout](rollout.md): ROL-1
@@ -79,5 +79,4 @@ Lessons whose "Against" line opens with "Disagree:", a real split between cases;
 - [Context and prompts](context.md): CTX-1, CTX-6
 - [Many agents at once](orchestration.md): ORC-4, ORC-6
 - [Human oversight](oversight.md): OVS-1, OVS-2
-- [Knowledge capture](knowledge.md): KNW-4
 - [Measuring and reading results](measurement.md): MSR-4

@@ -27,7 +27,7 @@ superseded_by:
 
 # Ladybird ports its JavaScript engine front end from C++ to Rust with Claude Code and Codex
 
-Ladybird, an independent web browser, began moving from C++ to Rust with the front half of its
+Ladybird, a web browser, began moving from C++ to Rust with the front half of its
 JavaScript engine, LibJS: lexer, parser, syntax tree and bytecode generator. Its founder, Andreas
 Kling, did the translation with Claude Code and Codex in hundreds of small prompts, deciding what to
 port, in which order and how the Rust should look, then had other models review the result for
@@ -125,8 +125,8 @@ runs ([PR](https://github.com/LadybirdBrowser/ladybird/pull/8104)).
 - The Rust code is not idiomatic: the author says it reads as translated C++, mimics the C++
   register allocation so the bytecode matches, and leaves much to simplify once the C++ pipeline
   can be retired; the cleanup is deferred. The post also ranks matching the C++ pipeline above
-  correctness, which comes a close second, so the port keeps whatever the C++ got wrong
-  ([source](https://ladybird.org/posts/adopting-rust/#results)).
+  correctness, which comes a close second; so the port keeps whatever the C++ got wrong (our
+  reading) ([source](https://ladybird.org/posts/adopting-rust/#results)).
 - The pull request names register allocation as the most awkward part: the Rust generator frees
   registers by hand so their reuse order matches C++, which it says looks very strange
   ([PR](https://github.com/LadybirdBrowser/ladybird/pull/8104)).
@@ -185,4 +185,4 @@ runs ([PR](https://github.com/LadybirdBrowser/ladybird/pull/8104)).
 - Related: a larger agent-run port of a JavaScript runtime into Rust,
   [Bun Zig to Rust](2026-07-08-bun-zig-to-rust.md); a port that also used a black-box suite as its
   oracle, [GitHub Copilot runtime to Rust](2026-09-16-github-copilot-runtime-rust.md); a solo port
-  into Rust steered by one engineer, [Pokemon Showdown to Rust](2026-01-25-vjeux-pokemon-showdown-rust.md).
+  into Rust steered by one engineer, [Pokémon Showdown to Rust](2026-01-25-vjeux-pokemon-showdown-rust.md).

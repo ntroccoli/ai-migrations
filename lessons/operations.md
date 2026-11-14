@@ -34,7 +34,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: partly. Depends on model ability: no. Strength: medium. Era: 2026; newest: Claude Opus 5.x.
   - Cases: [GitHub: what went wrong][gh-wrong].
   - Against: None found.
-- **OPS-8** [stated] Running old and new paths side by side can double the load on shared services such as caches and rate-limit stores; check their headroom first, since raising it may need infrastructure work.
+- **OPS-8** [ours] Check the headroom of shared services old and new paths both hit, such as caches and rate-limit stores; one team's store lacked room for double load, and raising it took infrastructure work.
   - Old system as oracle: no. Depends on model ability: no. Strength: weak. Era: 2026; newest: Claude (version unstated).
   - Cases: [GitLab: what went wrong][glb-wrong].
   - Against: None found; one case, its limit was known before the migration began, and the source does not say the side-by-side running brought it back.

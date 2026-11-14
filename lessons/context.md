@@ -55,7 +55,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **CTX-12** [stated] Before porting, have a model write down why each old function exists and what behaviour it protects, and give those notes with every prompt; they cut the rounds per unit.
   - Old system as oracle: no. Depends on model ability: partly. Strength: weak. Era: 2025–2026; newest: Claude (version unstated).
   - Cases: [Datadog: what worked][ddg-worked].
-  - Against: None found; one team's account, with no count of rounds before and after the notes ([Datadog][ddg-wrong]).
+  - Against: None found; one team's account, with no count of rounds before and after the notes ([Datadog][ddg-wrong]). Such notes can invent claims: Mindstone's agent-written discovery reports needed citation checks and a review by models from three makers ([Mindstone][mnd-wrong]).
 - **CTX-13** [stated] Keep a rule for agents in an instruction file beside the code it governs, not at the root, and name the test enforcing it, so a reader can tell when the rule has expired.
   - Old system as oracle: no. Depends on model ability: partly. Strength: weak. Era: 2026; newest: unstated.
   - Cases: [Temporal: what worked][tmp-worked].
@@ -72,6 +72,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [glb-wrong]: ../cases/2026-07-08-gitlab-rate-limiting.md#what-went-wrong
 [int-practices]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#practices-to-copy
 [mnd-practices]: ../cases/2026-07-06-mindstone-go-to-typescript.md#practices-to-copy
+[mnd-wrong]: ../cases/2026-07-06-mindstone-go-to-typescript.md#what-went-wrong
 [opw-practices]: ../cases/2026-04-20-1password-monolith-refactor.md#practices-to-copy
 [opw-worked]: ../cases/2026-04-20-1password-monolith-refactor.md#what-worked
 [opw-wrong]: ../cases/2026-04-20-1password-monolith-refactor.md#what-went-wrong

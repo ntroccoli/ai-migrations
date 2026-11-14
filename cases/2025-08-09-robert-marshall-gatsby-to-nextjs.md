@@ -56,10 +56,10 @@ gives no page, file or line count ([source](https://robertmarshall.dev/blog/gats
 
 ## Who did what
 
-- **AI:** Claude Code, with the Context7, Serena and Sequential Thinking add-ons, wrote the code
-  in both runs. In the first run it planned the move in plan mode, then carried it out with every
+- **AI:** Claude Code wrote the code in both runs; the post names the Context7, Serena and
+  Sequential Thinking add-ons for the first. In the first run it planned the move in plan mode, then carried it out with every
   step running without approval; the prompt told it to list the files, build shared code with
-  2 sub-agents and split the rest among another 4 to 6 subagents, and the post reports the plan and the result,
+  2 subagents and split the rest among another 4 to 6 subagents, and the post reports the plan and the result,
   not each stage ([prompt](https://robertmarshall.dev/blog/gatsby-next-migration-failed-but-taught-me-ai/#the-prompt)). In the restart it designed the Next.js architecture,
   wrote the WordPress data module, adapted each component and wired them up
   ([steps](https://robertmarshall.dev/blog/gatsby-next-migration-failed-but-taught-me-ai/#step-3-component-migration)). The post gives no share of the code, only that a

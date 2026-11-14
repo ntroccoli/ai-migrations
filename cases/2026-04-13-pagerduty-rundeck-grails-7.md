@@ -13,7 +13,7 @@ from: Rundeck on Grails 6 (Spring Boot 2.7, Spring Security 5, Hibernate 5, Groo
 to: Rundeck on Grails 7 (Spring Boot 3.2, Spring Security 6, Hibernate 6, Groovy 4, Java 17, jakarta)
 from_languages: [Groovy, Java]
 size: 5,100 tests; 400+ files touched by the jakarta package rename
-duration: 9 days
+duration: 9 days to handoff; finishing work unstated
 people: 1 product manager, plus engineer reviewers (count unstated)
 cost: $200 in AI tools
 ai_share: unstated
@@ -32,7 +32,7 @@ account no software engineer, took Rundeck to Grails 7, with
 Spring Boot, Spring Security, Hibernate, Groovy, Java and the jakarta package rename moving at
 once, using Claude Sonnet 4.5 inside Cursor. Consultants had quoted 6 months and
 $200,000 to $300,000; the post reports 9 days, $200 in AI tools, and 5,083 of 5,100 tests
-passing, then handed the work to engineers for review and finalization. The code compiled after day one; 221 tests failed on day two. On day five a test deploy showed
+passing; engineers then reviewed and finalized the work. The code compiled after day one; 221 tests failed on day two. On day five a test deploy showed
 the admin user locked out: a Groovy 4 change to `equals()` let a set drop the admin role. AI
 helped find it; the fix needed knowledge of the authorization model. The 40-60x speed-up is the
 team's own estimate
@@ -102,7 +102,7 @@ review found or changed
 | 44 patterns by day seven, 44+ migration patterns at the end | migration patterns written up | reported | [post](https://www.pagerduty.com/eng/how-ai-tools-accelerated-six-month-framework-migration-to-nine-days/) |
 | $50,000 to $75,000 | dollar value of the time the patterns are expected to save on later upgrades and the handoff | self-estimate | [post](https://www.pagerduty.com/eng/how-ai-tools-accelerated-six-month-framework-migration-to-nine-days/) |
 | 40-60x | speed-up over a manual migration | self-estimate | [post](https://www.pagerduty.com/eng/how-ai-tools-accelerated-six-month-framework-migration-to-nine-days/) |
-| 900-1500x | cost saving against the consultants' quote, counting only the $200 tools bill | self-estimate | [post](https://www.pagerduty.com/eng/how-ai-tools-accelerated-six-month-framework-migration-to-nine-days/) |
+| 900-1500x | cost saving against the consultants' quote; method not given | self-estimate | [post](https://www.pagerduty.com/eng/how-ai-tools-accelerated-six-month-framework-migration-to-nine-days/) |
 | 10x cheaper, 40x faster | the closing section's working model (team member, AI and engineer review) against consultants and manual work | self-estimate | [post](https://www.pagerduty.com/eng/how-ai-tools-accelerated-six-month-framework-migration-to-nine-days/) |
 | 2-3 hours a day | engineer review in that working model | self-estimate | [post](https://www.pagerduty.com/eng/how-ai-tools-accelerated-six-month-framework-migration-to-nine-days/) |
 | 3-5 years | how long the post expects the new platform to last | self-estimate | [post](https://www.pagerduty.com/eng/how-ai-tools-accelerated-six-month-framework-migration-to-nine-days/) |
@@ -144,9 +144,14 @@ review found or changed
 - The 9 days end at a handoff: engineers then reviewed and finalized the work, and the post does
   not say how long that took
   ([source](https://www.pagerduty.com/eng/how-ai-tools-accelerated-six-month-framework-migration-to-nine-days/)).
-- The 900-1500x saving counts only the $200 tools bill against the consultants' quote, leaving out
-  the product manager's 9 days and the engineers' review; with people included, the closing section
-  gives 10x cheaper and 40x faster. Neither ratio is derived, and the post's own 6 months against
+- The upgrade pull request in the open-source repository, by the same author, stayed open from
+  December 2025 to April 2026; its record shows one approval with no review comments, and GitHub's
+  Copilot reviewer declined it as too large; the post leaves it unlinked
+  ([pull request](https://github.com/rundeck/rundeck/pull/9922)).
+- The post gives no method for the 900-1500x saving; set against the $200 tools bill alone, the
+  consultants' quote would give 1000-1500x (our arithmetic), and the product manager's 9 days and
+  the engineers' review are not priced. With people included, the closing section gives 10x cheaper
+  and 40x faster. Neither ratio is derived, and the post's own 6 months against
   9 days come to about 20x in calendar time, not 40-60x (our arithmetic)
   ([source](https://www.pagerduty.com/eng/how-ai-tools-accelerated-six-month-framework-migration-to-nine-days/)).
 - **Not reported:** how many engineer hours the review and finalization took, and what it changed;
@@ -177,7 +182,7 @@ review found or changed
 - The open-source Rundeck repository holds an upgrade pull request by the same author, opened in
   December 2025 and merged in April 2026, whose description names later versions (Spring Boot 3.5
   where the post says Spring Boot 3.2) and more patterns than the post. The post gives no link to it, so this case takes
-  nothing from it ([pull request](https://github.com/rundeck/rundeck/pull/9922)).
+  only its dates and review record from it, in What went wrong ([pull request](https://github.com/rundeck/rundeck/pull/9922)).
 - Related: a move whose pages passed every syntax check yet broke on deploy,
   [Zalando UI libraries](2025-02-20-zalando-ui-component-libraries.md); a framework move by one
   developer with a second model as reviewer,

@@ -3,7 +3,7 @@
 Questions to answer about a repository before an AI-driven move to another language, framework
 or library, or a large restructuring. Each has a **Check** an agent runs, an **Evidence** line in
 our words ("ours" marks our inference) and the **Lessons** behind it (`TST-2`: lesson 2 on the
-testing page; pages in [llms.txt](llms.txt)).
+testing page; listed in [lessons/evidence.md](lessons/evidence.md)).
 
 Cases named below (moves in [index.md](index.md)): [1Password][], [Airbnb][], [Asana][], [Bloomberg][],
 [Bun][], [Checkly][], [GitHub][], [GitLab][], [Google][], [Intel][], [Ladybird][], [PagerDuty][], [Pokémon][],
@@ -44,12 +44,12 @@ Cases named below (moves in [index.md](index.md)): [1Password][], [Airbnb][], [A
    Check: find the command that builds, formats, lints and tests one unit in the old stack, and
    name the one for the target stack (pin its toolchain). Use recorded timings first (logs, CI
    history); otherwise time each, count the output lines of a failure, and build and test two
-   fresh clones outside the repository at once, installing dependencies as an agent would and
-   counting the tests that actually ran (not worktrees, which write into its `.git`; cap the
-   time on a large one). For the number of agents you plan, estimate compile time, disk space, disk speed and process limits; say how
-   agents are kept from undoing each other's work, and which target platforms their machines can
-   build and test; for an app, how an agent drives it and how long one test takes. A missing
-   formatter or linter is a finding.
+   fresh clones outside the repository at once as an agent would (install dependencies, count
+   the tests that ran, cap the time; not worktrees, which write into the measured repository's
+   `.git`). For the agents you plan, estimate compile time, disk space and speed, and process
+   limits; say how agents are kept from undoing each other's work, and which target platforms
+   their machines can build and test; for an app, how an agent drives it and how long one test
+   takes. A missing formatter or linter is a finding.
    Evidence: GitHub needed a build lock. Bun's agents sharing one checkout undid each other's work
    within minutes, and heavy tests stalled the machine. 1Password and Spartacus gave each agent a
    worktree (Spartacus's tests failed to start there); Spotify's verify tool returns short
@@ -94,7 +94,7 @@ Cases named below (moves in [index.md](index.md)): [1Password][], [Airbnb][], [A
    each redesign allowed mid-port cost regressions, time or tokens. Bun wrote a
    porting guide first and left idiomatic code for later. 1Password's call-site cleanup ran from
    a list, templates and escalation rules; Spotify's judge rejects sessions mostly for straying
-   from the prompt.
+   from the prompt. Gatsby and Datadog built the target's design first.
    Lessons: CTX-4, PLN-2, PLN-5, PLN-13, REV-4, AGF-2, AGF-4.
 7. **What does the old stack do implicitly?**
    Check: search the scope for behaviour the target will not give for free, with the lists for
@@ -154,10 +154,10 @@ Cases named below (moves in [index.md](index.md)): [1Password][], [Airbnb][], [A
     a single-user or internal tool: what a release and a rollback are). Not released yet: mark it
     "not applicable yet" and say what must exist before the first release.
     Evidence: GitHub aimed to ship each port to a pre-release first, yet some regressions reached
-    stable; Bun's merged build stayed a canary while regressions were fixed; Google
-    rolled its largest migrations out slowly, owners watching. Temporal compared every query
-    and cut over read-only paths first; GitLab's shadow run on light traffic missed a fault.
-    A rollback path per unit is ours.
+    stable; Bun's merged build stayed a canary while regressions were fixed; Google rolled its
+    largest migrations out slowly, owners watching. Temporal compared every query and cut over
+    read-only paths first; GitLab ramped to full traffic past a divergence its shadow run flagged
+    but did not label. A rollback path per unit is ours.
     Lessons: ROL-2, ROL-3, ROL-5, ROL-7, ROL-10, ROL-11, VER-1, OPS-5, OPS-8.
 12. **How will you measure cost and result?**
     Check: write down the manual estimate and how it was made. Measure, before the port and on

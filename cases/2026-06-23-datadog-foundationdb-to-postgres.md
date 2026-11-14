@@ -18,7 +18,7 @@ people: unstated
 cost: unstated
 ai_share: most
 tools: [Claude, Cursor, end-to-end tests, blue/green deployment, response validator service, PostgreSQL, DuckDB]
-models: [Claude, unstated]
+models: [Claude]
 period: 2025-12..2026-02
 outcome: completed
 status: current
@@ -41,8 +41,7 @@ about 1 second
 ## Source
 
 A post on Datadog's engineering blog by Arnold Wakim, dated 2026-06-23 in
-the page's publishing data. Datadog sells observability products with AI features, but the AI
-tools this case used (Claude and Cursor) are not Datadog's, and the post promotes no Datadog
+the page's publishing data. The AI tools this case used (Claude and Cursor) are not Datadog's, and the post promotes no Datadog
 product. It states its results without the measurements behind them and gives no team size. Its
 two figures are diagrams (the old architecture and the new schema) with no numbers.
 
@@ -55,7 +54,7 @@ data lived over time ([source](https://www.datadoghq.com/blog/engineering/ai-ass
 path stored routes, sharding strategies and rules as key-value entries in FoundationDB; its read
 path served snapshots from RocksDB in memory
 ([architecture](https://www.datadoghq.com/blog/engineering/ai-assisted-storage-migration/#from-config-file-to-control-plane)). Because these entities reference each other, the
-code pulled entries by the tens of thousands into every pod and checked the relations itself
+code pulled entries by the tens of thousands into pod processes and checked the relations itself
 ([source](https://www.datadoghq.com/blog/engineering/ai-assisted-storage-migration/#when-the-kv-model-stopped-scaling)).
 The new write path is a relational schema on Datadog's self-managed PostgreSQL platform; the read
 path restores DuckDB snapshots, chosen over SQLite for its array columns and a dialect close
@@ -179,7 +178,7 @@ fixtures; the post gives that as the reason for the live comparison.
 - Model era: December 2025 to February 2026, with Claude (version not named) and Cursor
   ([source](https://www.datadoghq.com/blog/engineering/ai-assisted-storage-migration/#what-changed-after-the-migration)).
 - A data move where the people's design decision, not the code port, carried the result: the
-  failed first attempt kept the old data model on a new engine.
+  first design, ruled out on an estimate, kept the old data model on a new engine.
 - Related: a port judged by existing end-to-end tests,
   [GitHub Copilot runtime to Rust](2026-09-16-github-copilot-runtime-rust.md); a large
   refactor of one codebase with agents, [1Password monolith](2026-04-20-1password-monolith-refactor.md).

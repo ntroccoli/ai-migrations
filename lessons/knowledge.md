@@ -18,10 +18,10 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: no. Depends on model ability: no. Strength: medium. Era: 2026; newest: Claude Opus 5.x.
   - Cases: [GitHub: numbers][gh-numbers], [GitHub: what worked][gh-worked].
   - Against: GitHub's split of the engineer's messages by intent was labelled by an LLM, not checked by a person ([GitHub][gh-numbers]).
-- **KNW-4** [stated] A compacted or fresh session forgets what the last one learned; keep the method in files it rereads (instructions, one debug script) and find work by search, not a growing notes file.
+- **KNW-4** [stated] A compacted or fresh session forgets what the last one learned; keep the method in files it rereads (instructions, one debug script) and find work by search.
   - Old system as oracle: no. Depends on model ability: partly. Strength: medium. Era: 2025–2026; newest: Claude (version unstated).
   - Cases: [Pokémon: what went wrong][vjx-wrong], [Pokémon: what worked][vjx-worked], [Datadog: what worked][ddg-worked].
-  - Against: Disagree: PagerDuty's author credits a growing file of fix patterns with faster fixes later in the run and in the next upgrade, unmeasured ([PagerDuty][pgd-worked]). The Pokémon account gives no measure of time saved, and a search finds only the markers the agent wrote, not stubs it left unmarked ([Pokémon][vjx-worked]); such files also go stale: at Temporal a migration left an agent guide pointing at deleted code, and nothing flagged it ([Temporal][tmp-wrong]).
+  - Against: None found; the gains are unmeasured: PagerDuty's author credits a growing file of fix patterns with faster fixes later in the run and in the next upgrade ([PagerDuty][pgd-worked]), and the Pokémon account gives no measure of time saved, and a search finds only the markers the agent wrote, not stubs it left unmarked ([Pokémon][vjx-worked]); such files also go stale: at Temporal a migration left an agent guide pointing at deleted code, and nothing flagged it ([Temporal][tmp-wrong]).
 - **KNW-5** [stated] Mark temporary migration code the day you write it with what it is for and how to remove it; an agent can later find the notes and work through them as the removal list.
   - Old system as oracle: no. Depends on model ability: partly. Strength: weak. Era: 2026; newest: unstated.
   - Cases: [Temporal: what worked][tmp-worked].

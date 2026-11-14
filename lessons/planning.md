@@ -58,7 +58,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **PLN-13** [stated] In a framework or data-store move, build the target's foundation (architecture, data model) in its own idiom first, then port old parts onto it; one straight port rebuilt the old layers.
   - Old system as oracle: no. Depends on model ability: partly. Strength: weak. Era: 2025–2026; newest: Claude (version unstated).
   - Cases: [Gatsby blog: what went wrong][rmg-wrong], [Gatsby blog: what worked][rmg-worked], [Datadog: who did what][ddg-who], [Datadog: what went wrong][ddg-wrong].
-  - Against: None found; Gatsby is one small blog, and Datadog ruled out its straight port on an estimate without building it ([Datadog][ddg-wrong]).
+  - Against: Disagree: ports judged against the old system translated the old design first and deferred idiom or the data store ([Ladybird][lb-wrong], [Mindstone][mnd-migrated]); Gatsby is one small blog, and Datadog ruled out its straight port on an estimate without building it ([Datadog][ddg-wrong]).
 
 [air-numbers]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#numbers
 [air-who]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#who-did-what

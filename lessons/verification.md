@@ -20,7 +20,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: Google's developers could not tell how many retries a file would need ([Google][goo-wrong]); test feedback helped one model on Intel's battery far more than another ([Intel][int-worked]); Uber neither retried nor handed over files whose tests failed but put them back on the old framework, as diagnosing each was impractical ([Uber][ubr-wrong]); in Bun's port, where units depended on each other, the engineer fixed the workflow prompt instead of handing units to people ([Bun][bun-practices]).
 - **VER-4** [stated] Give the agent one verify tool that picks the right build and test runner and returns short errors, and run it automatically before the agent may finish.
   - Old system as oracle: partly. Depends on model ability: partly. Strength: weak. Era: 2025–2026; newest: Claude (version unstated).
-  - Cases: [Spotify: what worked][spo-worked], [Spotify: practices to copy][spo-practices].
+  - Cases: [Spotify: what worked][spo-worked], [Spotify: practices to copy][spo-practices], [Datadog: what went wrong][ddg-wrong].
   - Against: GitHub's agents called the raw build and test commands directly, in large volume, and still finished ([GitHub][gh-numbers]).
 - **VER-5** [stated] Before trusting a green suite, confirm the tests really ran: compare executed tests and assertions with the baseline, and count skips as failures.
   - Old system as oracle: yes. Depends on model ability: no. Strength: medium. Era: 2024–2026; newest: Claude Fable 5.x.
@@ -58,6 +58,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [bun-checked]: ../cases/2026-07-08-bun-zig-to-rust.md#how-it-was-checked
 [bun-practices]: ../cases/2026-07-08-bun-zig-to-rust.md#practices-to-copy
 [bun-wrong]: ../cases/2026-07-08-bun-zig-to-rust.md#what-went-wrong
+[ddg-wrong]: ../cases/2026-06-23-datadog-foundationdb-to-postgres.md#what-went-wrong
 [gh-checked]: ../cases/2026-09-16-github-copilot-runtime-rust.md#how-it-was-checked
 [gh-numbers]: ../cases/2026-09-16-github-copilot-runtime-rust.md#numbers
 [gh-wrong]: ../cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong

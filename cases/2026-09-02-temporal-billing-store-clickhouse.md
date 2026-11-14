@@ -16,7 +16,7 @@ size: a few dozen read-path queries over two tables
 duration: unstated
 people: unstated
 cost: unstated
-ai_share: part
+ai_share: unstated
 tools: [coding agents (not named), unattended CI and review-comment loops, shadow comparison harness, regression tests, agent instruction files]
 models: [unstated]
 period: unstated
@@ -65,8 +65,8 @@ pipeline and streams stayed as they were
   but hardly any of the new code, though the record only begins more than a week in.
   The final teardown, several dozen files of mostly deployment configuration, took one working
   session, with an agent working from the cleanup notes; unattended loops handled CI failures and
-  review comments. Basis for `ai_share: part`: prompt coverage as the authors report it, not
-  measured authorship; the posts state no overall share
+  review comments. `ai_share` is `unstated`: the posts state no overall share, and prompt
+  coverage as the authors report it is not measured authorship
   ([source](https://temporal.io/blog/using-coding-agents-on-a-migration-three-practices-that-mattered)).
 - **Rule-based tools:** a shadow comparison that sent every query to both stores, served the old
   answer and compared the two in the background; a regression test on the overflow fix; feature
@@ -102,7 +102,7 @@ the new store
 | 3 to 5 years | headroom on ClickHouse on current growth projections | estimate | [earlier post](https://temporal.io/blog/migrating-temporal-clouds-billing-store-to-clickhouse#what-it-bought-us) |
 | about 70% | drop in steady-state spend | reported | [earlier post](https://temporal.io/blog/migrating-temporal-clouds-billing-store-to-clickhouse#what-it-bought-us) |
 | 30 to 50% | cost reduction the design doc aimed for | reported | [earlier post](https://temporal.io/blog/migrating-temporal-clouds-billing-store-to-clickhouse#what-it-bought-us) |
-| about 1.4 seconds | average query speed-up over a week of identical live traffic | measured | [earlier post](https://temporal.io/blog/migrating-temporal-clouds-billing-store-to-clickhouse#what-it-bought-us) |
+| about 1.4 seconds | average time saved per query over a week of identical live traffic | measured | [earlier post](https://temporal.io/blog/migrating-temporal-clouds-billing-store-to-clickhouse#what-it-bought-us) |
 | about half an hour | how much sooner usage data reaches customers | measured | [earlier post](https://temporal.io/blog/migrating-temporal-clouds-billing-store-to-clickhouse#what-it-bought-us) |
 | about 20 minutes | freshness gap on metering data, from the monitoring chart | measured | [earlier post](https://temporal.io/blog/migrating-temporal-clouds-billing-store-to-clickhouse#deciding-which-differences-were-bugs) |
 | several dozen files | touched by the final teardown, done in one working session | reported | [later post](https://temporal.io/blog/using-coding-agents-on-a-migration-three-practices-that-mattered#why-cleanup-is-the-part-that-benefits) |
@@ -125,8 +125,9 @@ the new store
   removed both file and test
   ([source](https://temporal.io/blog/using-coding-agents-on-a-migration-three-practices-that-mattered#practice-2-put-durable-rules-next-to-the-code-and-say-how-they-are-enforced)).
 - Checking whether a value was possible at all, not only whether the two stores agreed, flagged
-  the overflow. Shadowing had started on the largest accounts for other reasons; the authors say
-  starting with the smallest would have shown full agreement and passed the port
+  the overflow. Shadowing had started on a few high-volume internal accounts for other reasons; the authors say
+  starting with the smallest would have shown full agreement and passed the port, and advise
+  aiming the comparison at the largest and most unusual accounts first, the cutover at the other end
   ([earlier post](https://temporal.io/blog/migrating-temporal-clouds-billing-store-to-clickhouse#the-defect-this-caught)).
 - Ordering the cutover by how costly a mistake is to undo, against the direction data flows: the
   read-only APIs went first, where a flag reverses a wrong answer, and the aggregation that feeds
@@ -202,6 +203,8 @@ the new store
 
 - Model era: the posts name no model and give no dates for the work; the account of the migration
   appeared in 2026-08 and the account of the agents a few weeks later.
+- Dated by the later post: the earlier one (2026-08-11) never mentions AI, so the two are not a
+  series; the post about the agents is the source, and the earlier one gives the migration's detail.
 - A data-store move rather than a language port: the code that changed was queries in a new SQL
   dialect, plus the teardown of the old store's scaffolding and configuration.
 - Related: stale docs and agent guidance that still favour the old library slowed

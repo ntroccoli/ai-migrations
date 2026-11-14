@@ -5,7 +5,7 @@
 What this [log.md](../log.md) entry added, changed or removed, since "2026-11-14 — second update": lesson IDs and checklist questions (Q1 is question 1). A revisit reads these lines for every entry newer than the one its record names, then only the lessons and questions they list.
 
 - Added lessons: PLN-13, TST-13, TST-14, TST-15, ROL-10, ROL-11, OPS-8, TEM-6, CTX-12, CTX-13, KNW-5
-- Changed lessons: PLN-5, PLN-6, PLN-7, PLN-9, PLN-11, PLN-12, TST-1, TST-2, TST-5, TST-7, TST-9, TST-12, VER-1, VER-7, REV-1, REV-3, REV-5, REV-9, REV-10, REV-11, ROL-1, ROL-2, ROL-3, OPS-3, CST-2, TEM-1, TEM-2, TOL-6, CTX-1, CTX-4, CTX-5, CTX-10, AGF-5, AGF-6, AGF-9, OVS-1, OVS-3, KNW-1, KNW-4, MSR-1, MSR-9
+- Changed lessons: PLN-5, PLN-6, PLN-7, PLN-9, PLN-11, PLN-12, TST-1, TST-2, TST-5, TST-7, TST-9, TST-12, VER-1, VER-4, VER-7, REV-1, REV-3, REV-5, REV-9, REV-10, REV-11, ROL-1, ROL-2, ROL-3, OPS-3, CST-2, TEM-1, TEM-2, TOL-6, CTX-1, CTX-4, CTX-5, CTX-10, AGF-5, AGF-6, AGF-9, OVS-1, OVS-3, KNW-1, KNW-4, MSR-1, MSR-9
 - Lessons gone: none
 - Added questions: none
 - Changed questions: Q2, Q3, Q6, Q7, Q8, Q9, Q10, Q11
@@ -30,8 +30,8 @@ PLN-9 253fea70
 PLN-10 c20be6b9
 PLN-11 ddbb5d17
 PLN-12 de4dd65f
-PLN-13 aaa2af1d
-TST-1 b0659e9f
+PLN-13 c8f4eced
+TST-1 599c997d
 TST-2 79e547ec
 TST-3 22209971
 TST-4 f69a7c5a
@@ -43,13 +43,13 @@ TST-9 471dd3fc
 TST-10 559edbf9
 TST-11 73ff2765
 TST-12 992b72b5
-TST-13 293645b4
+TST-13 736522bf
 TST-14 957789d4
 TST-15 6a13f987
 VER-1 4e9f2079
 VER-2 675e127a
 VER-3 d3dfd043
-VER-4 e33408d4
+VER-4 6c50efad
 VER-5 b3ec5c51
 VER-6 f3bbead4
 VER-7 e545c8e7
@@ -86,7 +86,7 @@ OPS-4 920d863c
 OPS-5 ce77bb50
 OPS-6 3d84316b
 OPS-7 06b0a226
-OPS-8 f2dc0e3c
+OPS-8 23134f30
 SEC-1 86cfb9fa
 SEC-2 2d30fb48
 SEC-3 23b30d0a
@@ -111,7 +111,7 @@ TEM-2 ef4aa243
 TEM-3 4bf8aa7c
 TEM-4 a7e9acff
 TEM-5 fb9c7ff2
-TEM-6 390b7496
+TEM-6 d7dedcc8
 TOL-1 0d1d0113
 TOL-2 deef297e
 TOL-3 162e6328
@@ -133,7 +133,7 @@ CTX-8 7b43d27a
 CTX-9 75869dfc
 CTX-10 ccd62d4e
 CTX-11 2ddd5a0c
-CTX-12 8cb57297
+CTX-12 7a89dfec
 CTX-13 f9fc0b6b
 ORC-1 1124effd
 ORC-2 0471d285
@@ -150,7 +150,7 @@ AGF-6 6b910d80
 AGF-7 bacb0682
 AGF-8 58610395
 AGF-9 38d6416b
-OVS-1 01a71386
+OVS-1 d929c4f5
 OVS-2 11ae3827
 OVS-3 e781ac7b
 OVS-4 25c05b2d
@@ -158,7 +158,7 @@ OVS-5 ce84188a
 KNW-1 68991784
 KNW-2 fefad608
 KNW-3 b18cce9f
-KNW-4 70378ea2
+KNW-4 193f68f8
 KNW-5 2f03333b
 MSR-1 9a4b266d
 MSR-2 41aa780d
@@ -172,14 +172,14 @@ MSR-9 a0f3c084
 MSR-10 ca2e74fb
 Q1 6c1b593b
 Q2 82ae75ee
-Q3 8af23d45
+Q3 be9987e2
 Q4 4c54657d
 Q5 b382f2de
-Q6 3cc5a54b
+Q6 5a8dad59
 Q7 4aa288f1
 Q8 d7a232c6
 Q9 d05a7dea
 Q10 02d78dcf
-Q11 9c2e2218
+Q11 b8491a6c
 Q12 74e6a289
 ```

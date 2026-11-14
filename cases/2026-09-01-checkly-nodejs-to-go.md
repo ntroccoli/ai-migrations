@@ -43,7 +43,7 @@ A post on Checkly's blog by Edvinas Janusevicius, a backend engineer there, date
 the page's metadata (modified 2026-09-29). Checkly sells synthetic monitoring built on Playwright,
 closes the post by promoting it, and advertises agent features beside it, but it sells none of the
 AI tools the case used, so the author counts as a tool user. The post states its results without
-the data behind them. An embedded video in which the author walks Stefan through the rewrite was
+the data behind them. An embedded video in which the author walks a colleague through the rewrite was
 not archived; this case rests on the text only
 ([source](https://www.checklyhq.com/blog/agentic-rewrite-nodejs-to-go/)).
 
@@ -135,7 +135,7 @@ made changes risky
 ## What worked
 
 - Building the harness first meant correctness was defined by tests, not by whoever reviewed the
-  agent's code; the authors credit the harness, built before any agent code, for the result
+  agent's code; the author credits the harness, built before any agent code, for the result
   ([source](https://www.checklyhq.com/blog/agentic-rewrite-nodejs-to-go/#designing-a-test-harness)).
 - Test inputs drawn from a day of real configurations and outcomes, reduced to unique scenarios,
   tied coverage to what production really does
@@ -146,7 +146,7 @@ made changes risky
 - The rollout went from internal accounts to free, paid and then enterprise customers behind a
   feature flag; apart from those who hit the edge-case bugs, the post says no customer noticed
   ([source](https://www.checklyhq.com/blog/agentic-rewrite-nodejs-to-go/#rolling-out-to-customers)).
-- The authors find Go's types a better match for agents than JavaScript's, and a further check
+- The author finds Go's types a better match for agents than JavaScript's, and a further check
   on regressions
   ([source](https://www.checklyhq.com/blog/agentic-rewrite-nodejs-to-go/#improved-developer-experience)).
 
@@ -155,7 +155,7 @@ made changes risky
 - Problems came almost as soon as internal accounts moved, mostly failed retries; the post names
   no others. Locally the harness had 3 retry queues chosen by check type, while production also
   routes on factors such as priority and hosting type, to 18 queues per region. The agent wrote
-  retry handling for the harness's world, and the gap shipped. The authors trace it to a
+  retry handling for the harness's world, and the gap shipped. The author traces it to a
   design-time boundary model that was too coarse; they aligned the harness with production,
   removed local-only code paths and supervised reworking the retry code
   ([source](https://www.checklyhq.com/blog/agentic-rewrite-nodejs-to-go/#first-deployment-what-we-got-wrong)).

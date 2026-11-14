@@ -46,6 +46,6 @@ The aspect pages (tag counts per page: [lessons/index.md](https://raw.githubuser
 
 ## Optional
 
-- [Everything in one file](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms-full.txt): the single opt-in file that holds everything (every lesson with its sub-items, every case line, the checklist and the pitfalls), for tools that cannot follow links. About 219 KB (~56k tokens): otherwise follow the route above.
+- [Everything in one file](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms-full.txt): the single opt-in file that holds everything (every lesson with its sub-items, every case line, the checklist and the pitfalls), for tools that cannot follow links. About 220 KB (~56k tokens): otherwise follow the route above.
 - [Pitfalls by kind of move](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/pitfalls.md): what the old stack did implicitly, and seams for moving in steps.
 - [Update log](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/log.md): what each update covered and changed, and why.

@@ -1,18 +1,18 @@
 ---
-title: Mindstone folds 86 Go services into one TypeScript monolith with coding agents
+title: Mindstone folds 86 Go targets into one TypeScript monolith with coding agents
 date: 2026-07-06
 company: Mindstone
-summary: Agents rewrote 86 Go services as one TypeScript service in about 2 weeks, checked by tests run on both: the first suite chased coverage, asserting nothing.
+summary: Agents rewrote 86 Go targets as one TypeScript service in about 2 weeks, checked by tests run on both: the first suite chased coverage, asserting nothing.
 source_url: https://blog.mindstone.com/p/can-you-trust-code-no-human-wrote
 also: []
 source_type: engineering-post
 author_relation: user-of-tool
 evidence: assertion-only
 kind: mixed
-from: 86 Go microservices (RPC, Kafka, ScyllaDB, Redis on Kubernetes)
+from: 86 Go targets (55 microservices plus crons, webhooks, GraphQL edges, libraries, APIs; RPC, Kafka, ScyllaDB, Redis on Kubernetes)
 to: a single TypeScript service running on Cloud Run (Hono, graphql-yoga, Node 24)
 from_languages: [Go]
-size: 86 services, about 500,000 lines of Go into 231,488 lines of TypeScript
+size: 86 targets, about 500,000 lines of Go into 231,488 lines of TypeScript
 duration: about 2 weeks
 people: unstated (team: a CTO and 4 product engineers; part kept working on the Go system)
 cost: unstated
@@ -25,9 +25,9 @@ status: current
 superseded_by:
 ---
 
-# Mindstone folds 86 Go services into one TypeScript monolith with coding agents
+# Mindstone folds 86 Go targets into one TypeScript monolith with coding agents
 
-Mindstone's small engineering team replaced a six-year-old fleet of 86 Go services with one TypeScript
+Mindstone's small engineering team replaced a six-year-old fleet of 86 Go targets (55 of them microservices) with one TypeScript
 service, and says no person wrote any new code by hand. Agents first wrote tests that pinned the old
 services' behaviour; the same Go test bodies then ran against the new TypeScript server. The first
 suite chased coverage and checked almost nothing, so it was thrown away and regenerated under a
@@ -44,13 +44,14 @@ A post on Mindstone's Substack blog by Peter Timson, a product engineer there, p
 does not sell the agents or models the case used, and the post promotes none of them, so the
 author is a user of the tools. The post shows code excerpts of its harness, pipeline and checks,
 but no logs, data or repository behind its counts; the scope table is an image
-([source](https://blog.mindstone.com/p/can-you-trust-code-no-human-wrote#%C2%A71-the-problem)). Full text not archived (Substack terms forbid storing it); checks ran against notes.
+([source](https://blog.mindstone.com/p/can-you-trust-code-no-human-wrote#%C2%A71-the-problem)). The full text is not stored here (Substack's terms forbid storing it); our own-words check ran
+against the maintainer's notes, not the original.
 
 ## What was migrated
 
 A backend the company calls a core revenue source: 86 Go targets (55 microservices, 11 crons, 11
 webhooks, 4 GraphQL edges, 2 shared libraries and 3 internal APIs) talking over RPC and Kafka,
-with ScyllaDB storage and Redis caching on Kubernetes. They became a single TypeScript service, hosted on Cloud
+with ScyllaDB storage and Redis on Kubernetes. They became a single TypeScript service, hosted on Cloud
 Run, still on ScyllaDB; a move to SQL is left for a later phase. The rest of the company already
 wrote TypeScript, and a team of a CTO and four engineers found 86 services too costly to run
 ([source](https://blog.mindstone.com/p/can-you-trust-code-no-human-wrote#%C2%A71-the-problem)).
@@ -97,7 +98,7 @@ In the pipeline, a missing gate verdict counted as no-go, two reviewer agents on
 than the writer's both had to pass the code, and the cross-target suite had to go green
 ([source](https://blog.mindstone.com/p/can-you-trust-code-no-human-wrote#%C2%A77-the-migration-factory)).
 The post claims no behaviour regressions at cutover, on the basis that each service passed the
-old one's tests; it reports no production monitoring or shadow traffic
+old one's tests; our notes of it record no production monitoring or shadow traffic
 ([source](https://blog.mindstone.com/p/can-you-trust-code-no-human-wrote#%C2%A712-results)).
 
 ## Numbers
@@ -114,15 +115,15 @@ old one's tests; it reports no production monitoring or shadow traffic
 | 116 services | services with the two-backend test setup | reported | [post](https://blog.mindstone.com/p/can-you-trust-code-no-human-wrote#%C2%A73-the-cross-target-harness-one-test-two-systems) |
 | 57 of 108 values | wildcarded values in one service that stayed the same across two runs | measured | [post](https://blog.mindstone.com/p/can-you-trust-code-no-human-wrote#%C2%A76-closing-the-loopholes-the-anti-cheat-audit-scripts) |
 | at most 40 files | chunk size for discovery of large services | reported | [post](https://blog.mindstone.com/p/can-you-trust-code-no-human-wrote#%C2%A78-discovery-and-anti-hallucination) |
-| 47 targets queued, 23 targets green | one run on the busiest day, two at a time | reported | [post](https://blog.mindstone.com/p/can-you-trust-code-no-human-wrote#%C2%A712-results) |
-| roughly 27 targets in a day | busiest day, counting some finished the day before | reported | [post](https://blog.mindstone.com/p/can-you-trust-code-no-human-wrote#%C2%A712-results) |
+| 47 targets queued, 23 targets green | one run on April 14, two at a time | reported | [post](https://blog.mindstone.com/p/can-you-trust-code-no-human-wrote#%C2%A712-results) |
+| roughly 27 targets in a day | April 14, counting some finished the day before | reported | [post](https://blog.mindstone.com/p/can-you-trust-code-no-human-wrote#%C2%A712-results) |
 | 7,000-test suite in minutes, not hours | run time of the real-infrastructure suite with warm containers | reported | [post](https://blog.mindstone.com/p/can-you-trust-code-no-human-wrote#%C2%A711-making-thousands-of-real-infra-tests-fast) |
 
 ## What worked
 
 - The team chose not to move services one at a time with old and new side by side, which it
   expected to stall; a deliberately short deadline pushed it to build a pipeline that migrates
-  services rather than port them by hand. The authors credit that choice, though the deadline
+  services rather than port them by hand. The author credits that choice, though the deadline
   slipped ([source](https://blog.mindstone.com/p/can-you-trust-code-no-human-wrote#%C2%A71-the-problem)).
 - One test body run against both backends turned the rewrite into a parity check; a test that
   passed on Go and failed on TypeScript exposed a family of wire-format bugs, such as
@@ -131,7 +132,7 @@ old one's tests; it reports no production monitoring or shadow traffic
 - Failing any test that leaves a side effect or response field unasserted gave agents a precise,
   repeatable failure to act on, so they could loop until right without being able to fake it
   ([source](https://blog.mindstone.com/p/can-you-trust-code-no-human-wrote#%C2%A75-the-un-cheatable-test-framework-assert-every-side-effect-or-fail)).
-- Regenerating the hollow suite from scratch under the new rules was faster than repairing it
+- Regenerating the hollow suite from scratch under the new rules beat repairing it
   ([source](https://blog.mindstone.com/p/can-you-trust-code-no-human-wrote#%C2%A75-the-un-cheatable-test-framework-assert-every-side-effect-or-fail)).
 - Each shortcut agents found became a scripted check, rather than a better-worded prompt; the post
   says strict rejection and retry did more than wording did

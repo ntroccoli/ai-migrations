@@ -38,15 +38,17 @@ prompts.
    below). In a read-only run, write no file; show the record after the report.
 7. Revisit, in a fresh session, when the collection has grown or after a few weeks of work:
    - Start: compare the log entry the record names (date and title) with the newest one
-     [llms.txt](../llms.txt) names. If they match and no item is due for re-check (nothing
-     waiting, nothing open that later work could show), say so and stop.
+     [llms.txt](../llms.txt) names. If they match and no item is due for re-check (due: waiting
+     or open, with commits in the project since the record's date), say so and stop.
    - Re-check: rerun each item's "Check now" unchanged and look for its "Event that proves it"
      in the work since; compare with its baseline. Mark each exactly proven, still waiting,
      stopped holding or not shown (its event cannot be seen yet), with the numbers; in the
      record, still waiting and not shown stay "waiting for first use". Date each change; reopen
      proven or skipped items only if their check now fails.
    - New: for each [log.md](../log.md) entry newer than the record's, read its file in
-     [changes/](../changes/) (lesson IDs and checklist questions added, changed or removed); open
+     `changes/`, named by the entry's date and title (`2026-11-14 — third update` is
+     `changes/2026-11-14-third-update.md`): the lesson IDs and checklist questions added, changed
+     or removed; open
      only those lessons, and measure them as in step 4.
    - Lint: list the applied lessons that a newer lesson now contradicts or supersedes, and the
      record's items whose lesson changed.
