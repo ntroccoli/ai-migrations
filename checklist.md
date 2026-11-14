@@ -44,7 +44,9 @@ native apps); [Google][] (wider IDs); [Uber][] (Java tests; a contrast case).
    Check: find the command that builds, formats, lints and tests one unit in the old stack, and
    name the one for the target stack (pin its toolchain). Use recorded timings first (logs, CI
    history); otherwise time each, count the output lines of a failure, and build and test two
-   clones outside the repository at once (a worktree would write into its `.git`). For the number
+   fresh clones outside the repository at once, installing dependencies as an agent would and
+   counting the tests that actually ran (clones, since a worktree writes into the measured
+   repository's `.git`; on a large repository, cap the time). For the number
    of agents you plan, estimate compile time, disk space, disk speed and process limits; say how
    agents are kept from undoing each other's work, and which target platforms their machines can
    build and test; for an app, how an agent drives it and how long one test takes. A missing
@@ -151,7 +153,7 @@ native apps); [Google][] (wider IDs); [Uber][] (Java tests; a contrast case).
     Check: find the release channels (pre-release, flags, canary), the share of users each
     reaches, how problems are reported and watched, and how one unit's change is rolled back (for
     a single-user or internal tool: what a release and a rollback are). Not released yet: mark it
-    "not applicable yet".
+    "not applicable yet" and say what must exist before the first release.
     Evidence: GitHub aimed to ship each port to a pre-release first, yet some regressions reached
     stable; Bun's merged build stayed a canary while regressions were fixed; Google
     rolled its largest migrations out slowly, owners watching. A rollback path per unit is ours.
@@ -199,7 +201,8 @@ Starting points from one case each, not targets; elsewhere judge "gap" from the 
    one), then what others depend on (the oracle, the baseline, the end state), then the rest.
 8. Report as below and wait for the owner's choice.
 9. Record: once the owner has chosen, write `docs/migration-review.md` in the measured repository
-   (the one file this checklist adds there; format below); in a read-only run, after the report.
+   (the one file this checklist adds there; format below). In a read-only run, write no file;
+   show the record after the report.
 10. Revisit: a later run reads that record first and re-checks only open, waiting and
     stopped-holding items, and questions whose measurement may have moved or that a newer
     `log.md` entry changed. Date each status change with its event; reopen proven or skipped
@@ -238,7 +241,7 @@ Go / no-go: go | go after the blockers | no-go — <one line why>.
    Evidence: Q<n>, its lesson IDs, and links to case sections you read.
    Depends on: <proposal numbers, or none>.
    Cost: S | M | L (S under a day of agent work, M a few days, L a week or more).
-   Recommendation: do | later | skip.
+   Recommendation: do | later | skip (one word), with a one-line reason.
    Check that proves it: <command or count to rerun>.
 2. ...
 ```
@@ -249,13 +252,19 @@ The record, `docs/migration-review.md` in the measured repository:
 # Migration review record: <repository>
 
 Checklist: <ai-migrations commit or date>. Migration: <from> to <to>.
+Log entry: <date and title of the newest log.md entry this review covered>.
 
-| # | Question | Proposal | Status | Event that shows it | Date |
-| --- | --- | --- | --- | --- | --- |
-| 1 | Q<n> | <one line> | <status> | <commit, test run or number> | <YYYY-MM-DD> |
+| # | Question | Proposal | Baseline | Status | Event that shows it | Date |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | Q<n> | <one line> | <how often, evidence> | <status> | <commit, test run or number> | <YYYY-MM-DD> |
 ```
 
-Status is one of: open, proven, waiting for first use, stopped holding, skipped.
+Status is one of: open, proven, waiting for first use, stopped holding, skipped. A proposal
+marked "later" is open; one the owner declined is skipped; an applied change whose check failed
+stays open, and its event names the failed check. An applied change whose check passed is waiting for first use until an event in later work
+shows it held; then it is proven. Baseline: written before any change, how
+often the problem happened so far, with evidence; a revisit compares with it. Outside a migration, the lessons route keeps a
+record of the same shape: [docs/applying-lessons.md](docs/applying-lessons.md).
 
 [GitHub]: cases/2026-09-16-github-copilot-runtime-rust.md
 [Bun]: cases/2026-07-08-bun-zig-to-rust.md

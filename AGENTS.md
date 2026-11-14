@@ -9,7 +9,8 @@ sources stay migrations; the lessons may reach wider. Unofficial: it names no en
 company names describe the subject only.
 
 Layout: `cases/` (one file per case), `lessons/` (one page per aspect), `checklist.md`,
-`pitfalls.md`, `docs/field-reports.md` (how readers report what the checklist foresaw); generated
+`pitfalls.md`, `docs/field-reports.md` (how readers report what the checklist foresaw),
+`docs/applying-lessons.md` (the lessons route outside a migration: method, report, record); generated
 by `node scripts/build.mjs`, never by hand: `index.md`, `lessons/index.md`, `llms.txt`, `llms-full.txt`.
 
 The maintainer keeps the full source texts, and the source lines behind each lesson, in a private
@@ -94,8 +95,9 @@ Field rules (all checked):
 - `source_url`: the primary source, `https://`. `also`: an inline list of the other URLs of the
   same source (the other parts of a series, or the project's official repository when the source
   links it), or `[]`.
-- `source_type`: `engineering-post` (the migrating company's engineers), `paper`, `talk`, `repo`
-  (official repository or docs), `vendor-marketing` (written to sell).
+- `source_type`: `engineering-post` (by the engineers who ran the migration, for a company or for
+  themselves), `paper`, `talk`, `repo` (official repository or docs), `vendor-marketing` (written
+  to sell).
 - `author_relation`: `seller-of-tool` when the author's company sells, or promotes in the source,
   an AI tool or platform the case used, and also when a tool user writes the source in
   partnership with the tool's vendor; `user-of-tool`; `independent` (no stake in the work or

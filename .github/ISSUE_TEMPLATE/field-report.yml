@@ -28,7 +28,7 @@ body:
     id: move
     attributes:
       label: The move
-      description: From what to what, as a category, for example "TypeScript service to Rust" or "Enzyme tests to React Testing Library". No names.
+      description: From what to what, as a category, for example "TypeScript service to Rust" or "Enzyme tests to React Testing Library". No names. For a lessons review of a project that is not a migration, write "none (not a migration)".
     validations:
       required: true
   - type: dropdown
@@ -52,13 +52,14 @@ body:
         - In progress
         - Finished
         - Stopped or abandoned
+        - Not a migration (lessons review)
     validations:
       required: true
   - type: textarea
     id: predicted
     attributes:
       label: What the review predicted
-      description: The go or no-go, the blockers and the main gaps, a few lines.
+      description: A few lines. For a migration, the go or no-go, the blockers and the main gaps; for a lessons review, the proposals applied and the check meant to prove each.
     validations:
       required: true
   - type: textarea

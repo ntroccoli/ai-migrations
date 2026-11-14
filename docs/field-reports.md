@@ -1,7 +1,7 @@
 # Field reports
 
 A field report says what the [checklist](../checklist.md) or the [lessons](../lessons/) predicted
-on a real project, and what actually happened. The cases tell what other teams saw; reports tell
+on a real project, migration or not, and what actually happened. The cases tell what other teams saw; reports tell
 whether that held on your project. They are the only way to learn which questions foresee real
 regressions and which miss them.
 
@@ -10,18 +10,22 @@ regressions and which miss them.
 - After a review, when you decided not to migrate, and why.
 - During or after the migration, above all when you hit a regression: did a question or a lesson
   foresee it, or did nothing?
-- At a revisit (README step 3), when the record in `docs/migration-review.md` shows an item that
-  was proven, or stopped holding.
+- After a lessons review on a project that is not a migration ([applying the
+  lessons](applying-lessons.md)): which lessons held once the changes were in use.
+- At a revisit (step 3 of either route in the README), when the record (`docs/migration-review.md`
+  or `docs/ai-lessons-review.md`) shows an item that was proven, or stopped holding.
 
 One report per review or revisit. Use the
 [Field report form](https://github.com/ntroccoli/ai-migrations/issues/new?template=field-report.yml).
 
 ## For the agent that drafts a report
 
-1. Read the project's record (`docs/migration-review.md`) and the review report. Use only what
+1. Read the [form](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/.github/ISSUE_TEMPLATE/field-report.yml) for its headings and
+   options. Read the project's record (`docs/migration-review.md` for a migration,
+   `docs/ai-lessons-review.md` for the lessons route) and the review report, if kept. Use only what
    they and the project's history show; do not invent numbers.
-2. Fill the form's fields: what was run, the IDs used, the move as a category, the size band, the
-   stage, what was predicted, what happened, which IDs foresaw a problem, which did not hold, and
+2. Fill the form's fields: what was run, the IDs used, the move as a category ("none (not a
+   migration)" on the lessons route), the size band, the stage, what was predicted, what happened, which IDs foresaw a problem, which did not hold, and
    what nothing foresaw.
 3. Remove everything listed under "Never include" below. Write numbers as counts, sizes or
    shares; name a file by its role ("the test runner config"), not its path.

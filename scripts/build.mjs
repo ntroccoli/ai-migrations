@@ -34,12 +34,14 @@ const orList = xs => joinList(xs, 'or');
 const byName = (a, b) => a.localeCompare(b);
 const uncovered = LANGUAGES.filter(x => !byLanguage.has(x)).sort(byName);
 const langMoves = cases.filter(c => c.meta.kind === 'language').map(c => c.meta.company).sort(byName);
+const outOf = [...byLanguage.keys()].filter(x => cases.some(c => c.meta.kind === 'language' && [c.meta.from_languages].flat().includes(x))).sort(byName);
 const unnamed = cases.filter(c => [c.meta.from_languages].flat().every(x => !x || x === 'unstated')).map(c => c.meta.company).sort(byName);
 const COVERED =
   [...byLanguage.keys()].sort(byName).map(x => `${x} (${[...new Set(byLanguage.get(x))].sort(byName).join(', ')})`).join(', ') +
   '. Each case line below gives the move itself (from, to).' +
   ` Only ${joinList(langMoves, 'and')} changed the code's language; the others kept it (a framework, test, data, build or ` +
   'structure move).' +
+  (outOf.length ? ` The language-changing cases that name a language move code out of ${joinList(outOf, 'and')} only; for the other languages listed they show moves that kept the language.` : '') +
   (unnamed.length ? ` Language not named: ${unnamed.join(', ')}.` : '') +
   (uncovered.length ? ` No case names ${orList(uncovered)} as the language it started from: lessons applied there are extrapolation.` : '');
 
@@ -74,13 +76,20 @@ const count = lessons => {
 const prefixOf = p => p.lessons[0]?.id.split('-')[0] ?? '';
 const all = pages.flatMap(p => p.lessons);
 const LEGEND = LESSON_LEGEND;
-// Who wrote the text, and which cases involve the maker of the model that wrote it.
-const claude = cases.filter(c => [c.meta.models].flat().some(m => /\b(Claude|Opus|Sonnet|Haiku)\b/.test(m)));
-const noModels = cases.filter(c => [c.meta.models].flat().every(m => !m || m === 'unstated'));
+// Who wrote the text, and which cases involve the maker of the model that wrote it: a Claude model
+// named in `models`, or Claude Code in `tools` (it runs Claude models); and which of those also
+// used other vendors' models.
+const isClaude = m => /\b(Claude|Opus|Sonnet|Haiku|Fable|Mythos)\b/.test(m);
+const named = c => [c.meta.models].flat().filter(m => m && m !== 'unstated');
+const claude = cases.filter(c => named(c).some(isClaude) || [c.meta.tools].flat().some(t => /\bClaude Code\b/.test(t || '')));
+const noModels = cases.filter(c => !claude.includes(c) && !named(c).length);
+const mixed = claude.filter(c => named(c).some(m => !isClaude(m))).map(c => c.meta.company).sort(byName);
 const DISCLOSURE = 'Disclosure: the cases and lessons are drafted by Claude, an Anthropic model, and reviewed by the ' +
-  `maintainer. ${noModels.length ? 'At least ' : ''}${claude.length} of the ${cases.length} cases used Claude models (${claude.map(c => c.meta.company).join(', ')}` +
-  `${noModels.length ? `; ${noModels.length} cases leave the models unstated` : ''}), ` +
-  'and Anthropic owns Bun, the subject of one case.';
+  `maintainer. ${noModels.length ? 'At least ' : ''}${claude.length} of the ${cases.length} cases used Claude models or Claude Code (${claude.map(c => c.meta.company).join(', ')}` +
+  `${noModels.length ? `; ${noModels.length} others leave the models unstated` : ''}), ` +
+  'and Anthropic owns Bun, the subject of one case.' +
+  (mixed.length ? ` ${joinList(mixed, 'and')} also used other vendors' models; where a source compares outcomes by model, ` +
+    'that is its author\'s own unaudited report, and no lesson ranks vendors.' : '');
 
 // The case files a lesson cites, in "Cases" or "Against", with the lesson IDs.
 const caseFileOf = target => target?.match(/(?:^|\/)cases\/([^#/\s]+\.md)/)?.[1];
@@ -208,14 +217,15 @@ out['llms.txt'] = [
   '## How to use', '',
   `- Before a migration or a large restructuring: run the [checklist](${RAW_BASE}/checklist.md) on the repository and change nothing. Each ` +
     'question has a Check to measure and cites lesson IDs; open only the lessons and cases behind a gap.',
-  '- For any other large piece of AI-driven work: scan the one-line list of every lesson at the end of ' +
-    `[lessons/index.md](${RAW_BASE}/lessons/index.md) (about ${indexKB} KB), then open the aspect pages of the lessons ` +
-    'that fit (each lesson there has its cases, the evidence against it, and its oracle and strength).',
+  '- For any other large piece of AI-driven work, not a migration (README "Learning from the lessons"): follow ' +
+    `[docs/applying-lessons.md](${RAW_BASE}/docs/applying-lessons.md). It starts from the one-line list of every lesson at the end of ` +
+    `[lessons/index.md](${RAW_BASE}/lessons/index.md) (about ${indexKB} KB), where each line shows its oracle tag and strength, ` +
+    'then opens the aspect pages of the lessons that fit (each lesson there has its cases, the evidence against it, and its oracle and strength).',
   `- Open a case only when you need its detail. Each has "Who did what", "How it was checked", a Numbers table with ` +
     `the basis of each number, "What went wrong" and "Practices to copy". File format: [AGENTS.md](${RAW_BASE}/AGENTS.md).`,
   `- After a review, a migration or a revisit: tell what the checklist or the lessons foresaw and what they missed, ` +
     `in a field report ([how](${RAW_BASE}/docs/field-reports.md)); show the user the exact text before posting.`,
-  `- Relative links inside these files resolve against ${RAW_BASE}/.`, '',
+  `- Relative links inside these files resolve against the raw URL of the file that holds them (under ${RAW_BASE}/).`, '',
   '## Lessons', '',
   ...pages.map(p => {
     const c = count(p.lessons);

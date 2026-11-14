@@ -9,7 +9,7 @@ import { ROOT } from './lib.mjs';
 
 const TMP = join(ROOT, '.test-tmp');
 const PARTS = ['scripts', 'cases', 'lessons', 'checklist.md', 'pitfalls.md', 'NOTICE.md', 'index.md', 'llms.txt', 'llms-full.txt',
-  'README.md', 'CONTRIBUTING.md', 'LICENSE-CONTENT.md', '.github', 'lychee.toml'];
+  'README.md', 'CONTRIBUTING.md', 'docs', 'LICENSE-CONTENT.md', '.github', 'lychee.toml'];
 const ONEPW = '2026-04-20-1password-monolith-refactor.md';
 const INTEL = '2026-08-24-intel-ideas-c-to-rust.md';
 const BUN = '2026-07-08-bun-zig-to-rust.md';
