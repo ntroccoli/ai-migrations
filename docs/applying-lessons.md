@@ -41,6 +41,11 @@ prompts.
 
 Work measured: <what agents do here: sessions, tasks, reviews, tests, releases>.
 
+## Limits of this run
+- Session: fresh | not fresh (<why; a session that ran the work is partly judging itself>).
+- Figures: measured from the repository now, or recorded (taken from notes or logs, not re-measured); mark each "recorded" figure below.
+- Models: <the models this project uses>; any newer than every case, or with no row in "By model", makes its model-dependent lessons things to re-check, not evidence.
+
 ## Not run
 - <lesson ID>: `<exact command>` — <why it was not run>.
 
@@ -76,11 +81,14 @@ Log entry: <date and title of the newest log.md entry this review covered>.
 ```
 
 Baseline: written before any change, how often the proposal's problem happened so far, with the
-evidence (a count from the history, logs or incidents); a revisit compares the work since with it.
+evidence (a count from the history, logs or incidents), marked "(recorded)" when it comes from notes
+rather than a fresh count; a revisit compares the work since with it.
 
 Status uses the checklist's words: open, proven, waiting for first use, stopped holding,
 skipped. A proposal marked "later" is open; one the owner declined is skipped; an applied change
-whose check failed stays open, and its event names the failed check. An applied change whose check passed is waiting for first use until an event in later work
+whose check failed stays open, and its event names the failed check. A "do" that waits on an owner
+answer, or on work outside this session, stays open, and its event says what it waits on. An
+applied change whose check passed is waiting for first use until an event in later work
 shows it held; then it is proven.
 
 ## Afterwards
