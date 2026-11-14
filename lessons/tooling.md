@@ -29,7 +29,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Related view (karpathy-ideas): [plan for intelligence brownouts][k-plan-for-intelligence-brownouts], agrees.
 - **TOL-6** [stated] Set up linters, formatters, type checks and coding instructions before the first change, and run them inside the agent's loop, not only in CI.
   - Old system as oracle: no. Depends on model ability: partly. Strength: strong. Era: 2024–2026; newest: Claude Opus 5.x.
-  - Cases: [GitHub: what worked][gh-worked], [Spotify: practices to copy][spo-practices], [Airbnb: what worked][air-worked], [Slack: what worked][slk-worked].
+  - Cases: [GitHub: what worked][gh-worked], [Spotify: practices to copy][spo-practices], [Airbnb: what worked][air-worked], [Slack: what worked][slk-worked], [Temporal: what went wrong][tmp-wrong].
   - Against: At Shopify, with guidance, linting, tests and static analysis in place, generated code could still repeat logic or drift from the architecture, so native experts stayed essential ([Shopify][shp-wrong]).
   - Related view (karpathy-ideas): [agents ignore code style rules][k-agents-ignore-code-style-rules], agrees.
 - **TOL-7** [stated] Before choosing a model for a mechanical framework move, try deterministic rewrites on a typed syntax tree; at very large scale they were judged more practical.
@@ -68,6 +68,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [spo-numbers]: ../cases/2025-11-06-spotify-honk.md#numbers
 [spo-practices]: ../cases/2025-11-06-spotify-honk.md#practices-to-copy
 [spo-worked]: ../cases/2025-11-06-spotify-honk.md#what-worked
+[tmp-wrong]: ../cases/2026-09-02-temporal-billing-store-clickhouse.md#what-went-wrong
 [ubr-who]: ../cases/2026-04-07-uber-junit4-to-junit5.md#who-did-what
 [ubr-worked]: ../cases/2026-04-07-uber-junit4-to-junit5.md#what-worked
 [ubr-wrong]: ../cases/2026-04-07-uber-junit4-to-junit5.md#what-went-wrong

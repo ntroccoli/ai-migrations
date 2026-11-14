@@ -3,6 +3,76 @@
 Each update of the collection: when it ran, the sources it covered, and what changed. Newest
 first.
 
+## 2026-11-14 — third update
+
+- **Covered:** eight cases from engineering posts published between 2025-08 and 2026-09: a
+  personal blog moved from Gatsby to Next.js after a failed first run (Robert Marshall); Ladybird's
+  JavaScript front end ported from C++ to Rust, checked against the C++ pipeline in lockstep;
+  PagerDuty's Rundeck moved to Grails 7 by a product manager with an agent, engineers finishing;
+  Datadog's routing store moved from FoundationDB to PostgreSQL after a schema redesign; Mindstone's
+  86 Go services rewritten as one TypeScript service by agents under an assert-everything harness;
+  GitLab's rate limiter moved into a shared gem (a seller's account); Checkly's Node.js worker
+  rewritten in Go overnight, then fixed for production's queue layout; Temporal's billing reads
+  moved to ClickHouse behind a shadow comparison. One field report was open (relation to the
+  collection unstated, not a migration); it is not independent evidence and changed nothing here.
+- **Mix:** three language moves, two framework moves, two data-store moves and one
+  restructuring; one author sells a tool the case used (GitLab). Two sources are kept as notes
+  only under their sites' terms (Mindstone, GitLab), so those cases have no quote.
+- **Added:** the eight case files; 11 new lessons; in `pitfalls.md`, a section for data-store
+  moves (access patterns kept on a new engine, sums that overflow at real volumes) and an
+  equality item under library upgrades.
+- **Rules:** new units (service, target, queue, key, cohort and others) and Groovy among the
+  languages; a number after "day" or "week" is a label; `lessons/index.md` is capped at 12 KB
+  (12,288 bytes), so model families with the same lessons share a row in "By model" and "Where
+  the cases disagree" lists IDs per page; "Codex 5.3" is its own family (OpenAI Codex 5.x).
+
+### Checklist and lessons impact
+
+- **Checklist:** no question added, merged or dropped. New evidence reached questions 2
+  (Ladybird's lockstep run and its edited expected outputs, Checkly's harness that passed while
+  production retries failed; TST-13, TST-14, TST-15), 6 (PLN-13), 7 (PagerDuty's equality
+  change), 8 (CTX-12, CTX-13), 9 (KNW-5), 10 (TEM-6) and 11 (Temporal's compare-then-cut-over
+  order, GitLab's light-traffic shadow run; ROL-10, ROL-11, OPS-8). Questions 3 and 8 were
+  trimmed in wording; the case list at the top keeps the names and points to the index for each
+  move. The file grew from 20,051 to 20,331 bytes, under its 20,480-byte cap. No field report was
+  behind any change.
+- **New lessons:** PLN-13, TST-13, TST-14, TST-15, ROL-10, ROL-11, OPS-8, TEM-6, CTX-12, CTX-13, KNW-5.
+  Two merges: GitLab's shadow-mode lesson and Temporal's "aim the comparison at the largest
+  inputs" became ROL-10; Mindstone's and GitLab's notes on the people's cost of agent work became
+  TEM-6.
+- **Changed lessons:** PLN-5, PLN-6, PLN-7, PLN-9, PLN-11, PLN-12, TST-1, TST-2, TST-5, TST-7,
+  TST-9, TST-12, VER-1, VER-7, REV-1, REV-3, REV-5, REV-9, REV-10, REV-11, ROL-1, ROL-2, ROL-3,
+  OPS-3, CST-2, TEM-1, TEM-2, TOL-6, CTX-1, CTX-4, CTX-5, CTX-10, AGF-5, AGF-6, AGF-9, OVS-1,
+  OVS-3, KNW-1, KNW-4, MSR-1, MSR-9. Strength raised: TST-1 to strong (seven cases); PLN-12,
+  TST-7, TST-12, CTX-5, REV-11 and KNW-4 to medium. Reworded: REV-3 (equality), TST-7 (numeric
+  types and sums, not only widening), TST-12 (query answers). The sceptic pass changed oracle
+  tags on TST-14 and ROL-11 (partly to no) and REV-10 (yes to no), the model tag on TST-5 (no to
+  partly), corrected OVS-1 (Ladybird's pull request was approved by another contributor) and
+  REV-1 (no engineer passed GitLab's failing change), and kept CTX-10 and PLN-13 weak. OVS-1,
+  KNW-4 and TST-1 now carry the cases where the suite or its owner moved with the port: OVS-1
+  and KNW-4 open with "Disagree:" (Mindstone's script-guarded tests, PagerDuty's growing notes
+  file). "None found" lines went from 53 to 61 (plain ones from 34 to 32), mostly the new
+  lessons' stated limits; "Disagree:" lines from 19 to 21.
+- **Re-checks:** TOL-2 and AGF-8 stay marked "may be outdated": no new case shows a codemod
+  feeding a model or a language the model handled poorly. New model families (OpenAI Codex
+  5.x, and Claude Opus and Fable with no version) come from Mindstone and Checkly, whose
+  citations show the same behaviour (gamed tests in AGF-5 and TST-14, a harness built to what the
+  tests show in TST-15).
+- **By case:**
+  - Gatsby: question 6; lessons PLN-13 (new), PLN-5, PLN-9, CTX-4, AGF-6.
+  - Ladybird: question 2; lessons TST-13 (new), PLN-5, PLN-11, TST-1, TST-9, REV-1,
+    REV-10, TEM-1, ROL-1, OVS-1.
+  - PagerDuty: question 7; lessons KNW-4, TEM-1, VER-1, REV-3, AGF-9, TEM-2, MSR-1, CST-2, KNW-1.
+  - Datadog: questions 6, 7 and 8; lessons PLN-13, CTX-12 (new), PLN-5, TST-1, TST-12, CTX-5,
+    CTX-1, REV-11, KNW-4.
+  - Mindstone: questions 2 and 10; lessons TST-14, TEM-6 (new), ROL-1, OVS-1, TST-5, TST-1,
+    TST-13, PLN-5, AGF-5, AGF-9, KNW-1, REV-1, OPS-3, CTX-4, MSR-1, PLN-12.
+  - GitLab: questions 10 and 11; lessons ROL-10, OPS-8, TEM-6 (new), REV-1, ROL-2, REV-9,
+    VER-7, CTX-4, OVS-3, ROL-3, REV-5.
+  - Checkly: question 2; lessons TST-15 (new), TST-1, PLN-5, TST-5, TST-2, TST-13, ROL-2, KNW-1.
+  - Temporal: questions 7, 8, 9 and 11; lessons ROL-10, ROL-11, CTX-13, KNW-5 (new), KNW-4, PLN-7,
+    CTX-10, TST-7, TST-12, PLN-6, TOL-6, MSR-9.
+
 ## 2026-11-14 — second update
 
 - **Covered:** three cases from sources published between 2026-01 and 2026-10: Pokémon Showdown

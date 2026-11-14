@@ -8,16 +8,16 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 
 - **REV-1** [stated] Never let the writing agent review its own change; use two or more reviewers in fresh contexts that see only the diff and are told to find faults.
   - Old system as oracle: partly. Depends on model ability: partly. Strength: medium. Era: 2026; newest: Claude Opus 5.x.
-  - Cases: [Bun: how it was checked][bun-checked], [Bun: what worked][bun-worked], [GitHub: practices to copy][gh-practices].
-  - Against: No source measures how much these reviewers miss; an outside critic calls the Bun merge unreviewed ([Bun][bun-wrong]).
+  - Cases: [Bun: how it was checked][bun-checked], [Bun: what worked][bun-worked], [GitHub: practices to copy][gh-practices], [Ladybird: who did what][lb-who], [Mindstone: how it was checked][mnd-checked].
+  - Against: No source measures how much these reviewers miss; an outside critic calls the Bun merge unreviewed ([Bun][bun-wrong]). At GitLab a change passed an adversarial review agent and Duo Code Review, then broke requests for some users ([GitLab][glb-wrong]).
   - Related view (karpathy-ideas): [llm council anonymous peer review][k-llm-council-anonymous-peer-review], agrees.
 - **REV-2** [stated] Split the review: agents and tests do the exhaustive old-against-new comparison; people spend their attention on architecture, contracts and flagged risk.
   - Old system as oracle: partly. Depends on model ability: partly. Strength: medium. Era: 2026; newest: Claude Opus 5.x.
   - Cases: [GitHub: who did what][gh-who], [Bun: how it was checked][bun-checked].
   - Against: Disagree: at Slack and Google a person checked every change before merge ([Slack][slk-who]) ([Google][goo-checked]), and Shopify puts a person's approval on every checkpoint ([Shopify][shp-checked]); in Bun no person read every line. Zalando had a person review every change, and one wrong data change still got through ([Zalando][zal-wrong]). In ts-rust the author says he read none of the code, and no other reviewer is named ([ts-rust][tsr-who]).
-- **REV-3** [ours] Give reviewers a written list of constructs that read the same in old and new code but behave differently: assertions, eager defaults, falsy checks, number types, built-in validators.
+- **REV-3** [ours] Give reviewers a written list of constructs that read the same in old and new code but behave differently: assertions, eager defaults, falsy checks, number types, built-in validators, equality.
   - Old system as oracle: yes. Depends on model ability: partly. Strength: medium. Era: 2026; newest: Claude Opus 5.x.
-  - Cases: [Bun: what went wrong][bun-wrong], [GitHub: what went wrong][gh-wrong], [Spartacus: what went wrong][spa-wrong].
+  - Cases: [Bun: what went wrong][bun-wrong], [GitHub: what went wrong][gh-wrong], [Spartacus: what went wrong][spa-wrong], [PagerDuty: what went wrong][pgd-wrong].
   - Against: None found; the Spartacus post does not say what its reviewer was told to look for ([Spartacus][spa-wrong]).
 - **REV-4** [stated] Add an automatic scope check that compares each diff with its instruction; agents drift into refactors, switched-off tests and side fixes.
   - Old system as oracle: no. Depends on model ability: partly. Strength: medium. Era: 2025–2026; newest: Claude (version unstated).
@@ -26,7 +26,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Related view (karpathy-ideas): [models too agentic state stakes and scope][k-models-too-agentic-state-stakes-and-scope], agrees.
 - **REV-5** [ours] Treat LLM reviewers and judges as unmeasured until you know their miss rate; veto counts and showcase catches say nothing about what got through.
   - Old system as oracle: partly. Depends on model ability: no. Strength: medium. Era: 2025–2026; newest: Claude Fable 5.x.
-  - Cases: [Spotify: what went wrong][spo-wrong], [Bun: how it was checked][bun-checked], [Spartacus: what went wrong][spa-wrong].
+  - Cases: [Spotify: what went wrong][spo-wrong], [Bun: how it was checked][bun-checked], [Spartacus: what went wrong][spa-wrong], [GitLab: what went wrong][glb-wrong].
   - Against: GitHub turned its session logs into evaluations, a start on measuring ([GitHub][gh-worked]).
 - **REV-6** [stated] Have the tool leave an inline note with a guide link at each spot it deliberately left for a person, so reviewers find the judgement calls fast.
   - Old system as oracle: no. Depends on model ability: no. Strength: medium. Era: 2024–2026; newest: Claude (version unstated).
@@ -42,16 +42,16 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: None found.
 - **REV-9** [stated] Once agents write fast, review, testing and deploy by the owning teams become the bottleneck; plan for that load from the start: reviewer capacity, evidence that eases review, priority.
   - Old system as oracle: no. Depends on model ability: partly. Strength: strong. Era: 2025–2026; newest: Claude Opus 4.x.
-  - Cases: [GitHub: what went wrong][gh-wrong], [Google: who did what][goo-who], [Spotify: how it was checked][spo-checked], [Bloomberg: what went wrong][bbg-wrong].
+  - Cases: [GitHub: what went wrong][gh-wrong], [Google: who did what][goo-who], [Spotify: how it was checked][spo-checked], [Bloomberg: what went wrong][bbg-wrong], [GitLab: what went wrong][glb-wrong].
   - Against: At Bloomberg reviewer time was not the whole limit: the moves were low priority and owners carried the deploy risk, so most PRs got no decision; its authors look to more checks inside the pipeline and to runs that owners request ([Bloomberg][bbg-wrong]). At Asana, whose engineers reviewed their own agents' pull requests twice a day, slow lint and CI held the work up, not approval ([Asana][asa-wrong]).
   - Related view (karpathy-ideas): [verification not generation is the bottleneck][k-verification-not-generation-is-the-bottleneck], agrees.
 - **REV-10** [ours] Grade a small sample of converted code against hand-converted versions with a rubric; pass rates say nothing about readability or idiom.
-  - Old system as oracle: yes. Depends on model ability: no. Strength: weak. Era: 2024; newest: Claude 2.x.
-  - Cases: [Slack: how it was checked][slk-checked].
+  - Old system as oracle: no. Depends on model ability: no. Strength: weak. Era: 2024–2026; newest: Claude 2.x.
+  - Cases: [Slack: how it was checked][slk-checked], [Ladybird: what went wrong][lb-wrong].
   - Against: Airbnb reports intent and coverage kept, with no quality grading ([Airbnb][air-checked]).
 - **REV-11** [stated] Code that meets the feature requirements can still duplicate logic, drift from the architecture or run slowly; keep reviewers who know the target platform.
-  - Old system as oracle: no. Depends on model ability: partly. Strength: weak. Era: 2025–2026; newest: unstated.
-  - Cases: [Shopify: what went wrong][shp-wrong], [Pokémon: what went wrong][vjx-wrong].
+  - Old system as oracle: no. Depends on model ability: partly. Strength: medium. Era: 2025–2026; newest: Claude (version unstated).
+  - Cases: [Shopify: what went wrong][shp-wrong], [Pokémon: what went wrong][vjx-wrong], [Datadog: what went wrong][ddg-wrong].
   - Against: Disagree: in the Pokémon port an engineer who had never written Rust spotted the hard-coded behaviour; only the speed work needed Rust expertise ([Pokémon][vjx-wrong]).
 
 [air-checked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#how-it-was-checked
@@ -60,14 +60,20 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [bun-checked]: ../cases/2026-07-08-bun-zig-to-rust.md#how-it-was-checked
 [bun-worked]: ../cases/2026-07-08-bun-zig-to-rust.md#what-worked
 [bun-wrong]: ../cases/2026-07-08-bun-zig-to-rust.md#what-went-wrong
+[ddg-wrong]: ../cases/2026-06-23-datadog-foundationdb-to-postgres.md#what-went-wrong
 [gh-practices]: ../cases/2026-09-16-github-copilot-runtime-rust.md#practices-to-copy
 [gh-who]: ../cases/2026-09-16-github-copilot-runtime-rust.md#who-did-what
 [gh-worked]: ../cases/2026-09-16-github-copilot-runtime-rust.md#what-worked
 [gh-wrong]: ../cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong
+[glb-wrong]: ../cases/2026-07-08-gitlab-rate-limiting.md#what-went-wrong
 [goo-checked]: ../cases/2025-04-13-google-int64-ids.md#how-it-was-checked
 [goo-who]: ../cases/2025-04-13-google-int64-ids.md#who-did-what
 [goo-worked]: ../cases/2025-04-13-google-int64-ids.md#what-worked
 [goo-wrong]: ../cases/2025-04-13-google-int64-ids.md#what-went-wrong
+[lb-who]: ../cases/2026-02-23-ladybird-libjs-rust.md#who-did-what
+[lb-wrong]: ../cases/2026-02-23-ladybird-libjs-rust.md#what-went-wrong
+[mnd-checked]: ../cases/2026-07-06-mindstone-go-to-typescript.md#how-it-was-checked
+[pgd-wrong]: ../cases/2026-04-13-pagerduty-rundeck-grails-7.md#what-went-wrong
 [shp-checked]: ../cases/2026-09-10-shopify-react-native-to-native.md#how-it-was-checked
 [shp-wrong]: ../cases/2026-09-10-shopify-react-native-to-native.md#what-went-wrong
 [slk-checked]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#how-it-was-checked

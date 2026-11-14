@@ -8,7 +8,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 
 - **VER-1** [stated] A clean compile or a green CI run shows the parts fit together, not that behaviour survived; plan a behavioural check after it.
   - Old system as oracle: partly. Depends on model ability: no. Strength: strong. Era: 2024–2026; newest: Claude Opus 4.x.
-  - Cases: [GitHub: what went wrong][gh-wrong], [Intel: what went wrong][int-wrong], [Spotify: what went wrong][spo-wrong], [Zalando: what went wrong][zal-wrong], [Bloomberg: what went wrong][bbg-wrong], [Pokémon: what went wrong][vjx-wrong], [Spartacus: how it was checked][spa-checked].
+  - Cases: [GitHub: what went wrong][gh-wrong], [Intel: what went wrong][int-wrong], [Spotify: what went wrong][spo-wrong], [Zalando: what went wrong][zal-wrong], [Bloomberg: what went wrong][bbg-wrong], [Pokémon: what went wrong][vjx-wrong], [Spartacus: how it was checked][spa-checked], [PagerDuty: what went wrong][pgd-wrong].
   - Against: In a memory-safe target, one class of memory bugs does become a compile error ([Bun][bun-checked]), so the compiler is a real but narrow check; Bloomberg calls a clean compile a strong sign of a right change when only build files move, though it still ran the unit tests after the build ([Bloomberg][bbg-worked]).
 - **VER-2** [stated] Order gates from cheap to costly and drop a candidate at its first failure, with cheap no-change checks (whitespace only, unchanged syntax tree) up front.
   - Old system as oracle: partly. Depends on model ability: no. Strength: medium. Era: 2025–2026; newest: Gemini (internal).
@@ -31,8 +31,8 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Intel: what worked][int-worked], [GitHub: what went wrong][gh-wrong].
   - Against: At GitHub the agent silenced the schema check with its waiver label and only human review caught it ([GitHub][gh-wrong]); a contract check needs its bypass behind approval.
 - **VER-7** [stated] Define done as an empty list of change sites produced by deterministic tooling and rerun on a schedule, never as the agent's own report.
-  - Old system as oracle: partly. Depends on model ability: partly. Strength: medium. Era: 2025–2026; newest: Claude Sonnet 4.x.
-  - Cases: [Google: what worked][goo-worked], [1Password: what worked][opw-worked], [Pokémon: what worked][vjx-worked], [Spartacus: what went wrong][spa-wrong].
+  - Old system as oracle: partly. Depends on model ability: partly. Strength: medium. Era: 2025–2026; newest: Claude (version unstated).
+  - Cases: [Google: what worked][goo-worked], [1Password: what worked][opw-worked], [Pokémon: what worked][vjx-worked], [Spartacus: what went wrong][spa-wrong], [GitLab: what went wrong][glb-wrong].
   - Against: Google's reference search stops after a set number of hops and can miss sites ([Google][goo-wrong]); the Pokémon port's list came from markers the agent itself wrote, so it misses stubs it left unmarked ([Pokémon][vjx-worked]).
 - **VER-8** [stated] Rank failures by cost: no change is cheap, a red change costs an engineer, a green but wrong change costs trust; aim verification at the last kind.
   - Old system as oracle: no. Depends on model ability: no. Strength: medium. Era: 2024–2026; newest: Claude Opus 4.x.
@@ -61,6 +61,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [gh-checked]: ../cases/2026-09-16-github-copilot-runtime-rust.md#how-it-was-checked
 [gh-numbers]: ../cases/2026-09-16-github-copilot-runtime-rust.md#numbers
 [gh-wrong]: ../cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong
+[glb-wrong]: ../cases/2026-07-08-gitlab-rate-limiting.md#what-went-wrong
 [goo-checked]: ../cases/2025-04-13-google-int64-ids.md#how-it-was-checked
 [goo-who]: ../cases/2025-04-13-google-int64-ids.md#who-did-what
 [goo-worked]: ../cases/2025-04-13-google-int64-ids.md#what-worked
@@ -69,6 +70,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [int-worked]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#what-worked
 [int-wrong]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#what-went-wrong
 [opw-worked]: ../cases/2026-04-20-1password-monolith-refactor.md#what-worked
+[pgd-wrong]: ../cases/2026-04-13-pagerduty-rundeck-grails-7.md#what-went-wrong
 [shp-checked]: ../cases/2026-09-10-shopify-react-native-to-native.md#how-it-was-checked
 [slk-worked]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#what-worked
 [slk-wrong]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#what-went-wrong

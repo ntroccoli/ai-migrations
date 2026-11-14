@@ -9,14 +9,14 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **OVS-1** [stated] The agent that changes the code must not change what counts as correct: edits to tests, snapshots, baselines and waiver labels need a separate owner's approval.
   - Old system as oracle: partly. Depends on model ability: partly. Strength: medium. Era: 2025–2026; newest: Claude Opus 5.x.
   - Cases: [GitHub: practices to copy][gh-practices], [GitHub: what went wrong][gh-wrong], [Spotify: what went wrong][spo-wrong], [Bun: how it was checked][bun-checked], [Intel: what went wrong][int-wrong], [Pokémon: what went wrong][vjx-wrong].
-  - Against: None found.
+  - Against: Disagree: Mindstone had agents write and edit the tests before the port, with audit scripts, a no-go default and automatic rollback of test edits that broke the suite in place of an owner's approval; people stepped in when a close read found the first suite hollow ([Mindstone][mnd-who], [rollback][mnd-wrong]). Ladybird's pull request edited 42 expected-output files beside the port, all in the author's commits, and another contributor approved it without comment ([Ladybird][lb-wrong], [review][lb-who]).
 - **OVS-2** [stated] Keep the final merge with a person who checks how the agent answered CI and review, not only the diff.
   - Old system as oracle: no. Depends on model ability: partly. Strength: strong. Era: 2024–2026; newest: Claude Opus 5.x.
   - Cases: [GitHub: how it was checked][gh-checked], [Google: how it was checked][goo-checked], [Slack: who did what][slk-who].
   - Against: Disagree: in Bun no person read every line; the engineer checked the reviewers instead ([Bun][bun-checked]), and an outside critic calls it unreviewed. ts-rust shipped releases whose author says he read none of the code, names no other reviewer, and gates each revision by comparison with the original's output ([ts-rust][tsr-checked]).
 - **OVS-3** [stated] Decide up front where automation stops (a retry cap, a residue size, a category for people) and hand over with the failed attempt as the starting point.
   - Old system as oracle: no. Depends on model ability: no. Strength: strong. Era: 2024–2026; newest: Claude Opus 4.x.
-  - Cases: [Airbnb: what worked][air-worked], [Airbnb: practices to copy][air-practices], [1Password: practices to copy][opw-practices], [Google: who did what][goo-who], [Bloomberg: who did what][bbg-who], [Bloomberg: what went wrong][bbg-wrong].
+  - Cases: [Airbnb: what worked][air-worked], [Airbnb: practices to copy][air-practices], [1Password: practices to copy][opw-practices], [Google: who did what][goo-who], [Bloomberg: who did what][bbg-who], [Bloomberg: what went wrong][bbg-wrong], [GitLab: how it was checked][glb-checked].
   - Against: Uber's stop rule was a revert to the old framework, not a hand-over to people ([Uber][ubr-wrong]).
 - **OVS-4** [stated] Bind each human approval to the exact text approved, such as a hash of the plan, so any later edit to the plan needs a fresh approval.
   - Old system as oracle: no. Depends on model ability: no. Strength: weak. Era: 2025–2026; newest: unstated.
@@ -35,9 +35,14 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [gh-checked]: ../cases/2026-09-16-github-copilot-runtime-rust.md#how-it-was-checked
 [gh-practices]: ../cases/2026-09-16-github-copilot-runtime-rust.md#practices-to-copy
 [gh-wrong]: ../cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong
+[glb-checked]: ../cases/2026-07-08-gitlab-rate-limiting.md#how-it-was-checked
 [goo-checked]: ../cases/2025-04-13-google-int64-ids.md#how-it-was-checked
 [goo-who]: ../cases/2025-04-13-google-int64-ids.md#who-did-what
 [int-wrong]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#what-went-wrong
+[lb-who]: ../cases/2026-02-23-ladybird-libjs-rust.md#who-did-what
+[lb-wrong]: ../cases/2026-02-23-ladybird-libjs-rust.md#what-went-wrong
+[mnd-who]: ../cases/2026-07-06-mindstone-go-to-typescript.md#who-did-what
+[mnd-wrong]: ../cases/2026-07-06-mindstone-go-to-typescript.md#what-went-wrong
 [opw-practices]: ../cases/2026-04-20-1password-monolith-refactor.md#practices-to-copy
 [shp-checked]: ../cases/2026-09-10-shopify-react-native-to-native.md#how-it-was-checked
 [slk-who]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#who-did-what

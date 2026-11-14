@@ -12,23 +12,23 @@ The legend of the tags, the Era and the strength rule heads every aspect page.
 
 | Aspect | Prefix | Lessons | stated | ours | oracle yes | partly | no | model yes | partly | no |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [Planning and scoping](planning.md) | PLN | 12 | 10 | 2 | 1 | 2 | 9 | 1 | 5 | 6 |
-| [Testing and oracles](testing.md) | TST | 12 | 8 | 4 | 8 | 2 | 2 | 0 | 2 | 10 |
+| [Planning and scoping](planning.md) | PLN | 13 | 11 | 2 | 1 | 2 | 10 | 1 | 6 | 6 |
+| [Testing and oracles](testing.md) | TST | 15 | 11 | 4 | 9 | 3 | 3 | 0 | 5 | 10 |
 | [Verification loops and gates](verification.md) | VER | 11 | 11 | 0 | 1 | 8 | 2 | 0 | 4 | 7 |
-| [Code review](review.md) | REV | 11 | 8 | 3 | 2 | 5 | 4 | 0 | 7 | 4 |
-| [Release and rollout](rollout.md) | ROL | 9 | 8 | 1 | 1 | 2 | 6 | 0 | 1 | 8 |
-| [Machines and operations](operations.md) | OPS | 7 | 6 | 1 | 1 | 2 | 4 | 0 | 2 | 5 |
+| [Code review](review.md) | REV | 11 | 8 | 3 | 1 | 5 | 5 | 0 | 7 | 4 |
+| [Release and rollout](rollout.md) | ROL | 11 | 10 | 1 | 1 | 3 | 7 | 0 | 1 | 10 |
+| [Machines and operations](operations.md) | OPS | 8 | 7 | 1 | 1 | 2 | 5 | 0 | 2 | 6 |
 | [Security](security.md) | SEC | 10 | 7 | 3 | 0 | 3 | 7 | 0 | 6 | 4 |
 | [Cost](cost.md) | CST | 9 | 2 | 7 | 0 | 1 | 8 | 0 | 0 | 9 |
-| [Team and roles](team.md) | TEM | 5 | 5 | 0 | 0 | 0 | 5 | 0 | 2 | 3 |
+| [Team and roles](team.md) | TEM | 6 | 6 | 0 | 0 | 0 | 6 | 0 | 3 | 3 |
 | [Rule-based tools and AI](tooling.md) | TOL | 10 | 10 | 0 | 0 | 5 | 5 | 1 | 9 | 0 |
-| [Context and prompts](context.md) | CTX | 11 | 11 | 0 | 1 | 2 | 8 | 5 | 6 | 0 |
+| [Context and prompts](context.md) | CTX | 13 | 13 | 0 | 1 | 2 | 10 | 5 | 8 | 0 |
 | [Many agents at once](orchestration.md) | ORC | 6 | 6 | 0 | 0 | 2 | 4 | 0 | 5 | 1 |
 | [Agent failure modes](agent-failures.md) | AGF | 9 | 8 | 1 | 0 | 3 | 6 | 8 | 1 | 0 |
 | [Human oversight](oversight.md) | OVS | 5 | 5 | 0 | 0 | 1 | 4 | 0 | 3 | 2 |
-| [Knowledge capture](knowledge.md) | KNW | 4 | 4 | 0 | 0 | 1 | 3 | 0 | 1 | 3 |
+| [Knowledge capture](knowledge.md) | KNW | 5 | 5 | 0 | 0 | 1 | 4 | 0 | 2 | 3 |
 | [Measuring and reading results](measurement.md) | MSR | 10 | 4 | 6 | 0 | 3 | 7 | 0 | 1 | 9 |
-| **All** | | 141 | 113 | 28 | 15 | 42 | 84 | 15 | 55 | 71 |
+| **All** | | 152 | 124 | 28 | 15 | 44 | 93 | 15 | 63 | 74 |
 
 "Model" counts the "Depends on model ability" tag.
 
@@ -43,45 +43,41 @@ The legend of the tags, the Era and the strength rule heads every aspect page.
 
 With a specific or a new model: process lessons (model ability: no) apply as they are. Start with the lessons tagged yes or partly whose cases name your model or its family ("By model" in lessons/index.md); treat those from other models as things to re-check on yours, not tips. A model newer than every case (newest: 2026-11-03) has no evidence here yet. The lessons hold only what the cases show: no prompting advice.
 
-Families group the model names the cases give by maker, line and major version ("Claude Opus 4.6" and "Opus 4.8" are Claude Opus 4.x; "GPT-5.4" and "gpt-5.5" are GPT-5.x); a name with a line but no version, and an internal model, stay apart; unstated covers the cases that name no model. Lessons: those tagged yes or partly for model ability whose cited cases name a model of the family (a lesson's Era names only the newest). Newest case: the latest publication date among the cases that name it.
+Families group the model names the cases give by maker, line and major version ("Claude Opus 4.6" and "Opus 4.8" are Claude Opus 4.x; "GPT-5.4" and "gpt-5.5" are GPT-5.x); a name with a line but no version, and an internal model, stay apart; unstated covers the cases that name no model. Lessons: those tagged yes or partly for model ability whose cited cases name a model of the family (a lesson's Era names only the newest). Newest case: the latest publication date among the cases that name it. Families with the same newest case and lessons share a row.
 
 | Model family | Names in the cases | Newest case | Lessons (model ability yes or partly) |
 | --- | --- | --- | --- |
-| Claude Opus 4.x | Claude Opus 4.6; Claude Opus 4.8 | 2026-11-03 | 38: PLN-7, PLN-8, PLN-10, PLN-12, TST-10, VER-3, VER-10, REV-1, REV-2, REV-3, REV-8, REV-9, ROL-5, OPS-3, SEC-2, SEC-5, SEC-9, TEM-1, TOL-1, TOL-6, TOL-9, TOL-10, CTX-2, CTX-4, CTX-9, ORC-1, ORC-3, ORC-5, ORC-6, AGF-1, AGF-2, AGF-3, AGF-4, AGF-5, AGF-7, OVS-1, OVS-2, MSR-7 |
-| Claude Sonnet 4.x | Claude Sonnet 4.5; Claude Sonnet 4.6 | 2026-11-03 | 25: PLN-8, PLN-10, PLN-12, TST-10, VER-3, VER-7, VER-10, REV-3, REV-9, OPS-2, SEC-5, SEC-9, TOL-1, TOL-9, TOL-10, CTX-2, CTX-9, ORC-1, ORC-6, AGF-1, AGF-6, AGF-7, OVS-1, OVS-5, MSR-7 |
+| Claude Opus 4.x | Claude Opus 4.6; Claude Opus 4.8; Opus 4.6 | 2026-11-03 | 42: PLN-7, PLN-8, PLN-10, PLN-12, TST-5, TST-10, TST-14, VER-3, VER-10, REV-1, REV-2, REV-3, REV-8, REV-9, ROL-5, OPS-3, SEC-2, SEC-5, SEC-9, TEM-1, TEM-6, TOL-1, TOL-6, TOL-9, TOL-10, CTX-2, CTX-4, CTX-9, ORC-1, ORC-3, ORC-5, ORC-6, AGF-1, AGF-2, AGF-3, AGF-4, AGF-5, AGF-7, AGF-9, OVS-1, OVS-2, MSR-7 |
+| Claude Sonnet 4.x | Claude Sonnet 4.5; Claude Sonnet 4.6 | 2026-11-03 | 27: PLN-8, PLN-10, PLN-12, TST-5, TST-10, VER-3, VER-7, VER-10, REV-3, REV-9, OPS-2, SEC-5, SEC-9, TOL-1, TOL-9, TOL-10, CTX-2, CTX-9, ORC-1, ORC-6, AGF-1, AGF-6, AGF-7, AGF-9, OVS-1, OVS-5, MSR-7 |
 | Claude Opus 5.x | Opus 5.5; Claude Opus 5 | 2026-10-07 | 21: PLN-7, REV-1, REV-2, REV-3, REV-8, REV-9, ROL-5, OPS-3, SEC-2, TEM-1, TOL-6, CTX-4, ORC-1, ORC-3, ORC-5, AGF-2, AGF-3, AGF-4, AGF-5, OVS-1, OVS-2 |
-| GPT-5.x | GPT-5.6 Sol; gpt-5.5; GPT-5.5; GPT-5.4 | 2026-10-07 | 29: PLN-7, TST-10, REV-1, REV-2, REV-3, REV-8, REV-9, ROL-5, OPS-3, SEC-2, SEC-5, SEC-9, TEM-1, TOL-1, TOL-6, CTX-4, CTX-9, ORC-1, ORC-3, ORC-5, ORC-6, AGF-1, AGF-2, AGF-3, AGF-4, AGF-5, OVS-1, OVS-2, MSR-7 |
+| GPT-5.x | GPT-5.6 Sol; gpt-5.5; GPT-5.5; GPT-5.4; GPT-5.3; GPT-5.3 Codex | 2026-10-07 | 34: PLN-7, PLN-12, TST-5, TST-10, TST-14, REV-1, REV-2, REV-3, REV-8, REV-9, ROL-5, OPS-3, SEC-2, SEC-5, SEC-9, TEM-1, TEM-6, TOL-1, TOL-6, CTX-4, CTX-9, ORC-1, ORC-3, ORC-5, ORC-6, AGF-1, AGF-2, AGF-3, AGF-4, AGF-5, AGF-9, OVS-1, OVS-2, MSR-7 |
 | GPT-6.x | GPT 6 Astra | 2026-10-07 | 0: none |
-| Claude Haiku 4.x | Claude Haiku 4.5 | 2026-09-16 | 21: PLN-7, REV-1, REV-2, REV-3, REV-8, REV-9, ROL-5, OPS-3, SEC-2, TEM-1, TOL-6, CTX-4, ORC-1, ORC-3, ORC-5, AGF-2, AGF-3, AGF-4, AGF-5, OVS-1, OVS-2 |
-| Claude Sonnet (version unstated) | Claude Sonnet | 2026-09-16 | 21: PLN-7, REV-1, REV-2, REV-3, REV-8, REV-9, ROL-5, OPS-3, SEC-2, TEM-1, TOL-6, CTX-4, ORC-1, ORC-3, ORC-5, AGF-2, AGF-3, AGF-4, AGF-5, OVS-1, OVS-2 |
-| Gemini 3.x | Gemini 3.1 Pro | 2026-09-16 | 21: PLN-7, REV-1, REV-2, REV-3, REV-8, REV-9, ROL-5, OPS-3, SEC-2, TEM-1, TOL-6, CTX-4, ORC-1, ORC-3, ORC-5, AGF-2, AGF-3, AGF-4, AGF-5, OVS-1, OVS-2 |
-| Grok 4.x | Grok 4.6 | 2026-09-16 | 21: PLN-7, REV-1, REV-2, REV-3, REV-8, REV-9, ROL-5, OPS-3, SEC-2, TEM-1, TOL-6, CTX-4, ORC-1, ORC-3, ORC-5, AGF-2, AGF-3, AGF-4, AGF-5, OVS-1, OVS-2 |
-| Claude Mythos (version unstated) | Claude Mythos Preview | 2026-08-24 | 9: TST-10, SEC-5, SEC-9, TOL-1, CTX-9, ORC-6, AGF-1, OVS-1, MSR-7 |
+| Claude Haiku 4.x; Claude Sonnet (version unstated); Grok 4.x | Claude Haiku 4.5; Claude Sonnet; Grok 4.6 | 2026-09-16 | 21: PLN-7, REV-1, REV-2, REV-3, REV-8, REV-9, ROL-5, OPS-3, SEC-2, TEM-1, TOL-6, CTX-4, ORC-1, ORC-3, ORC-5, AGF-2, AGF-3, AGF-4, AGF-5, OVS-1, OVS-2 |
+| Gemini 3.x | Gemini 3.1 Pro; Gemini 3.1 | 2026-09-16 | 26: PLN-7, PLN-12, TST-5, TST-14, REV-1, REV-2, REV-3, REV-8, REV-9, ROL-5, OPS-3, SEC-2, TEM-1, TEM-6, TOL-6, CTX-4, ORC-1, ORC-3, ORC-5, AGF-2, AGF-3, AGF-4, AGF-5, AGF-9, OVS-1, OVS-2 |
+| Claude Fable (version unstated); Claude Opus (version unstated) | Fable; Opus | 2026-09-01 | 2: TST-5, TST-15 |
+| Claude Mythos (version unstated) | Claude Mythos Preview | 2026-08-24 | 10: TST-5, TST-10, SEC-5, SEC-9, TOL-1, CTX-9, ORC-6, AGF-1, OVS-1, MSR-7 |
+| Claude (version unstated) | Claude; Claude via Claude Code (version unstated) | 2026-07-08 | 31: PLN-6, PLN-8, PLN-13, VER-3, VER-4, VER-7, REV-4, REV-9, REV-11, SEC-1, SEC-2, SEC-3, TEM-3, TEM-6, TOL-4, TOL-5, TOL-6, CTX-1, CTX-3, CTX-4, CTX-5, CTX-6, CTX-7, CTX-8, CTX-12, AGF-2, AGF-4, AGF-5, AGF-7, OVS-1, KNW-4 |
 | Claude Fable 5.x | Claude Fable 5 (pre-release version) | 2026-07-08 | 16: PLN-7, REV-1, REV-2, REV-3, REV-8, OPS-2, OPS-3, SEC-2, SEC-3, TEM-1, TOL-1, ORC-1, ORC-2, AGF-1, OVS-1, MSR-7 |
-| Claude (version unstated) | Claude via Claude Code (version unstated) | 2025-11-06 | 25: PLN-6, PLN-8, VER-3, VER-4, REV-4, REV-9, SEC-1, SEC-2, SEC-3, TEM-3, TOL-4, TOL-5, TOL-6, CTX-1, CTX-3, CTX-4, CTX-5, CTX-6, CTX-7, CTX-8, AGF-2, AGF-4, AGF-5, AGF-7, OVS-1 |
+| OpenAI Codex 5.x | Codex 5.3 | 2026-07-06 | 9: PLN-12, TST-5, TST-14, REV-1, OPS-3, TEM-6, CTX-4, AGF-5, AGF-9 |
 | Gemini (internal) | internal version of Gemini fine-tuned with the DIDACT framework | 2025-04-13 | 14: PLN-8, VER-3, VER-7, REV-4, REV-9, TOL-2, TOL-3, TOL-4, TOL-5, AGF-4, AGF-7, AGF-8, OVS-2, MSR-7 |
 | GPT-4o | GPT-4o | 2025-02-20 | 11: PLN-6, TST-11, TOL-4, CTX-1, CTX-2, CTX-3, CTX-4, CTX-5, AGF-2, AGF-4, AGF-7 |
-| Claude 2.x | Claude 2.1 | 2024-05-22 | 8: TEM-3, TOL-2, TOL-4, TOL-6, CTX-1, CTX-2, OVS-2, MSR-7 |
-| unstated | unstated | 2026-09-10 | 41: PLN-6, PLN-7, PLN-8, PLN-10, PLN-11, VER-3, VER-7, REV-1, REV-2, REV-3, REV-8, REV-11, OPS-2, OPS-3, SEC-2, SEC-3, SEC-10, TEM-1, TOL-1, TOL-3, TOL-6, TOL-7, TOL-8, CTX-1, CTX-2, CTX-4, CTX-8, CTX-10, CTX-11, ORC-1, ORC-2, AGF-1, AGF-2, AGF-3, AGF-5, AGF-6, AGF-7, AGF-9, OVS-1, KNW-4, MSR-7 |
+| Claude 2.x | Claude 2.1 | 2024-05-22 | 9: TST-5, TEM-3, TOL-2, TOL-4, TOL-6, CTX-1, CTX-2, OVS-2, MSR-7 |
+| unstated | unstated | 2026-09-10 | 46: PLN-6, PLN-7, PLN-8, PLN-10, PLN-11, PLN-13, VER-3, VER-7, REV-1, REV-2, REV-3, REV-8, REV-11, OPS-2, OPS-3, SEC-2, SEC-3, SEC-10, TEM-1, TOL-1, TOL-3, TOL-6, TOL-7, TOL-8, CTX-1, CTX-2, CTX-4, CTX-5, CTX-8, CTX-10, CTX-11, CTX-12, CTX-13, ORC-1, ORC-2, AGF-1, AGF-2, AGF-3, AGF-5, AGF-6, AGF-7, AGF-9, OVS-1, KNW-4, KNW-5, MSR-7 |
 
 ## Where the cases disagree
 
-- **PLN-4** ([Planning and scoping](planning.md)) Order the slices along the dependency graph, leaves first and the most connected hub last, and approach the hub from one direction only.
-- **PLN-5** ([Planning and scoping](planning.md)) Translate first and redesign later: keep behaviour the same during the move so that any failure points at the port, not at a deliberate change.
-- **PLN-11** ([Planning and scoping](planning.md)) Do not port a whole app in one pass, even from specs gathered first; Shopify's author says that gives code nobody can maintain. Port in small ordered slices a person can review quickly.
-- **VER-10** ([Verification loops and gates](verification.md)) Where one change repeats across many targets, keep the pass/fail gates deterministic as the model writes more; an error a model-run gate lets through can spread to every target.
-- **REV-2** ([Code review](review.md)) Split the review: agents and tests do the exhaustive old-against-new comparison; people spend their attention on architecture, contracts and flagged risk.
-- **REV-11** ([Code review](review.md)) Code that meets the feature requirements can still duplicate logic, drift from the architecture or run slowly; keep reviewers who know the target platform.
-- **ROL-1** ([Release and rollout](rollout.md)) Swap one component per change inside normal releases, old and new in one tree joined by a temporary bridge, so the main branch can always ship.
-- **OPS-5** ([Machines and operations](operations.md)) Keep hardening after merge: repeated security review, round-the-clock fuzzing and leak tracking, with people reviewing the fixes they produce.
-- **SEC-2** ([Security](security.md)) Whatever the harness exposes may get used unasked (an unlisted skill, git commands, a peer's worktree); remove what the task does not need.
-- **SEC-4** ([Security](security.md)) After a port into a memory-safe language, count where unsafe code sits, allow it only at foreign and system boundaries, and have the compiler forbid it elsewhere.
-- **CST-9** ([Cost](cost.md)) Pipeline and harness costs pay back over many repositories or migrations; a one-off project should reuse a general harness rather than build one.
-- **TOL-4** ([Rule-based tools and AI](tooling.md)) Price the rule-based alternative with the upkeep of its rules; hand-written transforms keep growing on long-tail patterns, which is where models pay off.
-- **TOL-5** ([Rule-based tools and AI](tooling.md)) Keep agents and models behind your own thin interface, log traces from day one, and pin model and settings per run; the best agent changed within a year.
-- **CTX-1** ([Context and prompts](context.md)) Choosing the right context (nearby files, good examples, runtime data, exact mapping tables) moved results more than polishing the prompt wording.
-- **CTX-6** ([Context and prompts](context.md)) Prefer large, static, version-controlled prompts and few tools for predictability; letting the agent fetch context through many tools adds variance.
-- **ORC-4** ([Many agents at once](orchestration.md)) Build the work queue from deterministic output (compiler errors by module, failing traces per command), run the tool once, then fan the items out.
-- **ORC-6** ([Many agents at once](orchestration.md)) Prefer a short leash to a complex multi-agent design where you can: fixed code picks context, order and output place, and the model translates one unit.
-- **OVS-2** ([Human oversight](oversight.md)) Keep the final merge with a person who checks how the agent answered CI and review, not only the diff.
-- **MSR-4** ([Measuring and reading results](measurement.md)) Credit a gain to the migration only after separating it from work that landed in the same window (other speed work, linker changes, unrelated fixes).
+Lessons whose "Against" line opens with "Disagree:", a real split between cases; each one's line is in [evidence.md](evidence.md).
+
+- [Planning and scoping](planning.md): PLN-4, PLN-5, PLN-11
+- [Verification loops and gates](verification.md): VER-10
+- [Code review](review.md): REV-2, REV-11
+- [Release and rollout](rollout.md): ROL-1
+- [Machines and operations](operations.md): OPS-5
+- [Security](security.md): SEC-2, SEC-4
+- [Cost](cost.md): CST-9
+- [Rule-based tools and AI](tooling.md): TOL-4, TOL-5
+- [Context and prompts](context.md): CTX-1, CTX-6
+- [Many agents at once](orchestration.md): ORC-4, ORC-6
+- [Human oversight](oversight.md): OVS-1, OVS-2
+- [Knowledge capture](knowledge.md): KNW-4
+- [Measuring and reading results](measurement.md): MSR-4

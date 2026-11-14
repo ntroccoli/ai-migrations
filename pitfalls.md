@@ -124,6 +124,18 @@ does underneath them.
 - (ours) Removed or deprecated APIs; changed defaults; behaviour changes listed only in the release notes
   between the two versions (read them all, not only the latest); transitive dependencies that
   now conflict; generated code or configuration that must be regenerated.
+- Equality and hashing that a language upgrade changes under the same source: after Groovy 3 to 4,
+  a role and a user of the same name counted as one item in a set, and the admin lost its role.
+  [PagerDuty][]
+
+## A data store to another (for example key-value to relational, or to an analytics store)
+
+- The old store's access pattern: reading key by key on the new engine turns one operation into
+  thousands of round trips in a row; Datadog ruled that out and redesigned the schema first.
+  [Datadog][]
+- Sums over large values: a ported query that adds a 64-bit column without widening passes on
+  small test data and overflows only at production volumes; floating-point sums need a tolerance
+  when old and new are compared. [Temporal][]
 
 ## Seams
 
@@ -173,3 +185,6 @@ where a case is linked):
 [Asana]: cases/2026-08-07-asana-enzyme-to-rtl.md
 [Pokémon]: cases/2026-01-25-vjeux-pokemon-showdown-rust.md
 [Spartacus]: cases/2026-04-13-lutz-leonhardt-spartacus-signal-forms.md
+[PagerDuty]: cases/2026-04-13-pagerduty-rundeck-grails-7.md
+[Datadog]: cases/2026-06-23-datadog-foundationdb-to-postgres.md
+[Temporal]: cases/2026-09-02-temporal-billing-store-clickhouse.md

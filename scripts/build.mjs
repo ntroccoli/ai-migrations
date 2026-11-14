@@ -134,6 +134,14 @@ for (const p of pages) for (const l of p.lessons) if (['yes', 'partly'].includes
   for (const fam of new Set(cited.flatMap(c => [c.meta.models].flat().filter(Boolean).map(familyOf)))) families.get(fam)?.lessons.push(l.id);
 }
 const familyRows = [...families].sort(([a, x], [b, y]) => (a === 'unstated') - (b === 'unstated') || y.newest.localeCompare(x.newest) || a.localeCompare(b));
+// Families with the same newest case and the same lessons share one row (they come from the same
+// cases), which keeps lessons/index.md under INDEX_MAX_BYTES.
+const familyGroups = [];
+for (const [fam, f] of familyRows) {
+  const g = fam !== 'unstated' && familyGroups.find(x => x.fams[0] !== 'unstated' && x.newest === f.newest && x.lessons.join() === f.lessons.join());
+  if (g) { g.fams.push(fam); f.names.forEach(n => g.names.add(n)); }
+  else familyGroups.push({ fams: [fam], names: new Set(f.names), newest: f.newest, lessons: f.lessons });
+}
 const NEWEST_CASE = cases.map(c => String(c.meta.date)).sort().at(-1);
 const MODEL_RULE = 'With a specific or a new model: process lessons (model ability: no) apply as they are. Start with the lessons tagged ' +
   'yes or partly whose cases name your model or its family ("By model" in lessons/index.md); treat those from other models as ' +
@@ -163,8 +171,9 @@ out[`changes/${NEWEST.slug}.md`] = renderChanges(NEWEST, prevEntry, lessonPrints
     const c = count(p.lessons);
     return `| [${p.title}](${p.slug}.md) | ${prefixOf(p)} | ${c.n} | ${c.stated} | ${c.ours} | ${c.yes} | ${c.partly} | ${c.no} | ${c.mYes} | ${c.mPartly} | ${c.mNo} |`;
   });
-  const disagree = pages.flatMap(p => p.lessons.filter(l => /^Disagree:/.test(sub(l, 'Against') || ''))
-    .map(l => `- **${l.id}** ([${p.title}](${p.slug}.md)) ${l.text}`));
+  // One line per page (IDs only; the lesson text is in evidence.md), so the index stays under INDEX_MAX_BYTES.
+  const disagree = pages.map(p => [p, p.lessons.filter(l => /^Disagree:/.test(sub(l, 'Against') || '')).map(l => l.id)])
+    .filter(([, ids]) => ids.length).map(([p, ids]) => `- [${p.title}](${p.slug}.md): ${ids.join(', ')}`);
   out['lessons/index.md'] = [
     GENERATED, '',
     '# Lessons by aspect', '',
@@ -189,10 +198,11 @@ out[`changes/${NEWEST.slug}.md`] = renderChanges(NEWEST, prevEntry, lessonPrints
     'Families group the model names the cases give by maker, line and major version ("Claude Opus 4.6" and "Opus 4.8" are ' +
       'Claude Opus 4.x; "GPT-5.4" and "gpt-5.5" are GPT-5.x); a name with a line but no version, and an internal model, ' +
       'stay apart; unstated covers the cases that name no model. Lessons: those tagged yes or partly for model ability whose ' +
-      'cited cases name a model of the family (a lesson\'s Era names only the newest). Newest case: the latest publication date among the cases that name it.', '',
+      'cited cases name a model of the family (a lesson\'s Era names only the newest). Newest case: the latest publication date among the cases that name it. Families with the same newest case and lessons share a row.', '',
     '| Model family | Names in the cases | Newest case | Lessons (model ability yes or partly) |', '| --- | --- | --- | --- |',
-    ...familyRows.map(([fam, f]) => `| ${fam} | ${[...f.names].join('; ')} | ${f.newest} | ${f.lessons.length}: ${f.lessons.join(', ') || 'none'} |`), '',
+    ...familyGroups.map(g => `| ${g.fams.join('; ')} | ${[...g.names].join('; ')} | ${g.newest} | ${g.lessons.length}: ${g.lessons.join(', ') || 'none'} |`), '',
     '## Where the cases disagree', '',
+    'Lessons whose "Against" line opens with "Disagree:", a real split between cases; each one\'s line is in [evidence.md](evidence.md).', '',
     ...(disagree.length ? disagree : ['None recorded.']), '',
   ].join('\n');
 }

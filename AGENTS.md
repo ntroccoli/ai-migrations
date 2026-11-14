@@ -304,6 +304,9 @@ Reading cost drives this layout: what an agent reads at the start is paid on eve
 route: `llms.txt`, then `lessons/evidence.md`, then an aspect page only for the lessons used. Only
 `lessons/evidence.md` and `llms-full.txt` list every lesson; keep it so (a test checks the index
 and `llms.txt`).
+`lessons/index.md` stays at or under 12 KB (12,288 bytes, `INDEX_MAX_BYTES`, checked by the
+validator): model families with the same lessons share a "By model" row, and "Where the cases
+disagree" lists IDs per page.
 `node scripts/build.mjs --check` writes nothing and exits 1 when any of them is out of date; it
 must exit 0 before a commit. Never edit these files by hand: change the sources and rebuild.
 

@@ -10,7 +10,7 @@ import {
   CASES_DIR, CHECKLIST, NOTICE, SOURCE_TYPES, KINDS, AI_SHARES, RELATIONS, EVIDENCE, OUTCOMES,
   STATUSES, BASES, REQUIRED, LANGUAGES, SECTIONS, NUMBERS_HEADER, UNITS, SCALES, PITFALLS, CHECKLIST_MAX_BYTES,
   parseCase, listCases, sections, refDefs, linksIn, anchor, practices, closestPractices,
-  LESSONS_DIR, LESSON_PAGES, LESSON_MAX_BYTES, LESSON_NOTE, LESSON_LEGEND, KARPATHY_IDEAS, ORACLES, MODEL_DEPENDENCE, STRENGTHS, META_LINE, parseLessonPage, strengthCeiling, lessonMeta,
+  LESSONS_DIR, LESSON_PAGES, LESSON_MAX_BYTES, INDEX_MAX_BYTES, LESSON_NOTE, LESSON_LEGEND, KARPATHY_IDEAS, ORACLES, MODEL_DEPENDENCE, STRENGTHS, META_LINE, parseLessonPage, strengthCeiling, lessonMeta,
   casesOf, expectedEra, eraText, parseEra, LOG, CHANGES_DIR, logEntries, parseChanges,
 } from './lib.mjs';
 
@@ -35,7 +35,7 @@ const notice = existsSync(NOTICE) ? readFileSync(NOTICE, 'utf8').replace(/\r\n/g
 // it; a number of up to three digits right after a capitalised name that does not start a sentence
 // (Opus 4.8, Java 21, August 21; also inside a bracket, (Claude 2.1); and the second of a pair
 // after such a name, JUnit 4 and 5, Java 17 or 21); and a number after a label word (part 4,
-// step 2; see LABELS). Every other number needs a unit: a % or x suffix, a currency sign, or a word
+// step 2, day 5; see LABELS). Every other number needs a unit: a % or x suffix, a currency sign, or a word
 // from UNITS (scripts/lib.mjs) within the next three words; scale words such as "million" or "K"
 // may sit between. In "5 to 10 files" or "120 of 140 files" the first number takes the unit of the
 // second. It is a heuristic: it catches a bare number, not a wrong unit, and numbers written as
@@ -47,7 +47,7 @@ const STARTERS = new Set(['The', 'A', 'An', 'In', 'By', 'Over', 'About', 'Only',
   'Of', 'For', 'With', 'After', 'Before', 'Its', 'Their', 'These', 'Those', 'At', 'On', 'To', 'From',
   'Up', 'Nearly', 'Around', 'Roughly', 'Just', 'And', 'But', 'Then', 'Within', 'Across', 'Under']);
 // Words after which a number is a label, not a quantity: part 4, step 2, version 3.
-const LABELS = new Set(['part', 'parts', 'step', 'phase', 'version', 'figure', 'table', 'section', 'chapter', 'round']);
+const LABELS = new Set(['part', 'parts', 'step', 'phase', 'version', 'figure', 'table', 'section', 'chapter', 'round', 'day', 'week']);
 // A plural is accepted: "-s" ("files"), and "-ies" for a unit ending in "y" ("dependencies").
 const isUnit = w => {
   const x = w.toLowerCase().split('-').pop();
@@ -545,6 +545,11 @@ if (!args.length) {
   const list = validateChecklist(files, lessons.ids);
   validatePitfalls();
   validateLog(lessons.ids);
+  const index = join(LESSONS_DIR, 'index.md');
+  if (existsSync(index)) {
+    const size = Buffer.byteLength(readFileSync(index, 'utf8').replace(/\r\n/g, '\n'), 'utf8');
+    if (size > INDEX_MAX_BYTES) err('lessons/index.md', `${size} bytes (at most ${INDEX_MAX_BYTES}); shorten what build.mjs writes there`);
+  }
   for (const c of files) if (!lessons.cited.has(c) && !list?.cited.has(c)) err(c, 'no lesson and no checklist question cites this case');
   summary = ` ${lessons.ids.size} lessons valid. checklist.md valid: ${list?.n ?? 0} questions, each citing lessons.`;
 }

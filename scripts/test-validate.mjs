@@ -5,7 +5,7 @@
 import { cpSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync, existsSync, appendFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { ROOT, parseCase, expectedEra, eraText } from './lib.mjs';
+import { ROOT, parseCase, expectedEra, eraText, LOG, logEntries } from './lib.mjs';
 
 const TMP = join(ROOT, '.test-tmp');
 const PARTS = ['scripts', 'cases', 'lessons', 'checklist.md', 'pitfalls.md', 'NOTICE.md', 'index.md', 'llms.txt', 'llms-full.txt',
@@ -194,6 +194,10 @@ test('lesson page without the evidence note fails', 1,
   d => edit(L(d, 'review'), 'Evidence base: every lesson here comes from', 'Evidence: every lesson here comes from'), null, 'needs the evidence note');
 test('lesson page over the size cap fails', 1,
   d => appendFileSync(L(d, 'review'), `\n[pad]: ../index.md${' '.repeat(21000)}\n`), null, 'bytes (at most 20480)');
+test('lessons/index.md over its size cap fails', 1,
+  d => appendFileSync(join(d, 'lessons', 'index.md'), `\n${' '.repeat(13000)}\n`), null, 'bytes (at most 12288)');
+test('a number after day or week is a label, not a quantity', 0,
+  d => edit(join(d, 'cases', BUN), '\n## What worked\n', '\n## What worked\n\n- On day 5 and in week 2 the port ran ([source](https://bun.com/blog/bun-in-rust)).\n'), [join('cases', BUN)]);
 test('bare number in a lesson sub-item fails', 1,
   d => edit(L(d, 'review'), '  - Against: None found.\n', '  - Against: None found in 7 gizmos.\n'), null, 'number "7" has no unit');
 test('long quote in a lesson page fails', 1,
@@ -257,7 +261,9 @@ const fixture = (strength, names, model = 'no') => d => {
   if (i < 0) throw new Error('test setup: lessons/team.md has no reference definitions');
   writeFileSync(f, `${t.slice(0, i).replace(/\n+$/, '\n')}${lesson}\n${t.slice(i).replace(/\n*$/, '\n')}${refs}\n`);
   // The fixture is a new lesson: the newest log entry names it, as the validator asks.
-  edit(join(d, 'log.md'), '- **New lessons:** AGF-9, CTX-11, KNW-4, OVS-5.', '- **New lessons:** AGF-9, CTX-11, KNW-4, OVS-5, TEM-99.');
+  const log = join(d, 'log.md');
+  writeFileSync(log, readFileSync(log, 'utf8').replace(/^(- \*\*New lessons:\*\* )none\.$|^(- \*\*New lessons:\*\* [^\n]*?)\.$/m,
+    (_, none, list) => none ? `${none}TEM-99.` : `${list}, TEM-99.`));
 };
 test('fixture lesson at its ceiling passes', 0, fixture('weak', ['airbnb']));
 test('medium on one assertion-only case fails', 1, fixture('medium', ['airbnb']),
@@ -432,9 +438,10 @@ test('a changed question must be named by number in the Checklist line', 1, d =>
   node(d, 'build.mjs', []);
   if (!/^- Changed questions: Q5$/m.test(changes(d))) throw new Error(changes(d).slice(0, 600));
 }, null, 'its "- **Checklist:**" line misses question Q5');
+const NEWEST_SLUG = logEntries(readFileSync(LOG, 'utf8'))[0].slug;
 test('build --check fails after hand-editing the newest changes file', 1,
-  d => { appendFileSync(join(d, 'changes', '2026-11-14-second-update.md'), '\nA hand edit.\n'); return ['--check']; },
-  null, 'out of date: changes/2026-11-14-second-update.md', 'build.mjs');
+  d => { appendFileSync(join(d, 'changes', `${NEWEST_SLUG}.md`), '\nA hand edit.\n'); return ['--check']; },
+  null, `out of date: changes/${NEWEST_SLUG}.md`, 'build.mjs');
 test('build refuses a missing changes file of an older entry', 1,
   d => { rmSync(join(d, 'changes', '2026-11-13-first-update.md')); return []; }, null, 'changes/2026-11-13-first-update.md is missing', 'build.mjs');
 test('an older changes file is frozen: build leaves it as it is', 0, d => {

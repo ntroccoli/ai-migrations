@@ -8,7 +8,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 
 - **MSR-1** [ours] Treat savings measured against a manual effort that never ran as self-estimates; record the basis beside each figure and never add them across cases.
   - Old system as oracle: no. Depends on model ability: no. Strength: strong. Era: 2024–2026; newest: Claude Fable 5.x.
-  - Cases: [Google: what went wrong][goo-wrong], [Spotify: numbers][spo-numbers], [Airbnb: numbers][air-numbers], [Slack: numbers][slk-numbers], [Bun: numbers][bun-numbers], [1Password: what went wrong][opw-wrong].
+  - Cases: [Google: what went wrong][goo-wrong], [Spotify: numbers][spo-numbers], [Airbnb: numbers][air-numbers], [Slack: numbers][slk-numbers], [Bun: numbers][bun-numbers], [1Password: what went wrong][opw-wrong], [PagerDuty: numbers][pgd-numbers], [Mindstone: numbers][mnd-numbers].
   - Against: Google's estimate at least agrees with its measured shares of model-made edits ([Google][goo-numbers]).
 - **MSR-2** [ours] For every success rate ask out of what (attempted, opened, merged, dropped from scope), and report each measure with its base; bases differed several-fold.
   - Old system as oracle: no. Depends on model ability: no. Strength: strong. Era: 2024–2026; newest: Claude Opus 4.x.
@@ -39,8 +39,8 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Cases: [Google: who did what][goo-who], [Slack: who did what][slk-who], [1Password: who did what][opw-who], [Spotify: who did what][spo-who], [Uber: who did what][ubr-who], [Bloomberg: who did what][bbg-who].
   - Against: In Bun almost all the work ran through agent workflows ([Bun][bun-who]).
 - **MSR-9** [stated] If you will claim savings, measure people's share from file snapshots or logs from day one; estimates from the tool's own builders are biased.
-  - Old system as oracle: no. Depends on model ability: no. Strength: medium. Era: 2025; newest: Gemini (internal).
-  - Cases: [Google: how it was checked][goo-checked], [Google: what went wrong][goo-wrong].
+  - Old system as oracle: no. Depends on model ability: no. Strength: medium. Era: 2025–2026; newest: Gemini (internal).
+  - Cases: [Google: how it was checked][goo-checked], [Google: what went wrong][goo-wrong], [Temporal: what went wrong][tmp-wrong].
   - Against: Google itself warns that edit distance misses the thinking behind edits, and the snapshot method skips edits made along the way, so it understates people's share ([Google][goo-wrong]).
 - **MSR-10** [stated] A merge rate undercounts unrequested changes: also count targets whose owners rejected the change and then migrated anyway, often reusing it.
   - Old system as oracle: no. Depends on model ability: no. Strength: weak. Era: 2025–2026; newest: Claude Opus 4.x.
@@ -62,9 +62,11 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [goo-who]: ../cases/2025-04-13-google-int64-ids.md#who-did-what
 [goo-wrong]: ../cases/2025-04-13-google-int64-ids.md#what-went-wrong
 [int-who]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#who-did-what
+[mnd-numbers]: ../cases/2026-07-06-mindstone-go-to-typescript.md#numbers
 [opw-context]: ../cases/2026-04-20-1password-monolith-refactor.md#context
 [opw-who]: ../cases/2026-04-20-1password-monolith-refactor.md#who-did-what
 [opw-wrong]: ../cases/2026-04-20-1password-monolith-refactor.md#what-went-wrong
+[pgd-numbers]: ../cases/2026-04-13-pagerduty-rundeck-grails-7.md#numbers
 [slk-checked]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#how-it-was-checked
 [slk-numbers]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#numbers
 [slk-who]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#who-did-what
@@ -73,6 +75,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [spo-numbers]: ../cases/2025-11-06-spotify-honk.md#numbers
 [spo-who]: ../cases/2025-11-06-spotify-honk.md#who-did-what
 [spo-wrong]: ../cases/2025-11-06-spotify-honk.md#what-went-wrong
+[tmp-wrong]: ../cases/2026-09-02-temporal-billing-store-clickhouse.md#what-went-wrong
 [tsr-wrong]: ../cases/2026-10-07-ping-tsgo-to-rust.md#what-went-wrong
 [ubr-who]: ../cases/2026-04-07-uber-junit4-to-junit5.md#who-did-what
 [ubr-wrong]: ../cases/2026-04-07-uber-junit4-to-junit5.md#what-went-wrong

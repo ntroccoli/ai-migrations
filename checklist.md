@@ -5,10 +5,9 @@ or library, or a large restructuring. Each has a **Check** an agent runs, an **E
 our words ("ours" marks our inference) and the **Lessons** behind it (`TST-2`: lesson 2 on the
 testing page; pages in [llms.txt](llms.txt)).
 
-Cases: [GitHub][] and [Pokémon][] (TypeScript), [Bun][] (Zig), [Intel][] (C) and [ts-rust][] (Go)
-to Rust; [1Password][] (Go); [Spotify][] and [Bloomberg][] (fleets); [Airbnb][], [Slack][] and
-[Asana][] (React tests); [Zalando][] (UI library); [Spartacus][] (Angular forms); [Shopify][] (to
-native apps); [Google][] (wider IDs); [Uber][] (Java tests; a contrast case).
+Cases named below (moves in [index.md](index.md)): [1Password][], [Airbnb][], [Asana][], [Bloomberg][],
+[Bun][], [Checkly][], [GitHub][], [GitLab][], [Google][], [Intel][], [Ladybird][], [PagerDuty][], [Pokémon][],
+[Shopify][], [Slack][], [Spartacus][], [Spotify][], [Temporal][], [ts-rust][], [Zalando][], [Uber][] (a contrast case).
 
 1. **Is the move allowed, possible and worth it?**
    Check: find the written reason and the measured problem behind it (none written: ask the
@@ -35,26 +34,26 @@ native apps); [Google][] (wider IDs); [Uber][] (Java tests; a contrast case).
    Evidence: GitHub's unchanged end-to-end suites were the oracle; its feature-loss regressions
    came almost all from their gaps. Bun's suite, in a third language, judged the whole port (a
    critic notes it missed the old bugs). Google's correct changes stalled on failing tests and
-   goldens; Spotify's worst case is green CI with wrong behaviour. Intel matched the C original's
-   `git blame` output; Shopify compared both apps' screens and events at named points; ts-rust
-   compared each revision with Go at a pinned revision; Pokémon replayed seeded battles
-   in both. Bloomberg's Python changes could fail only once deployed.
-   Lessons: TST-1, TST-2, TST-3, TST-4, TST-5, TST-6, TST-8, TST-10, TST-12, VER-5, VER-11, OVS-1.
+   goldens; Spotify's worst case is green CI with wrong behaviour. Intel, Shopify, ts-rust,
+   Pokémon and Ladybird ran old and new on the same inputs (Ladybird also edited its expected
+   outputs in that change). Bloomberg's changes could fail only once deployed; Checkly's harness
+   passed while production retries failed.
+   Lessons: TST-1, TST-2, TST-3, TST-4, TST-5, TST-6, TST-8, TST-10, TST-12, TST-13, TST-14, TST-15,
+   VER-5, VER-11, OVS-1.
 3. **Can an agent build, check and test alone, fast, and in parallel, in both toolchains?**
    Check: find the command that builds, formats, lints and tests one unit in the old stack, and
    name the one for the target stack (pin its toolchain). Use recorded timings first (logs, CI
    history); otherwise time each, count the output lines of a failure, and build and test two
    fresh clones outside the repository at once, installing dependencies as an agent would and
-   counting the tests that actually ran (clones, since a worktree writes into the measured
-   repository's `.git`; on a large repository, cap the time). For the number
-   of agents you plan, estimate compile time, disk space, disk speed and process limits; say how
+   counting the tests that actually ran (not worktrees, which write into its `.git`; cap the
+   time on a large one). For the number of agents you plan, estimate compile time, disk space, disk speed and process limits; say how
    agents are kept from undoing each other's work, and which target platforms their machines can
    build and test; for an app, how an agent drives it and how long one test takes. A missing
    formatter or linter is a finding.
    Evidence: GitHub needed a build lock. Bun's agents sharing one checkout undid each other's work
    within minutes, and heavy tests stalled the machine. 1Password and Spartacus gave each agent a
    worktree (Spartacus's tests failed to start there); Spotify's verify tool returns short
-   errors. Shopify's agents took minutes per test in simulators; Asana's people stepped in most over slow lint and CI that disagreed with local runs.
+   errors. Shopify's agents took minutes per test in simulators; Asana's lint was slow and CI disagreed with local runs.
    Lessons: OPS-1, OPS-2, OPS-3, ORC-1, ORC-2, VER-2, VER-4, TOL-6, TOL-8.
 4. **How big is the job, really?**
    Check: scope is everything that must exist in the target. Count lines and files in scope by
@@ -96,7 +95,7 @@ native apps); [Google][] (wider IDs); [Uber][] (Java tests; a contrast case).
    porting guide first and left idiomatic code for later. 1Password's call-site cleanup ran from
    a list, templates and escalation rules; Spotify's judge rejects sessions mostly for straying
    from the prompt.
-   Lessons: CTX-4, PLN-2, PLN-5, REV-4, AGF-2, AGF-4.
+   Lessons: CTX-4, PLN-2, PLN-5, PLN-13, REV-4, AGF-2, AGF-4.
 7. **What does the old stack do implicitly?**
    Check: search the scope for behaviour the target will not give for free, with the lists for
    this kind of move in [pitfalls.md](pitfalls.md) as it says. Make a table of direct dependencies: target
@@ -104,7 +103,7 @@ native apps); [Google][] (wider IDs); [Uber][] (Java tests; a contrast case).
    Evidence: the regressions compiled: GitHub's runtime defaults and one-sided paired operations,
    Bun's lines that read alike but behave differently, Intel's pointer comparison, Google's bit
    operations and SQL tied to the old width, 1Password's backfill order, Zalando's wrong data
-   mapping, which passed review and broke a live page.
+   mapping that broke a live page, PagerDuty's equality change.
    Lessons: REV-3, OPS-4, TST-7, VER-6, SEC-5, SEC-6, AGF-3, SEC-10.
 8. **Is the code uniform enough for one prompt, and what context goes with it?**
    Check: group the units by kind of code (pure logic, concurrency, OS layer, GPU or UI, data
@@ -114,14 +113,14 @@ native apps); [Google][] (wider IDs); [Uber][] (Java tests; a contrast case).
    can do first. Pilot the model on the hardest files of each language in scope, and check the
    largest files fit its context window. A group too varied for one prompt is a candidate to defer
    or do by hand. Search docs and agent instructions for advice favouring the old stack.
-   Evidence: Spotify dropped a framework too varied for one prompt, and mapping tables fixed
-   wrong field mappings; Airbnb found the choice of related files mattered more than prompt
-   wording; Slack gave the model a codemod's partial output and each test's rendered output;
-   Google's model handled Dart poorly, so people did it. Uber's recipes did a test-framework move
-   where its AI attempt failed. Bloomberg gave each kind of target its own prompt and checks;
-   stale docs misled Asana's agents; Pokémon split files the agent would not open whole.
-   Lessons: CTX-1, CTX-2, CTX-3, CTX-5, CTX-9, CTX-10, CTX-11, TOL-2, TOL-7, TOL-9, AGF-8, PLN-8,
-   PLN-12.
+   Evidence: Spotify dropped a framework too varied for one prompt; mapping tables fixed wrong
+   field mappings. Airbnb's choice of related files mattered more than wording; Slack gave the
+   model a codemod's partial output and each test's rendered output. Google's model handled Dart
+   poorly, so people did it; Uber's recipes did a move its AI attempt failed. Bloomberg gave each
+   kind of target its own prompt; stale docs misled Asana's agents; Pokémon split files the agent
+   would not open.
+   Lessons: CTX-1, CTX-2, CTX-3, CTX-5, CTX-9, CTX-10, CTX-11, CTX-12, CTX-13, TOL-2, TOL-7, TOL-9,
+   AGF-8, PLN-8, PLN-12.
 9. **How will you work the long tail, stop, and learn from failures?**
    Check: look for a status record per unit, a way to rerun failing units by step, a retry limit
    (for independent units such as files; where units depend on each other, a rule to fix the
@@ -132,7 +131,7 @@ native apps); [Google][] (wider IDs); [Uber][] (Java tests; a contrast case).
    instructions, skills and evals; Spotify asks the agent what its prompt lacked; Zalando reran a golden set after each prompt
    change. Uber put files whose tests failed back on the old framework. ts-rust's first attempt
    stalled for months, no stop rule stated; Spartacus now stops for a person after each wave.
-   Lessons: VER-3, KNW-1, KNW-2, KNW-4, OVS-3, OVS-5, CTX-7, AGF-7, OPS-6, ROL-8, TST-11.
+   Lessons: VER-3, KNW-1, KNW-2, KNW-4, KNW-5, OVS-3, OVS-5, CTX-7, AGF-7, OPS-6, ROL-8, TST-11.
 10. **What may the agent decide and reach alone, and who reviews?**
     Check: list the guardrails an agent could switch off (deleting or editing tests, updating
     snapshots or baselines, waiver labels, CI flags) and who must approve each; the steps kept
@@ -148,7 +147,7 @@ native apps); [Google][] (wider IDs); [Uber][] (Java tests; a contrast case).
     requests got no decision from their owners; Shopify needed reviewers who knew the target
     platform.
     Lessons: OVS-1, OVS-2, AGF-1, AGF-5, AGF-9, SEC-1, SEC-2, SEC-3, REV-1, REV-2, REV-9, REV-11,
-    TEM-4, ROL-9.
+    TEM-4, TEM-6, ROL-9.
 11. **How will changes reach users?**
     Check: find the release channels (pre-release, flags, canary), the share of users each
     reaches, how problems are reported and watched, and how one unit's change is rolled back (for
@@ -156,8 +155,10 @@ native apps); [Google][] (wider IDs); [Uber][] (Java tests; a contrast case).
     "not applicable yet" and say what must exist before the first release.
     Evidence: GitHub aimed to ship each port to a pre-release first, yet some regressions reached
     stable; Bun's merged build stayed a canary while regressions were fixed; Google
-    rolled its largest migrations out slowly, owners watching. A rollback path per unit is ours.
-    Lessons: ROL-2, ROL-3, ROL-5, ROL-7, VER-1, OPS-5.
+    rolled its largest migrations out slowly, owners watching. Temporal compared every query
+    and cut over read-only paths first; GitLab's shadow run on light traffic missed a fault.
+    A rollback path per unit is ours.
+    Lessons: ROL-2, ROL-3, ROL-5, ROL-7, ROL-10, ROL-11, VER-1, OPS-5, OPS-8.
 12. **How will you measure cost and result?**
     Check: write down the manual estimate and how it was made. Measure, before the port and on
     fixed hardware, the number the product exists for (speed, latency, memory, output quality),
@@ -203,8 +204,7 @@ Starting points from one case each, not targets; elsewhere judge "gap" from the 
 9. Record: once the owner has chosen, write `docs/migration-review.md` in the measured repository
    (the one file this checklist adds there; format below). In a read-only run, write no file;
    show the record after the report.
-10. Revisit as step 7 of [applying the lessons](docs/applying-lessons.md) says (start, re-check,
-    new, lint, propose), with the questions its `changes/` files list as well as the lessons.
+10. Revisit as step 7 of [applying the lessons](docs/applying-lessons.md) says, with the questions its `changes/` files list as well as the lessons.
 11. Share (optional): a [field report](docs/field-reports.md) once an item has met its problem.
 
 ## Report format
@@ -283,3 +283,8 @@ record of the same shape: [docs/applying-lessons.md](docs/applying-lessons.md).
 [Pokémon]: cases/2026-01-25-vjeux-pokemon-showdown-rust.md
 [ts-rust]: cases/2026-10-07-ping-tsgo-to-rust.md
 [Spartacus]: cases/2026-04-13-lutz-leonhardt-spartacus-signal-forms.md
+[Ladybird]: cases/2026-02-23-ladybird-libjs-rust.md
+[Checkly]: cases/2026-09-01-checkly-nodejs-to-go.md
+[Temporal]: cases/2026-09-02-temporal-billing-store-clickhouse.md
+[GitLab]: cases/2026-07-08-gitlab-rate-limiting.md
+[PagerDuty]: cases/2026-04-13-pagerduty-rundeck-grails-7.md

@@ -12,7 +12,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: With a model call per file, Zalando put its API bill under $40 per repository before any cache discount ([Zalando][zal-numbers]); the cache matters most for long agent runs. Zalando still ordered its prompt for caching ([Zalando][zal-worked]).
 - **CST-2** [ours] Ask for the full bill: tokens at the price paid, people's hours by role, compute and CI, review, and the work after merge; most sources give one piece.
   - Old system as oracle: no. Depends on model ability: no. Strength: strong. Era: 2024–2026; newest: GPT-6.x.
-  - Cases: [GitHub: numbers][gh-numbers], [Bun: numbers][bun-numbers], [Airbnb: what went wrong][air-wrong], [Spotify: what went wrong][spo-wrong], [ts-rust: numbers][tsr-numbers].
+  - Cases: [GitHub: numbers][gh-numbers], [Bun: numbers][bun-numbers], [Airbnb: what went wrong][air-wrong], [Spotify: what went wrong][spo-wrong], [ts-rust: numbers][tsr-numbers], [PagerDuty: what went wrong][pgd-wrong].
   - Against: GitHub gives the fullest token breakdown in the set ([GitHub][gh-numbers]).
 - **CST-3** [ours] Expect cost per unit to have a long tail; report median and mean, and size the budget for hub components and hard files.
   - Old system as oracle: no. Depends on model ability: no. Strength: medium. Era: 2024–2026; newest: Claude Opus 5.x.
@@ -59,6 +59,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [int-numbers]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#numbers
 [int-who]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#who-did-what
 [int-worked]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#what-worked
+[pgd-wrong]: ../cases/2026-04-13-pagerduty-rundeck-grails-7.md#what-went-wrong
 [slk-wrong]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#what-went-wrong
 [spo-checked]: ../cases/2025-11-06-spotify-honk.md#how-it-was-checked
 [spo-numbers]: ../cases/2025-11-06-spotify-honk.md#numbers

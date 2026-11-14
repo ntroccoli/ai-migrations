@@ -41,7 +41,7 @@ export const SECTIONS = [
 // `from`, not "source_languages": in a case, "source" is the publication (source_url, source_type).
 // build.mjs lists the covered ones in llms.txt and names the ones in this list no case starts from.
 // Add a language here when a case needs it.
-export const LANGUAGES = ['C', 'C++', 'C#', 'Dart', 'Go', 'Java', 'JavaScript', 'Kotlin', 'PHP', 'Python', 'Ruby',
+export const LANGUAGES = ['C', 'C++', 'C#', 'Dart', 'Go', 'Groovy', 'Java', 'JavaScript', 'Kotlin', 'PHP', 'Python', 'Ruby',
   'Rust', 'Scala', 'SQL', 'Swift', 'TypeScript', 'Zig'];
 export const NUMBERS_HEADER = '| Number | What it counts | Basis | Source |';
 
@@ -60,6 +60,8 @@ export const UNITS = new Set(`
   character word example comment review lifecycle window event
   method task rule instruction zone office symbol project library cent
   seed battle thread
+  service microservice target value edge cron webhook api queue vcpu
+  key spec cohort shard connection
 `.trim().split(/\s+/));
 // Words that may sit between a number and its unit without being units themselves.
 export const SCALES = new Set(['thousand', 'million', 'billion', 'k', 'm', 'b']);
@@ -130,6 +132,9 @@ export const LESSONS_DIR = join(ROOT, 'lessons');
 export const LESSON_PAGES = ['planning', 'testing', 'verification', 'review', 'rollout', 'operations', 'security',
   'cost', 'team', 'tooling', 'context', 'orchestration', 'agent-failures', 'oversight', 'knowledge', 'measurement'];
 export const LESSON_MAX_BYTES = 20 * 1024; // an agent reads a page whole
+// lessons/index.md (generated) is a table of contents for people; its size is checked so "By model" and
+// "Where the cases disagree" stay short as cases arrive.
+export const INDEX_MAX_BYTES = 12 * 1024;
 // Every lesson page opens with this sentence (after its title and intro); validate.mjs matches it.
 export const LESSON_NOTE = 'Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.';
 // Every lesson page holds this legend as its own paragraph, after the evidence note; validate.mjs
@@ -255,6 +260,7 @@ export const MODEL_FAMILIES = [
   [/\bGPT[- ]?(\d+)/i, m => `GPT-${m[1]}.x`],
   [/\bGPT\b/i, () => 'GPT (version unstated)'],
   [/\bo(\d)(?:-mini|-pro)?\b/, m => `OpenAI o${m[1]}`],
+  [/\bCodex[- ]?(\d+)/i, m => `OpenAI Codex ${m[1]}.x`],
   [/\bCodex\b/i, () => 'OpenAI Codex (version unstated)'],
   [/\binternal\b.*\bGemini\b|\bGemini\b.*\binternal\b/i, () => 'Gemini (internal)'],
   [/\bGemini\s+(\d+)/i, m => `Gemini ${m[1]}.x`],

@@ -8,12 +8,12 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 
 - **TEM-1** [stated] The lead engineer's job becomes running the control loop: framing slices, challenging design, pushing for completeness, deciding every merge.
   - Old system as oracle: no. Depends on model ability: partly. Strength: medium. Era: 2025–2026; newest: Claude Opus 5.x.
-  - Cases: [GitHub: numbers][gh-numbers], [GitHub: who did what][gh-who], [Bun: who did what][bun-who], [Pokémon: who did what][vjx-who].
-  - Against: GitHub's split of the engineer's messages by intent was labelled by an LLM, not checked by a person ([GitHub][gh-numbers]).
+  - Cases: [GitHub: numbers][gh-numbers], [GitHub: who did what][gh-who], [Bun: who did what][bun-who], [Pokémon: who did what][vjx-who], [Ladybird: who did what][lb-who].
+  - Against: GitHub's split of the engineer's messages by intent was labelled by an LLM, not checked by a person ([GitHub][gh-numbers]). At PagerDuty a product manager, not an engineer, ran the loop and approved each fix, and engineers reviewed and finished the work ([PagerDuty][pgd-who]).
   - Related view (karpathy-ideas): [partial autonomy and autonomy slider][k-partial-autonomy-and-autonomy-slider], agrees.
 - **TEM-2** [stated] Count the people behind a one-engineer story (reviewers in many teams, interop, packaging and build specialists) and staff and budget for them.
   - Old system as oracle: no. Depends on model ability: no. Strength: strong. Era: 2024–2026; newest: Claude Opus 5.x.
-  - Cases: [GitHub: who did what][gh-who], [Google: who did what][goo-who], [Slack: who did what][slk-who].
+  - Cases: [GitHub: who did what][gh-who], [Google: who did what][goo-who], [Slack: who did what][slk-who], [PagerDuty: who did what][pgd-who].
   - Against: Bun credits the port to one engineer and names no helpers for it ([Bun][bun-who]), and the Pokémon Showdown port was one person's holiday project ([Pokémon][vjx-who]).
 - **TEM-3** [stated] A central team should own the agent tooling, build it with early adopters, and teach prompt writing; untrained users fell into the same traps.
   - Old system as oracle: no. Depends on model ability: partly. Strength: medium. Era: 2024–2026; newest: Claude (version unstated).
@@ -27,13 +27,21 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: no. Depends on model ability: no. Strength: weak. Era: 2024–2025; newest: GPT-4o.
   - Cases: [Zalando: what went wrong][zal-wrong].
   - Against: ts-rust's author says he read none of the ported code and left the fixing to agents; it reports no incident either way, so the case neither shows nor rules out the cost ([ts-rust][tsr-who]). In the Pokémon port the agent debugged on its own though the owner had never written Rust; the one gap he reports was in judging speed work ([Pokémon][vjx-wrong]).
+- **TEM-6** [stated] Budget for the people: engineers new to agents lose days going in circles, and steering agents that cut corners, then reviewing all they produce, wears people out.
+  - Old system as oracle: no. Depends on model ability: partly. Strength: medium. Era: 2026; newest: Claude (version unstated).
+  - Cases: [Mindstone: what went wrong][mnd-wrong], [GitLab: what went wrong][glb-wrong].
+  - Against: None found; neither case gives hours, headcount or review load, and GitLab's is one engineer's remark in a seller's account ([Mindstone][mnd-wrong], [GitLab][glb-wrong]).
 
 [bbg-who]: ../cases/2026-11-03-bloomberg-python-cpp-uplift.md#who-did-what
 [bun-who]: ../cases/2026-07-08-bun-zig-to-rust.md#who-did-what
 [gh-numbers]: ../cases/2026-09-16-github-copilot-runtime-rust.md#numbers
 [gh-who]: ../cases/2026-09-16-github-copilot-runtime-rust.md#who-did-what
+[glb-wrong]: ../cases/2026-07-08-gitlab-rate-limiting.md#what-went-wrong
 [goo-checked]: ../cases/2025-04-13-google-int64-ids.md#how-it-was-checked
 [goo-who]: ../cases/2025-04-13-google-int64-ids.md#who-did-what
+[lb-who]: ../cases/2026-02-23-ladybird-libjs-rust.md#who-did-what
+[mnd-wrong]: ../cases/2026-07-06-mindstone-go-to-typescript.md#what-went-wrong
+[pgd-who]: ../cases/2026-04-13-pagerduty-rundeck-grails-7.md#who-did-what
 [slk-who]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#who-did-what
 [spo-who]: ../cases/2025-11-06-spotify-honk.md#who-did-what
 [spo-wrong]: ../cases/2025-11-06-spotify-honk.md#what-went-wrong

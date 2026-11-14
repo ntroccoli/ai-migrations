@@ -16,7 +16,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: Bun's limits covered memory, CPU and processes, yet the disk still filled and crashed the machine several times ([Bun][bun-wrong]); no case shows disk quotas in use.
 - **OPS-3** [stated] Make the inner loop fast (module splits, build caches, host I/O) before scaling agents; their time goes mostly to reading, building and testing, not writing.
   - Old system as oracle: no. Depends on model ability: partly. Strength: strong. Era: 2025–2026; newest: Claude Opus 5.x.
-  - Cases: [GitHub: what went wrong][gh-wrong], [GitHub: numbers][gh-numbers], [Bun: practices to copy][bun-practices], [Shopify: what went wrong][shp-wrong], [Asana: what went wrong][asa-wrong].
+  - Cases: [GitHub: what went wrong][gh-wrong], [GitHub: numbers][gh-numbers], [Bun: practices to copy][bun-practices], [Shopify: what went wrong][shp-wrong], [Asana: what went wrong][asa-wrong], [Mindstone: what worked][mnd-worked].
   - Against: At Shopify the slow step was not the build: hot reload helped but did not fix it, because agents read and drove the app through simulators; its fix is a headless path into the app's logic ([Shopify][shp-worked]).
 - **OPS-4** [stated] List what the old runtime supplied silently (time zone, environment, process flags) and test every platform you ship; one green platform says little.
   - Old system as oracle: yes. Depends on model ability: no. Strength: medium. Era: 2025–2026; newest: Claude Opus 5.x.
@@ -34,6 +34,10 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: partly. Depends on model ability: no. Strength: medium. Era: 2026; newest: Claude Opus 5.x.
   - Cases: [GitHub: what went wrong][gh-wrong].
   - Against: None found.
+- **OPS-8** [stated] Running old and new paths side by side can double the load on shared services such as caches and rate-limit stores; check their headroom first, since raising it may need infrastructure work.
+  - Old system as oracle: no. Depends on model ability: no. Strength: weak. Era: 2026; newest: Claude (version unstated).
+  - Cases: [GitLab: what went wrong][glb-wrong].
+  - Against: None found; one case, its limit was known before the migration began, and the source does not say the side-by-side running brought it back.
 
 [air-worked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-worked
 [asa-wrong]: ../cases/2026-08-07-asana-enzyme-to-rtl.md#what-went-wrong
@@ -43,7 +47,9 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [bun-wrong]: ../cases/2026-07-08-bun-zig-to-rust.md#what-went-wrong
 [gh-numbers]: ../cases/2026-09-16-github-copilot-runtime-rust.md#numbers
 [gh-wrong]: ../cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong
+[glb-wrong]: ../cases/2026-07-08-gitlab-rate-limiting.md#what-went-wrong
 [goo-worked]: ../cases/2025-04-13-google-int64-ids.md#what-worked
+[mnd-worked]: ../cases/2026-07-06-mindstone-go-to-typescript.md#what-worked
 [shp-worked]: ../cases/2026-09-10-shopify-react-native-to-native.md#what-worked
 [shp-wrong]: ../cases/2026-09-10-shopify-react-native-to-native.md#what-went-wrong
 [slk-worked]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#what-worked
