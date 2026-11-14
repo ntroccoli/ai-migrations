@@ -34,7 +34,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 
 ## May be outdated
 
-"May be outdated" marks a lesson about what models can or cannot do (tagged "Depends on model ability: yes") whose most recent case (the later of its publication date and the end of its work) is more than 12 months older than the last build: newer models may no longer behave so; re-check it against recent work before you rely on it.
+"May be outdated" marks a lesson about what models can or cannot do (tagged "Depends on model ability: yes") whose most recent case (the later of its publication date and the end of its work) is more than 12 months older than the newest update in the log: newer models may no longer behave so; re-check it against recent work before you rely on it.
 
 - **TOL-2** ([Rule-based tools and AI](tooling.md)) Run a rule-based codemod first and give the model its partial output, with a note wherever the rules gave up; it anchors the model.
 - **AGF-8** ([Agent failure modes](agent-failures.md)) Check how well the model handles each language in scope; one poorly supported language fell back to people.

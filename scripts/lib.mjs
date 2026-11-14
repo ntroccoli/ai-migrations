@@ -140,7 +140,7 @@ export const ORACLES = ['yes', 'partly', 'no'];
 // process whose need comes from such a behaviour (partly), or holds whatever the model (no).
 export const MODEL_DEPENDENCE = ['yes', 'partly', 'no'];
 // A lesson tagged `yes` whose newest case in "Cases" was published more than this many months before
-// the build date is marked "may be outdated" in lessons/index.md and llms.txt.
+// the date of the newest log.md entry is marked "may be outdated" in lessons/index.md and llms.txt.
 export const OUTDATED_MONTHS = 12;
 export const STRENGTHS = ['strong', 'medium', 'weak'];
 // The highest strength the cases in a lesson's "Cases" line allow (AGENTS.md "Lessons"): `strong`

@@ -9,7 +9,7 @@ import { ROOT, parseCase, expectedEra, eraText } from './lib.mjs';
 
 const TMP = join(ROOT, '.test-tmp');
 const PARTS = ['scripts', 'cases', 'lessons', 'checklist.md', 'pitfalls.md', 'NOTICE.md', 'index.md', 'llms.txt', 'llms-full.txt',
-  'README.md', 'CONTRIBUTING.md', 'docs', 'LICENSE-CONTENT.md', '.github', 'lychee.toml'];
+  'README.md', 'CONTRIBUTING.md', 'docs', 'LICENSE-CONTENT.md', '.github', 'lychee.toml', 'log.md'];
 const ONEPW = '2026-04-20-1password-monolith-refactor.md';
 const INTEL = '2026-08-24-intel-ideas-c-to-rust.md';
 const BUN = '2026-07-08-bun-zig-to-rust.md';
@@ -258,7 +258,7 @@ test('fixture Era years that miss a cited case fail', 1, d => {
 }, null, 'TEM-99: the Era must give the years and models of the cases in "Cases": "Era: 2024–2026; models: Claude 2.1,');
 
 // "May be outdated" (build.mjs): a lesson tagged yes for model ability whose most recent case is more than
-// OUTDATED_MONTHS old at the build date. Bun is dated 2026-07-08 (work 2026-05); --today fixes the date.
+// OUTDATED_MONTHS old at the reference date. Bun is dated 2026-07-08 (work 2026-05); --today fixes the date.
 const outdatedRun = (model, today) => d => {
   fixture('medium', ['bun'], model)(d);
   const r = node(d, 'build.mjs', ['--today', today]);
@@ -277,10 +277,25 @@ test('a model-dependent lesson with a recent case is not marked', 0, d => {
 test('a lesson tagged partly is never marked', 0, d => {
   if (marked(outdatedRun('partly', '2030-01-01')(d))) throw new Error('TEM-99 marked although not tagged yes');
 });
-test('build --check fails once a lesson crosses the line until rebuilt', 1, d => {
-  outdatedRun('yes', '2027-07-07')(d);
-  return ['--check', '--today', '2027-07-09'];
+// Without --today the reference date is the newest log.md entry, never the clock.
+const newLogEntry = (d, date) => edit(join(d, 'log.md'), '\n## ', `\n## ${date} — a test update\n\n- A test entry.\n\n## `);
+test('the reference date is the newest log entry', 0, d => {
+  fixture('medium', ['bun'], 'yes')(d);
+  newLogEntry(d, '2027-07-09');
+  node(d, 'build.mjs', []);
+  const o = { index: readFileSync(join(d, 'lessons', 'index.md'), 'utf8'), llms: readFileSync(join(d, 'llms.txt'), 'utf8') };
+  if (!marked(o)) throw new Error('TEM-99 not marked at the log date 2027-07-09');
+  return ['--check'];
+}, null, null, 'build.mjs');
+test('build --check fails after a new log entry moves a lesson past the line, until rebuilt', 1, d => {
+  fixture('medium', ['bun'], 'yes')(d);
+  newLogEntry(d, '2027-07-07');
+  node(d, 'build.mjs', []);
+  newLogEntry(d, '2027-07-09');
+  return ['--check'];
 }, null, 'out of date: lessons/index.md', 'build.mjs');
+test('build refuses a log.md without a dated entry', 1,
+  d => { writeFileSync(join(d, 'log.md'), '# Update log\n'); return []; }, null, 'log.md needs an entry', 'build.mjs');
 test('build refuses a bad --today', 2, () => ['--today', 'tomorrow'], null, '--today takes a date', 'build.mjs');
 
 // build.mjs --check: generated files must match the sources.

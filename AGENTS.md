@@ -217,9 +217,10 @@ Rules (all checked by `node scripts/validate.mjs`; one broken-copy test each):
   in time, so it is derived, never written freely.
 - "May be outdated": `build.mjs` marks, in `lessons/index.md` and `llms.txt`, every lesson tagged
   `yes` whose most recent case in "Cases" (the later of its `date` and the end of its `period`)
-  is more than 12 months (`OUTDATED_MONTHS`) older than the build date (`--today YYYY-MM-DD` to
-  set it). The date is not written, so `build.mjs --check` fails only when a lesson crosses the
-  line: rebuild, and re-check that lesson against newer cases.
+  is more than 12 months (`OUTDATED_MONTHS`) older than the date of the newest `log.md` entry,
+  never today's date, so the output never changes by itself (`--today YYYY-MM-DD` is for tests
+  only). The mark is refreshed by the next update's log entry and rebuild; re-check each marked
+  lesson against newer cases then.
 - "Strength" is capped by the cases in "Cases" (`strengthCeiling` in `scripts/lib.mjs`):
   `strong` needs two or more cases, or one whose `evidence` is `shown-in-source` or
   `independent-data`, and at least one case whose `author_relation` is not `seller-of-tool`;

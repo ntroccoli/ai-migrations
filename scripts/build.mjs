@@ -4,9 +4,9 @@
 // repository URL and the AI disclosure.
 // Usage: node scripts/build.mjs          write the files
 //        node scripts/build.mjs --check  write nothing; exit 1 if any generated file is out of date
-//        --today YYYY-MM-DD             the build date for the "may be outdated" mark (default: today, UTC).
-// The mark depends on the build date, so a lesson can cross the line between two builds: --check then
-// fails until someone rebuilds, which is the reminder to re-check that lesson.
+//        --today YYYY-MM-DD             tests only: the reference date for the "may be outdated" mark.
+// The reference date is the date of the newest log.md entry, never the clock, so the output does not
+// change by itself; each update's log entry moves it, and that rebuild refreshes the mark.
 // The case files and lesson pages are the source of truth; never edit the generated files by hand.
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join, posix } from 'node:path';
@@ -17,8 +17,11 @@ import {
 
 const check = process.argv.includes('--check');
 const ti = process.argv.indexOf('--today');
-const TODAY = ti > 0 ? process.argv[ti + 1] : new Date().toISOString().slice(0, 10);
-if (!/^\d{4}-\d{2}-\d{2}$/.test(TODAY || '')) { console.error('--today takes a date, YYYY-MM-DD'); process.exit(2); }
+const LOG = join(ROOT, 'log.md');
+const logDate = () => (existsSync(LOG) ? readFileSync(LOG, 'utf8') : '').match(/^## (\d{4}-\d{2}-\d{2})\b/m)?.[1];
+const TODAY = ti > 0 ? process.argv[ti + 1] : logDate();
+if (ti > 0 && !/^\d{4}-\d{2}-\d{2}$/.test(TODAY || '')) { console.error('--today takes a date, YYYY-MM-DD'); process.exit(2); }
+if (!TODAY) { console.error('cannot build: log.md needs an entry "## YYYY-MM-DD ..." (the reference date of the "may be outdated" mark)'); process.exit(1); }
 const REPO = `https://github.com/${REPO_SLUG}`;
 const RAW_BASE = `https://raw.githubusercontent.com/${REPO_SLUG}/main`;
 // Hand-written files that name this repository: the build rewrites any older slug in REPO_SLUGS
@@ -108,12 +111,11 @@ for (const p of pages) for (const l of p.lessons) {
 }
 
 // "May be outdated" (AGENTS.md "Lessons"): tagged yes for model ability, newest case in "Cases" older than
-// OUTDATED_MONTHS at the build date. The date itself is never written, so a rebuild on another day changes nothing
-// unless a lesson crosses the line.
+// OUTDATED_MONTHS at the reference date (the newest log.md entry).
 const outdated = new Set(pages.flatMap(p => p.lessons.filter(l =>
   mayBeOutdated(l, casesOf(l, p.refs).map(f => caseByFile.get(f)?.meta).filter(Boolean), TODAY)).map(l => l.id)));
 const OUTDATED_NOTE = `"May be outdated" marks a lesson about what models can or cannot do (tagged "Depends on model ability: yes") ` +
-  `whose most recent case (the later of its publication date and the end of its work) is more than ${OUTDATED_MONTHS} months older than the last build: newer models may no longer behave so; ` +
+  `whose most recent case (the later of its publication date and the end of its work) is more than ${OUTDATED_MONTHS} months older than the newest update in the log: newer models may no longer behave so; ` +
   're-check it against recent work before you rely on it.';
 const out = {};
 
@@ -143,7 +145,7 @@ const out = {};
     '"Model" counts the "Depends on model ability" tag.', '',
     '## May be outdated', '',
     OUTDATED_NOTE, '',
-    ...(outdated.size ? pages.flatMap(p => p.lessons.filter(l => outdated.has(l.id)).map(l => `- **${l.id}** ([${p.title}](${p.slug}.md)) ${l.text}`)) : ['None at the last build.']), '',
+    ...(outdated.size ? pages.flatMap(p => p.lessons.filter(l => outdated.has(l.id)).map(l => `- **${l.id}** ([${p.title}](${p.slug}.md)) ${l.text}`)) : ['None at the newest update.']), '',
     '## Cases behind the lessons', '',
     'Lessons that cite each case, in "Cases" or "Against".', '',
     '| Case | Lessons |', '| --- | --- |',
