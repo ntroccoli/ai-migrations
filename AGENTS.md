@@ -96,7 +96,8 @@ Field rules (all checked):
 - `source_type`: `engineering-post` (the migrating company's engineers), `paper`, `talk`, `repo`
   (official repository or docs), `vendor-marketing` (written to sell).
 - `author_relation`: `seller-of-tool` when the author's company sells, or promotes in the source,
-  an AI tool or platform the case used; `user-of-tool`; `independent` (no stake in the work or
+  an AI tool or platform the case used, and also when a tool user writes the source in
+  partnership with the tool's vendor; `user-of-tool`; `independent` (no stake in the work or
   the tools). A seller's case weighs less; its Source section says what is sold.
 - `evidence`: how far a reader can check the claims. `independent-data` (someone outside the
   company measured it), `shown-in-source` (the source shows the data, logs, benchmark or method

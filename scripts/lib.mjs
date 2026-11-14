@@ -45,18 +45,19 @@ export const LANGUAGES = ['C', 'C++', 'C#', 'Dart', 'Go', 'Java', 'JavaScript', 
 export const NUMBERS_HEADER = '| Number | What it counts | Basis | Source |';
 
 // Units: a number in a case must be followed, within three words, by one of these (a measure or
-// a counted noun; a trailing "s" for the plural is accepted). Add a unit here when a case needs it.
+// a counted noun; the plural is accepted: "-s", and "-ies" for a unit ending in "y"). Add a unit
+// here, in the singular, when a case needs it.
 export const UNITS = new Set(`
   % x percent usd dollar
   ms s second minute hour day week month year
   kb mb gb tb byte token
   line file pr pull request commit branch worktree repo repository crate package dependency
-  dependencie component module function export route block test rebase build run check
-  session subagent agent message call prompt turn attempt retry retrie step wave
+  component module function export route block test rebase build run check
+  session subagent agent message call prompt turn attempt retry step wave
   release migration pipeline dataset change error diagnostic regression compaction issue bug
-  people person engineer developer team user product language sdk
+  people person engineer developer team user product language sdk app application screen
   character word example comment review lifecycle window event
-  method task rule instruction zone office symbol project library librarie cent
+  method task rule instruction zone office symbol project library cent
 `.trim().split(/\s+/));
 // Words that may sit between a number and its unit without being units themselves.
 export const SCALES = new Set(['thousand', 'million', 'billion', 'k', 'm', 'b']);
@@ -107,11 +108,11 @@ export const practices = body => (sections(body).find(s => s.name === 'Practices
   .map(l => l.match(/^- \[(stated|ours)\] (.+) \(\[[^\]]+\]\([^)\s]+\)\)\s*$/)).filter(Boolean)
   .map(m => ({ tag: m[1], text: m[2] }));
 // Content words of a line, for matching a lesson to the practice it rests on: lower case, four
-// letters or more, a plural "s" dropped.
+// letters or more, a plural dropped ("-ies" to "y", then a final "s").
 const STOP = new Set(['that', 'this', 'with', 'from', 'when', 'then', 'than', 'each', 'into', 'only', 'have', 'they',
   'their', 'them', 'what', 'which', 'before', 'after', 'every', 'more', 'most', 'some', 'there', 'where', 'while']);
 export const contentWords = s => new Set(s.toLowerCase().split(/[^\p{L}]+/u).filter(w => w.length >= 4 && !STOP.has(w))
-  .map(w => w.replace(/s$/, '')));
+  .map(w => w.replace(/ies$/, 'y').replace(/s$/, '')));
 // The practice lines closest to a lesson's text (most content words shared); [] when none shares one.
 export function closestPractices(text, lines) {
   const want = contentWords(text);

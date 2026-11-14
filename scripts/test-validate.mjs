@@ -197,19 +197,35 @@ test('from_languages mixing unstated and a language fails', 1,
 test('from_languages: [unstated] passes', 0,
   d => edit(caseFile(d, BUN), 'from_languages: [Zig]', 'from_languages: [unstated]'));
 
-// Strength ceiling: the cases behind a lesson cap its strength.
-const strength = (id, from, to) => d => {
-  const page = { AGF: 'agent-failures', KNW: 'knowledge', TST: 'testing' }[id.slice(0, 3)];
-  const t = readFileSync(L(d, page), 'utf8').replace(/\r\n/g, '\n');
-  const at = t.indexOf(`- **${id}** `);
-  const i = t.indexOf(`Strength: ${from}.`, at);
-  writeFileSync(L(d, page), t.slice(0, i) + `Strength: ${to}.` + t.slice(i + `Strength: ${from}.`.length));
+// Strength ceiling: the cases behind a lesson cap its strength. The tests add a fixture lesson
+// (TEM-99) citing chosen cases, so they do not hang on the live cases behind real lessons, which
+// change as cases arrive.
+const FIXTURE_CASES = {
+  airbnb: '2025-04-01-airbnb-enzyme-to-rtl.md', // user-of-tool, assertion-only
+  bun: BUN, // seller-of-tool, shown-in-source
+  github: '2026-09-16-github-copilot-runtime-rust.md', // seller-of-tool, shown-in-source
+  slack: '2024-05-22-slack-enzyme-to-rtl.md', // user-of-tool, shown-in-source
+  uber: '2026-04-07-uber-junit4-to-junit5.md', // contrast case (ai_share: little), user-of-tool
 };
-test('medium on one assertion-only case fails', 1, strength('AGF-6', 'weak', 'medium'),
-  null, 'AGF-6: strength medium needs more evidence; its cases allow at most weak');
-test('strong on cases only from sellers of the tool fails', 1, strength('KNW-3', 'medium', 'strong'),
-  null, 'KNW-3: strength strong needs more evidence; its cases allow at most medium');
-test('strong on two cases, one not from a seller, passes', 0, strength('TST-5', 'medium', 'strong'));
+const fixture = (strength, names) => d => {
+  const f = L(d, 'team');
+  const t = readFileSync(f, 'utf8').replace(/\r\n/g, '\n');
+  const cites = names.map(k => `[Fixture ${k}][fx-${k}]`).join(', ');
+  const lesson = `- **TEM-99** [ours] A fixture lesson for the strength tests.\n  - Old system as oracle: no. Strength: ${strength}. Era: 2026.\n`
+    + `  - Cases: ${cites}.\n  - Against: None found.\n`;
+  const refs = names.map(k => `[fx-${k}]: ../cases/${FIXTURE_CASES[k]}#what-went-wrong`).join('\n');
+  const i = t.search(/^\[[a-z0-9-]+\]: /m); // the first reference definition; the lessons end before it
+  writeFileSync(f, `${t.slice(0, i).replace(/\n+$/, '\n')}${lesson}\n${t.slice(i).replace(/\n*$/, '\n')}${refs}\n`);
+};
+test('fixture lesson at its ceiling passes', 0, fixture('weak', ['airbnb']));
+test('medium on one assertion-only case fails', 1, fixture('medium', ['airbnb']),
+  null, 'TEM-99: strength medium needs more evidence; its cases allow at most weak');
+test('strong on cases only from sellers of the tool fails', 1, fixture('strong', ['bun', 'github']),
+  null, 'TEM-99: strength strong needs more evidence; its cases allow at most medium');
+test('strong on two cases, one not from a seller, passes', 0, fixture('strong', ['bun', 'airbnb']));
+test('a contrast case does not raise a lesson to strong', 1, fixture('strong', ['bun', 'github', 'uber']),
+  null, 'TEM-99: strength strong needs more evidence; its cases allow at most medium');
+test('one case that shows its data, not from a seller, allows strong', 0, fixture('strong', ['slack']));
 
 // build.mjs --check: generated files must match the sources.
 test('build --check passes on the repository', 0, () => ['--check'], null, null, 'build.mjs');
@@ -247,20 +263,6 @@ test('a rebuild after a rename rewrites the old name and leaves other URLs', 0, 
   }
   return ['--check'];
 }, null, null, 'build.mjs');
-test('a contrast case does not raise a lesson to strong', 1, d => {
-  const f = join(d, 'lessons', 'planning.md');
-  const t = readFileSync(f, 'utf8').replace(/\r\n/g, '\n');
-  const i = t.indexOf('- **PLN-8** ');
-  const j = t.indexOf('Strength: medium.', i);
-  writeFileSync(f, t.slice(0, j) + 'Strength: strong.' + t.slice(j + 'Strength: medium.'.length));
-}, null, 'PLN-8: strength strong needs more evidence');
-test('one case that shows its data, not from a seller, allows strong', 0, d => {
-  const f = join(d, 'lessons', 'context.md');
-  const t = readFileSync(f, 'utf8').replace(/\r\n/g, '\n');
-  const i = t.indexOf('- **CTX-2** ');
-  const j = t.indexOf('Strength: medium.', i);
-  writeFileSync(f, t.slice(0, j) + 'Strength: strong.' + t.slice(j + 'Strength: medium.'.length));
-});
 test('build --check fails after hand-editing the README disclosure', 1,
   d => { edit(join(d, 'README.md'), 'Disclosure: the cases', 'Disclosure: some cases'); return ['--check']; }, null, 'out of date: README.md', 'build.mjs');
 test('build refuses a README without its block markers', 1,

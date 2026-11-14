@@ -27,8 +27,11 @@ const words = text => text
   .toLowerCase()
   .match(/[\p{L}\p{N}]+(?:['.,][\p{L}\p{N}]+)*/gu) || [];
 
-const srcFiles = srcArgs.flatMap(p => (statSync(p).isDirectory()
-  ? readdirSync(p).filter(f => /\.(md|txt)$/.test(f)).map(f => join(p, f)) : [p]));
+// A folder is read recursively, so raw/ with one folder per case can be passed whole.
+const listSources = p => (statSync(p).isDirectory()
+  ? readdirSync(p).flatMap(f => (statSync(join(p, f)).isDirectory() || /\.(md|txt)$/.test(f) ? listSources(join(p, f)) : []))
+  : [p]);
+const srcFiles = srcArgs.flatMap(listSources);
 const grams = new Set();
 for (const f of srcFiles) {
   const w = words(readFileSync(f, 'utf8'));

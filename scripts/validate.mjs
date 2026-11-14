@@ -47,7 +47,11 @@ const STARTERS = new Set(['The', 'A', 'An', 'In', 'By', 'Over', 'About', 'Only',
   'Up', 'Nearly', 'Around', 'Roughly', 'Just', 'And', 'But', 'Then', 'Within', 'Across', 'Under']);
 // Words after which a number is a label, not a quantity: part 4, step 2, version 3.
 const LABELS = new Set(['part', 'parts', 'step', 'phase', 'version', 'figure', 'table', 'section', 'chapter', 'round']);
-const isUnit = w => { const x = w.toLowerCase().split('-').pop(); return UNITS.has(x) || (x.endsWith('s') && UNITS.has(x.slice(0, -1))); };
+// A plural is accepted: "-s" ("files"), and "-ies" for a unit ending in "y" ("dependencies").
+const isUnit = w => {
+  const x = w.toLowerCase().split('-').pop();
+  return UNITS.has(x) || (x.endsWith('ies') && UNITS.has(x.slice(0, -3) + 'y')) || (x.endsWith('s') && UNITS.has(x.slice(0, -1)));
+};
 const bare = t => t.replace(/^[^\p{L}\p{N}%]+|[^\p{L}\p{N}%]+$/gu, '');
 
 function checkUnits(text) {
