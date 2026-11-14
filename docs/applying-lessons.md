@@ -86,5 +86,7 @@ shows it held; then it is proven.
 ## Afterwards
 
 A [field report](field-reports.md) from this route says which lessons held in a project that is
-not a migration. It tells the maintainer which lessons and oracle tags to re-check against their
+not a migration. Draft one only once an item has met its problem since its baseline (proven, or
+stopped holding); until then, write in the record that nothing has happened yet, with the date,
+and revisit later. It tells the maintainer which lessons and oracle tags to re-check against their
 cases; it never changes a lesson by itself.

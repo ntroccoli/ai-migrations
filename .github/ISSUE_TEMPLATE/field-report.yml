@@ -17,6 +17,22 @@ body:
         - The checklist and some lessons
     validations:
       required: true
+  - type: dropdown
+    id: relation
+    attributes:
+      label: Relation to this collection
+      description: Reports from the maintainer's own projects are counted apart from independent ones; they are not independent evidence.
+      options:
+        - Independent (no tie to this collection or its maintainer)
+        - The maintainer's own project
+        - Other (say how in the next box)
+    validations:
+      required: true
+  - type: input
+    id: relation_other
+    attributes:
+      label: If other, the relation
+      description: One line, without names, for example "a colleague of the maintainer". Leave empty otherwise.
   - type: input
     id: used
     attributes:
@@ -88,6 +104,13 @@ body:
     attributes:
       label: IDs whose prediction did not hold
       description: Question or lesson IDs, comma-separated, or "none". Say why in the next box.
+    validations:
+      required: true
+  - type: input
+    id: untested
+    attributes:
+      label: IDs not yet tested by a real event
+      description: IDs applied or checked where nothing has happened yet that they would catch, comma-separated, or "none".
     validations:
       required: true
   - type: textarea
