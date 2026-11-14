@@ -134,8 +134,8 @@ for (const p of pages) for (const l of p.lessons) if (['yes', 'partly'].includes
   for (const fam of new Set(cited.flatMap(c => [c.meta.models].flat().filter(Boolean).map(familyOf)))) families.get(fam)?.lessons.push(l.id);
 }
 const familyRows = [...families].sort(([a, x], [b, y]) => (a === 'unstated') - (b === 'unstated') || y.newest.localeCompare(x.newest) || a.localeCompare(b));
-// Families with the same newest case and the same lessons share one row (they come from the same
-// cases), which keeps lessons/index.md under INDEX_MAX_BYTES.
+// Families with the same newest case and the same lessons share one row (usually because the same
+// cases name them; the row does not check that), which keeps lessons/index.md under INDEX_MAX_BYTES.
 const familyGroups = [];
 for (const [fam, f] of familyRows) {
   const g = fam !== 'unstated' && familyGroups.find(x => x.fams[0] !== 'unstated' && x.newest === f.newest && x.lessons.join() === f.lessons.join());
@@ -145,7 +145,7 @@ for (const [fam, f] of familyRows) {
 const NEWEST_CASE = cases.map(c => String(c.meta.date)).sort().at(-1);
 const MODEL_RULE = 'With a specific or a new model: process lessons (model ability: no) apply as they are. Start with the lessons tagged ' +
   'yes or partly whose cases name your model or its family ("By model" in lessons/index.md); treat those from other models as ' +
-  `things to re-check on yours, not tips. A model newer than every case (newest: ${NEWEST_CASE}) has no evidence here yet. The lessons ` +
+  `things to re-check on yours, not tips. A model released after the newest case (published ${NEWEST_CASE}) has no evidence here yet. The lessons ` +
   'hold only what the cases show: no prompting advice.';
 const out = {};
 
@@ -243,6 +243,7 @@ out['index.md'] = [
     'the author\'s stake in the tools; the cost the source gives; a one-line summary.', '',
   `Lessons drawn from the cases, by aspect: [lessons/index.md](lessons/index.md) (${all.length} lessons on ` +
     `${pages.length} pages). Before a migration: [checklist.md](checklist.md).`, '',
+  `Moves covered, by the language the code was in before the move: ${COVERED}`, '',
   ...cases.map(c => caseLine(c, 'cases/')), '',
 ].join('\n');
 
@@ -312,7 +313,6 @@ out['llms.txt'] = [
   MODEL_RULE, '',
   `${OUTDATED_NOTE} ${outdated.size ? `Marked now: ${[...outdated].join(', ')}.` : 'None is marked now.'} A lesson's Era gives the years of its cases and the newest model family among them.`, '',
   DISCLOSURE, '',
-  `Moves covered, by the language the code was in before the move: ${COVERED}`, '',
   '## How to use', '',
   `- Before a migration or a large restructuring: run the [checklist](${RAW_BASE}/checklist.md) on the repository and change nothing. Each ` +
     'question has a Check to measure and cites lesson IDs; open only the lessons and cases behind a gap.',
@@ -322,9 +322,11 @@ out['llms.txt'] = [
     `"Learning from the lessons"), follow [docs/applying-lessons.md](${RAW_BASE}/docs/applying-lessons.md).`,
   `- Open a case only when you need its detail. Each has "Who did what", "How it was checked", a Numbers table with ` +
     `the basis of each number, "What went wrong" and "Practices to copy". File format: [AGENTS.md](${RAW_BASE}/AGENTS.md).`,
-  `- After a review, a migration or a revisit: tell what the checklist or the lessons foresaw and what they missed, ` +
+  `- Once a prediction has met a real event (a decision not to migrate, a regression, an item proven or failing at a ` +
+    'revisit): tell what the checklist or the lessons foresaw and what they missed, ' +
     `in a field report ([how](${RAW_BASE}/docs/field-reports.md)); show the user the exact text before posting.`,
-  `- Revisit: the newest update is "${NEWEST.head}". If your record names it and nothing is due for re-check, stop. Else, for each ` +
+  `- Revisit: the newest update is "${NEWEST.head}". If your record names it and no item is due for re-check (due: waiting or ` +
+    'open, with commits in the project since the record\'s date), stop. Else, for each ' +
     `[log.md](${RAW_BASE}/log.md) entry newer than your record's, read changes/<entry>.md (newest: [${NEWEST.slug}](${RAW_BASE}/changes/${NEWEST.slug}.md)), ` +
     'the lesson IDs and questions it added, changed or removed.',
   `- Relative links inside these files resolve against the raw URL of the file that holds them (under ${RAW_BASE}/).`, '',
@@ -333,7 +335,9 @@ out['llms.txt'] = [
     `[lessons/evidence.md](${RAW_BASE}/lessons/evidence.md) first; open a page only for the lessons you use.`, '',
   ...pages.map(p => `- [${p.title}](${RAW_BASE}/lessons/${p.slug}.md): ${p.lessons.length} lessons, ${prefixOf(p)}-n. ${p.intro}`), '',
   '## Cases', '',
-  ...cases.map(c => caseLine(c, `${RAW_BASE}/cases/`)), '',
+  `- [The case index](${RAW_BASE}/index.md): ${cases.length} cases, one line each from its front matter (kind, from and to, AI ` +
+    'share, evidence, the author\'s stake in the tools, cost, a summary), and the moves covered by the language the code was ' +
+    'in before the move. Read it to choose cases; open only the cases you need.', '',
   '## Optional', '',
   `- [Everything in one file](${RAW_BASE}/llms-full.txt): the single opt-in file that holds everything (every lesson ` +
     'with its sub-items, every case line, the checklist and the pitfalls), for tools that cannot follow links. About ' +

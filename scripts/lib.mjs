@@ -135,6 +135,9 @@ export const LESSON_MAX_BYTES = 20 * 1024; // an agent reads a page whole
 // lessons/index.md (generated) is a table of contents for people; its size is checked so "By model" and
 // "Where the cases disagree" stay short as cases arrive.
 export const INDEX_MAX_BYTES = 12 * 1024;
+// llms.txt (generated) is what an agent reads first on every run; it lists no cases (index.md does), so it
+// does not grow with each case. Checked by validate.mjs.
+export const LLMS_MAX_BYTES = 20 * 1024;
 // Every lesson page opens with this sentence (after its title and intro); validate.mjs matches it.
 export const LESSON_NOTE = 'Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.';
 // Every lesson page holds this legend as its own paragraph, after the evidence note; validate.mjs
@@ -256,6 +259,8 @@ export const MODEL_FAMILIES = [
   [/\b(?:Claude\s+)?(Opus|Sonnet|Haiku|Fable|Mythos)\b(?:\s+(\d+))?/i, m => `Claude ${cap(m[1])} ${m[2] ? `${m[2]}.x` : '(version unstated)'}`],
   [/\bClaude\s+(\d+)/i, m => `Claude ${m[1]}.x`],
   [/\bClaude\b/i, () => 'Claude (version unstated)'],
+  // "GPT-5.3 Codex" is the Codex line ("Codex 5.3" in the same source), not the GPT chat line.
+  [/\bGPT[- ]?(\d+)(?:\.\d+)?[- ]Codex\b/i, m => `OpenAI Codex ${m[1]}.x`],
   [/\bGPT[- ]?(\d+)o\b/i, m => `GPT-${m[1]}o`],
   [/\bGPT[- ]?(\d+)/i, m => `GPT-${m[1]}.x`],
   [/\bGPT\b/i, () => 'GPT (version unstated)'],

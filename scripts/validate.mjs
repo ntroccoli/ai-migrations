@@ -7,10 +7,10 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, dirname, resolve, basename } from 'node:path';
 import {
-  CASES_DIR, CHECKLIST, NOTICE, SOURCE_TYPES, KINDS, AI_SHARES, RELATIONS, EVIDENCE, OUTCOMES,
+  ROOT, CASES_DIR, CHECKLIST, NOTICE, SOURCE_TYPES, KINDS, AI_SHARES, RELATIONS, EVIDENCE, OUTCOMES,
   STATUSES, BASES, REQUIRED, LANGUAGES, SECTIONS, NUMBERS_HEADER, UNITS, SCALES, PITFALLS, CHECKLIST_MAX_BYTES,
   parseCase, listCases, sections, refDefs, linksIn, anchor, practices, closestPractices,
-  LESSONS_DIR, LESSON_PAGES, LESSON_MAX_BYTES, INDEX_MAX_BYTES, LESSON_NOTE, LESSON_LEGEND, KARPATHY_IDEAS, ORACLES, MODEL_DEPENDENCE, STRENGTHS, META_LINE, parseLessonPage, strengthCeiling, lessonMeta,
+  LESSONS_DIR, LESSON_PAGES, LESSON_MAX_BYTES, INDEX_MAX_BYTES, LLMS_MAX_BYTES, LESSON_NOTE, LESSON_LEGEND, KARPATHY_IDEAS, ORACLES, MODEL_DEPENDENCE, STRENGTHS, META_LINE, parseLessonPage, strengthCeiling, lessonMeta,
   casesOf, expectedEra, eraText, parseEra, LOG, CHANGES_DIR, logEntries, parseChanges,
 } from './lib.mjs';
 
@@ -549,6 +549,11 @@ if (!args.length) {
   if (existsSync(index)) {
     const size = Buffer.byteLength(readFileSync(index, 'utf8').replace(/\r\n/g, '\n'), 'utf8');
     if (size > INDEX_MAX_BYTES) err('lessons/index.md', `${size} bytes (at most ${INDEX_MAX_BYTES}); shorten what build.mjs writes there`);
+  }
+  const llms = join(ROOT, 'llms.txt');
+  if (existsSync(llms)) {
+    const size = Buffer.byteLength(readFileSync(llms, 'utf8').replace(/\r\n/g, '\n'), 'utf8');
+    if (size > LLMS_MAX_BYTES) err('llms.txt', `${size} bytes (at most ${LLMS_MAX_BYTES}); shorten what build.mjs writes there`);
   }
   for (const c of files) if (!lessons.cited.has(c) && !list?.cited.has(c)) err(c, 'no lesson and no checklist question cites this case');
   summary = ` ${lessons.ids.size} lessons valid. checklist.md valid: ${list?.n ?? 0} questions, each citing lessons.`;

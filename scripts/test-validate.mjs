@@ -5,7 +5,7 @@
 import { cpSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync, existsSync, appendFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { ROOT, parseCase, expectedEra, eraText, LOG, logEntries } from './lib.mjs';
+import { ROOT, parseCase, expectedEra, eraText, LOG, logEntries, modelFamily } from './lib.mjs';
 
 const TMP = join(ROOT, '.test-tmp');
 const PARTS = ['scripts', 'cases', 'lessons', 'checklist.md', 'pitfalls.md', 'NOTICE.md', 'index.md', 'llms.txt', 'llms-full.txt',
@@ -196,8 +196,13 @@ test('lesson page over the size cap fails', 1,
   d => appendFileSync(L(d, 'review'), `\n[pad]: ../index.md${' '.repeat(21000)}\n`), null, 'bytes (at most 20480)');
 test('lessons/index.md over its size cap fails', 1,
   d => appendFileSync(join(d, 'lessons', 'index.md'), `\n${' '.repeat(13000)}\n`), null, 'bytes (at most 12288)');
-test('a number after day or week is a label, not a quantity', 0,
-  d => edit(join(d, 'cases', BUN), '\n## What worked\n', '\n## What worked\n\n- On day 5 and in week 2 the port ran ([source](https://bun.com/blog/bun-in-rust)).\n'), [join('cases', BUN)]);
+test('llms.txt over its size cap fails', 1,
+  d => appendFileSync(join(d, 'llms.txt'), `\n${' '.repeat(21000)}\n`), null, 'bytes (at most 20480)');
+// One fixture per label word: in a shared sentence the other word, within three words, would pass the number.
+test('a number after day is a label, not a quantity', 0,
+  d => edit(join(d, 'cases', BUN), '\n## What worked\n', '\n## What worked\n\n- On day 5 the port ran ([source](https://bun.com/blog/bun-in-rust)).\n'), [join('cases', BUN)]);
+test('a number after week is a label, not a quantity', 0,
+  d => edit(join(d, 'cases', BUN), '\n## What worked\n', '\n## What worked\n\n- In week 2 the port ran ([source](https://bun.com/blog/bun-in-rust)).\n'), [join('cases', BUN)]);
 test('bare number in a lesson sub-item fails', 1,
   d => edit(L(d, 'review'), '  - Against: None found.\n', '  - Against: None found in 7 gizmos.\n'), null, 'number "7" has no unit');
 test('long quote in a lesson page fails', 1,
@@ -337,8 +342,8 @@ test('build refuses a lesson without its oracle line', 1,
     writeFileSync(p, readFileSync(p, 'utf8').replace(/\n {2}- Old system as oracle: [^\n]*(?=\n {2}- Cases: \[GitHub: who did what\])/, ''));
     return [];
   }, null, 'REV-2: no "Old system as oracle" line', 'build.mjs');
-test('build --check fails after a from_languages change (llms.txt "Moves covered")', 1,
-  d => { edit(caseFile(d, INTEL), 'from_languages: [C]', 'from_languages: [C, Python]'); return ['--check']; }, null, 'out of date: llms.txt', 'build.mjs');
+test('build --check fails after a from_languages change (index.md "Moves covered")', 1,
+  d => { edit(caseFile(d, INTEL), 'from_languages: [C]', 'from_languages: [C, Python]'); return ['--check']; }, null, 'out of date: index.md', 'build.mjs');
 test('llms-full.txt carries each reference definition once', 0, d => {
   node(d, 'build.mjs', []);
   const defs = readFileSync(join(d, 'llms-full.txt'), 'utf8').match(/^\[[^\]]+\]:/gm) || [];
@@ -372,6 +377,18 @@ test('evidence.md shortens a Disagree line to its case names', 0, d => {
   if (!line.endsWith('Against: disagree: Airbnb.')) throw new Error(`line: ${line}`);
   return ['--check'];
 }, null, null, 'build.mjs');
+// modelFamily: a name the source writes two ways lands in one family; GPT chat names stay GPT.
+for (const [name, want] of [['GPT-5.3 Codex', 'OpenAI Codex 5.x'], ['Codex 5.3', 'OpenAI Codex 5.x'], ['GPT-5.3', 'GPT-5.x'], ['GPT-4o', 'GPT-4o']]) {
+  const got = modelFamily(name), ok = got === want;
+  console.log(`${ok ? 'ok  ' : 'FAIL'} modelFamily("${name}") is ${want}`);
+  if (!ok) failed.push(`modelFamily("${name}"): wanted ${want}, got ${got}`);
+}
+// "By model": families with the same newest case and the same lessons share one row, so no two rows match.
+test('"By model" rows never repeat a newest case with the same lessons', 0, d => {
+  const rows = (generated(d).index.split(/^## By model$/m)[1]?.split(/^## /m)[0].match(/^\| (?!Model family|---).*$/gm) || [])
+    .map(r => r.split(' | ').slice(2).join(' | '));
+  if (rows.length < 2 || new Set(rows).size !== rows.length) throw new Error(`rows: ${rows.length}, distinct: ${new Set(rows).size}`);
+});
 // One agent route (llms.txt, then evidence.md, then a page): no other short file lists every lesson.
 test('lessons/index.md and llms.txt do not list every lesson', 0, d => {
   const o = generated(d);

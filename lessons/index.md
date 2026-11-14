@@ -41,7 +41,7 @@ The legend of the tags, the Era and the strength rule heads every aspect page.
 
 ## By model
 
-With a specific or a new model: process lessons (model ability: no) apply as they are. Start with the lessons tagged yes or partly whose cases name your model or its family ("By model" in lessons/index.md); treat those from other models as things to re-check on yours, not tips. A model newer than every case (newest: 2026-11-03) has no evidence here yet. The lessons hold only what the cases show: no prompting advice.
+With a specific or a new model: process lessons (model ability: no) apply as they are. Start with the lessons tagged yes or partly whose cases name your model or its family ("By model" in lessons/index.md); treat those from other models as things to re-check on yours, not tips. A model released after the newest case (published 2026-11-03) has no evidence here yet. The lessons hold only what the cases show: no prompting advice.
 
 Families group the model names the cases give by maker, line and major version ("Claude Opus 4.6" and "Opus 4.8" are Claude Opus 4.x; "GPT-5.4" and "gpt-5.5" are GPT-5.x); a name with a line but no version, and an internal model, stay apart; unstated covers the cases that name no model. Lessons: those tagged yes or partly for model ability whose cited cases name a model of the family (a lesson's Era names only the newest). Newest case: the latest publication date among the cases that name it. Families with the same newest case and lessons share a row.
 
@@ -50,7 +50,7 @@ Families group the model names the cases give by maker, line and major version (
 | Claude Opus 4.x | Claude Opus 4.6; Claude Opus 4.8; Opus 4.6 | 2026-11-03 | 42: PLN-7, PLN-8, PLN-10, PLN-12, TST-5, TST-10, TST-14, VER-3, VER-10, REV-1, REV-2, REV-3, REV-8, REV-9, ROL-5, OPS-3, SEC-2, SEC-5, SEC-9, TEM-1, TEM-6, TOL-1, TOL-6, TOL-9, TOL-10, CTX-2, CTX-4, CTX-9, ORC-1, ORC-3, ORC-5, ORC-6, AGF-1, AGF-2, AGF-3, AGF-4, AGF-5, AGF-7, AGF-9, OVS-1, OVS-2, MSR-7 |
 | Claude Sonnet 4.x | Claude Sonnet 4.5; Claude Sonnet 4.6 | 2026-11-03 | 27: PLN-8, PLN-10, PLN-12, TST-5, TST-10, VER-3, VER-7, VER-10, REV-3, REV-9, OPS-2, SEC-5, SEC-9, TOL-1, TOL-9, TOL-10, CTX-2, CTX-9, ORC-1, ORC-6, AGF-1, AGF-6, AGF-7, AGF-9, OVS-1, OVS-5, MSR-7 |
 | Claude Opus 5.x | Opus 5.5; Claude Opus 5 | 2026-10-07 | 21: PLN-7, REV-1, REV-2, REV-3, REV-8, REV-9, ROL-5, OPS-3, SEC-2, TEM-1, TOL-6, CTX-4, ORC-1, ORC-3, ORC-5, AGF-2, AGF-3, AGF-4, AGF-5, OVS-1, OVS-2 |
-| GPT-5.x | GPT-5.6 Sol; gpt-5.5; GPT-5.5; GPT-5.4; GPT-5.3; GPT-5.3 Codex | 2026-10-07 | 34: PLN-7, PLN-12, TST-5, TST-10, TST-14, REV-1, REV-2, REV-3, REV-8, REV-9, ROL-5, OPS-3, SEC-2, SEC-5, SEC-9, TEM-1, TEM-6, TOL-1, TOL-6, CTX-4, CTX-9, ORC-1, ORC-3, ORC-5, ORC-6, AGF-1, AGF-2, AGF-3, AGF-4, AGF-5, AGF-9, OVS-1, OVS-2, MSR-7 |
+| GPT-5.x | GPT-5.6 Sol; gpt-5.5; GPT-5.5; GPT-5.4; GPT-5.3 | 2026-10-07 | 34: PLN-7, PLN-12, TST-5, TST-10, TST-14, REV-1, REV-2, REV-3, REV-8, REV-9, ROL-5, OPS-3, SEC-2, SEC-5, SEC-9, TEM-1, TEM-6, TOL-1, TOL-6, CTX-4, CTX-9, ORC-1, ORC-3, ORC-5, ORC-6, AGF-1, AGF-2, AGF-3, AGF-4, AGF-5, AGF-9, OVS-1, OVS-2, MSR-7 |
 | GPT-6.x | GPT 6 Astra | 2026-10-07 | 0: none |
 | Claude Haiku 4.x; Claude Sonnet (version unstated); Grok 4.x | Claude Haiku 4.5; Claude Sonnet; Grok 4.6 | 2026-09-16 | 21: PLN-7, REV-1, REV-2, REV-3, REV-8, REV-9, ROL-5, OPS-3, SEC-2, TEM-1, TOL-6, CTX-4, ORC-1, ORC-3, ORC-5, AGF-2, AGF-3, AGF-4, AGF-5, OVS-1, OVS-2 |
 | Gemini 3.x | Gemini 3.1 Pro; Gemini 3.1 | 2026-09-16 | 26: PLN-7, PLN-12, TST-5, TST-14, REV-1, REV-2, REV-3, REV-8, REV-9, ROL-5, OPS-3, SEC-2, TEM-1, TEM-6, TOL-6, CTX-4, ORC-1, ORC-3, ORC-5, AGF-2, AGF-3, AGF-4, AGF-5, AGF-9, OVS-1, OVS-2 |
@@ -58,7 +58,7 @@ Families group the model names the cases give by maker, line and major version (
 | Claude Mythos (version unstated) | Claude Mythos Preview | 2026-08-24 | 10: TST-5, TST-10, SEC-5, SEC-9, TOL-1, CTX-9, ORC-6, AGF-1, OVS-1, MSR-7 |
 | Claude (version unstated) | Claude; Claude via Claude Code (version unstated) | 2026-07-08 | 31: PLN-6, PLN-8, PLN-13, VER-3, VER-4, VER-7, REV-4, REV-9, REV-11, SEC-1, SEC-2, SEC-3, TEM-3, TEM-6, TOL-4, TOL-5, TOL-6, CTX-1, CTX-3, CTX-4, CTX-5, CTX-6, CTX-7, CTX-8, CTX-12, AGF-2, AGF-4, AGF-5, AGF-7, OVS-1, KNW-4 |
 | Claude Fable 5.x | Claude Fable 5 (pre-release version) | 2026-07-08 | 16: PLN-7, REV-1, REV-2, REV-3, REV-8, OPS-2, OPS-3, SEC-2, SEC-3, TEM-1, TOL-1, ORC-1, ORC-2, AGF-1, OVS-1, MSR-7 |
-| OpenAI Codex 5.x | Codex 5.3 | 2026-07-06 | 9: PLN-12, TST-5, TST-14, REV-1, OPS-3, TEM-6, CTX-4, AGF-5, AGF-9 |
+| OpenAI Codex 5.x | Codex 5.3; GPT-5.3 Codex | 2026-07-06 | 9: PLN-12, TST-5, TST-14, REV-1, OPS-3, TEM-6, CTX-4, AGF-5, AGF-9 |
 | Gemini (internal) | internal version of Gemini fine-tuned with the DIDACT framework | 2025-04-13 | 14: PLN-8, VER-3, VER-7, REV-4, REV-9, TOL-2, TOL-3, TOL-4, TOL-5, AGF-4, AGF-7, AGF-8, OVS-2, MSR-7 |
 | GPT-4o | GPT-4o | 2025-02-20 | 11: PLN-6, TST-11, TOL-4, CTX-1, CTX-2, CTX-3, CTX-4, CTX-5, AGF-2, AGF-4, AGF-7 |
 | Claude 2.x | Claude 2.1 | 2024-05-22 | 9: TST-5, TEM-3, TOL-2, TOL-4, TOL-6, CTX-1, CTX-2, OVS-2, MSR-7 |
