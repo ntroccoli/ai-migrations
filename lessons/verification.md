@@ -50,6 +50,10 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: partly. Depends on model ability: no. Strength: weak. Era: 2025–2026; newest: Claude Opus 4.x.
   - Cases: [Bloomberg: what worked][bbg-worked], [Bloomberg: what went wrong][bbg-wrong].
   - Against: None found; Bloomberg's authors cannot separate this from the population, the earlier start, the perceived risk of each move and a part-time review helper ([Bloomberg][bbg-worked]).
+- **VER-12** [stated] When the move is done, add a check that stops new code from using the old path, so later work does not quietly undo the migration.
+  - Old system as oracle: no. Depends on model ability: no. Strength: weak. Era: 2026; newest: Claude (version unstated).
+  - Cases: [GitLab: what worked][glb-worked].
+  - Against: None found; one seller's account, which does not say how the check works or whether it has caught anything ([GitLab][glb-wrong]).
 
 [air-worked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-worked
 [bbg-who]: ../cases/2026-11-03-bloomberg-python-cpp-uplift.md#who-did-what
@@ -62,6 +66,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [gh-checked]: ../cases/2026-09-16-github-copilot-runtime-rust.md#how-it-was-checked
 [gh-numbers]: ../cases/2026-09-16-github-copilot-runtime-rust.md#numbers
 [gh-wrong]: ../cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong
+[glb-worked]: ../cases/2026-07-08-gitlab-rate-limiting.md#what-worked
 [glb-wrong]: ../cases/2026-07-08-gitlab-rate-limiting.md#what-went-wrong
 [goo-checked]: ../cases/2025-04-13-google-int64-ids.md#how-it-was-checked
 [goo-who]: ../cases/2025-04-13-google-int64-ids.md#who-did-what

@@ -2,7 +2,7 @@
 title: GitLab uses AI agents to move its application rate limiter onto a shared Ruby gem
 date: 2026-07-08
 company: GitLab
-summary: Agents moved 121 rate-limit keys onto one gem; 17 keys slipped past the plan, and a divergence shadow mode had flagged reached users.
+summary: Agents moved 121 rate-limit keys onto one gem; 17 keys slipped past the plan, and a divergence that shadow mode had flagged still reached users.
 source_url: https://about.gitlab.com/blog/ai-agents-for-migrating-rate-limiting-system/
 also: []
 source_type: engineering-post
@@ -19,7 +19,7 @@ cost: unstated
 ai_share: unstated
 tools: [GitLab Duo Agent Platform, GitLab Duo Code Review, MCP, feature flags, shadow-mode comparison]
 models: [Claude]
-period: 2026
+period: 2026-05..2026-06
 outcome: completed
 status: current
 superseded_by:
@@ -44,10 +44,10 @@ A post on GitLab's blog by Sam Wiskow, who set the project's scope and wrote par
 code. GitLab sells the AI features the team used, GitLab Duo Agent Platform and Duo Code Review;
 the post recommends them and ends with a link to a free trial, so the author is a seller of the
 tool. It states results without data: no dashboards, logs or counts beyond those in the text. Its
-two figures are diagrams (the agent loop and the shifted bottleneck). It names Claude once, as the
-agent that missed keys, with no version. Full text not archived (the site's terms forbid automated
-retrieval); checks ran against notes
-([source](https://about.gitlab.com/blog/ai-agents-for-migrating-rate-limiting-system/)).
+two figures are diagrams (the agent loop and the shifted bottleneck). It names Claude, with no version, as
+the agent that missed keys. The full text is not stored here (the site's terms forbid automated
+retrieval); our notes were taken from it once, before its terms were read, and this case was checked
+against those notes ([source](https://about.gitlab.com/blog/ai-agents-for-migrating-rate-limiting-system/)).
 
 ## What was migrated
 
@@ -56,7 +56,9 @@ monolith, which holds 121 keys, and another one at the Rack layer. The goal is o
 `labkit-ruby`, observable and operated alike in every place. All monolith traffic passes
 through it, so its failures had to show and be reversible. The post covers the application-level
 part; the Rack layer, at about 4 billion requests daily, is next and in progress
-([source](https://about.gitlab.com/blog/ai-agents-for-migrating-rate-limiting-system/#the-setup)).
+([source](https://about.gitlab.com/blog/ai-agents-for-migrating-rate-limiting-system/#the-setup), [now](https://about.gitlab.com/blog/ai-agents-for-migrating-rate-limiting-system/#where-we-are-now)). The gem itself was largely
+built in the same project (14 specs and more than 30 merge requests into `labkit-ruby`), so the case
+is part new build and part migration ([source](https://about.gitlab.com/blog/ai-agents-for-migrating-rate-limiting-system/#the-setup)).
 
 ## Who did what
 
@@ -150,8 +152,8 @@ near zero, and a guardrail now stops new rate limits from bypassing the framewor
   characteristics instead of array scopes) waits for a later pass
   ([source](https://about.gitlab.com/blog/ai-agents-for-migrating-rate-limiting-system/#where-the-loop-missed)).
 - Redis capacity: at the start Bob judged the 4-shard cluster behind rate limiting to have some
-  spare capacity, though too little for twice its load; in early May a limit met before came back and
-  needed an infrastructure change. `maxclients` was raised in stages and stopped at 75,000
+  spare capacity, though too little for twice its load; in early May a Redis limit met before this project came back
+  and needed an infrastructure change. The connection cap, `maxclients`, was raised in stages and stopped at 75,000
   connections, short of 100,000 connections, because more would have saturated the primaries'
   CPU; each shard has one primary and executes commands on one core, so no bigger machine helps
   ([source](https://about.gitlab.com/blog/ai-agents-for-migrating-rate-limiting-system/#where-the-loop-missed)).
@@ -176,7 +178,7 @@ near zero, and a guardrail now stops new rate limits from bypassing the framewor
 - [stated] Cap the rounds of agent review and send unresolved blockers to a person. ([The setup](https://about.gitlab.com/blog/ai-agents-for-migrating-rate-limiting-system/#the-setup))
 - [stated] Do not read agreement in shadow mode as success; push traffic past the limits at a low rollout share first. ([What worked](https://about.gitlab.com/blog/ai-agents-for-migrating-rate-limiting-system/#what-worked))
 - [stated] Group many call sites under one feature flag pair instead of a flag per site. ([What worked](https://about.gitlab.com/blog/ai-agents-for-migrating-rate-limiting-system/#what-worked))
-- [stated] Label shadow comparison results so a structural collision shows apart from ordinary disagreement. ([Where the loop missed](https://about.gitlab.com/blog/ai-agents-for-migrating-rate-limiting-system/#where-the-loop-missed))
+- [ours] Label shadow comparison results so a structural collision shows apart from ordinary disagreement. ([Where the loop missed](https://about.gitlab.com/blog/ai-agents-for-migrating-rate-limiting-system/#where-the-loop-missed))
 - [ours] Hold the rollout ramp while shadow comparison flags any divergence on a key. ([Where the loop missed](https://about.gitlab.com/blog/ai-agents-for-migrating-rate-limiting-system/#where-the-loop-missed))
 - [ours] Have agents and people keep a running count of migrated items against the full inventory, and check it before closing. ([Where the loop missed](https://about.gitlab.com/blog/ai-agents-for-migrating-rate-limiting-system/#where-the-loop-missed))
 - [stated] Have a person audit the main branch for leftovers when the migration looks done. ([Where we are now](https://about.gitlab.com/blog/ai-agents-for-migrating-rate-limiting-system/#where-we-are-now))

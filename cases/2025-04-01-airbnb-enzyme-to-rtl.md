@@ -40,7 +40,7 @@ about a week. The team had estimated the work at 1.5 years by hand and finished 
 A post on Airbnb's engineering blog by one of its engineers (the page shows no date; the site's
 publishing data gives 2025-04-01). Airbnb does not sell the tools it used. The post states its
 results without the data behind them. It names no model, team size or cost figure; its only
-figures are two diagrams of the pipeline.
+figures are two diagrams of the pipeline. The full text is not stored here (the site's terms forbid storing or scraping its content); this case was checked against it before it was discarded, and later checks run against our notes.
 
 ## What was migrated
 

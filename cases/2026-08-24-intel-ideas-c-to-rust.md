@@ -46,9 +46,8 @@ development and offered for experimental use, and its open challenges promote In
 tagging hardware, so the case is rated as a tool author's. The method is shown: the harness,
 its ranking code and its prompt are public, and the test format follows DARPA's public test
 corpus. The libgit2 figures are stated without logs or the translated code. The work is funded
-by DARPA. The site refuses automated reading; the full text was archived on 2026-11-13 by
-reading the page in a browser, and our checks for copied wording and for the numbers ran against
-that text.
+by DARPA. The site refuses automated reading; the page was read once in a browser on 2026-11-13.
+The full text is not stored here (the site's terms forbid storing or scraping its content); this case was checked against it before it was discarded, and later checks run against our notes.
 
 ## What was migrated
 

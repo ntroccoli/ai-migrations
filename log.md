@@ -16,9 +16,8 @@ first.
   moved to ClickHouse behind a shadow comparison. One field report was open (relation to the
   collection unstated, not a migration); it is not independent evidence and changed nothing here.
 - **Mix:** two language moves, one mixed move (language and architecture), two framework moves,
-  two data-store moves and one restructuring; one author sells a tool the case used (GitLab). Two cases were written from notes
-  only under their sites' terms (Mindstone, GitLab), so they have no quote.
-- **Added:** the eight case files; 11 new lessons; in `pitfalls.md`, a section for data-store
+  two data-store moves and one restructuring; one author sells a tool the case used (GitLab).
+- **Added:** the eight case files; 12 new lessons; in `pitfalls.md`, a section for data-store
   moves (access patterns kept on a new engine, sums that overflow at real volumes) and an
   equality item under library upgrades.
 - **Rules:** new units (service, target, queue, key, cohort and others) and Groovy among the
@@ -35,6 +34,11 @@ first.
   run flagged the divergence; its labels did not set it apart), PagerDuty's cost ratio (the post
   gives no method), Temporal's AI share (`unstated`: the posts state none) and Mindstone's scope
   (86 targets, not 86 services), and took back grades raised faster than the cases support.
+- **Sources kept as notes:** the sites of seven cases forbid storing their text (Mindstone, GitLab,
+  and from this update also Airbnb, Asana, Datadog, Intel and Shopify), so the private archive keeps
+  notes only. Each such case says so in its Source section and carries no quote (Shopify's quote
+  was dropped); it counts toward a lesson's strength like any other. GitLab's page was fetched
+  once by script before its terms were read; the maintainer kept the case on its notes.
 
 ### Checklist and lessons impact
 
@@ -48,7 +52,7 @@ first.
   names and points to the index for each move, and the lesson IDs point to `lessons/evidence.md`.
   The file grew from 20,051 to 20,418 bytes, under its 20,480-byte cap. No field report was
   behind any change.
-- **New lessons:** PLN-13, TST-13, TST-14, TST-15, ROL-10, ROL-11, OPS-8, TEM-6, CTX-12, CTX-13, KNW-5.
+- **New lessons:** PLN-13, TST-13, TST-14, TST-15, VER-12, ROL-10, ROL-11, OPS-8, TEM-6, CTX-12, CTX-13, KNW-5.
   Two merges: GitLab's shadow-mode lesson and Temporal's "aim the comparison at the largest
   inputs" became ROL-10; Mindstone's and GitLab's notes on the people's cost of agent work became
   TEM-6.
@@ -85,7 +89,7 @@ first.
     CTX-1, REV-11, KNW-4, VER-4.
   - Mindstone: questions 2 and 10; lessons TST-14, TEM-6, PLN-13, CTX-12 (new), ROL-1, OVS-1, TST-5, TST-1,
     TST-13, PLN-5, AGF-5, AGF-9, KNW-1, REV-1, OPS-3, CTX-4, MSR-1, PLN-12.
-  - GitLab: questions 10 and 11; lessons ROL-10, OPS-8, TEM-6 (new), REV-1, ROL-2, REV-9,
+  - GitLab: questions 10 and 11; lessons ROL-10, OPS-8, TEM-6, VER-12 (new), REV-1, ROL-2, REV-9,
     VER-7, CTX-4, OVS-3, ROL-3, REV-5.
   - Checkly: question 2; lessons TST-15 (new), TST-1, PLN-5, TST-5, TST-2, TST-13, ROL-2, KNW-1.
   - Temporal: questions 7, 8, 9 and 11; lessons ROL-10, ROL-11, CTX-13, KNW-5 (new), KNW-4, PLN-7,

@@ -44,6 +44,7 @@ A post on Datadog's engineering blog by Arnold Wakim, dated 2026-06-23 in
 the page's publishing data. The AI tools this case used (Claude and Cursor) are not Datadog's, and the post promotes no Datadog
 product. It states its results without the measurements behind them and gives no team size. Its
 two figures are diagrams (the old architecture and the new schema) with no numbers.
+The full text is not stored here (the site's terms forbid archiving or copying its content); this case was checked against it before it was discarded, and later checks run against our notes.
 
 ## What was migrated
 

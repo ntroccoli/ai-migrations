@@ -44,8 +44,7 @@ A post on Mindstone's Substack blog by Peter Timson, a product engineer there, p
 does not sell the agents or models the case used, and the post promotes none of them, so the
 author is a user of the tools. The post shows code excerpts of its harness, pipeline and checks,
 but no logs, data or repository behind its counts; the scope table is an image
-([source](https://blog.mindstone.com/p/can-you-trust-code-no-human-wrote#%C2%A71-the-problem)). The full text is not stored here (Substack's terms forbid storing it); our own-words check ran
-against the maintainer's notes, not the original.
+([source](https://blog.mindstone.com/p/can-you-trust-code-no-human-wrote#%C2%A71-the-problem)). The full text is not stored here (the site's terms forbid storing its content); this case was checked against it before it was discarded, and later checks run against our notes.
 
 ## What was migrated
 

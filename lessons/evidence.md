@@ -2,7 +2,7 @@
 
 # Lesson evidence in one line each
 
-152 lessons. This is the one file that lists every lesson (besides llms-full.txt, which holds everything). To choose lessons: scan this file, then open the aspect page (the heading link) only for the lessons you use; it holds the full "Against" line, the Era (years and newest model family) and the legend. Each line: ID, tag (stated by a source, or ours), the lesson, then oracle (does the evidence rely on the old system), model (does it depend on model ability), strength, "may be outdated" where it applies, the cases it cites, and the cases its "Against" line cites.
+153 lessons. This is the one file that lists every lesson (besides llms-full.txt, which holds everything). To choose lessons: scan this file, then open the aspect page (the heading link) only for the lessons you use; it holds the full "Against" line, the Era (years and newest model family) and the legend. Each line: ID, tag (stated by a source, or ours), the lesson, then oracle (does the evidence rely on the old system), model (does it depend on model ability), strength, "may be outdated" where it applies, the cases it cites, and the cases its "Against" line cites.
 
 ## [Planning and scoping](planning.md)
 
@@ -51,6 +51,7 @@
 - **VER-9** [stated] Where the target has no tests the agent cannot check itself: leave it out, require tests first, or budget for owners to test each change. Oracle partly; model no; weak. Cases: Spotify. Against: Intel.
 - **VER-10** [stated] Where one change repeats across many targets, keep the pass/fail gates deterministic as the model writes more; an error a model-run gate lets through can spread to every target. Oracle no; model partly; weak. Cases: Bloomberg. Against: disagree: Google, Spotify, Shopify, Bun.
 - **VER-11** [stated] Before building the pipeline, judge how late a wrong change first fails; changes that only the owner's deploy could check were merged less and rejected more. Oracle partly; model no; weak. Cases: Bloomberg. Against: none found; a limit from Bloomberg.
+- **VER-12** [stated] When the move is done, add a check that stops new code from using the old path, so later work does not quietly undo the migration. Oracle no; model no; weak. Cases: GitLab. Against: none found; a limit from GitLab.
 
 ## [Code review](review.md)
 

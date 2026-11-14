@@ -46,7 +46,7 @@ describes the first app moved, with before-and-after app metrics
 coding agents or models it used; its tools Helix and Tardis are internal. The posts state results
 without the data behind them, apart from two small tables of startup times and app sizes and
 screen recordings. Neither post names a model, a token count or a cost. Two linked posts on X
-were not archived.
+were not archived. The full text is not stored here (the site's terms forbid storing or scraping its content); this case was checked against it before it was discarded, and later checks run against our notes.
 
 ## What was migrated
 
@@ -184,11 +184,6 @@ stability, download size, build speed and frame rate
 - [stated] Capture screenshots and raw analytics events from old and new apps at named checkpoints and have agents compare them. ([What we've learned](https://shopify.engineering/shop-app-migration))
 - [stated] Build one platform first and port the other from it, giving each platform a separate plan and a separate review. ([What we've learned](https://shopify.engineering/shop-app-migration))
 - [ours] Before trusting a speed-up, time how long an agent takes to test one change on the target platform; minutes per test cap the gain. ([Fast feedback loops](https://shopify.engineering/back-to-native))
-
-## In their words
-
-> "It doesn’t matter how good the model is if it can’t test its work quickly"
-> — Mustafa Ali, Shopify, [2026-09-10](https://shopify.engineering/back-to-native)
 
 ## Context
 

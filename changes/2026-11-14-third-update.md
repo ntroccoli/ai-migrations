@@ -4,7 +4,7 @@
 
 What this [log.md](../log.md) entry added, changed or removed, since "2026-11-14 — second update": lesson IDs and checklist questions (Q1 is question 1). A revisit reads these lines for every entry newer than the one its record names, then only the lessons and questions they list.
 
-- Added lessons: PLN-13, TST-13, TST-14, TST-15, ROL-10, ROL-11, OPS-8, TEM-6, CTX-12, CTX-13, KNW-5
+- Added lessons: PLN-13, TST-13, TST-14, TST-15, VER-12, ROL-10, ROL-11, OPS-8, TEM-6, CTX-12, CTX-13, KNW-5
 - Changed lessons: PLN-5, PLN-6, PLN-7, PLN-9, PLN-11, PLN-12, TST-1, TST-2, TST-5, TST-7, TST-9, TST-12, VER-1, VER-4, VER-7, REV-1, REV-3, REV-5, REV-9, REV-10, REV-11, ROL-1, ROL-2, ROL-3, OPS-3, CST-2, TEM-1, TEM-2, TOL-6, CTX-1, CTX-4, CTX-5, CTX-10, AGF-5, AGF-6, AGF-9, OVS-1, OVS-3, KNW-1, KNW-4, MSR-1, MSR-9
 - Lessons gone: none
 - Added questions: none
@@ -57,6 +57,7 @@ VER-8 dcf78524
 VER-9 7296298f
 VER-10 76144bbe
 VER-11 36c4cc99
+VER-12 f5d34aa1
 REV-1 bf402055
 REV-2 40cd5896
 REV-3 3ca7be3a

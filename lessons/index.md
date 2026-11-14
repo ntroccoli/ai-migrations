@@ -14,7 +14,7 @@ The legend of the tags, the Era and the strength rule heads every aspect page.
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [Planning and scoping](planning.md) | PLN | 13 | 11 | 2 | 1 | 2 | 10 | 1 | 6 | 6 |
 | [Testing and oracles](testing.md) | TST | 15 | 11 | 4 | 9 | 3 | 3 | 0 | 5 | 10 |
-| [Verification loops and gates](verification.md) | VER | 11 | 11 | 0 | 1 | 8 | 2 | 0 | 4 | 7 |
+| [Verification loops and gates](verification.md) | VER | 12 | 12 | 0 | 1 | 8 | 3 | 0 | 4 | 8 |
 | [Code review](review.md) | REV | 11 | 8 | 3 | 1 | 5 | 5 | 0 | 7 | 4 |
 | [Release and rollout](rollout.md) | ROL | 11 | 10 | 1 | 1 | 3 | 7 | 0 | 1 | 10 |
 | [Machines and operations](operations.md) | OPS | 8 | 6 | 2 | 1 | 2 | 5 | 0 | 2 | 6 |
@@ -28,7 +28,7 @@ The legend of the tags, the Era and the strength rule heads every aspect page.
 | [Human oversight](oversight.md) | OVS | 5 | 5 | 0 | 0 | 1 | 4 | 0 | 3 | 2 |
 | [Knowledge capture](knowledge.md) | KNW | 5 | 5 | 0 | 0 | 1 | 4 | 0 | 2 | 3 |
 | [Measuring and reading results](measurement.md) | MSR | 10 | 4 | 6 | 0 | 3 | 7 | 0 | 1 | 9 |
-| **All** | | 152 | 123 | 29 | 15 | 44 | 93 | 15 | 63 | 74 |
+| **All** | | 153 | 124 | 29 | 15 | 44 | 94 | 15 | 63 | 75 |
 
 "Model" counts the "Depends on model ability" tag.
 

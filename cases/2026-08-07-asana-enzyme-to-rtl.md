@@ -43,7 +43,8 @@ dated 2026-08-07. It closes by calling itself part of a continuing Asana and Ope
 collaboration on what Codex can do for larger engineering work, so `author_relation` is
 `seller-of-tool`: the author's company promotes, in the source, the AI tool the case used (Asana
 itself does not sell Codex). The post also points to an OpenAI article on harness engineering.
-It states its figures without data, logs or a method; it has no charts or tables
+It states its figures without data, logs or a method; it has no charts or tables.
+The full text is not stored here (the site's terms forbid scraping it); this case was checked against it before it was discarded, and later checks run against our notes
 ([source](https://asana.com/inside-asana/migrating-off-enzyme-2-weeks)).
 
 ## What was migrated
