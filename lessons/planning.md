@@ -48,7 +48,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: no. Strength: medium. Era: unstated; Claude Sonnet 4.5, then Opus 4.6, 2025–2026.
   - Cases: [Uber: what worked][ubr-worked], [Bloomberg: what worked][bbg-worked].
   - Against: None found; Bloomberg's authors say easier archetypes may have gone first, which can inflate early success rates ([Bloomberg][bbg-wrong]).
-- **PLN-11** [stated] Do not port a whole app in one pass, even from specs gathered first; it gave code nobody could maintain. Port in small ordered slices a person can review quickly.
+- **PLN-11** [stated] Do not port a whole app in one pass, even from specs gathered first; the author says that gives code nobody can maintain. Port in small ordered slices a person can review quickly.
   - Old system as oracle: partly. Strength: weak. Era: 2025–2026 (models unstated).
   - Cases: [Shopify: what went wrong][shp-wrong], [Shopify: how it was checked][shp-checked].
   - Against: Bun merged a whole port as one branch ([Bun][bun-worked]), though built from many agent-sized units, not in one pass.

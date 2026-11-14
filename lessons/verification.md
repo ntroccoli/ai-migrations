@@ -43,10 +43,10 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: partly. Strength: weak. Era: Claude Code, 2025–2026.
   - Cases: [Spotify: how it was checked][spo-checked], [Spotify: practices to copy][spo-practices].
   - Against: Intel translated without tests on purpose to measure the repair cost afterwards ([Intel][int-checked]).
-- **VER-10** [stated] In a fleet pipeline, keep the pass/fail gates deterministic even as the model takes on more of the writing; an error a model-run gate lets through can spread to every target.
+- **VER-10** [stated] Where one change repeats across many targets, keep the pass/fail gates deterministic as the model writes more; an error a model-run gate lets through can spread to every target.
   - Old system as oracle: no. Strength: weak. Era: Claude Sonnet 4.5, then Opus 4.6, 2025–2026.
   - Cases: [Bloomberg: what worked][bbg-worked].
-  - Against: Disagree: Google's gates include the model agreeing its change was needed ([Google][goo-checked]), Spotify gates each PR with an LLM judge ([Spotify][spo-checked]), Shopify puts two adversarial reviewers (likely agents) on every checkpoint ([Shopify][shp-checked]), and Bun's reviewer agents, seeing only the diff, caught bugs and rejected stubs ([Bun][bun-worked]).
+  - Against: Disagree: Google's gates include the model agreeing its change was needed ([Google][goo-checked]), Spotify gates each PR with an LLM judge ([Spotify][spo-checked]), Shopify puts two adversarial reviewers (likely agents) on every checkpoint ([Shopify][shp-checked]), and Bun's reviewer agents, seeing only the diff, caught bugs ([Bun][bun-checked]) and, once a rule was added, rejected stubs ([Bun][bun-wrong]).
 - **VER-11** [stated] Before building the pipeline, judge how late a wrong change first fails; changes that only the owner's deploy could check were merged less and rejected more.
   - Old system as oracle: partly. Strength: weak. Era: Claude Sonnet 4.5, then Opus 4.6, 2025–2026.
   - Cases: [Bloomberg: what worked][bbg-worked], [Bloomberg: what went wrong][bbg-wrong].
@@ -58,7 +58,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [bbg-wrong]: ../cases/2026-11-03-bloomberg-python-cpp-uplift.md#what-went-wrong
 [bun-checked]: ../cases/2026-07-08-bun-zig-to-rust.md#how-it-was-checked
 [bun-practices]: ../cases/2026-07-08-bun-zig-to-rust.md#practices-to-copy
-[bun-worked]: ../cases/2026-07-08-bun-zig-to-rust.md#what-worked
+[bun-wrong]: ../cases/2026-07-08-bun-zig-to-rust.md#what-went-wrong
 [gh-checked]: ../cases/2026-09-16-github-copilot-runtime-rust.md#how-it-was-checked
 [gh-numbers]: ../cases/2026-09-16-github-copilot-runtime-rust.md#numbers
 [gh-wrong]: ../cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong

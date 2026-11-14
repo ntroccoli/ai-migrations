@@ -34,7 +34,7 @@ first.
 - **New lessons:** PLN-11, PLN-12, TST-11, TST-12, VER-10, VER-11, REV-11, ROL-9, TEM-5, TOL-8,
   TOL-9, TOL-10, CTX-10, OVS-4, MSR-10.
 - **Changed lessons:** strength raised for PLN-10 and CTX-3 (to medium), VER-1, REV-9 and OPS-3
-  (to strong); reworded PLN-10, CTX-3, REV-9, CST-6, CST-8 and OPS-3; new citations or
+  (to strong); reworded PLN-10, CTX-3, REV-9, CST-6 and CST-8; new citations or
   Against lines on PLN-5, PLN-6, PLN-8, TST-8, VER-3, VER-8, REV-2, ROL-1, ROL-3, OPS-1, OPS-6,
   SEC-9, CST-1, CST-4, TEM-4, TOL-4, TOL-6, CTX-1, CTX-2, CTX-4, CTX-5, CTX-6, ORC-1, ORC-2, ORC-6,
   AGF-2, AGF-4, AGF-7, OVS-3, KNW-1, MSR-2 and MSR-8. Ten "Against: None found" lines now
@@ -46,7 +46,7 @@ first.
   - Asana: questions 3, 8 and 10; lessons CTX-10 (new), TST-8, REV-9, OPS-1, OPS-3, CST-4,
     CTX-1, CTX-3, CTX-6, CTX-8, ORC-2, ORC-6.
   - Shopify: questions 2, 3, 5 and 10; lessons PLN-11, TST-12, REV-11, TOL-8, OVS-4 (new),
-    PLN-5, REV-2, ROL-1, OPS-3, TOL-6, CTX-2, ORC-1, ORC-6, KNW-1.
+    PLN-5, VER-10, REV-2, ROL-1, OPS-3, TOL-6, CTX-2, ORC-1, ORC-6, KNW-1.
   - Bloomberg: questions 2, 8, 10 and 12; lessons PLN-12, VER-10, VER-11, ROL-9, TOL-9, TOL-10,
     MSR-10 (new), PLN-8, PLN-10, VER-1, VER-3, VER-8, REV-9, ROL-3, OPS-6, SEC-9, CST-8, TEM-4,
     CTX-2, ORC-6, AGF-7, OVS-3, KNW-1, MSR-2, MSR-8.

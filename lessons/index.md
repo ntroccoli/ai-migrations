@@ -53,7 +53,7 @@ Lessons that cite each case, in "Cases" or "Against".
 ## Where the cases disagree
 
 - **PLN-5** ([Planning and scoping](planning.md)) Translate first and redesign later: keep behaviour the same during the move so that any failure points at the port, not at a deliberate change.
-- **VER-10** ([Verification loops and gates](verification.md)) In a fleet pipeline, keep the pass/fail gates deterministic even as the model takes on more of the writing; an error a model-run gate lets through can spread to every target.
+- **VER-10** ([Verification loops and gates](verification.md)) Where one change repeats across many targets, keep the pass/fail gates deterministic as the model writes more; an error a model-run gate lets through can spread to every target.
 - **REV-2** ([Code review](review.md)) Split the review: agents and tests do the exhaustive old-against-new comparison; people spend their attention on architecture, contracts and flagged risk.
 - **ROL-1** ([Release and rollout](rollout.md)) Swap one component per change inside normal releases, old and new in one tree joined by a temporary bridge, so the main branch can always ship.
 - **OPS-5** ([Machines and operations](operations.md)) Keep hardening after merge: repeated security review, round-the-clock fuzzing and leak tracking, with people reviewing the fixes they produce.
@@ -85,7 +85,7 @@ To find the lessons that fit work other than a migration, scan this list, then o
 - **PLN-8** [stated] Leave out segments you cannot specify or verify (non-standard repositories, unsupported platforms, languages the model handles poorly) instead of forcing one approach on all. (oracle: no; medium)
 - **PLN-9** [ours] Plan for a partial outcome and a stop rule: no published case here was abandoned, so success odds read from such cases are inflated. (oracle: no; medium)
 - **PLN-10** [stated] Measure how often each pattern (runner, rule, base class) is used and how automatable it is, and build the transforms or prompts with the best return first. (oracle: no; medium)
-- **PLN-11** [stated] Do not port a whole app in one pass, even from specs gathered first; it gave code nobody could maintain. Port in small ordered slices a person can review quickly. (oracle: partly; weak)
+- **PLN-11** [stated] Do not port a whole app in one pass, even from specs gathered first; the author says that gives code nobody can maintain. Port in small ordered slices a person can review quickly. (oracle: partly; weak)
 - **PLN-12** [stated] Sort targets into archetypes, each with its own prompt, data collection and checks; give rare archetypes a generic starting point instead of dedicated automation. (oracle: no; weak)
 
 ### [Testing and oracles](testing.md)
@@ -114,7 +114,7 @@ To find the lessons that fit work other than a migration, scan this list, then o
 - **VER-7** [stated] Define done as an empty list of change sites produced by deterministic tooling and rerun on a schedule, never as the agent's own report. (oracle: partly; medium)
 - **VER-8** [stated] Rank failures by cost: no change is cheap, a red change costs an engineer, a green but wrong change costs trust; aim verification at the last kind. (oracle: no; medium)
 - **VER-9** [stated] Where the target has no tests the agent cannot check itself: leave it out, require tests first, or budget for owners to test each change. (oracle: partly; weak)
-- **VER-10** [stated] In a fleet pipeline, keep the pass/fail gates deterministic even as the model takes on more of the writing; an error a model-run gate lets through can spread to every target. (oracle: no; weak)
+- **VER-10** [stated] Where one change repeats across many targets, keep the pass/fail gates deterministic as the model writes more; an error a model-run gate lets through can spread to every target. (oracle: no; weak)
 - **VER-11** [stated] Before building the pipeline, judge how late a wrong change first fails; changes that only the owner's deploy could check were merged less and rejected more. (oracle: partly; weak)
 
 ### [Code review](review.md)
