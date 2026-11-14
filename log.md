@@ -3,6 +3,56 @@
 Each update of the collection: when it ran, the sources it covered, and what changed. Newest
 first.
 
+## 2026-11-14 — second update
+
+- **Covered:** three cases from sources published between 2026-01 and 2026-10: Pokémon Showdown
+  (one engineer's port of a TypeScript battle engine to Rust with Claude Code, checked on seeded
+  battles; a personal blog post and the port's repository), Spartacus (one developer's move of 44
+  Angular form components in a fork of SAP's storefront to Signal Forms with Claude Code
+  sub-agents; a dev.to post with its pull request and plan files; not SAP's migration) and ts-rust
+  (Ping.gg's port of the Go TypeScript 7 compiler to Rust, a first attempt that stalled and a
+  restart; the repository's README, partly written by models, and a history page; unaudited). No
+  field reports were open.
+- **Mix:** two language moves (TypeScript and Go to Rust) and one framework move; one blog post,
+  one dev.to post and one repository; no author sells an AI tool the case used. Two are one-person
+  projects, not company products.
+- **Added:** the three case files; 4 new lessons; a pitfall item each under JavaScript runtime to
+  a compiled language (objects that point at each other) and under library or framework moves
+  (built-ins that check differently; that section now holds a case-backed item, so its heading
+  dropped "(ours)").
+- **Rules:** `also` may hold the project's official repository when the source links it; when part
+  of a source was written by a model, the case's Source section says which parts and each claim
+  is cited from the part that says it; seed, battle and thread are units. The README disclosure
+  now counts models the source names without the word Claude (Opus, Sonnet, Haiku).
+
+### Checklist and lessons impact
+
+- **Checklist:** no question added, merged or dropped. Question 3 now asks to build and test two
+  clones at once (not only build); question 8 cites CTX-11, question 9 KNW-4 and OVS-5, question
+  10 AGF-9. New evidence reached questions 2 (ts-rust's pinned-revision
+  comparison, Pokémon's seeded battles), 3 (Spartacus's worktrees where tests could not start), 8
+  (Pokémon split files the agent would not open), 9 (ts-rust's first attempt with no stop rule,
+  Spartacus's waves) and 12 (ts-rust's list-price token figures); the file was trimmed by as many
+  bytes as were added. No field report was behind any change.
+- **New lessons:** AGF-9, CTX-11, KNW-4, OVS-5.
+- **Changed lessons:** strength raised for TST-5 (to strong), AGF-6 and REV-11 (to medium);
+  oracle tag changed from no to partly on VER-1 and MSR-6 in the sceptic pass; REV-3 reworded
+  (old and new code, not two languages; built-in validators added); new citations or Against
+  lines on AGF-1, PLN-1, PLN-4, PLN-5, PLN-9, PLN-11, TST-1, TST-2, TST-6, VER-1, VER-5, VER-7,
+  REV-2, REV-5, OVS-1, OVS-2, AGF-5, KNW-1, SEC-1, SEC-3, TEM-1, TEM-2, TEM-5, CST-2, CST-4,
+  MSR-2, MSR-6, ORC-1, OPS-2 and TOL-1. Five "Against: None found" lines now carry
+  counter-evidence (KNW-1, PLN-4, SEC-3, TEM-5, TST-6) and four state a limit instead (AGF-6,
+  REV-3, REV-11, VER-5); with the new lessons' limits, "None found" lines went from 54 to 53
+  (plain ones from 43 to 34).
+- **By case:**
+  - Pokémon Showdown: questions 2, 8, 9 and 10; lessons AGF-9, CTX-11, KNW-4 (new), AGF-1,
+    TST-5, AGF-6, REV-11, TEM-5, PLN-4, PLN-5, PLN-11, SEC-1, SEC-3, AGF-5, OVS-1, KNW-1, MSR-6,
+    TEM-1, TEM-2, VER-1, VER-7, TOL-1.
+  - Spartacus: questions 3 and 9; lessons OVS-5 (new), AGF-6, REV-3, TST-6, VER-5, VER-1, VER-7,
+    TST-2, REV-5, MSR-2, ORC-1, PLN-1, OPS-2.
+  - ts-rust: questions 2, 9 and 12; lessons TEM-5, PLN-9, OVS-2, REV-2, MSR-6, CST-2, CST-4,
+    PLN-5, TST-1, TST-2.
+
 ## 2026-11-13 — first update
 
 - **Covered:** four cases from sources published between 2025-02 and 2026-11, picked from
