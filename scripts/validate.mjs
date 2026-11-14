@@ -8,8 +8,8 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, dirname, resolve, basename } from 'node:path';
 import {
   CASES_DIR, CHECKLIST, NOTICE, SOURCE_TYPES, KINDS, AI_SHARES, RELATIONS, EVIDENCE, OUTCOMES,
-  STATUSES, BASES, REQUIRED, SECTIONS, NUMBERS_HEADER, UNITS, SCALES, PITFALLS, CHECKLIST_MAX_BYTES,
-  parseCase, listCases, sections, refDefs, linksIn, anchor,
+  STATUSES, BASES, REQUIRED, LANGUAGES, SECTIONS, NUMBERS_HEADER, UNITS, SCALES, PITFALLS, CHECKLIST_MAX_BYTES,
+  parseCase, listCases, sections, refDefs, linksIn, anchor, practices, closestPractices,
   LESSONS_DIR, LESSON_PAGES, LESSON_MAX_BYTES, LESSON_NOTE, LESSON_LEGEND, KARPATHY_IDEAS, ORACLES, STRENGTHS, parseLessonPage, strengthCeiling, lessonMeta,
 } from './lib.mjs';
 
@@ -158,6 +158,14 @@ function validateCase(c) {
     if (!need) err(file, 'cost: give an amount with its unit (for example ~$120,000), or "unstated"');
     for (const n of missing) err(file, `cost: number "${n}" has no unit`);
   }
+  // from_languages: the languages the code was in before the move, from LANGUAGES (scripts/lib.mjs).
+  const langs = meta.from_languages;
+  if (!Array.isArray(langs) || !langs.length) err(file, 'from_languages: an inline list of languages, e.g. [Java], or [unstated]');
+  else if (langs.includes('unstated')) { if (langs.length > 1) err(file, 'from_languages: [unstated] stands alone'); }
+  else {
+    for (const x of langs) if (!LANGUAGES.includes(x)) err(file, `from_languages: "${x}" is not in LANGUAGES (scripts/lib.mjs); spell it as listed there, or add it`);
+    if (new Set(langs).size !== langs.length) err(file, 'from_languages: a language is listed twice');
+  }
   for (const k of ['tools', 'models']) if (!Array.isArray(meta[k]) || !meta[k].length) err(file, `${k}: an inline list, or [unstated]`);
   if (!/^(unstated|\d{4}(-\d{2})?(\.\.\d{4}(-\d{2})?)?)$/.test(meta.period || '')) err(file, 'period: YYYY, YYYY-MM, a range A..B, or unstated');
   if (meta.status === 'superseded') {
@@ -291,12 +299,13 @@ const ID = /^([A-Z]{3})-[1-9]\d*$/;
 const SUBS = /^Old system as oracle\|Cases\|Against(\|Related view)?(\|Sceptic)*$/;
 const caseSections = new Map(); // case file -> Set of section anchors
 const caseMetas = new Map(); // case file -> front matter
+const casePractices = new Map(); // case file -> its "Practices to copy" lines, [{ tag, text }]
 function sectionsOf(file) {
   if (!caseSections.has(file)) {
     const p = join(CASES_DIR, file);
     const c = existsSync(p) ? parseCase(p) : null;
     caseSections.set(file, c ? new Set(sections(c.body).map(s => anchor(s.name))) : null);
-    if (c) caseMetas.set(file, c.meta);
+    if (c) { caseMetas.set(file, c.meta); casePractices.set(file, practices(c.body)); }
   }
   return caseSections.get(file);
 }
@@ -369,6 +378,16 @@ function validateLessons() {
           // Exactly "Disagree:" puts the lesson in the index's list of splits; a near miss would drop it silently.
           if (s.label === 'Against' && /^disagree/i.test(s.text) && !/^Disagree: \S/.test(s.text)) e(s.line, `${l.id}: start a split with "Against: Disagree: ..."`);
           const files = new Set(links.map(x => caseLink(l, x, s.label)).filter(Boolean));
+          // A [stated] lesson rests on what a source says: when "Cases" links only "Practices to copy"
+          // sections, the practice line closest to the lesson (most content words shared) must be [stated]
+          // too, since an [ours] practice is our inference, not the source's.
+          if (s.label === 'Cases' && l.tag === 'stated' && links.length && links.every(x => /#practices-to-copy$/.test(x.target || ''))) {
+            const lines = [...files].flatMap(f => casePractices.get(f) || []);
+            const top = closestPractices(l.text, lines);
+            if (!top.some(x => x.tag === 'stated')) {
+              e(s.line, `${l.id}: [stated] but "Cases" links only "Practices to copy", and the closest practice line is not [stated]${top[0] ? ` ("${top[0].text.slice(0, 50)}")` : ''}; cite the case section the practice comes from, or tag the lesson [ours]`);
+            }
+          }
           // Strength follows the evidence: the cases behind the lesson set its ceiling.
           const strength = lessonMeta(l).strength;
           if (s.label === 'Cases' && STRENGTHS.includes(strength)) {

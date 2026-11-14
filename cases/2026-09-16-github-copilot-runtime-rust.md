@@ -11,6 +11,7 @@ evidence: shown-in-source
 kind: language
 from: TypeScript on Node.js and V8
 to: Rust (native library with a C ABI)
+from_languages: [TypeScript]
 size: about 430,000 lines of TypeScript ported into 832,378 lines of Rust
 duration: about 14.5 weeks
 people: 1 lead developer, with a team for interop, SDK bindings, packaging and reviews

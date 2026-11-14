@@ -174,6 +174,29 @@ test('a case that no lesson and no question cites fails', 1, d => {
   edit(caseFile(d, '2026-07-09-bun-copy.md'), 'date: 2026-07-08', 'date: 2026-07-09');
 }, null, '2026-07-09-bun-copy.md: no lesson and no checklist question cites this case');
 
+// A [stated] lesson that cites only "Practices to copy" rests on a [stated] practice line.
+const SPO = '2025-11-06-spotify-honk.md';
+const SPO_ASK = '- [stated] Ask the agent after each session what its prompt was missing.';
+test('[stated] lesson resting only on an [ours] practice fails', 1,
+  d => edit(caseFile(d, SPO), SPO_ASK, SPO_ASK.replace('[stated]', '[ours]')), null,
+  'CTX-7: [stated] but "Cases" links only "Practices to copy"');
+test('[ours] lesson resting only on an [ours] practice passes', 0, d => {
+  edit(caseFile(d, SPO), SPO_ASK, SPO_ASK.replace('[stated]', '[ours]'));
+  edit(L(d, 'context'), '- **CTX-7** [stated]', '- **CTX-7** [ours]');
+});
+
+// from_languages: an inline list of names from LANGUAGES (scripts/lib.mjs).
+test('from_languages missing fails', 1,
+  d => edit(caseFile(d, BUN), 'from_languages: [Zig]\n', ''), null, 'missing key "from_languages"');
+test('from_languages with an unknown language fails', 1,
+  d => edit(caseFile(d, BUN), 'from_languages: [Zig]', 'from_languages: [zig]'), null, 'from_languages: "zig" is not in LANGUAGES');
+test('from_languages listing a language twice fails', 1,
+  d => edit(caseFile(d, BUN), 'from_languages: [Zig]', 'from_languages: [Zig, Zig]'), null, 'from_languages: a language is listed twice');
+test('from_languages mixing unstated and a language fails', 1,
+  d => edit(caseFile(d, BUN), 'from_languages: [Zig]', 'from_languages: [Zig, unstated]'), null, 'from_languages: [unstated] stands alone');
+test('from_languages: [unstated] passes', 0,
+  d => edit(caseFile(d, BUN), 'from_languages: [Zig]', 'from_languages: [unstated]'));
+
 // Strength ceiling: the cases behind a lesson cap its strength.
 const strength = (id, from, to) => d => {
   const page = { AGF: 'agent-failures', KNW: 'knowledge', TST: 'testing' }[id.slice(0, 3)];
@@ -198,6 +221,15 @@ test('build refuses a case that does not parse', 1,
   d => { edit(caseFile(d, BUN), 'kind: language\n', 'kind language\n'); return []; }, null, 'cannot build', 'build.mjs');
 test('build refuses a lesson without its oracle line', 1,
   d => { edit(L(d, 'review'), '  - Old system as oracle: partly. Strength: medium. Era: 2026.\n  - Cases: [GitHub: who did what]', '  - Cases: [GitHub: who did what]'); return []; }, null, 'REV-2: no "Old system as oracle" line', 'build.mjs');
+test('build --check fails after a from_languages change (llms.txt "Moves covered")', 1,
+  d => { edit(caseFile(d, INTEL), 'from_languages: [C]', 'from_languages: [C, Python]'); return ['--check']; }, null, 'out of date: llms.txt', 'build.mjs');
+test('llms-full.txt carries each reference definition once', 0, d => {
+  node(d, 'build.mjs', []);
+  const defs = readFileSync(join(d, 'llms-full.txt'), 'utf8').match(/^\[[^\]]+\]:/gm) || [];
+  const dup = defs.filter((x, i) => defs.indexOf(x) !== i);
+  if (!defs.length || dup.length) throw new Error(`definitions: ${defs.length}, repeated: ${dup.join(' ')}`);
+  return ['--check'];
+}, null, null, 'build.mjs');
 test('build --check fails after hand-editing lessons/index.md', 1,
   d => { appendFileSync(join(d, 'lessons', 'index.md'), '\nA hand edit.\n'); return ['--check']; }, null, 'out of date: lessons/index.md', 'build.mjs');
 

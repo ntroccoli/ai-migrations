@@ -11,6 +11,7 @@ evidence: assertion-only
 kind: mixed
 from: many (for example Java AutoValue classes, old Scio versions, deprecated datasets)
 to: many (for example Java records, the newest Scio, new dataset versions)
+from_languages: [Java, Scala, SQL]
 size: more than 1,500 merged PRs by part 1; 240 PRs in the dataset case (part 4)
 duration: unstated (agent work began in February 2025)
 people: unstated (hundreds of developers use the agent)

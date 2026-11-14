@@ -11,6 +11,7 @@ evidence: assertion-only
 kind: test-framework
 from: Java tests on JUnit 4 in a Bazel monorepo
 to: Java tests on JUnit 5 (Jupiter engine on the JUnit Platform)
+from_languages: [Java]
 size: over 75,000 test classes; over 1.25 million lines changed
 duration: 4 months
 people: unstated

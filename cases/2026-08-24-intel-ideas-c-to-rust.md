@@ -11,6 +11,7 @@ evidence: shown-in-source
 kind: language
 from: C (libgit2 command-line client)
 to: safe Rust (no unsafe code)
+from_languages: [C]
 size: about 112,000 lines of C
 duration: unstated
 people: unstated

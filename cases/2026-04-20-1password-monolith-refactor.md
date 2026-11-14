@@ -11,6 +11,7 @@ evidence: assertion-only
 kind: architecture
 from: Go monolith (B5), database transactions opened with MustBegin (panics on failure)
 to: separately owned services; transaction calls that return errors
+from_languages: [Go]
 size: over 3,000 call sites in a monolith of millions of lines; one service extraction attempted
 duration: unstated (the call-site edits ran in hours)
 people: unstated

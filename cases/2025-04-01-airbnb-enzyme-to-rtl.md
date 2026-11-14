@@ -11,6 +11,7 @@ evidence: assertion-only
 kind: test-framework
 from: Enzyme (React component tests)
 to: React Testing Library
+from_languages: [TypeScript]
 size: nearly 3,500 test files
 duration: 6 weeks
 people: unstated

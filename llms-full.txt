@@ -1012,10 +1012,3 @@ where a case is linked):
 - Not a language difference but an agent failure that looks like one: functions left as stubs, or
   missing, behind a clean build; compiler feedback alone lets them through. [Intel](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-08-24-intel-ideas-c-to-rust.md), [Bun](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md)
 
-[GitHub]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md
-[Bun]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md
-[Intel]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-08-24-intel-ideas-c-to-rust.md
-[Google]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-13-google-int64-ids.md
-[1Password]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-20-1password-monolith-refactor.md
-[Slack]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2024-05-22-slack-enzyme-to-rtl.md
-[Uber]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-07-uber-junit4-to-junit5.md

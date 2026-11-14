@@ -11,6 +11,7 @@ evidence: shown-in-source
 kind: language
 from: Zig (Bun runtime, bundler, package manager, test runner)
 to: Rust (about 100 crates)
+from_languages: [Zig]
 size: 535,496 lines of Zig (comments excluded) in 1,448 files
 duration: 11 days (2026-05-03 to the merge on 2026-05-14, per the post)
 people: 1 engineer

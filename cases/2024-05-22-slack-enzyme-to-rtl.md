@@ -11,6 +11,7 @@ evidence: shown-in-source
 kind: test-framework
 from: Enzyme (React unit and integration tests)
 to: React Testing Library
+from_languages: [JavaScript, TypeScript]
 size: more than 15,000 test cases
 duration: unstated
 people: unstated

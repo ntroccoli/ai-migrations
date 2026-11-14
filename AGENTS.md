@@ -52,6 +52,7 @@ evidence: assertion-only
 kind: test-framework
 from: Enzyme (React component tests)
 to: React Testing Library
+from_languages: [TypeScript]
 size: nearly 3,500 test files
 duration: 6 weeks
 people: unstated
@@ -105,6 +106,11 @@ Field rules (all checked):
   across call sites), `mixed`.
 - `from`, `to`, `size`, `duration`, `people`: short text; every number carries a unit;
   `unstated` when the source does not say.
+- `from_languages`: an inline list of the languages the migrated code was written in before the
+  move, each spelled as in `LANGUAGES` (`scripts/lib.mjs`; add one there when a case needs it), no
+  repeats, or `[unstated]`. Named after `from` because "source" here means the publication.
+  `llms.txt` lists the covered languages from it, and the ones in `LANGUAGES` that no case starts
+  from.
 - `ai_share`: `most`, `part`, `little` or `unstated`: the share of the changed code AI produced,
   only as the source states it, never guessed. The basis goes in "Who did what".
 - `tools`, `models`: inline lists; `[unstated]` when the source names none. Models are named
@@ -183,6 +189,10 @@ Rules (all checked by `node scripts/validate.mjs`; one broken-copy test each):
 - IDs: three capital letters, a hyphen and a number; one prefix per page; unique across pages.
   IDs are never reused, so checklist and outside references do not break.
 - `[stated]`: a source says it or reports it as what worked or failed; `[ours]`: our inference.
+  A `[stated]` lesson cites at least one case section other than "Practices to copy"; when it
+  cites only practices, the practice line closest to it (most content words shared,
+  `closestPractices` in `scripts/lib.mjs`) must be `[stated]` too, since an `[ours]` practice is
+  our inference. Failing that, cite the section the practice comes from, or tag the lesson `[ours]`.
 - Sub-items in this order: "Old system as oracle: yes|partly|no. Strength: strong|medium|weak.
   Era: <models and period>.", "Cases:" (at least one link), "Against:" (never empty; start it
   with "Disagree:" for a real split between cases, which the index lists), then optional
@@ -241,8 +251,8 @@ step: every URL to this repository comes from `REPO_SLUGS` in `scripts/lib.mjs` 
 repository, put the new owner/name first in that line and rebuild; the build rewrites the old
 name in `SYNCED` files, `lychee.toml` included), and two blocks in `README.md` (the AI
 disclosure and the current counts) are written between their comment markers. The moves the
-cases cover, in `llms.txt`, come from `COVERED` in `scripts/build.mjs`: update it when a case
-adds a source language.
+cases cover, in `llms.txt`, come from each case's `from_languages`; nothing is kept by hand.
+`llms-full.txt` carries each reference definition once (its links are inline).
 `node scripts/build.mjs --check` writes nothing and exits 1 when any of them is out of date; it
 must exit 0 before a commit. Never edit these files by hand: change the sources and rebuild.
 

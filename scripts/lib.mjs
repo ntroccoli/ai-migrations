@@ -27,7 +27,7 @@ export const OUTCOMES = ['completed', 'partial', 'ongoing', 'abandoned'];
 export const STATUSES = ['current', 'superseded'];
 export const BASES = ['measured', 'reported', 'estimate', 'self-estimate', 'vendor-claim'];
 export const REQUIRED = ['title', 'date', 'company', 'summary', 'source_url', 'also', 'source_type',
-  'author_relation', 'evidence', 'kind', 'from', 'to', 'size', 'duration', 'people', 'cost', 'ai_share', 'tools',
+  'author_relation', 'evidence', 'kind', 'from', 'to', 'from_languages', 'size', 'duration', 'people', 'cost', 'ai_share', 'tools',
   'models', 'period', 'outcome', 'status', 'superseded_by'];
 // Sections in order; `optional` ones may be left out.
 export const SECTIONS = [
@@ -36,6 +36,12 @@ export const SECTIONS = [
   { name: 'What worked' }, { name: 'What went wrong' }, { name: 'Practices to copy' },
   { name: 'In their words', optional: true }, { name: 'Context' },
 ];
+// `from_languages`: the languages the migrated code was written in before the move. Named after
+// `from`, not "source_languages": in a case, "source" is the publication (source_url, source_type).
+// build.mjs lists the covered ones in llms.txt and names the ones in this list no case starts from.
+// Add a language here when a case needs it.
+export const LANGUAGES = ['C', 'C++', 'C#', 'Dart', 'Go', 'Java', 'JavaScript', 'Kotlin', 'PHP', 'Python', 'Ruby',
+  'Rust', 'Scala', 'SQL', 'Swift', 'TypeScript', 'Zig'];
 export const NUMBERS_HEADER = '| Number | What it counts | Basis | Source |';
 
 // Units: a number in a case must be followed, within three words, by one of these (a measure or
@@ -93,6 +99,25 @@ export function sections(body) {
     if (h) { cur = { name: h[1], lines: [], line: i + 1 }; out.push(cur); } else if (cur) cur.lines.push(l);
   });
   return out.map(s => ({ name: s.name, line: s.line, text: s.lines.join('\n').trim() }));
+}
+
+// The lines of "Practices to copy": [{ tag, text }] (lines that do not parse are left out; validate.mjs
+// reports them).
+export const practices = body => (sections(body).find(s => s.name === 'Practices to copy')?.text ?? '').split('\n')
+  .map(l => l.match(/^- \[(stated|ours)\] (.+) \(\[[^\]]+\]\([^)\s]+\)\)\s*$/)).filter(Boolean)
+  .map(m => ({ tag: m[1], text: m[2] }));
+// Content words of a line, for matching a lesson to the practice it rests on: lower case, four
+// letters or more, a plural "s" dropped.
+const STOP = new Set(['that', 'this', 'with', 'from', 'when', 'then', 'than', 'each', 'into', 'only', 'have', 'they',
+  'their', 'them', 'what', 'which', 'before', 'after', 'every', 'more', 'most', 'some', 'there', 'where', 'while']);
+export const contentWords = s => new Set(s.toLowerCase().split(/[^\p{L}]+/u).filter(w => w.length >= 4 && !STOP.has(w))
+  .map(w => w.replace(/s$/, '')));
+// The practice lines closest to a lesson's text (most content words shared); [] when none shares one.
+export function closestPractices(text, lines) {
+  const want = contentWords(text);
+  const scored = lines.map(p => ({ ...p, score: [...contentWords(p.text)].filter(w => want.has(w)).length }));
+  const top = Math.max(0, ...scored.map(p => p.score));
+  return top ? scored.filter(p => p.score === top) : [];
 }
 
 // ---- Lessons ----------------------------------------------------------------------------------
