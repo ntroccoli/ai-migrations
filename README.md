@@ -75,7 +75,9 @@ To choose yourself, replace the first sentence with "Apply proposals 1, 3 and 5.
 
 #### Step 3: revisit, and tell us what happened
 
-When the code has moved on, or the migration has started, paste:
+Not right after step 2: step 2 already runs every check, and nothing has happened since the
+baseline yet. Wait until the problems could have come back: a few weeks of work, about five
+tasks, or the migration under way. Then paste:
 
 ```text
 Read https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms.txt and follow it. Read docs/migration-review.md, then the entries in https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/log.md newer than the one it names. Re-run only the open, waiting and stopped-holding items, and any question whose measurement may have moved or that a newer entry changed. Compare each item with its baseline in the record: how often its problem happened since. Update the record and its log entry. If no item has met its problem since the baseline, write that in the record with the date and do not draft a field report yet; I will run this step again later. Otherwise draft a field report as https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/field-reports.md describes, and show it to me before posting.
@@ -107,7 +109,9 @@ To choose yourself, replace the first sentence with "Apply proposals 1, 3 and 5.
 
 #### Step 3: revisit, and tell us what happened
 
-After some weeks of work with the changes, paste:
+Not right after step 2: step 2 already runs every check, and nothing has happened since the
+baseline yet. Wait until the problems could have come back: a few weeks of work or about five
+tasks with the changes in place. Then paste:
 
 ```text
 Read https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/applying-lessons.md and docs/ai-lessons-review.md, then the entries in https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/log.md newer than the one the record names. Re-check the open, waiting and stopped-holding items, each with the event in the work since that shows it, and any lesson a newer entry changed. Compare each item with its baseline in the record: how often its problem happened since. Update the record and its log entry. If no item has met its problem since the baseline, write that in the record with the date and do not draft a field report yet; I will run this step again later. Otherwise draft a field report as https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/field-reports.md describes, naming which lessons held and which did not, and show it to me before posting.
