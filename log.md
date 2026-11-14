@@ -59,6 +59,19 @@ first.
   - ts-rust: questions 2, 9 and 12; lessons TEM-5, PLN-9, OVS-2, REV-2, MSR-6, CST-2, CST-4,
     PLN-5, TST-1, TST-2.
 
+### Lesson tags (same day, after the update)
+
+- **New tag:** every lesson now says whether it depends on model ability (`yes`: it states what
+  models or agents can or cannot do; `partly`: a process whose need comes from such a behaviour;
+  `no`: it holds whatever the model). Lessons about model limits age fast, process lessons barely.
+- **Era in one form:** the years and the models of the cases a lesson cites, derived from the
+  cases and checked by the validator, so lessons compare in time.
+- **May be outdated:** `lessons/index.md` and `llms.txt` mark a lesson tagged `yes` whose most
+  recent case is more than a year older than the build; today TOL-2 and AGF-8.
+- **Sceptic pass:** of 15 lessons sampled at random among those tagged "Old system as oracle: no",
+  2 flipped to partly (REV-5, AGF-3), and AGF-5 with them; 10 model-ability tags moved from no
+  to partly.
+
 ## 2026-11-13 — first update
 
 - **Covered:** four cases from sources published between 2025-02 and 2026-11, picked from
