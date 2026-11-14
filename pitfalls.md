@@ -111,7 +111,7 @@ does underneath them.
 - Imports that look required in the code but are test-only or conditional; Bloomberg crossed
   syntax-tree imports with modules seen at run time to tell them apart. [Bloomberg][]
 - A wrong dependency choice that builds and passes smoke checks, then fails only once deployed;
-  unit tests the pipeline never ran. [Bloomberg][]
+  the pipeline also never ran some targets' unit tests. [Bloomberg][]
 
 ## A library or framework version upgrade (ours)
 

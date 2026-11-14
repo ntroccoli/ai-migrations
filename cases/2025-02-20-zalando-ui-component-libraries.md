@@ -2,7 +2,7 @@
 title: Zalando moves partner apps from one in-house UI component library to another with GPT-4o
 date: 2025-02-20
 company: Zalando
-summary: A Python tool fed GPT-4o hand-checked mappings and examples per component group; about 90% of migrated lines were right, and one bad change reached production.
+summary: A Python tool fed GPT-4o hand-checked mappings and examples per component group; over 90% of migrated lines were right, and one bad change reached production.
 source_url: https://engineering.zalando.com/posts/2025/02/llm-migration-ui-component-libraries.html
 also: [https://gitnation.com/contents/llm-powered-migration-of-ui-component-libraries]
 source_type: engineering-post
@@ -31,7 +31,7 @@ Zalando's Partner Tech department had built two UI component libraries of its ow
 fifteen partner-facing B2B applications onto one of them. Codemods were judged a poor fit for the
 many ways teams used each component, so a team worked out a prompt in a hackathon over five rounds,
 ending with an interface, a hand-checked mapping and examples per component. A Python tool on
-GPT-4o then rewrote each file and opened it for an engineer's review. The authors report about 90%
+GPT-4o then rewrote each file and opened it for an engineer's review. The authors report over 90%
 of migrated lines correct, at under $40 per repository, but also wrong size mappings, invented
 props, output that changed between runs, grids the model could not judge visually, and one
 mistake that reached production ([post](https://engineering.zalando.com/posts/2025/02/llm-migration-ui-component-libraries.html),
@@ -210,8 +210,8 @@ passed review and broke a page in production
 - [stated] Add hand-verified before and after examples of rising complexity to the prompt for complex components. ([Iteration 5](https://engineering.zalando.com/posts/2025/02/llm-migration-ui-component-libraries.html#iteration-5-passing-examples-to-the-llm))
 - [stated] Keep a golden set of examples as regression tests and rerun it on every prompt change or model trial. ([Talk](https://gitnation.com/contents/llm-powered-migration-of-ui-component-libraries))
 - [stated] Group components so each prompt stays small; accuracy fell as the context grew. ([Creating the tool](https://engineering.zalando.com/posts/2025/02/llm-migration-ui-component-libraries.html#creating-the-tool))
-- [stated] Put fixed instructions first and the file last so prompt caching applies across files. ([Creating the tool](https://engineering.zalando.com/posts/2025/02/llm-migration-ui-component-libraries.html#creating-the-tool))
-- [stated] Review every generated change and test it visually; a compiling page can still have a broken layout. ([Talk](https://gitnation.com/contents/llm-powered-migration-of-ui-component-libraries))
+- [stated] Put fixed instructions first and the file last so prompt caching can apply across files. ([Creating the tool](https://engineering.zalando.com/posts/2025/02/llm-migration-ui-component-libraries.html#creating-the-tool))
+- [stated] Review every generated change and test it visually; a compiling page can still have a broken layout. ([Lessons learned](https://engineering.zalando.com/posts/2025/02/llm-migration-ui-component-libraries.html#lessons-learned))
 - [stated] Keep the team close to the migrated code so it learns the new library the model applied for it. ([Talk](https://gitnation.com/contents/llm-powered-migration-of-ui-component-libraries))
 - [stated] Say what to do when the target is absent, so the model leaves unrelated code alone. ([Lessons learned](https://engineering.zalando.com/posts/2025/02/llm-migration-ui-component-libraries.html#lessons-learned))
 - [ours] Treat temperature zero as no guarantee of the same output; recheck a file whenever it is rerun. ([Challenges](https://engineering.zalando.com/posts/2025/02/llm-migration-ui-component-libraries.html#challenges-and-limitation))
@@ -219,7 +219,7 @@ passed review and broke a page in production
 
 ## In their words
 
-> "a page could be syntactically migrated correctly, the layout may appear broken upon deployment."
+> "while a page could be syntactically migrated correctly, the layout may appear broken upon deployment."
 > — Naval Singh, Principal Engineer, Zalando, [2025-02-20](https://engineering.zalando.com/posts/2025/02/llm-migration-ui-component-libraries.html#challenges-and-limitation)
 
 ## Context

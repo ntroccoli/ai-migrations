@@ -2,7 +2,7 @@
 title: Shopify rebuilds its React Native mobile apps natively for iOS and Android
 date: 2026-09-10
 company: Shopify
-summary: Agents port Shopify's React Native apps to native iOS and Android code through gated checkpoints; one-shot ports failed, and the Shop app shipped in 12 weeks.
+summary: Agents port Shopify's React Native apps to native iOS and Android in gated checkpoints; the author says one-shot ports fail. The Shop app shipped in 12 weeks.
 source_url: https://shopify.engineering/back-to-native
 also: [https://shopify.engineering/shop-app-migration]
 source_type: engineering-post
@@ -151,8 +151,8 @@ stability, download size, build speed and frame rate
 - Agents driving simulators were a bottleneck: could not build, test and iterate reliably,
   people had to watch them constantly, and Shopify's own tooling for reproducing, fixing and
   verifying bugs was slow and brittle. Reading app state from accessibility data or
-  screen captures made each test take several minutes against seconds for the change; hot reload did
-  not fix it ([source](https://shopify.engineering/back-to-native)).
+  screen captures made each test take several minutes against seconds for the change; hot reload
+  helped but did not fix it ([source](https://shopify.engineering/back-to-native)).
 - Generated code could meet feature requirements and still repeat code, drift from the intended
   architecture or run slowly; native expertise, repository guidance, linting, tests and review were
   still needed ([Shop app post](https://shopify.engineering/shop-app-migration)).
@@ -187,7 +187,7 @@ stability, download size, build speed and frame rate
 
 ## In their words
 
-> "It doesn't matter how good the model is if it can't test its work quickly"
+> "It doesn’t matter how good the model is if it can’t test its work quickly"
 > — Mustafa Ali, Shopify, [2026-09-10](https://shopify.engineering/back-to-native)
 
 ## Context

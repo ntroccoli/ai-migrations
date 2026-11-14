@@ -30,7 +30,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **PLN-6** [stated] Set expectations per class of work: bounded, repetitive edits gain a lot; work with ordering, schema or shared-state constraints gains far less.
   - Old system as oracle: no. Strength: medium. Era: GPT-4o, 2024–2025; 2026 (models unstated).
   - Cases: [1Password: what worked][opw-worked], [1Password: what went wrong][opw-wrong], [Spotify: numbers][spo-numbers], [Zalando: what went wrong][zal-wrong].
-  - Against: Uber's repetitive test-framework move did not work with generative AI over several files at once, which the authors put down to scale and in-house test patterns ([Uber][ubr-wrong]); the 1Password post is the only one to compare both classes in one team.
+  - Against: Uber's repetitive test-framework move did not work with generative AI over several files at once, which the authors put down to scale and in-house test patterns ([Uber][ubr-wrong]).
   - Related view (karpathy-ideas): [coding agents weak on novel code][k-coding-agents-weak-on-novel-code], agrees.
 - **PLN-7** [ours] Reopen rewrites shelved for cost, since agents change the price; but weigh them against doing nothing, not against a manual rewrite nobody would fund.
   - Old system as oracle: no. Strength: medium. Era: 2026.
@@ -44,10 +44,10 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: no. Strength: medium. Era: all.
   - Cases: [Slack: what went wrong][slk-wrong], [1Password: what went wrong][opw-wrong], [Spotify: what went wrong][spo-wrong], [Airbnb: what went wrong][air-wrong].
   - Against: Uber reports an AI attempt that failed and was dropped, a first in this collection, though it names no model, size or date ([Uber][ubr-wrong]); the migrations themselves are all survivors.
-- **PLN-10** [stated] Measure how often each pattern (runner, rule, base class) is used across the code base, and build the transforms or prompts around the most used first.
+- **PLN-10** [stated] Measure how often each pattern (runner, rule, base class) is used and how automatable it is, and build the transforms or prompts with the best return first.
   - Old system as oracle: no. Strength: medium. Era: unstated; Claude Sonnet 4.5, then Opus 4.6, 2025–2026.
   - Cases: [Uber: what worked][ubr-worked], [Bloomberg: what worked][bbg-worked].
-  - Against: Bloomberg ordered its work by expected return (how automatable each archetype was), not by frequency alone ([Bloomberg][bbg-worked]).
+  - Against: None found; Bloomberg's authors say easier archetypes may have gone first, which can inflate early success rates ([Bloomberg][bbg-wrong]).
 - **PLN-11** [stated] Do not port a whole app in one pass, even from specs gathered first; it gave code nobody could maintain. Port in small ordered slices a person can review quickly.
   - Old system as oracle: partly. Strength: weak. Era: 2025–2026 (models unstated).
   - Cases: [Shopify: what went wrong][shp-wrong], [Shopify: how it was checked][shp-checked].

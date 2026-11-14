@@ -16,7 +16,7 @@ size: about 8,600 candidate repos; 2,333 PRs
 duration: 6 months of campaigns
 people: unstated
 cost: unstated
-ai_share: part
+ai_share: unstated
 tools: [archetype registry, data collectors, validation rules, prompt template renderer, CMake templates, deterministic CMake generator, JSON schema validation, AST import analysis, production telemetry, per-run containers, initiative tracker]
 models: [Claude Opus 4.6, Claude Sonnet 4.5]
 period: 2025-10..2026-06
@@ -70,9 +70,9 @@ instructions and ask each team to migrate on its own.
   (packaging configuration, layout, build changes); for CMake it only read each makefile and
   filled a JSON object with what the build needs (sources, libraries, flags, custom rules). It
   also repaired its output when a check failed (up to 3 retries) and wrote each PR description.
-  Basis for `ai_share: part`: the paper gives no share; we read `part` from the roles it states:
-  the model never writes CMake build files (templates do), and those make up 2,039 of the 2,333
-  PRs ([source](https://arxiv.org/abs/2611.05457)).
+  Basis for `ai_share: unstated`: the paper gives no share. By the roles it states, the model
+  wrote the PyPackaging changes but never the CMake build files (templates do), which make up
+  2,039 of the 2,333 PRs ([source](https://arxiv.org/abs/2611.05457)).
   Classification by an LLM was tried in a prior campaign and abandoned.
 - **Rule-based tools:** everything else: an archetype registry built from asset, package and
   tracker data; twelve data collectors (telemetry, package metadata, syntax-tree import scans,
@@ -149,7 +149,7 @@ counted. The 729 "successful migrations" of the abstract are the merged PRs
   separate: a uniform population, an earlier start, lower perceived risk and one engineer helping
   with reviews. For a move of build files they call a clean compile a strong sign the change is right,
   and still ran the unit tests after the build. The CMake merge count was still rising at a
-  steady rate at the cut-off, so its rate is a floor.
+  steady rate at the cut-off, so we read its rate as a floor.
 - Sorting targets into archetypes, each with its own template, collectors and rules, made
   success rates readable per group and let the team order work by expected return
   ([source](https://arxiv.org/abs/2611.05457)).
@@ -205,7 +205,7 @@ counted. The 729 "successful migrations" of the abstract are the merged PRs
 - **Not reported:** how many merged PRs were later reverted or broke in production; review time
   per PR; team size; the pipeline's build cost (inference is called negligible, with no figure);
   how many Python tasks the generic prompt handled and how their PRs fared (by our subtraction,
-  82 PyPackaging PRs fall outside the three templated archetypes); how many PRs the central
+  if Tables III and IV count PRs alike, 82 PyPackaging PRs fall outside the three templated archetypes); how many PRs the central
   review stopped; how many test and bot-closed PRs were left out; retry and validation-failure
   rates. Some counts do not
   reconcile and the paper does not explain them: Table II's rows add up to 2,137 CMake PRs against 2,039 PRs
@@ -224,7 +224,7 @@ counted. The 729 "successful migrations" of the abstract are the merged PRs
 - [stated] Each model upgrade, revisit workaround pre-processing; keep a step only if it adds reproducibility or eases debugging. ([Lesson 4](https://arxiv.org/abs/2611.05457))
 - [stated] Give rare archetypes a generic starting-point PR instead of dedicated automation. ([Lesson 7](https://arxiv.org/abs/2611.05457))
 - [stated] Let owners commit to the generated branch, and run each project's test suite before the PR opens. ([RQ3](https://arxiv.org/abs/2611.05457))
-- [ours] Plan for the receiving teams' review and deploy cost as the main budget line of a fleet migration, not generation. ([Lesson 1](https://arxiv.org/abs/2611.05457))
+- [stated] Plan for the receiving teams' review and deploy cost as the main budget line of a fleet migration, not generation. ([Conclusions](https://arxiv.org/abs/2611.05457))
 - [stated] Count owner-made migrations that reuse a rejected change, or a merge rate alone undercounts the effect. ([Lesson 6](https://arxiv.org/abs/2611.05457))
 
 ## In their words

@@ -14,7 +14,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: no. Strength: weak. Era: 2026.
   - Cases: [Bun: what went wrong][bun-wrong].
   - Against: Bun's limits covered memory, CPU and processes, yet the disk still filled and crashed the machine several times ([Bun][bun-wrong]); no case shows disk quotas in use.
-- **OPS-3** [stated] Make the inner loop fast (module splits, build caches, host I/O, a headless path into the app) before scaling agents; their time goes mostly to reading, building and testing, not writing.
+- **OPS-3** [stated] Make the inner loop fast (module splits, build caches, host I/O) before scaling agents; their time goes mostly to reading, building and testing, not writing.
   - Old system as oracle: no. Strength: strong. Era: 2025–2026.
   - Cases: [GitHub: what went wrong][gh-wrong], [GitHub: numbers][gh-numbers], [Bun: practices to copy][bun-practices], [Shopify: what went wrong][shp-wrong], [Asana: what went wrong][asa-wrong].
   - Against: At Shopify the slow step was not the build: hot reload helped but did not fix it, because agents read and drove the app through simulators; its fix is a headless path into the app's logic ([Shopify][shp-worked]).

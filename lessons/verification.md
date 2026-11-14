@@ -43,14 +43,14 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Old system as oracle: partly. Strength: weak. Era: Claude Code, 2025–2026.
   - Cases: [Spotify: how it was checked][spo-checked], [Spotify: practices to copy][spo-practices].
   - Against: Intel translated without tests on purpose to measure the repair cost afterwards ([Intel][int-checked]).
-- **VER-10** [stated] Keep automated checks out of the model even as it takes on more of the writing; an error a model-run check lets through can spread across the whole fleet.
+- **VER-10** [stated] In a fleet pipeline, keep the pass/fail gates deterministic even as the model takes on more of the writing; an error a model-run gate lets through can spread to every target.
   - Old system as oracle: no. Strength: weak. Era: Claude Sonnet 4.5, then Opus 4.6, 2025–2026.
   - Cases: [Bloomberg: what worked][bbg-worked].
-  - Against: Disagree: Google's gates include the model agreeing its change was needed ([Google][goo-checked]), and Spotify gates each PR with an LLM judge ([Spotify][spo-checked]).
+  - Against: Disagree: Google's gates include the model agreeing its change was needed ([Google][goo-checked]), Spotify gates each PR with an LLM judge ([Spotify][spo-checked]), Shopify puts two adversarial reviewers (likely agents) on every checkpoint ([Shopify][shp-checked]), and Bun's reviewer agents, seeing only the diff, caught bugs and rejected stubs ([Bun][bun-worked]).
 - **VER-11** [stated] Before building the pipeline, judge how late a wrong change first fails; changes that only the owner's deploy could check were merged less and rejected more.
   - Old system as oracle: partly. Strength: weak. Era: Claude Sonnet 4.5, then Opus 4.6, 2025–2026.
   - Cases: [Bloomberg: what worked][bbg-worked], [Bloomberg: what went wrong][bbg-wrong].
-  - Against: Bloomberg's authors cannot separate this from the population, the earlier start, the perceived risk of each move and a part-time review helper ([Bloomberg][bbg-worked]).
+  - Against: None found; Bloomberg's authors cannot separate this from the population, the earlier start, the perceived risk of each move and a part-time review helper ([Bloomberg][bbg-worked]).
 
 [air-worked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-worked
 [bbg-who]: ../cases/2026-11-03-bloomberg-python-cpp-uplift.md#who-did-what
@@ -58,6 +58,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [bbg-wrong]: ../cases/2026-11-03-bloomberg-python-cpp-uplift.md#what-went-wrong
 [bun-checked]: ../cases/2026-07-08-bun-zig-to-rust.md#how-it-was-checked
 [bun-practices]: ../cases/2026-07-08-bun-zig-to-rust.md#practices-to-copy
+[bun-worked]: ../cases/2026-07-08-bun-zig-to-rust.md#what-worked
 [gh-checked]: ../cases/2026-09-16-github-copilot-runtime-rust.md#how-it-was-checked
 [gh-numbers]: ../cases/2026-09-16-github-copilot-runtime-rust.md#numbers
 [gh-wrong]: ../cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong
@@ -69,6 +70,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [int-worked]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#what-worked
 [int-wrong]: ../cases/2026-08-24-intel-ideas-c-to-rust.md#what-went-wrong
 [opw-worked]: ../cases/2026-04-20-1password-monolith-refactor.md#what-worked
+[shp-checked]: ../cases/2026-09-10-shopify-react-native-to-native.md#how-it-was-checked
 [slk-worked]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#what-worked
 [slk-wrong]: ../cases/2024-05-22-slack-enzyme-to-rtl.md#what-went-wrong
 [spo-checked]: ../cases/2025-11-06-spotify-honk.md#how-it-was-checked

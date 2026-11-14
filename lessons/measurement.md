@@ -45,7 +45,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **MSR-10** [stated] A merge rate undercounts unrequested changes: also count targets whose owners rejected the change and then migrated anyway, often reusing it.
   - Old system as oracle: no. Strength: weak. Era: Claude Sonnet 4.5, then Opus 4.6, 2025–2026.
   - Cases: [Bloomberg: what worked][bbg-worked].
-  - Against: Bloomberg followed up only the rejected Python PRs, not the far larger group left without a decision ([Bloomberg][bbg-worked]).
+  - Against: None found; Bloomberg followed up only the rejected Python PRs, not the far larger group left without a decision ([Bloomberg][bbg-worked]).
 
 [air-numbers]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#numbers
 [air-wrong]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-went-wrong

@@ -12,8 +12,8 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: One worktree per agent would have filled Bun's disk, so it used a few shared ones with git restricted ([Bun][bun-wrong]).
 - **ORC-2** [stated] Run agents in parallel only on changes that are independent by design; otherwise parallelism adds inconsistency.
   - Old system as oracle: no. Strength: weak. Era: 2026.
-  - Cases: [1Password: practices to copy][opw-practices], [Asana: who did what][asa-who].
-  - Against: Bun ran up to 64 agents at once on units that depended on each other, fed from a queue of compiler errors, and finished ([Bun][bun-numbers]).
+  - Cases: [1Password: practices to copy][opw-practices], [Asana: what went wrong][asa-wrong], [Bun: what went wrong][bun-wrong].
+  - Against: Bun split compiler errors, grouped by crate, across up to 64 agents and finished ([Bun][bun-worked]).
 - **ORC-3** [stated] Peer agents on adjacent code need a named coordinator or human tiebreaker, and autonomy must stop at anything outside the agent's own branch.
   - Old system as oracle: no. Strength: weak. Era: 2026 (GPT-5.6 Sol, Opus 4.8 sessions).
   - Cases: [GitHub: what went wrong][gh-wrong], [GitHub: practices to copy][gh-practices].
@@ -34,10 +34,8 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: Disagree: Bun and GitHub ran fleets of dozens of agents and finished ([Bun][bun-worked]) ([GitHub][gh-worked]), and Shopify split its Shop port across specialised subagents ([Shopify][shp-who]). Asana backs a simple design but not the short leash: a few agents with a loose goal, choosing their own files, finished, while sub-agents and tracked tickets did worse ([Asana][asa-wrong]).
 
 [air-worked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-worked
-[asa-who]: ../cases/2026-08-07-asana-enzyme-to-rtl.md#who-did-what
 [asa-wrong]: ../cases/2026-08-07-asana-enzyme-to-rtl.md#what-went-wrong
 [bbg-worked]: ../cases/2026-11-03-bloomberg-python-cpp-uplift.md#what-worked
-[bun-numbers]: ../cases/2026-07-08-bun-zig-to-rust.md#numbers
 [bun-worked]: ../cases/2026-07-08-bun-zig-to-rust.md#what-worked
 [bun-wrong]: ../cases/2026-07-08-bun-zig-to-rust.md#what-went-wrong
 [gh-numbers]: ../cases/2026-09-16-github-copilot-runtime-rust.md#numbers

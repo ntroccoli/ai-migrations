@@ -45,7 +45,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **TOL-9** [stated] Where the old format is regular, have the model fill a schema-checked data object and let templates write the new files; one template fix then repairs every target.
   - Old system as oracle: partly. Strength: weak. Era: Claude Sonnet 4.5, 2025–2026.
   - Cases: [Bloomberg: what worked][bbg-worked], [Bloomberg: how it was checked][bbg-checked].
-  - Against: The extraction path still produced a PR for only part of the tasks in each archetype, with reasons not given ([Bloomberg][bbg-wrong]).
+  - Against: None found; the extraction path still produced a PR for only part of the tasks in each archetype, with reasons not given ([Bloomberg][bbg-wrong]).
 - **TOL-10** [stated] At each model upgrade, review the pre-processing built to cover the older model's gaps; keep a step only if it adds reproducibility or eases debugging.
   - Old system as oracle: no. Strength: weak. Era: Claude Sonnet 4.5, then Opus 4.6, 2025–2026.
   - Cases: [Bloomberg: what went wrong][bbg-wrong].

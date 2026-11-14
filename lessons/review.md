@@ -14,7 +14,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 - **REV-2** [stated] Split the review: agents and tests do the exhaustive old-against-new comparison; people spend their attention on architecture, contracts and flagged risk.
   - Old system as oracle: partly. Strength: medium. Era: 2026.
   - Cases: [GitHub: who did what][gh-who], [Bun: how it was checked][bun-checked].
-  - Against: Disagree: at Slack and Google a person checked every change before merge ([Slack][slk-who]) ([Google][goo-checked]), and Shopify puts a person's approval on every checkpoint ([Shopify][shp-checked]); in Bun no person read every line.
+  - Against: Disagree: at Slack and Google a person checked every change before merge ([Slack][slk-who]) ([Google][goo-checked]), and Shopify puts a person's approval on every checkpoint ([Shopify][shp-checked]); in Bun no person read every line. Zalando had a person review every change, and one wrong data change still got through ([Zalando][zal-wrong]).
 - **REV-3** [ours] Give reviewers a written list of constructs that read the same in both languages but behave differently: assertions, eager defaults, falsy checks, number types.
   - Old system as oracle: yes. Strength: medium. Era: 2026.
   - Cases: [Bun: what went wrong][bun-wrong], [GitHub: what went wrong][gh-wrong].
@@ -76,6 +76,7 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
 [spo-checked]: ../cases/2025-11-06-spotify-honk.md#how-it-was-checked
 [spo-worked]: ../cases/2025-11-06-spotify-honk.md#what-worked
 [spo-wrong]: ../cases/2025-11-06-spotify-honk.md#what-went-wrong
+[zal-wrong]: ../cases/2025-02-20-zalando-ui-component-libraries.md#what-went-wrong
 [k-llm-council-anonymous-peer-review]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2025-11-22-llm-council-anonymous-peer-review.md
 [k-models-too-agentic-state-stakes-and-scope]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2025-08-09-models-too-agentic-state-stakes-and-scope.md
 [k-verification-not-generation-is-the-bottleneck]: https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/2025-06-04-verification-not-generation-is-the-bottleneck.md

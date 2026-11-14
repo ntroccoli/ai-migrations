@@ -2,26 +2,26 @@
 
 Questions to answer about a repository before an AI-driven migration to another language,
 framework or library, or a large restructuring. Each has a **Check** an agent runs on the
-repository, an **Evidence** line saying in our words what the cases show ("ours" marks our own
+repository, an **Evidence** line in our words on what the cases show ("ours" marks our own
 inference), and the **Lessons** behind it (`TST-2` is lesson 2 on the testing page; pages are
 listed in [llms.txt](llms.txt)).
 Pitfalls by kind of move: [pitfalls.md](pitfalls.md).
 
-Cases: [GitHub][] (TypeScript), [Bun][] (Zig) and [Intel][] (C) to Rust; [1Password][] (Go
-restructuring); [Spotify][] and [Bloomberg][] (fleet changes); [Airbnb][], [Slack][] and [Asana][]
-(React tests); [Zalando][] (UI library); [Shopify][] (React Native to native); [Google][] (wider
-IDs); [Uber][] (Java tests, rule-based: a contrast case).
+Cases: [GitHub][] (TypeScript), [Bun][] (Zig) and [Intel][] (C) to Rust; [1Password][] (Go);
+[Spotify][] and [Bloomberg][] (fleets); [Airbnb][], [Slack][] and [Asana][] (React tests);
+[Zalando][] (UI library); [Shopify][] (to native apps); [Google][] (wider IDs); [Uber][] (Java
+tests, rule-based: a contrast case).
 
 1. **Is the move allowed, possible and worth it?**
-   Check: find the written reason and the measured problem behind it; repository rules that pin the stack, forbid new libraries or name an approver (one
+   Check: find the written reason and the measured problem behind it (none written: ask the
+   owner); repository rules that pin the stack, forbid new libraries or name an approver (one
    that forbids the target is a blocker); for each framework the product rests on (renderer, UI,
    desktop shell, platform or store SDK), its mature equivalent in the target, or mark the move a
    rewrite on a new base; where time, memory or money goes today (a profile, a bill) and whether
    the code to port is on that path; who maintains the result and whether they read the target
    language; what the target must win, as numbers where possible.
-   Evidence: the cases start from a known problem or a forced move: GitHub's embedding, startup
-   and memory, Bun's crashes and leaks, Slack's test library blocking a React upgrade, Google's
-   IDs nearing the int32 limit. The rest is ours.
+   Evidence: the cases start from a known problem or a forced move (GitHub's startup and memory,
+   Bun's crashes, Slack's blocked React upgrade, Google's int32 limit). The rest is ours.
    Lessons: PLN-7, PLN-8, PLN-9, SEC-7.
 2. **Is there a test oracle that survives the move and that the agent cannot edit?**
    Check: count the tests that exercise behaviour through a public interface (CLI, API, files
@@ -35,10 +35,9 @@ IDs); [Uber][] (Java tests, rule-based: a contrast case).
    change first fails (build, tests, or only once deployed). Find who must approve a test change
    (CODEOWNERS, branch rules, CI, the owner); none is a finding.
    Evidence: GitHub's unchanged end-to-end suites were the oracle; its feature-loss regressions
-   came almost all from their gaps. Bun's suite, in a third language, judged the
-   whole port; a critic notes it had missed the old bugs. Google's correct changes stalled on
-   failing tests and goldens;
-   Spotify's worst case is green CI with wrong behaviour. Intel matched the C original's
+   came almost all from their gaps. Bun's suite, in a third language, judged the whole port; a
+   critic notes it had missed the old bugs. Google's correct changes stalled on failing tests and
+   goldens; Spotify's worst case is green CI with wrong behaviour. Intel matched the C original's
    `git blame` output; Shopify compared both apps' screens and events at named points.
    Bloomberg's Python changes could fail only once deployed.
    Lessons: TST-1, TST-2, TST-3, TST-4, TST-5, TST-6, TST-8, TST-10, TST-12, VER-5, VER-11, OVS-1.
@@ -46,20 +45,19 @@ IDs); [Uber][] (Java tests, rule-based: a contrast case).
    Check: find the command that builds, formats, lints and tests one unit in the old stack, and
    name the one for the target stack (pin its toolchain). Use recorded timings first (logs, CI
    history); otherwise time each, count the output lines of a failure, and build two separate
-   clones outside the repository at once. For the number
+   clones outside the repository at once (a worktree would write into its `.git`). For the number
    of agents you plan, estimate compile time, disk space, disk speed and process limits; say how
    agents are kept from undoing each other's work, and which target platforms their machines can
    build and test; for an app, how an agent drives it and how long one test takes. A missing
    formatter or linter is a finding.
-   Evidence: GitHub needed a build lock once many agents built at once. Bun's agents sharing one
-   checkout undid each other's work within minutes, and heavy tests stalled the machine.
-   1Password gave each agent a worktree; Spotify's verify tool returns short errors. Shopify's
-   agents took minutes per test in simulators; Asana's people stepped in most over slow lint
-   and CI that disagreed with local runs.
+   Evidence: GitHub needed a build lock. Bun's agents sharing one checkout undid each other's work
+   within minutes, and heavy tests stalled the machine. 1Password gave each agent a worktree;
+   Spotify's verify tool returns short errors. Shopify's agents took minutes per test in
+   simulators; Asana's people stepped in most over slow lint and CI that disagreed with local runs.
    Lessons: OPS-1, OPS-2, OPS-3, ORC-1, ORC-2, VER-2, VER-4, TOL-6, TOL-8.
 4. **How big is the job, really?**
-   Check: scope is everything that must exist in the target. Count lines and files in scope
-   (`scc`, `tokei` or `cloc`, by folder) for
+   Check: scope is everything that must exist in the target. Count lines and files in scope by
+   folder (`scc`, `tokei`, `cloc`, else `git ls-files -z -- <scope> | xargs -0 wc -l`) for
    code (GPU too), tests, build scripts, and other languages (shaders, generated files,
    templates or DSLs of the old stack). For a change across call sites, list every site with a
    code index or static analyzer, not text search alone, and keep the list. Add code tangled with
@@ -83,8 +81,8 @@ IDs); [Uber][] (Java tests, rule-based: a contrast case).
    Evidence: GitHub swapped one component per pull request through a temporary interop layer,
    leaves first; Intel went in dependency order; Google, Airbnb and Spotify moved one ID, file or
    repository at a time. Bun made one switch after a small trial, and cycles left by its package
-   split took two more agent runs. Shopify's one-pass port of a whole app gave code it could not
-   ship; small reviewed checkpoints replaced it. The cost of a mixed build is ours.
+   split took two more agent runs. Shopify's author says one-pass ports give code that cannot ship;
+   small reviewed checkpoints replaced them. The cost of a mixed build is ours.
    Lessons: PLN-1, PLN-4, PLN-11, ROL-1, ROL-6, ORC-4.
 6. **Is the end state written, and is the scope held?**
    Check: look for a written target for the whole migration (not one unit), before-and-after
@@ -93,7 +91,7 @@ IDs); [Uber][] (Java tests, rule-based: a contrast case).
    each diff for changes outside its scope. A repository rule against translating first (delete
    old paths, keep no compatibility) is a finding.
    Evidence: GitHub's agents ported only the hot paths until the full end state was written, and
-   each redesign the lead allowed during the port cost regressions, time or tokens. Bun wrote a
+   each redesign allowed mid-port cost regressions, time or tokens. Bun wrote a
    porting guide first and left idiomatic code for later. 1Password's call-site cleanup ran from
    a list, templates and escalation rules; Spotify's judge rejects sessions mostly for straying
    from the prompt.
@@ -101,13 +99,12 @@ IDs); [Uber][] (Java tests, rule-based: a contrast case).
 7. **What does the old stack do implicitly?**
    Check: search the scope for behaviour the target will not give for free, starting from the
    lists for this kind of move in [pitfalls.md](pitfalls.md); mark each item "like for like" or
-   "needs a decision" and give the search you used. Make a
-   table of direct dependencies: target library, version, stable release or archived (a missing
-   framework is question 1).
+   "needs a decision" and give the search you used. Make a table of direct dependencies: target
+   library, version, stable release or archived (a missing framework is question 1).
    Evidence: the regressions compiled: GitHub's runtime defaults and one-sided paired operations,
    Bun's lines that read alike but behave differently, Intel's pointer comparison, Google's bit
-   operations and SQL tied to the old width, 1Password's backfill order, Zalando's layouts that
-   broke once deployed.
+   operations and SQL tied to the old width, 1Password's backfill order, Zalando's wrong data
+   mapping in a component, which passed review and broke a live page.
    Lessons: REV-3, OPS-4, TST-7, VER-6, SEC-5, SEC-6, AGF-3, SEC-10.
 8. **Is the code uniform enough for one prompt, and what context goes with it?**
    Check: group the units by kind of code (pure logic, concurrency, OS layer, GPU or UI, data
@@ -121,8 +118,8 @@ IDs); [Uber][] (Java tests, rule-based: a contrast case).
    wrong field mappings; Airbnb found the choice of related files mattered more than prompt
    wording; Slack gave the model a codemod's partial output and each test's rendered output;
    Google's model handled Dart poorly, so people did it. Uber's recipes did a test-framework move
-   where its AI attempt failed. Bloomberg gave each archetype its own prompt and checks; stale
-   docs misled Asana's agents.
+   where its AI attempt failed. Bloomberg gave each kind of target its own prompt and
+   checks; stale docs misled Asana's agents.
    Lessons: CTX-1, CTX-2, CTX-3, CTX-5, CTX-9, CTX-10, TOL-2, TOL-7, TOL-9, AGF-8, PLN-8, PLN-12.
 9. **How will you work the long tail, stop, and learn from failures?**
    Check: look for a status record per unit, a way to rerun failing units by step, a retry limit
@@ -140,13 +137,15 @@ IDs); [Uber][] (Java tests, rule-based: a contrast case).
     snapshots or baselines, waiver labels, CI flags) and who must approve each; the steps kept
     for people (schema changes, backfills, deploy order); and the tools, skills and credentials
     agent sessions can reach. A rule written only in a document, with nothing enforcing it, is a
-    partial gap. Ask the owner who reviews, whether they read the target language, and how many
-    hours a week they have.
+    partial gap. Changes landing in other teams' code: count the owning teams, whether they asked
+    for the move, who carries the deploy risk. Ask the owner who reviews, whether they
+    read the target language, and how many hours a week they have.
     Evidence: a GitHub agent applied a waiver label to pass a failing check, and a session merged
     a peer's worktree unasked; Spotify's agents switched off unreliable tests; Bun's agents
     stubbed functions until reviewer agents, seeing only the diff, rejected that; 1Password's
-    agents repeated ordering mistakes after being told. Bloomberg's owners left most unrequested
-    PRs undecided; Shopify needed reviewers who knew the target platform.
+    agents repeated ordering mistakes after being told. Most of Bloomberg's unrequested pull
+    requests got no decision from their owners; Shopify needed reviewers who knew the target
+    platform.
     Lessons: OVS-1, OVS-2, AGF-1, AGF-5, SEC-1, SEC-2, SEC-3, REV-1, REV-2, REV-9, REV-11, TEM-4,
     ROL-9.
 11. **How will changes reach users?**
@@ -163,11 +162,11 @@ IDs); [Uber][] (Java tests, rule-based: a contrast case).
     fixed hardware, the number the product exists for (speed, latency, memory, output quality),
     and the part the port changes, if not the same path. Plan to record tokens or spend, engineer
     hours, pull requests, regressions after merge and reverts, marking measured against estimated.
-    Evidence: GitHub benchmarked before and after (other changes landed in the same window) and
-    gave its token bill; Bun priced its tokens at list rates and counted regressions
-    after merge; Google measured shares as edit distance. Every manual-effort or saving figure is
-    the team's own estimate. Bloomberg also counted undecided PRs, and owners' migrations that
-    reused rejected ones. Recording reverts is ours.
+    Evidence: GitHub benchmarked before and after (amid other changes) and gave its token
+    bill; Bun priced its tokens at list rates and counted regressions after merge;
+    Google measured shares as edit distance. Every effort or saving figure is
+    the team's own estimate. Bloomberg also counted undecided pull requests, and owners' migrations
+    that reused rejected ones. Recording reverts is ours.
     Lessons: CST-1, CST-2, CST-6, CST-7, MSR-1, MSR-2, MSR-4, MSR-5, MSR-9, MSR-10, TST-9, KNW-3.
 
 ## Starting thresholds
@@ -176,7 +175,7 @@ Only where a case gives a number: starting points from one case each, not target
 judge "gap" from the Check alone.
 
 - Q4: GitHub's first count was about 130,000 lines and about 430,000 went through the port. A
-  scope count with no allowance for inflow is a partial gap.
+  scope count with no allowance for code moving in or newly written is a partial gap.
   [GitHub][]
 - Q5: Bun ran its whole loop on 3 files before all 1,448. No pilot before the bulk run is a gap.
   [Bun][]
@@ -187,29 +186,28 @@ judge "gap" from the Check alone.
 ## How to run this checklist
 
 1. Run it in a fresh session on the repository to migrate, changing nothing there. The cases are
-   few and mostly teams' own accounts: read their "What went wrong" sections before relying on them.
+   few and mostly teams' own accounts: read their "What went wrong" before relying on them.
 2. Measure first: answer each Check with a number, file or command output, not from memory.
-3. A check you may not run: write the exact command, mark it "not run" with the reason, never guess its result. Logs or CI history
-   count if you say where they came from.
+3. A check you may not run: write the exact command, mark it "not run" with the reason, never
+   guess its result. Logs or CI history count if you say where they came from.
 4. A fact only the owner knows (review time, budget, approval of a new stack): write the question
    and mark it "ask the owner".
 5. Mark each question "gap", "partial gap", "no gap" or "not applicable yet", with the
    measurement.
-6. Write proposals from the Evidence lines and, if you can open them, the cited lessons (their
+6. Write proposals from the Evidence lines and, if you can, the cited lessons (their
    "Against" lines and oracle tags) and the case sections they link, above all "Practices to
    copy". Compare numbers across cases only when their units match.
 7. Order proposals by what blocks the rest: blockers first (a "no" on question 1 is the usual
    one), then what others depend on (the oracle, the baseline, the end state), then the rest.
-   After a no-go on question 1, give the verdict and the blockers, and list the other gaps one
-   line each, with no proposals.
+   After a no-go on question 1: the verdict, the blockers and the other gaps, one line each.
 8. Report as below and wait for the owner's choice.
 9. Record: once the owner has chosen, write `docs/migration-review.md` in the measured repository
-   (the one file this checklist adds there): each proposal with its status and, for proven and
-   stopped holding, the event that shows it and its date. In a read-only run, put the record
+   (the one file this checklist adds there; format below). In a read-only run, put the record
    after the report instead.
 10. Revisit: a later run reads that record first and re-checks only the open, waiting and
-    stopped-holding items, plus any question whose measurement may have moved. Update each status with the date and the event; reopen proven or skipped
-    items only if their check now fails.
+    stopped-holding items, plus any question whose measurement may have moved or that a newer
+    entry in `log.md` changed. Update each status with the date and the event; reopen proven or
+    skipped items only if their check now fails.
 
 ## Report format
 
@@ -235,6 +233,8 @@ Go / no-go: go | go after the blockers | no-go — <one line why>.
 - Q<n> <question>: <why, and what must exist first>.
 
 ## Proposals
+
+<After a no-go on Q1, replace this section with "Other gaps": one line per gap.>
 
 1. Q<n> <question> — gap | partial gap.
    Today: <what the repository does, with the measurement>.

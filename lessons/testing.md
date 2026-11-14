@@ -54,8 +54,8 @@ Evidence base: every lesson here comes from the **migrations** in [this collecti
   - Against: None found.
 - **TST-12** [stated] Check parity on what users and downstream systems see: capture screens and raw events from old and new at the same named points, ignoring values that vary per run.
   - Old system as oracle: yes. Strength: weak. Era: 2025–2026 (models unstated).
-  - Cases: [Shopify: how it was checked][shp-checked].
-  - Against: Shopify does not say how far parity reached beyond the flows engineers ran ([Shopify][shp-wrong]).
+  - Cases: [Shopify: how it was checked][shp-checked], [Zalando: how it was checked][zal-checked].
+  - Against: None found; Zalando calls for visual testing without saying how it compared the two, and Shopify does not say how far parity reached beyond the flows engineers ran ([Shopify][shp-wrong]).
 
 [air-checked]: ../cases/2025-04-01-airbnb-enzyme-to-rtl.md#how-it-was-checked
 [asa-checked]: ../cases/2026-08-07-asana-enzyme-to-rtl.md#how-it-was-checked
