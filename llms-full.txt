@@ -682,26 +682,25 @@ How to read the numbers in these sources, and how to report your own.
 Questions to answer about a repository before an AI-driven migration to another language,
 framework or library, or a large restructuring. Each has a **Check** an agent runs on the
 repository, an **Evidence** line saying in our words what the cases show ("ours" marks our own
-inference), and the **Lessons** behind it: IDs whose prefix names an aspect page listed in
-[llms.txt](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms.txt) (`TST-2` is lesson 2 on the testing page); each lesson links
-the case sections it rests on. Pitfalls by kind of move: [pitfalls.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/pitfalls.md). How to run it
-and the report format are at the end.
+inference), and the **Lessons** behind it (`TST-2` is lesson 2 on the testing page; pages are
+listed in [llms.txt](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms.txt)).
+Pitfalls by kind of move: [pitfalls.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/pitfalls.md).
 
 Cases: [GitHub](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md) (TypeScript), [Bun](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md) (Zig) and [Intel](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-08-24-intel-ideas-c-to-rust.md) (C) to Rust; [1Password](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-20-1password-monolith-refactor.md) (Go
-restructuring); [Spotify](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-11-06-spotify-honk.md) (fleet changes); [Airbnb](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-01-airbnb-enzyme-to-rtl.md) and [Slack](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2024-05-22-slack-enzyme-to-rtl.md) (React tests); [Google](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-13-google-int64-ids.md)
-(wider IDs); [Uber](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-07-uber-junit4-to-junit5.md) (Java tests, rule-based: a contrast case). Files are linked at the end.
+restructuring); [Spotify](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-11-06-spotify-honk.md) and [Bloomberg](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-11-03-bloomberg-python-cpp-uplift.md) (fleet changes); [Airbnb](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-01-airbnb-enzyme-to-rtl.md), [Slack](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2024-05-22-slack-enzyme-to-rtl.md) and [Asana](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-08-07-asana-enzyme-to-rtl.md)
+(React tests); [Zalando](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-02-20-zalando-ui-component-libraries.md) (UI library); [Shopify](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-10-shopify-react-native-to-native.md) (React Native to native); [Google](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-13-google-int64-ids.md) (wider
+IDs); [Uber](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-07-uber-junit4-to-junit5.md) (Java tests, rule-based: a contrast case).
 
 1. **Is the move allowed, possible and worth it?**
-   Check: find the written reason and the measured problem behind it (none written: ask the
-   owner); repository rules that pin the stack, forbid new libraries or name an approver (one
+   Check: find the written reason and the measured problem behind it; repository rules that pin the stack, forbid new libraries or name an approver (one
    that forbids the target is a blocker); for each framework the product rests on (renderer, UI,
    desktop shell, platform or store SDK), its mature equivalent in the target, or mark the move a
    rewrite on a new base; where time, memory or money goes today (a profile, a bill) and whether
    the code to port is on that path; who maintains the result and whether they read the target
    language; what the target must win, as numbers where possible.
    Evidence: the cases start from a known problem or a forced move: GitHub's embedding, startup
-   and memory, Bun's use-after-free crashes and leaks, Slack's test library blocking its next
-   React version, Google's IDs nearing the int32 limit. The rest is ours.
+   and memory, Bun's crashes and leaks, Slack's test library blocking a React upgrade, Google's
+   IDs nearing the int32 limit. The rest is ours.
    Lessons: PLN-7, PLN-8, PLN-9, SEC-7.
 2. **Is there a test oracle that survives the move and that the agent cannot edit?**
    Check: count the tests that exercise behaviour through a public interface (CLI, API, files
@@ -711,32 +710,36 @@ restructuring); [Spotify](https://raw.githubusercontent.com/ntroccoli/ai-migrati
    (plain-data summaries, tolerances) and how you confirm the tests ran. When the tests are what
    moves, say how intent and coverage are compared (coverage before and after, a hand-converted
    sample) and check new tests can fail. Say whether old and new can take the same inputs side by
-   side and have their outputs compared (a differential or shadow run). Find who must approve a
-   test change (CODEOWNERS, branch rules, CI, the owner); none is a finding.
-   Evidence: GitHub kept its end-to-end suites unchanged as the oracle, and its feature-loss
-   regressions came almost all from gaps in them. Bun's suite, in a third language, judged the
-   whole port; a critic notes it had missed the old bugs. Intel's translation compiled yet
-   crashed until repaired; Google's correct changes stalled on failing tests and goldens;
-   Spotify's worst case is green CI with wrong behaviour. Intel checked its repaired port by
-   matching the C original's `git blame` output; running both on live inputs is ours.
-   Lessons: TST-1, TST-2, TST-3, TST-4, TST-5, TST-6, TST-8, TST-10, VER-5, OVS-1.
+   side and have their outputs compared (a differential or shadow run), and how late a wrong
+   change first fails (build, tests, or only once deployed). Find who must approve a test change
+   (CODEOWNERS, branch rules, CI, the owner); none is a finding.
+   Evidence: GitHub's unchanged end-to-end suites were the oracle; its feature-loss regressions
+   came almost all from their gaps. Bun's suite, in a third language, judged the
+   whole port; a critic notes it had missed the old bugs. Google's correct changes stalled on
+   failing tests and goldens;
+   Spotify's worst case is green CI with wrong behaviour. Intel matched the C original's
+   `git blame` output; Shopify compared both apps' screens and events at named points.
+   Bloomberg's Python changes could fail only once deployed.
+   Lessons: TST-1, TST-2, TST-3, TST-4, TST-5, TST-6, TST-8, TST-10, TST-12, VER-5, VER-11, OVS-1.
 3. **Can an agent build, check and test alone, fast, and in parallel, in both toolchains?**
    Check: find the command that builds, formats, lints and tests one unit in the old stack, and
    name the one for the target stack (pin its toolchain). Use recorded timings first (logs, CI
    history); otherwise time each, count the output lines of a failure, and build two separate
-   clones outside the repository at once (a worktree would write into its `.git`). For the number
+   clones outside the repository at once. For the number
    of agents you plan, estimate compile time, disk space, disk speed and process limits; say how
    agents are kept from undoing each other's work, and which target platforms their machines can
-   build and test. A missing formatter or linter is a finding.
+   build and test; for an app, how an agent drives it and how long one test takes. A missing
+   formatter or linter is a finding.
    Evidence: GitHub needed a build lock once many agents built at once. Bun's agents sharing one
    checkout undid each other's work within minutes, and heavy tests stalled the machine.
-   1Password gave each agent a worktree; Spotify's verify tool returns short errors; Airbnb
-   gated each file on tests, lint and types.
-   Lessons: OPS-1, OPS-2, OPS-3, ORC-1, ORC-2, VER-2, VER-4, TOL-6.
+   1Password gave each agent a worktree; Spotify's verify tool returns short errors. Shopify's
+   agents took minutes per test in simulators; Asana's people stepped in most over slow lint
+   and CI that disagreed with local runs.
+   Lessons: OPS-1, OPS-2, OPS-3, ORC-1, ORC-2, VER-2, VER-4, TOL-6, TOL-8.
 4. **How big is the job, really?**
    Check: scope is everything that must exist in the target. Count lines and files in scope
-   (`git ls-files -z -- <scope> | xargs -0 wc -l`, or `scc`, `tokei` or `cloc`, by folder) for
-   code (GPU code counts), tests, build scripts, and other languages (shaders, generated files,
+   (`scc`, `tokei` or `cloc`, by folder) for
+   code (GPU too), tests, build scripts, and other languages (shaders, generated files,
    templates or DSLs of the old stack). For a change across call sites, list every site with a
    code index or static analyzer, not text search alone, and keep the list. Add code tangled with
    the scope. List the data and asset formats both builds read, and stored data that must stay
@@ -744,8 +747,8 @@ restructuring); [Spotify](https://raw.githubusercontent.com/ntroccoli/ai-migrati
    (`git log --since="3 months ago" --numstat --format=%ad --date=short -- <scope>`): commits and
    lines per week, active days, last change. Code still changing fast: ask the owner whether to
    wait, or delete the old code in the change that ports it so later edits conflict.
-   Evidence: GitHub's first count was about a third of what it finally ported, as code moved
-   into scope and colleagues kept adding to the old code. Google's code index beat text search
+   Evidence: GitHub's scope grew about threefold as code moved in and colleagues kept adding to
+   the old code. Google's code index beat text search
    but listed irrelevant sites; 1Password's analyzer listed every site.
    Lessons: PLN-3, PLN-10, ROL-4, TOL-1, TOL-3, MSR-8.
 5. **Can the work ship in small units, with old and new side by side?**
@@ -759,8 +762,9 @@ restructuring); [Spotify](https://raw.githubusercontent.com/ntroccoli/ai-migrati
    Evidence: GitHub swapped one component per pull request through a temporary interop layer,
    leaves first; Intel went in dependency order; Google, Airbnb and Spotify moved one ID, file or
    repository at a time. Bun made one switch after a small trial, and cycles left by its package
-   split took two more agent runs. The cost of a mixed build is ours.
-   Lessons: PLN-1, PLN-4, ROL-1, ROL-6, ORC-4.
+   split took two more agent runs. Shopify's one-pass port of a whole app gave code it could not
+   ship; small reviewed checkpoints replaced it. The cost of a mixed build is ours.
+   Lessons: PLN-1, PLN-4, PLN-11, ROL-1, ROL-6, ORC-4.
 6. **Is the end state written, and is the scope held?**
    Check: look for a written target for the whole migration (not one unit), before-and-after
    examples from this repository, sites grouped into patterns with a template each, when the
@@ -776,14 +780,13 @@ restructuring); [Spotify](https://raw.githubusercontent.com/ntroccoli/ai-migrati
 7. **What does the old stack do implicitly?**
    Check: search the scope for behaviour the target will not give for free, starting from the
    lists for this kind of move in [pitfalls.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/pitfalls.md); mark each item "like for like" or
-   "needs a decision" and give the search you used (a count only says where to look). Make a
+   "needs a decision" and give the search you used. Make a
    table of direct dependencies: target library, version, stable release or archived (a missing
    framework is question 1).
-   Evidence: the regressions compiled. GitHub's included number types, falsy defaults, time
-   zone, environment and paired operations ported on one side only; Bun's were mostly lines that
-   read the same in both languages but behave differently; Intel's compared pointers where the C
-   compared contents; Google's reached bit operations and SQL tied to the old width; 1Password's
-   agents ordered a backfill so rows could be lost silently.
+   Evidence: the regressions compiled: GitHub's runtime defaults and one-sided paired operations,
+   Bun's lines that read alike but behave differently, Intel's pointer comparison, Google's bit
+   operations and SQL tied to the old width, 1Password's backfill order, Zalando's layouts that
+   broke once deployed.
    Lessons: REV-3, OPS-4, TST-7, VER-6, SEC-5, SEC-6, AGF-3, SEC-10.
 8. **Is the code uniform enough for one prompt, and what context goes with it?**
    Check: group the units by kind of code (pure logic, concurrency, OS layer, GPU or UI, data
@@ -792,25 +795,25 @@ restructuring); [Spotify](https://raw.githubusercontent.com/ntroccoli/ai-migrati
    renamed fields or APIs, runtime facts a person would look at, and what a rule-based codemod
    can do first. Pilot the model on the hardest files of each language in scope, and check the
    largest files fit its context window. A group too varied for one prompt is a candidate to defer
-   or do by hand.
+   or do by hand. Search docs and agent instructions for advice favouring the old stack.
    Evidence: Spotify dropped a framework too varied for one prompt, and mapping tables fixed
    wrong field mappings; Airbnb found the choice of related files mattered more than prompt
    wording; Slack gave the model a codemod's partial output and each test's rendered output;
    Google's model handled Dart poorly, so people did it. Uber's recipes did a test-framework move
-   where its AI attempt failed.
-   Lessons: CTX-1, CTX-2, CTX-3, CTX-5, CTX-9, TOL-2, TOL-7, AGF-8, PLN-8.
+   where its AI attempt failed. Bloomberg gave each archetype its own prompt and checks; stale
+   docs misled Asana's agents.
+   Lessons: CTX-1, CTX-2, CTX-3, CTX-5, CTX-9, CTX-10, TOL-2, TOL-7, TOL-9, AGF-8, PLN-8, PLN-12.
 9. **How will you work the long tail, stop, and learn from failures?**
    Check: look for a status record per unit, a way to rerun failing units by step, a retry limit
    (for independent units such as files; where units depend on each other, a rule to fix the
    workflow and rerun instead), a rule for when to stop automating and finish by hand, and a place
-   where a failure seen twice becomes a standing instruction, skill or eval. Say which exist and
-   which the port must add.
-   Evidence: Airbnb stamped each file with its status, tuned on small samples of failures, swept
-   again and finished the last files by hand; Intel capped retries. Bun fixed the process, not
+   where a failure seen twice becomes a standing instruction, skill or eval.
+   Evidence: Airbnb stamped each file with its status, swept again after each fix and finished
+   the last files by hand; Intel capped retries. Bun fixed the process, not
    the code, when agents stubbed functions; GitHub turned repeated failures into instructions,
-   skills and evals; Spotify asks the agent what its prompt lacked. Uber put files whose tests
-   failed back on the old framework.
-   Lessons: VER-3, KNW-1, KNW-2, OVS-3, CTX-7, AGF-7, OPS-6, ROL-8.
+   skills and evals; Spotify asks the agent what its prompt lacked; Zalando reran a golden set
+   after each prompt change. Uber put files whose tests failed back on the old framework.
+   Lessons: VER-3, KNW-1, KNW-2, OVS-3, CTX-7, AGF-7, OPS-6, ROL-8, TST-11.
 10. **What may the agent decide and reach alone, and who reviews?**
     Check: list the guardrails an agent could switch off (deleting or editing tests, updating
     snapshots or baselines, waiver labels, CI flags) and who must approve each; the steps kept
@@ -821,8 +824,10 @@ restructuring); [Spotify](https://raw.githubusercontent.com/ntroccoli/ai-migrati
     Evidence: a GitHub agent applied a waiver label to pass a failing check, and a session merged
     a peer's worktree unasked; Spotify's agents switched off unreliable tests; Bun's agents
     stubbed functions until reviewer agents, seeing only the diff, rejected that; 1Password's
-    agents repeated ordering mistakes after being told. Budgeting reviewer time is ours.
-    Lessons: OVS-1, OVS-2, AGF-1, AGF-5, SEC-1, SEC-2, SEC-3, REV-1, REV-2, REV-9, TEM-4.
+    agents repeated ordering mistakes after being told. Bloomberg's owners left most unrequested
+    PRs undecided; Shopify needed reviewers who knew the target platform.
+    Lessons: OVS-1, OVS-2, AGF-1, AGF-5, SEC-1, SEC-2, SEC-3, REV-1, REV-2, REV-9, REV-11, TEM-4,
+    ROL-9.
 11. **How will changes reach users?**
     Check: find the release channels (pre-release, flags, canary), the share of users each
     reaches, how problems are reported and watched, and how one unit's change is rolled back (for
@@ -837,36 +842,33 @@ restructuring); [Spotify](https://raw.githubusercontent.com/ntroccoli/ai-migrati
     fixed hardware, the number the product exists for (speed, latency, memory, output quality),
     and the part the port changes, if not the same path. Plan to record tokens or spend, engineer
     hours, pull requests, regressions after merge and reverts, marking measured against estimated.
-    Evidence: GitHub benchmarked before and after, warning that other changes landed in the same
-    window, and gave its token bill; Bun priced its tokens at list rates and counted regressions
+    Evidence: GitHub benchmarked before and after (other changes landed in the same window) and
+    gave its token bill; Bun priced its tokens at list rates and counted regressions
     after merge; Google measured shares as edit distance. Every manual-effort or saving figure is
-    the team's own estimate. Recording reverts is ours.
-    Lessons: CST-1, CST-2, CST-6, CST-7, MSR-1, MSR-4, MSR-5, MSR-9, TST-9, KNW-3.
+    the team's own estimate. Bloomberg also counted undecided PRs, and owners' migrations that
+    reused rejected ones. Recording reverts is ours.
+    Lessons: CST-1, CST-2, CST-6, CST-7, MSR-1, MSR-2, MSR-4, MSR-5, MSR-9, MSR-10, TST-9, KNW-3.
 
 ### Starting thresholds
 
-Only where a case gives a number. They are starting points from one case each, not targets;
-adjust them to the repository. For a question without a line here, judge "gap" from the Check
-alone.
+Only where a case gives a number: starting points from one case each, not targets. Elsewhere,
+judge "gap" from the Check alone.
 
 - Q4: GitHub's first count was about 130,000 lines and about 430,000 went through the port. A
-  scope count with no allowance for code moving in and new code arriving is a partial gap.
+  scope count with no allowance for inflow is a partial gap.
   [GitHub](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md)
 - Q5: Bun ran its whole loop on 3 files before all 1,448. No pilot before the bulk run is a gap.
   [Bun](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md)
-- Q9: Airbnb saw most simple and medium files pass within about 10 attempts, and 50 to
-  100 attempts on the hardest gained little before people finished them; it tuned each fix on 5
-  to 10 failing files before sweeping again. No retry limit, or no rule to stop and hand-port, is
-  a gap. [Airbnb](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-01-airbnb-enzyme-to-rtl.md)
+- Q9: most of Airbnb's simple and medium files passed within about 10 attempts; 50 to 100
+  attempts on the hardest gained little. It tuned each fix on 5 to 10 failing files. No retry
+  limit, or no rule to stop and hand-port, is a gap. [Airbnb](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-01-airbnb-enzyme-to-rtl.md)
 
 ### How to run this checklist
 
 1. Run it in a fresh session on the repository to migrate, changing nothing there. The cases are
-   a small base, mostly teams' own accounts: if you can open them, read their "What went wrong"
-   sections before you rely on them.
+   few and mostly teams' own accounts: read their "What went wrong" sections before relying on them.
 2. Measure first: answer each Check with a number, file or command output, not from memory.
-3. A check you may not run (read-only review, shared hardware, no target toolchain yet): write the
-   exact command, mark it "not run" with the reason, never guess its result. Logs or CI history
+3. A check you may not run: write the exact command, mark it "not run" with the reason, never guess its result. Logs or CI history
    count if you say where they came from.
 4. A fact only the owner knows (review time, budget, approval of a new stack): write the question
    and mark it "ask the owner".
@@ -874,20 +876,18 @@ alone.
    measurement.
 6. Write proposals from the Evidence lines and, if you can open them, the cited lessons (their
    "Against" lines and oracle tags) and the case sections they link, above all "Practices to
-   copy" and "What went wrong". Compare numbers across cases only when their units match.
+   copy". Compare numbers across cases only when their units match.
 7. Order proposals by what blocks the rest: blockers first (a "no" on question 1 is the usual
    one), then what others depend on (the oracle, the baseline, the end state), then the rest.
    After a no-go on question 1, give the verdict and the blockers, and list the other gaps one
    line each, with no proposals.
 8. Report as below and wait for the owner's choice.
 9. Record: once the owner has chosen, write `docs/migration-review.md` in the measured repository
-   (the one file this checklist adds there): each proposal with its status (open, proven, waiting
-   for first use, stopped holding, skipped) and, for proven and stopped holding, the event that
-   shows it (a commit, a test run, a measured number) and its date. In a read-only run, put the
-   record after the report instead.
+   (the one file this checklist adds there): each proposal with its status and, for proven and
+   stopped holding, the event that shows it and its date. In a read-only run, put the record
+   after the report instead.
 10. Revisit: a later run reads that record first and re-checks only the open, waiting and
-    stopped-holding items, plus any question whose measurement may have moved (new code in scope,
-    a new toolchain). Update each status with the date and the event; reopen proven or skipped
+    stopped-holding items, plus any question whose measurement may have moved. Update each status with the date and the event; reopen proven or skipped
     items only if their check now fails.
 
 ### Report format
@@ -908,23 +908,21 @@ Go / no-go: go | go after the blockers | no-go — <one line why>.
 - Q<n>: <question>.
 
 ## No gap
-- Q<n> <question>: <measurement>. <Optional one-line note.>
+- Q<n> <question>: <measurement>.
 
 ## Not applicable yet
 - Q<n> <question>: <why, and what must exist first>.
 
 ## Proposals
 
-<After a no-go on Q1, replace this section with "Other gaps": one line per gap.>
-
 1. Q<n> <question> — gap | partial gap.
    Today: <what the repository does, with the measurement>.
    Change: <the proposal>.
-   Evidence: Q<n> in the checklist, its lesson IDs, plus anything you read in the cases (links).
+   Evidence: Q<n>, its lesson IDs, and links to case sections you read.
    Depends on: <proposal numbers, or none>.
    Cost: S | M | L (S under a day of agent work, M a few days, L a week or more).
    Recommendation: do | later | skip.
-   Check that proves it: <command or count to rerun after the change>.
+   Check that proves it: <command or count to rerun>.
 2. ...
 ```
 
@@ -951,6 +949,10 @@ Status is one of: open, proven, waiting for first use, stopped holding, skipped.
 [Google]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-13-google-int64-ids.md
 [Slack]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2024-05-22-slack-enzyme-to-rtl.md
 [Uber]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-07-uber-junit4-to-junit5.md
+[Zalando]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-02-20-zalando-ui-component-libraries.md
+[Asana]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-08-07-asana-enzyme-to-rtl.md
+[Shopify]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-10-shopify-react-native-to-native.md
+[Bloomberg]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-11-03-bloomberg-python-cpp-uplift.md
 
 ## Pitfalls by kind of move
 
@@ -1039,6 +1041,34 @@ does underneath them.
   changed the build so both versions ran side by side, and skipped any file using a pattern its
   recipes did not support. [Uber](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-07-uber-junit4-to-junit5.md)
 
+### A UI component library or design system to another
+
+- Sizes, spacing scales and grid columns that differ in meaning as well as name: a model mapped
+  a medium button to medium where the old medium looked like the new large, and the two grids had
+  12 and 24 columns. A page that compiles can render broken: check each page visually. [Zalando](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-02-20-zalando-ui-component-libraries.md)
+- Properties the target component lacks, which a model may fill with a plausible one that does not
+  exist; data passed into a component in a changed shape, which once passed review and broke a
+  page in production. [Zalando](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-02-20-zalando-ui-component-libraries.md)
+- Defaults the old components applied unasked, such as a notification timeout: decide whether to
+  keep them. [Zalando](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-02-20-zalando-ui-component-libraries.md)
+
+### A cross-platform mobile app to native apps (for example React Native to native iOS and Android code)
+
+- What users and other systems see across the switch: staying signed in, push notifications, and
+  analytics events with the context downstream systems read. [Shopify](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-10-shopify-react-native-to-native.md)
+- How long an agent takes to test one change on the target platform: driving simulators through
+  screenshots or the accessibility tree took minutes per test, where the edit took seconds; plan a
+  headless or command-line path into the app's logic. [Shopify](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-10-shopify-react-native-to-native.md)
+- (ours) Navigation and back stack, deep links, accessibility labels, layout across screen sizes
+  and over-the-air updates the cross-platform framework handled.
+
+### A build system or packaging model to another
+
+- Imports that look required in the code but are test-only or conditional; Bloomberg crossed
+  syntax-tree imports with modules seen at run time to tell them apart. [Bloomberg](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-11-03-bloomberg-python-cpp-uplift.md)
+- A wrong dependency choice that builds and passes smoke checks, then fails only once deployed;
+  unit tests the pipeline never ran. [Bloomberg](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-11-03-bloomberg-python-cpp-uplift.md)
+
 ### A library or framework version upgrade (ours)
 
 - Removed or deprecated APIs; changed defaults; behaviour changes listed only in the release notes
@@ -1061,6 +1091,8 @@ where a case is linked):
   cross the boundary.
 - A service split: route requests per path or tenant to the old or the new side and move the
   routes one at a time (the strangler-fig pattern).
+- A cross-platform app to native apps: a fresh native app beside the old one, each screen ported
+  against the running old app; Shopify chose this over a gradual move inside the old app. [Shopify](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-10-shopify-react-native-to-native.md)
 - A schema or storage change: expand and contract. Add the new form, write both, backfill, switch
   the reads, then drop the old form; this order avoids the backfill loss 1Password hit.
   [1Password](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-20-1password-monolith-refactor.md)
@@ -1070,6 +1102,8 @@ where a case is linked):
 - Replacement libraries that behave differently from the old ones; one caused an endless loop at
   startup. [GitHub](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md) (ours) List each direct dependency, its target library, version, and
   whether that is a stable release or archived.
+- Docs and agent instruction files that still recommend the old library steer agents back to it;
+  awkward patterns in example code get copied too. [Asana](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-08-07-asana-enzyme-to-rtl.md)
 - (ours) Source shared with another language or toolchain (shader headers, generated code), which a
   port splits into copies that drift.
 - (ours) Bit-exact results across languages (float model, thread count) when tests compare outputs.

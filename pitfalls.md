@@ -85,6 +85,34 @@ does underneath them.
   changed the build so both versions ran side by side, and skipped any file using a pattern its
   recipes did not support. [Uber][]
 
+## A UI component library or design system to another
+
+- Sizes, spacing scales and grid columns that differ in meaning as well as name: a model mapped
+  a medium button to medium where the old medium looked like the new large, and the two grids had
+  12 and 24 columns. A page that compiles can render broken: check each page visually. [Zalando][]
+- Properties the target component lacks, which a model may fill with a plausible one that does not
+  exist; data passed into a component in a changed shape, which once passed review and broke a
+  page in production. [Zalando][]
+- Defaults the old components applied unasked, such as a notification timeout: decide whether to
+  keep them. [Zalando][]
+
+## A cross-platform mobile app to native apps (for example React Native to native iOS and Android code)
+
+- What users and other systems see across the switch: staying signed in, push notifications, and
+  analytics events with the context downstream systems read. [Shopify][]
+- How long an agent takes to test one change on the target platform: driving simulators through
+  screenshots or the accessibility tree took minutes per test, where the edit took seconds; plan a
+  headless or command-line path into the app's logic. [Shopify][]
+- (ours) Navigation and back stack, deep links, accessibility labels, layout across screen sizes
+  and over-the-air updates the cross-platform framework handled.
+
+## A build system or packaging model to another
+
+- Imports that look required in the code but are test-only or conditional; Bloomberg crossed
+  syntax-tree imports with modules seen at run time to tell them apart. [Bloomberg][]
+- A wrong dependency choice that builds and passes smoke checks, then fails only once deployed;
+  unit tests the pipeline never ran. [Bloomberg][]
+
 ## A library or framework version upgrade (ours)
 
 - Removed or deprecated APIs; changed defaults; behaviour changes listed only in the release notes
@@ -107,6 +135,8 @@ where a case is linked):
   cross the boundary.
 - A service split: route requests per path or tenant to the old or the new side and move the
   routes one at a time (the strangler-fig pattern).
+- A cross-platform app to native apps: a fresh native app beside the old one, each screen ported
+  against the running old app; Shopify chose this over a gradual move inside the old app. [Shopify][]
 - A schema or storage change: expand and contract. Add the new form, write both, backfill, switch
   the reads, then drop the old form; this order avoids the backfill loss 1Password hit.
   [1Password][]
@@ -116,6 +146,8 @@ where a case is linked):
 - Replacement libraries that behave differently from the old ones; one caused an endless loop at
   startup. [GitHub][] (ours) List each direct dependency, its target library, version, and
   whether that is a stable release or archived.
+- Docs and agent instruction files that still recommend the old library steer agents back to it;
+  awkward patterns in example code get copied too. [Asana][]
 - (ours) Source shared with another language or toolchain (shader headers, generated code), which a
   port splits into copies that drift.
 - (ours) Bit-exact results across languages (float model, thread count) when tests compare outputs.
@@ -129,3 +161,7 @@ where a case is linked):
 [1Password]: cases/2026-04-20-1password-monolith-refactor.md
 [Slack]: cases/2024-05-22-slack-enzyme-to-rtl.md
 [Uber]: cases/2026-04-07-uber-junit4-to-junit5.md
+[Zalando]: cases/2025-02-20-zalando-ui-component-libraries.md
+[Shopify]: cases/2026-09-10-shopify-react-native-to-native.md
+[Bloomberg]: cases/2026-11-03-bloomberg-python-cpp-uplift.md
+[Asana]: cases/2026-08-07-asana-enzyme-to-rtl.md
