@@ -140,8 +140,8 @@ Read https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/field-r
 ## Contributing
 
 Corrections are welcome: a wrong number, a broken link, a summary that misreads its source. Open
-an issue; see [CONTRIBUTING.md](CONTRIBUTING.md). [AGENTS.md](AGENTS.md) describes the case
-format and the rules every file follows.
+an issue; see [CONTRIBUTING.md](CONTRIBUTING.md). [AGENTS.md](AGENTS.md) gives the scope, the
+commands and the writing rules, and points to the case format and the other rules in `docs/`.
 
 ## Licence
 

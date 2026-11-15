@@ -18,7 +18,7 @@ export const PITFALLS = join(ROOT, 'pitfalls.md');
 // Agents read checklist.md whole before a migration: keep it small.
 export const CHECKLIST_MAX_BYTES = 20 * 1024;
 
-// Field values. Keep in sync with AGENTS.md "Case files".
+// Field values. Keep in sync with docs/case-format.md "Case files".
 export const SOURCE_TYPES = ['engineering-post', 'paper', 'talk', 'repo', 'vendor-marketing'];
 export const KINDS = ['language', 'framework', 'test-framework', 'library-upgrade', 'data', 'architecture', 'mixed'];
 export const AI_SHARES = ['most', 'part', 'little', 'unstated'];
@@ -155,7 +155,7 @@ export const MODEL_DEPENDENCE = ['yes', 'partly', 'no'];
 // the date of the newest log.md entry is marked "may be outdated" in lessons/index.md and llms.txt.
 export const OUTDATED_MONTHS = 12;
 export const STRENGTHS = ['strong', 'medium', 'weak'];
-// The highest strength the cases in a lesson's "Cases" line allow (AGENTS.md "Lessons"): `strong`
+// The highest strength the cases in a lesson's "Cases" line allow (docs/lesson-rules.md "Lessons"): `strong`
 // needs two or more cases, or one whose source shows its data (`evidence` other than
 // `assertion-only`), and at least one case whose author does not sell the tool; `medium` needs the
 // same without the seller condition; anything else is `weak`. Contrast cases (`ai_share: little`)
@@ -313,7 +313,7 @@ export function mayBeOutdated(lesson, metas, today) {
   return newest < t.toISOString().slice(0, 10);
 }
 
-// Update log entries and what each added or changed (AGENTS.md "Update log"). Each entry of log.md
+// Update log entries and what each added or changed (docs/maintaining.md "Update log"). Each entry of log.md
 // has a generated changes/<slug>.md: the lesson IDs and checklist questions added, changed or gone
 // since the previous entry, and the fingerprints of the state after it. The newest entry's file is
 // rebuilt from the sources; an older one is frozen, since its state can no longer be rebuilt.

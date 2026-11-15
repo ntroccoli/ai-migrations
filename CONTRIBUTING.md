@@ -17,7 +17,8 @@ requests from outside contributors are not accepted yet.
 
 ## Rules every file follows
 
-- One case per file in `cases/`, in the format described in [AGENTS.md](AGENTS.md).
+- One case per file in `cases/`, in the format described in
+  [docs/case-format.md](docs/case-format.md).
 - Only migrations done with AI. Rule-based tools used inside one are recorded in that case; the
   one exception, a contrast case, is described in [AGENTS.md](AGENTS.md#scope).
 - Summaries in our own words. At most one quote per file, 15 words or fewer, attributed, linked

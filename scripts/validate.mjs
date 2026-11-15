@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
-// Validate case files, lesson pages and the checklist. Rules: AGENTS.md "Case files", "Lessons"
-// and "Checklist".
+// Validate case files, lesson pages and the checklist. Rules: docs/case-format.md,
+// docs/lesson-rules.md and docs/maintaining.md; AGENTS.md's own size cap and links are checked here.
 // Usage: node scripts/validate.mjs            (all of cases/, lessons/, checklist.md and pitfalls.md)
 //        node scripts/validate.mjs <file|dir>  (only those cases; no checklist check)
 //        node scripts/validate.mjs --cases-dir cases <staged case>  (its links resolve in cases/)
@@ -13,6 +13,9 @@ import {
   LESSONS_DIR, LESSON_PAGES, LESSON_MAX_BYTES, INDEX_MAX_BYTES, LLMS_MAX_BYTES, LESSON_NOTE, LESSON_LEGEND, KARPATHY_IDEAS, ORACLES, MODEL_DEPENDENCE, STRENGTHS, META_LINE, parseLessonPage, strengthCeiling, lessonMeta,
   casesOf, expectedEra, eraText, parseEra, LOG, CHANGES_DIR, logEntries, parseChanges,
 } from './lib.mjs';
+
+// AGENTS.md loads into every agent session, so it stays short: the rules by task live in docs/.
+const AGENTS_MAX_BYTES = 8 * 1024;
 
 const errors = [];
 const warnings = [];
@@ -27,7 +30,7 @@ const words = s => s.trim().split(/\s+/).filter(Boolean).length;
 const notice = existsSync(NOTICE) ? readFileSync(NOTICE, 'utf8').replace(/\r\n/g, '\n') : '';
 
 // ---- Units ----------------------------------------------------------------------------------
-// The units rule (AGENTS.md "Case files" points here). A number is a word that starts with a digit,
+// The units rule (docs/case-format.md "Case files" points here). A number is a word that starts with a digit,
 // after an optional ~ ≈ $ € £ or opening bracket: 3,500, 3.5K, 4.0x, 60–90%. Not numbers: digits
 // inside a word (GPT-5.6, E0425, o200k), inline code, link targets, dates (2025-04-01, 2025-04),
 // periods (2023..2024), list markers, ordinals (4th) and digit-led names (1Password: a digit then a
@@ -554,6 +557,16 @@ if (!args.length) {
   if (existsSync(llms)) {
     const size = Buffer.byteLength(readFileSync(llms, 'utf8').replace(/\r\n/g, '\n'), 'utf8');
     if (size > LLMS_MAX_BYTES) err('llms.txt', `${size} bytes (at most ${LLMS_MAX_BYTES}); shorten what build.mjs writes there`);
+  }
+  const agents = join(ROOT, 'AGENTS.md');
+  if (existsSync(agents)) {
+    const text = readFileSync(agents, 'utf8').replace(/\r\n/g, '\n');
+    const size = Buffer.byteLength(text, 'utf8');
+    if (size > AGENTS_MAX_BYTES) err('AGENTS.md', `${size} bytes (at most ${AGENTS_MAX_BYTES}); move rules to a docs/ file and point to it`);
+    for (const [, target] of text.matchAll(/\]\(([^)\s]+)\)/g)) {
+      const path = target.split('#')[0];
+      if (path && !/^[a-z]+:/.test(path) && !existsSync(join(ROOT, path))) err('AGENTS.md', `link to ${path} does not resolve`);
+    }
   }
   for (const c of files) if (!lessons.cited.has(c) && !list?.cited.has(c)) err(c, 'no lesson and no checklist question cites this case');
   summary = ` ${lessons.ids.size} lessons valid. checklist.md valid: ${list?.n ?? 0} questions, each citing lessons.`;

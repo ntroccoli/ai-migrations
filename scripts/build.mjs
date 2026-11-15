@@ -69,7 +69,7 @@ if (broken.length) {
   process.exit(1);
 }
 
-// One line per case, from the front matter only (AGENTS.md "One line per case").
+// One line per case, from the front matter only (docs/maintaining.md "One line per case").
 const caseLine = (c, prefix) => {
   const m = c.meta;
   return `- [${m.title}](${prefix}${c.file}) — ${m.kind}, ${m.from} to ${m.to}; AI share: ${m.ai_share}; evidence: ${m.evidence}; ` +
@@ -113,7 +113,7 @@ for (const p of pages) for (const l of p.lessons) {
   for (const f of files) caseUse.get(f)?.push(l.id);
 }
 
-// "May be outdated" (AGENTS.md "Lessons"): tagged yes for model ability, newest case in "Cases" older than
+// "May be outdated" (docs/lesson-rules.md "Lessons"): tagged yes for model ability, newest case in "Cases" older than
 // OUTDATED_MONTHS at the reference date (the newest log.md entry).
 const outdated = new Set(pages.flatMap(p => p.lessons.filter(l =>
   mayBeOutdated(l, casesOf(l, p.refs).map(f => caseByFile.get(f)?.meta).filter(Boolean), TODAY)).map(l => l.id)));
@@ -151,7 +151,7 @@ const MODEL_RULE = 'With a specific or a new model: process lessons (model abili
   'hold only what the cases show: no prompting advice.';
 const out = {};
 
-// changes/<entry>.md (AGENTS.md "Update log"): what each log entry added, changed or removed. Only the
+// changes/<entry>.md (docs/maintaining.md "Update log"): what each log entry added, changed or removed. Only the
 // newest entry's file is rebuilt, from the previous entry's frozen state; older files must exist.
 const entries = logEntries(readFileSync(LOG, 'utf8'));
 const changesFile = e => join(CHANGES_DIR, `${e.slug}.md`);
@@ -209,7 +209,7 @@ out[`changes/${NEWEST.slug}.md`] = renderChanges(NEWEST, prevEntry, lessonPrints
   ].join('\n');
 }
 
-// lessons/evidence.md: one line per lesson with only what choosing it needs (AGENTS.md "Generated
+// lessons/evidence.md: one line per lesson with only what choosing it needs (docs/maintaining.md "Generated
 // files"): tags, strength, the "may be outdated" mark, the cases it cites and those its "Against" cites.
 const companiesIn = (text, refs) => [...new Set(linksIn(text || '', refs).map(x => caseByFile.get(caseFileOf(x.target))?.meta.company)
   .filter(Boolean))];
@@ -323,7 +323,7 @@ out['llms.txt'] = [
     'open an aspect page only for the lessons you use. For a large piece of AI-driven work that is not a migration (README ' +
     `"Learning from the lessons"), follow [docs/applying-lessons.md](${RAW_BASE}/docs/applying-lessons.md).`,
   `- Open a case only when you need its detail. Each has "Who did what", "How it was checked", a Numbers table with ` +
-    `the basis of each number, "What went wrong" and "Practices to copy". File format: [AGENTS.md](${RAW_BASE}/AGENTS.md).`,
+    `the basis of each number, "What went wrong" and "Practices to copy". File format: [docs/case-format.md](${RAW_BASE}/docs/case-format.md).`,
   `- Once a prediction has met a real event (a decision not to migrate, a regression, an item proven or failing at a ` +
     'revisit): tell what the checklist or the lessons foresaw and what they missed, ' +
     `in a field report ([how](${RAW_BASE}/docs/field-reports.md)); show the user the exact text before posting.`,

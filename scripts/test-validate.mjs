@@ -9,7 +9,7 @@ import { ROOT, parseCase, expectedEra, eraText, LOG, logEntries, modelFamily } f
 
 const TMP = join(ROOT, '.test-tmp');
 const PARTS = ['scripts', 'cases', 'lessons', 'checklist.md', 'pitfalls.md', 'NOTICE.md', 'index.md', 'llms.txt', 'llms-full.txt',
-  'README.md', 'CONTRIBUTING.md', 'docs', 'changes', 'LICENSE-CONTENT.md', '.github', 'lychee.toml', 'log.md'];
+  'README.md', 'CONTRIBUTING.md', 'docs', 'changes', 'LICENSE-CONTENT.md', '.github', 'lychee.toml', 'log.md', 'AGENTS.md'];
 const ONEPW = '2026-04-20-1password-monolith-refactor.md';
 const INTEL = '2026-08-24-intel-ideas-c-to-rust.md';
 const BUN = '2026-07-08-bun-zig-to-rust.md';
@@ -103,7 +103,7 @@ test('a model name outside "Lessons:" is not a lesson ID', 0,
 test('a model name on a line after "Lessons:" is not a lesson ID', 0,
   d => edit(join(d, 'checklist.md'), '   Lessons: PLN-7, PLN-8, PLN-9, SEC-7.\n', '   Lessons: PLN-7, PLN-8, PLN-9, SEC-7.\n   Note: GPT-5 and SHA-256 are not lessons.\n'));
 
-// Lessons (AGENTS.md "Lessons"): one broken copy per rule.
+// Lessons (docs/lesson-rules.md "Lessons"): one broken copy per rule.
 const L = (d, page) => join(d, 'lessons', `${page}.md`);
 const REV1 = '- **REV-1** [stated] Never let the writing agent review its own change;';
 test('lesson with an unknown tag fails', 1,
@@ -132,7 +132,7 @@ test('bad oracle value fails', 1,
   d => edit(L(d, 'review'), 'Old system as oracle: partly. Depends', 'Old system as oracle: maybe. Depends'), null, 'REV-1: oracle must be one of');
 test('bad strength value fails', 1,
   d => edit(L(d, 'review'), 'ability: partly. Strength: medium. Era: 2026;', 'ability: partly. Strength: huge. Era: 2026;'), null, 'REV-1: strength must be one of');
-// "Depends on model ability" and the Era (AGENTS.md "Lessons").
+// "Depends on model ability" and the Era (docs/lesson-rules.md "Lessons").
 test('bad model-ability value fails', 1,
   d => edit(L(d, 'review'), 'Depends on model ability: partly. Strength: medium. Era: 2026;', 'Depends on model ability: maybe. Strength: medium. Era: 2026;'),
   null, 'REV-1: "Depends on model ability" must be one of');
@@ -198,6 +198,10 @@ test('lessons/index.md over its size cap fails', 1,
   d => appendFileSync(join(d, 'lessons', 'index.md'), `\n${' '.repeat(13000)}\n`), null, 'bytes (at most 12288)');
 test('llms.txt over its size cap fails', 1,
   d => appendFileSync(join(d, 'llms.txt'), `\n${' '.repeat(21000)}\n`), null, 'bytes (at most 20480)');
+test('AGENTS.md over its size cap fails', 1,
+  d => appendFileSync(join(d, 'AGENTS.md'), `\n${' '.repeat(9000)}\n`), null, 'bytes (at most 8192)');
+test('AGENTS.md pointing to a missing docs file fails', 1,
+  d => edit(join(d, 'AGENTS.md'), '(docs/lesson-rules.md)', '(docs/lesson-rule.md)'), null, 'link to docs/lesson-rule.md does not resolve');
 // One fixture per label word: in a shared sentence the other word, within three words, would pass the number.
 test('a number after day is a label, not a quantity', 0,
   d => edit(join(d, 'cases', BUN), '\n## What worked\n', '\n## What worked\n\n- On day 5 the port ran ([source](https://bun.com/blog/bun-in-rust)).\n'), [join('cases', BUN)]);
