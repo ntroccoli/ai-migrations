@@ -161,7 +161,7 @@ export const STRENGTHS = ['strong', 'medium', 'weak'];
 // same without the seller condition; anything else is `weak`. Contrast cases (`ai_share: little`)
 // do not count. `metas` are the cases' front matter.
 export function strengthCeiling(metas) {
-  // A contrast case (ai_share: little) never raises a lesson about what models do.
+  // A contrast case (ai_share: little) counts toward no lesson's cap, whatever the lesson is about.
   metas = metas.filter(m => m.ai_share !== 'little');
   if (!metas.length) return 'weak';
   const shown = metas.some(m => m.evidence && m.evidence !== 'assertion-only');

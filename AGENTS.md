@@ -37,8 +37,8 @@ every session.
   syntax-tree rewrites) are recorded in that case, never a case of their own.
 - One exception, a contrast case: a migration done mainly with rule-based tools whose source
   reports an AI attempt that failed or was dropped. Its summary starts "Contrast case.", its
-  Context says why it is here, `ai_share` is `little`, and it never raises the strength of a
-  lesson about what models do. Uber's JUnit move is the first.
+  Context says why it is here, `ai_share` is `little`, and it does not count toward any
+  lesson's strength cap. Uber's JUnit move is the first.
 - Primary sources only (engineering posts, papers, talks, official repos). Secondhand reports
   point to a primary source or are left out.
 

@@ -62,6 +62,12 @@ Summary in our own words, 40 to 150 words.
 
 Field rules (all checked):
 
+- `title`: not empty, and equal to the first heading of the body (the validator's "first heading
+  must equal the title" check).
+- `company`: the subject company as the source names it, not empty (the validator's "company is
+  empty" check). A superseded case and its successor must carry the same `company` (see `status`).
+- `summary`: not empty, at most 160 characters (the validator's "summary" check; it does not
+  count sentences, so keep it to one by hand). Used in the index and `llms-full.txt`.
 - `date`: `YYYY-MM-DD`, not in the future; the file name starts with it.
 - `source_url`: the primary source, `https://`. `also`: an inline list of the other URLs of the
   same source (the other parts of a series, a companion post the source links when the case is

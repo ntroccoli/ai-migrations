@@ -61,7 +61,7 @@ Rules (all checked by `node scripts/validate.mjs`; one broken-copy test each):
   `independent-data`, and at least one case whose `author_relation` is not `seller-of-tool`;
   `medium` needs two or more cases, or one that shows its data; any other lesson is `weak`. So a
   seller's case weighs less: a lesson resting only on such cases is at most `medium`. A contrast
-  case (`ai_share: little`) does not count toward the cap. Below the cap, grade by how well the
+  case (`ai_share: little`) does not count toward any lesson's cap. Below the cap, grade by how well the
   cases support the lesson; recount as cases arrive. The legend on every page states this rule
   (`LESSON_LEGEND`).
 - Links in "Cases" and "Against" go to a case section, `../cases/<file>.md#<section>`, and must
