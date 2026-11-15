@@ -284,7 +284,7 @@ const embed = rel => {
   // Each lesson with its sub-items, from the parsed page (whatever else sits between lessons).
   const lessonText = p => absolute(p.lessons.map(l => [p.lines[l.line - 1], ...l.subs.map(s => s.raw)].join('\n')).join('\n'), p.refs);
   out['llms-full.txt'] = [
-    '# AI migrations: every lesson, every case line, the checklist and the pitfalls in one file', '',
+    '# AI migrations: every lesson, every case line, the checklist, its report formats and the pitfalls in one file', '',
     'Unofficial; company names describe the subject only. Summaries and lessons are our own words under CC BY 4.0. ' +
       `Source: ${REPO}`, '',
     DISCLOSURE, '',
@@ -294,6 +294,7 @@ const embed = rel => {
     '## Cases', '',
     ...cases.map(c => caseLine(c, `${RAW_BASE}/cases/`)), '',
     embed('checklist.md'), '',
+    embed('docs/report-formats.md'), '',
     embed('pitfalls.md'), '',
   ].join('\n');
 }
@@ -328,7 +329,8 @@ out['llms.txt'] = [
     'revisit): tell what the checklist or the lessons foresaw and what they missed, ' +
     `in a field report ([how](${RAW_BASE}/docs/field-reports.md)); show the user the exact text before posting.`,
   `- Revisit: the newest update is "${NEWEST.head}". If your record names it and no item is due for re-check (due: waiting or ` +
-    'open, with commits in the project since the record\'s date), stop. Else, for each ' +
+    'open, with commits in the project since the record\'s date, or past its check-by date), stop. Else list first the rows ' +
+    'waiting for first use past their check-by date, with their owner; then, for each ' +
     `[log.md](${RAW_BASE}/log.md) entry newer than your record's, read changes/<entry>.md (newest: [${NEWEST.slug}](${RAW_BASE}/changes/${NEWEST.slug}.md)), ` +
     'the lesson IDs and questions it added, changed or removed.',
   `- Relative links inside these files resolve against the raw URL of the file that holds them (under ${RAW_BASE}/).`, '',
@@ -342,7 +344,7 @@ out['llms.txt'] = [
     'in before the move. Read it to choose cases; open only the cases you need.', '',
   '## Optional', '',
   `- [Everything in one file](${RAW_BASE}/llms-full.txt): the single opt-in file that holds everything (every lesson ` +
-    'with its sub-items, every case line, the checklist and the pitfalls), for tools that cannot follow links. About ' +
+    'with its sub-items, every case line, the checklist, its report formats and the pitfalls), for tools that cannot follow links. About ' +
     `${fullKB} KB (~${fullKTokens}k tokens): otherwise follow the route above.`,
   `- [Pitfalls by kind of move](${RAW_BASE}/pitfalls.md): what the old stack did implicitly, and seams for moving in steps.`,
   `- [Update log](${RAW_BASE}/log.md): what each update covered and changed, and why.`, '',

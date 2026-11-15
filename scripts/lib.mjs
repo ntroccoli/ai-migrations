@@ -15,8 +15,18 @@ export const CASES_DIR = join(ROOT, 'cases');
 export const CHECKLIST = join(ROOT, 'checklist.md');
 export const NOTICE = join(ROOT, 'NOTICE.md');
 export const PITFALLS = join(ROOT, 'pitfalls.md');
-// Agents read checklist.md whole before a migration: keep it small.
+// Agents read checklist.md whole before a migration: keep it small. Every size cap's source, what it
+// prevents and how it fails applied blindly: docs/maintaining.md "Size caps" (the validator checks a row
+// per cap in CAPS).
 export const CHECKLIST_MAX_BYTES = 20 * 1024;
+// Provenance (docs/lesson-rules.md "Provenance"): the published method files whose thresholds and hard
+// rules carry a marker such as (P3), read in the file's own "## Provenance" table.
+export const PROVENANCE_FILES = ['checklist.md', 'docs/applying-lessons.md', 'docs/report-formats.md'];
+export const PROVENANCE_LEVELS = ['published case', 'published cases', "others' measurement", 'vendor guidance', 'ours'];
+export const PROVENANCE_HEADER = '| ID | Source | Level | Prevents | Blind failure |';
+// A hard rule tells the reader or its agent to cut, cap, delete, forbid or stop. "limits" is left out: it
+// names a property (model limits); "a retry limit" is a rule.
+export const HARD_RULE = /\b(cut|cuts|cap|caps|capped|trim|trims|delete|deletes|remove|removes|drop|drops|forbid|forbids|never|stop|stops|limit|do not|must not|no more than|at most|at or under|wait for|(chang|writ|touch)(e|es|ing) (nothing|no))\b/i;
 
 // Field values. Keep in sync with docs/case-format.md "Case files".
 export const SOURCE_TYPES = ['engineering-post', 'paper', 'talk', 'repo', 'vendor-marketing'];

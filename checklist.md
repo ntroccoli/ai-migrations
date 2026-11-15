@@ -3,7 +3,9 @@
 Questions to answer about a repository before an AI-driven move to another language, framework
 or library, or a large restructuring. Each has a **Check** an agent runs, an **Evidence** line in
 our words ("ours" marks our inference) and the **Lessons** behind it (`TST-2`: lesson 2 on the
-testing page; listed in [lessons/evidence.md](lessons/evidence.md)).
+testing page; listed in [lessons/evidence.md](lessons/evidence.md)). A threshold or hard rule carries
+a marker such as (P3): the [Provenance](#provenance) table gives its source, evidence level, what it
+prevents and how it fails applied blindly. `ours` marks our inference or a number we picked: adapt it.
 
 Cases named below (moves in [index.md](index.md)): [1Password][], [Airbnb][], [Asana][], [Bloomberg][],
 [Bun][], [Checkly][], [GitHub][], [GitLab][], [Google][], [Intel][], [Ladybird][], [PagerDuty][], [Pokémon][],
@@ -12,7 +14,7 @@ Cases named below (moves in [index.md](index.md)): [1Password][], [Airbnb][], [A
 1. **Is the move allowed, possible and worth it?**
    Check: find the written reason and the measured problem behind it (none written: ask the
    owner); repository rules that pin the stack, forbid new libraries or name an approver (one
-   that forbids the target is a blocker); for each framework the product rests on (renderer, UI,
+   that forbids the target is a blocker (P1)); for each framework the product rests on (renderer, UI,
    desktop shell, platform or store SDK), its mature equivalent in the target, or mark the move a
    rewrite on a new base; where time, memory or money goes today (a profile, a bill) and whether
    the code to port is on that path; who maintains the result and whether they read the target
@@ -23,7 +25,7 @@ Cases named below (moves in [index.md](index.md)): [1Password][], [Airbnb][], [A
 2. **Is there a test oracle that survives the move and that the agent cannot edit?**
    Check: count the tests that exercise behaviour through a public interface (CLI, API, files
    written, a headless harness) apart from white-box tests; list public features with none; run
-   them once and list those that fail or do not run. Find golden files tied to the old
+   them once and list those that fail or will not run. Find golden files tied to the old
    implementation and how they are regenerated. Say how results are compared across languages
    (plain-data summaries, tolerances) and how you confirm the tests ran. When the tests are what
    moves, say how intent and coverage are compared (coverage before and after, a hand-converted
@@ -46,7 +48,7 @@ Cases named below (moves in [index.md](index.md)): [1Password][], [Airbnb][], [A
    history); otherwise time each, count the output lines of a failure, and build and test two
    fresh clones outside the repository at once as an agent would (install dependencies, count
    the tests that ran, cap the time; not worktrees, which write into the measured repository's
-   `.git`). For the agents you plan, estimate compile time, disk space and speed, and process
+   `.git`) (P2). For the agents you plan, estimate compile time, disk space and speed, and process
    limits; say how agents are kept from undoing each other's work, and which target platforms
    their machines can build and test; for an app, how an agent drives it and how long one test
    takes. A missing formatter or linter is a finding.
@@ -65,7 +67,7 @@ Cases named below (moves in [index.md](index.md)): [1Password][], [Airbnb][], [A
    readable (rows, hashes, saves). Give the change rate in scope over the last quarter
    (`git log --since="3 months ago" --numstat --format=%ad --date=short -- <scope>`): commits and
    lines per week, active days, last change. Code still changing fast: ask the owner whether to
-   wait, or delete the old code in the change that ports it so later edits conflict.
+   wait, or delete the old code in the change that ports it so later edits conflict (P3).
    Evidence: GitHub's scope grew about threefold as code moved in and the old code kept
    growing. Google's code index beat text search but listed irrelevant sites; 1Password's
    analyzer listed every site.
@@ -73,7 +75,7 @@ Cases named below (moves in [index.md](index.md)): [1Password][], [Airbnb][], [A
 5. **Can the work ship in small units, with old and new side by side?**
    Check: split the scope into units (files, components, packages, repositories), draw their
    dependency order with a read-only graph tool for the language (`go mod graph`, `cargo tree`,
-   `jdeps`, `madge`, `pydeps`), and count the cycles (Go and Cargo forbid package cycles: look
+   `jdeps`, `madge`, `pydeps`), and count the cycles (Go and Cargo reject package cycles: look
    between modules or files instead), and mark the leaves that touch neither I/O nor shared
    state. Find the seam that lets one unit switch while the rest stays, and how the build links
    both languages meanwhile (seams by kind of move: [pitfalls.md](pitfalls.md#seams)). No seam:
@@ -88,8 +90,8 @@ Cases named below (moves in [index.md](index.md)): [1Password][], [Airbnb][], [A
    Check: look for a written target for the whole migration (not one unit), before-and-after
    examples from this repository, sites grouped into patterns with a template each, when the
    agent must stop and escalate, a rule to translate first and redesign later, and a check on
-   each diff for changes outside its scope. A repository rule against translating first (delete
-   old paths, keep no compatibility) is a finding.
+   each diff for changes outside its scope (P4). A repository rule against translating first (delete
+   old paths, keep no compatibility) is a finding (P5).
    Evidence: GitHub's agents ported only the hot paths until the full end state was written, and
    each redesign allowed mid-port cost regressions, time or tokens. Bun wrote a
    porting guide first and left idiomatic code for later. 1Password's call-site cleanup ran from
@@ -125,7 +127,7 @@ Cases named below (moves in [index.md](index.md)): [1Password][], [Airbnb][], [A
    Check: look for a status record per unit, a way to rerun failing units by step, a retry limit
    (for independent units such as files; where units depend on each other, a rule to fix the
    workflow and rerun instead), a rule for when to stop automating and finish by hand, and a place
-   where a failure seen twice becomes a standing instruction, skill or eval.
+   where a failure seen twice becomes a standing instruction, skill or eval (P6).
    Evidence: Airbnb stamped each file with its status, swept again after each fix and finished
    the last files by hand; Intel capped retries. GitHub turned repeated failures into
    instructions, skills and evals; Spotify asks the agent what its prompt lacked; Zalando reran a golden set after each prompt
@@ -175,22 +177,22 @@ Cases named below (moves in [index.md](index.md)): [1Password][], [Airbnb][], [A
 
 Starting points from one case each, not targets; elsewhere judge "gap" from the Check alone.
 
-- Q4: GitHub first counted about 130,000 lines; about 430,000 went through the port. A scope
-  count with no allowance for code moving in or newly written is a partial gap.
+- Q4: GitHub first counted about 130,000 lines; about 430,000 went through the port (P7). A scope
+  count with no allowance for code moving in or newly written is a partial gap (P7).
   [GitHub][]
-- Q5: Bun ran its whole loop on 3 files before all 1,448. No pilot before the bulk run is a gap.
-  [Bun][]
+- Q5: Bun ran its whole loop on 3 files before all 1,448 (P8). No pilot before the bulk run is a
+  gap (P8). [Bun][]
 - Q9: most of Airbnb's simple and medium files passed within about 10 attempts; 50 to 100
-  attempts on the hardest gained little. No retry limit, or no rule to stop and hand-port, is a
-  gap. [Airbnb][]
+  attempts on the hardest gained little (P9). No retry limit, or no rule to stop and hand-port, is
+  a gap (P9). [Airbnb][]
 
 ## How to run this checklist
 
-1. Run it in a fresh session on the repository to migrate, changing nothing there. The cases are
+1. Run it in a fresh session on the repository to migrate, changing nothing there (P10). The cases are
    few and mostly their teams' own accounts: read "What went wrong" before relying on them.
 2. Measure first: answer each Check with a number, file or command output, not from memory.
 3. A check you may not run: write the exact command, mark it "not run" with the reason, never
-   guess its result. Logs or CI history count if you name their source.
+   guess its result (P11). Logs or CI history count if you name their source.
 4. A fact only the owner knows (review time, budget, approval of a new stack): write the question,
    mark it "ask the owner" and state a default; unanswered, assume it, note it in the record, go on.
 5. Mark each question "gap", "partial gap", "no gap" or "not applicable yet", with the
@@ -200,72 +202,35 @@ Starting points from one case each, not targets; elsewhere judge "gap" from the 
    Compare numbers across cases only in matching units.
 7. Order proposals by what blocks the rest: blockers first (a "no" on question 1 is the usual
    one), then what others depend on (the oracle, the baseline, the end state), then the rest.
-8. Report as below and wait for the owner's choice. One change per proposal (or parts 3a, 3b).
+8. Report as below and wait for the owner's choice (P10). One change per proposal (or parts 3a, 3b).
 9. Record: once the owner has chosen, write `docs/migration-review.md` in the measured repository
-   (the one file this checklist adds there; format below). In a read-only run, write no file;
+   (the one file this checklist adds there; format below). In a read-only run, write no file (P10);
    show the record after the report.
 10. Revisit as step 7 of [applying the lessons](docs/applying-lessons.md) says, with the questions its `changes/` files list as well as the lessons.
 11. Share (optional): a [field report](docs/field-reports.md) once an item has met its problem.
 
 ## Report format
 
-```markdown
-# Before-you-migrate review: <repository>, <YYYY-MM-DD>
+The report, and the record `docs/migration-review.md`: [docs/report-formats.md](docs/report-formats.md).
 
-Migration: <from> to <to>. Scope measured: <lines and files by kind, units, change rate>.
-Go / no-go: go | go after the blockers | no-go — <one line why>.
+## Provenance
 
-## Blockers
-- Q<n>: <what must happen first, and who decides>.
+Levels: `published case` (one), `published cases` (two or more), `others' measurement`,
+`vendor guidance`, `ours`.
 
-## Not run
-- Q<n>: `<exact command>` — <why it was not run>.
-
-## Ask the owner
-- Q<n>: <question>. Default: <assumed if unanswered>.
-
-## No gap
-- Q<n> <question>: <measurement>.
-
-## Not applicable yet
-- Q<n> <question>: <why, and what must exist first>.
-
-## Proposals
-
-<After a no-go on Q1, replace this section with "Other gaps": one line per gap.>
-
-1. Q<n> <question> — gap | partial gap.
-   Today: <what the repository does, with the measurement>.
-   Change: <the proposal>.
-   Evidence: Q<n>, its lesson IDs, and links to case sections you read.
-   Depends on: <proposal numbers, or none>.
-   Cost: S | M | L (S under a day of agent work, M a few days, L a week or more).
-   Recommendation: do | later | skip (one word), with a one-line reason.
-   Check now: <command or count that passes once applied>.
-   Event that proves it: <what later work must show>.
-2. ...
-```
-
-The record, `docs/migration-review.md` in the measured repository:
-
-```markdown
-# Migration review record: <repository>
-
-Checklist: <ai-migrations commit or date>. Migration: <from> to <to>.
-Log entry: <date and title of the newest log.md entry this review covered>.
-
-| # | Question | Proposal | Baseline | Status | Event that shows it | Date |
-| --- | --- | --- | --- | --- | --- | --- |
-| 1 | Q<n> | <one line> | <how often, evidence> | <status> | <commit, test run or number> | <YYYY-MM-DD> |
-```
-
-One status per row (a proposal's parts: rows 3a, 3b): open, proven, waiting for first use,
-stopped holding, skipped. "Later" is open; declined is skipped; a failed "Check now" stays open,
-its event naming it. A passed "Check now" is waiting for first use; its "Event that proves it",
-seen in later work, makes it proven. Assumed owner answers: one line each under the table.
-Baseline: written before any change, how often the problem happened so far, with evidence; a
-revisit compares with it. Outside a migration, the lessons route keeps a
-record of the same shape: [docs/applying-lessons.md](docs/applying-lessons.md).
+| ID | Source | Level | Prevents | Blind failure |
+| --- | --- | --- | --- | --- |
+| P1 | ours | ours | porting against the project's own rules | stopping where the rule only asks for an approver |
+| P2 | clones: OPS-1, ORC-1; no worktree, time cap: ours | ours | a measurement that hangs or writes into the measured repository | refusing worktrees for the port itself, where they kept agents apart |
+| P3 | [GitHub][], ROL-4 | published case | edits to old code after its port | deleting old code a side-by-side run (Q2) or a rollback (Q11) still needs |
+| P4 | CTX-4, AGF-2, REV-4 | published cases | agents guessing past what they understand; diffs straying from the task | a stop rule so wide that every unit waits for a person |
+| P5 | PLN-5 | published cases | a redesign inside the port, so a failure points nowhere | flagging a redesign the owner chose (PLN-5's Against lists moves that built the target first) |
+| P6 | VER-3, OVS-3, KNW-1 | published cases | endless retries; one failure fixed by hand again and again | a retry cap on units judged independent that share state |
+| P7 | [GitHub][], PLN-3 | published case | a plan sized on the first count | taking threefold growth as a rule for every project |
+| P8 | [Bun][], PLN-1 | published case | a bulk run on an untried loop | taking three files as pilot enough for code of several kinds (Q8) |
+| P9 | [Airbnb][], VER-3 | published case | attempts spent on files that will not pass | ten attempts as a cap for units that are not small independent files |
+| P10 | ours | ours | changes the owner did not choose | skipping read-only builds and tests, or no record after the owner chose |
+| P11 | ours | ours | invented measurements | marking checks "not run" that could run safely |
 
 [GitHub]: cases/2026-09-16-github-copilot-runtime-rust.md
 [Bun]: cases/2026-07-08-bun-zig-to-rust.md

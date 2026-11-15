@@ -3,6 +3,35 @@
 Each update of the collection: when it ran, the sources it covered, and what changed. Newest
 first.
 
+## 2026-11-15 — provenance of thresholds and hard rules
+
+- **Covered:** no new sources. Why: a size limit of 12 KB, picked in another project without a
+  measurement, spread through a published checklist into skills that sessions then pruned by it.
+  A reader's agent applies a number as written, so every threshold and hard rule here now says
+  where it comes from.
+- **Rules:** each threshold and each item that tells the reader or its agent to cut, cap, delete,
+  forbid or stop, in `checklist.md`, `docs/applying-lessons.md` and `docs/report-formats.md`,
+  carries a marker such as (P3); the file's Provenance table gives its source (a case or lesson
+  ID), its evidence level (`published case`, `published cases`, `others' measurement`,
+  `vendor guidance` or `ours`), what it prevents and how it fails applied blindly. The validator
+  refuses a threshold or hard rule without one (`docs/lesson-rules.md` "Provenance"). Our own size
+  caps have the same four parts in `docs/maintaining.md` "Size caps": all are numbers we picked,
+  none measured, and a trim to meet one moves text and proves no rule lost.
+- **Moved:** the report and record templates of both routes into `docs/report-formats.md`, to make
+  room in `checklist.md`; no rule was dropped (the rule sentences were compared before and after).
+- **Records:** each row waiting for first use names an owner and a check-by date; a revisit lists
+  the rows past their date first, and a row past its date makes the record due (both README
+  routes, `docs/applying-lessons.md` and `llms.txt`).
+
+### Checklist and lessons impact
+
+- **New lessons:** none.
+- **Changed lessons:** none.
+- **Checklist:** questions 1, 2, 3, 4, 5, 6 and 9 carry provenance markers (questions 2 and 5
+  reworded only where a description read as a rule); the "How to run" steps 1, 3, 8 and 9 and the
+  starting thresholds carry them too; the report and record formats moved to
+  `docs/report-formats.md`.
+
 ## 2026-11-14 — third update
 
 - **Covered:** eight cases from engineering posts published between 2025-08 and 2026-09: a

@@ -487,6 +487,45 @@ test('check-copy still flags the same run in the body', 1, d => {
 test('build refuses a GENERATED_FILES list out of step', 1,
   d => edit(join(d, 'scripts', 'lib.mjs'), "'lessons/evidence.md', ", ''), ['--check'], 'GENERATED_FILES', 'build.mjs');
 
+// Provenance (docs/lesson-rules.md "Provenance"): every threshold and hard rule has a marker and a full row.
+const CL = d => join(d, 'checklist.md');
+const AL = d => join(d, 'docs', 'applying-lessons.md');
+const P8_ROW = '| P8 | [Bun][], PLN-1 | published case | a bulk run on an untried loop | taking three files as pilot enough for code of several kinds (Q8) |';
+test('a hard rule without a provenance marker fails', 1,
+  d => edit(CL(d), 'guess its result (P11).', 'guess its result.'), null, 'a hard rule without a provenance marker');
+test('a threshold without a provenance marker fails', 1,
+  d => edit(CL(d), 'before all 1,448 (P8).', 'before all 1,448.'), null, 'a threshold (a number) without a provenance marker');
+test('a marker with no row fails', 1,
+  d => edit(CL(d), 'guess its result (P11).', 'guess its result (P12).'), null, 'marker (P12) has no row');
+test('a row no sentence carries fails', 1,
+  d => edit(CL(d), `${P8_ROW}\n`, `${P8_ROW}\n| P12 | ours | ours | something | something else |\n`), null, 'no sentence carries (P12)');
+test('a provenance row without its source fails', 1,
+  d => edit(CL(d), P8_ROW, P8_ROW.replace('[Bun][], PLN-1', '')), null, 'P8: "Source" is empty');
+test('a provenance row without its level fails', 1,
+  d => edit(CL(d), P8_ROW, P8_ROW.replace('published case', '')), null, 'P8: Level must be one of');
+test('a provenance row without what it prevents fails', 1,
+  d => edit(CL(d), P8_ROW, P8_ROW.replace('a bulk run on an untried loop', '')), null, 'P8: "Prevents" is empty');
+test('a provenance row without its blind failure fails', 1,
+  d => edit(CL(d), P8_ROW, P8_ROW.replace('taking three files as pilot enough for code of several kinds (Q8)', '')), null, 'P8: "Blind failure" is empty');
+test('"published cases" on one case fails', 1,
+  d => edit(CL(d), '| P7 | [GitHub][], PLN-3 | published case |', '| P7 | [GitHub][], PLN-3 | published cases |'), null, 'P7: "published cases" needs two or more cases');
+test('"others\' measurement" without a link fails', 1,
+  d => edit(CL(d), '| P1 | ours | ours |', "| P1 | ours | others' measurement |"), null, 'needs a link to that measurement');
+test('a provenance source naming an unknown lesson fails', 1,
+  d => edit(CL(d), '| P4 | CTX-4, AGF-2, REV-4 |', '| P4 | CTX-99, AGF-2, REV-4 |'), null, 'P4: source names lesson CTX-99');
+test('a cut rule in docs/applying-lessons.md without a marker fails', 1,
+  d => edit(AL(d), 'shelved rewrites) (P2).', 'shelved rewrites).'), null, 'docs/applying-lessons.md: line');
+test('a hard rule in a file with no Provenance table fails', 1,
+  d => appendFileSync(join(d, 'docs', 'report-formats.md'), '\nNever reopen a skipped row.\n'), null, 'docs/report-formats.md: line');
+test('a question that names stopping is not a rule', 0,
+  d => edit(CL(d), '9. **How will you work the long tail, stop, and learn from failures?**', '9. **How will you work the long tail, and when do you stop?**'));
+test('a size cap without its row in "Size caps" fails', 1,
+  d => edit(join(d, 'docs', 'maintaining.md'), '| `AGENTS_MAX_BYTES`', '| `AGENTS_BYTES`'), null, '"Size caps" has no row for AGENTS_MAX_BYTES');
+test('a size cap row without its blind failure fails', 1,
+  d => edit(join(d, 'docs', 'maintaining.md'), '| cutting a how-to-use line an agent needs |', '| |'), null, 'LLMS_MAX_BYTES: "Blind failure" is empty');
+test('a record table without Owner and Check by fails', 1,
+  d => edit(join(d, 'docs', 'report-formats.md'), '| # | Lesson | Proposal | Baseline | Status | Owner | Check by |', '| # | Lesson | Proposal | Baseline | Status |'), null, 'needs "| Status | Owner | Check by |"');
+
 // pitfalls.md: relative links resolve.
 test('pitfalls broken link fails', 1,
   d => edit(join(d, 'pitfalls.md'), '[Intel]: cases/2026-08-24-intel-ideas-c-to-rust.md', '[Intel]: cases/2026-08-24-intel-gone.md'), null, 'pitfalls.md: broken link');

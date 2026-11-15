@@ -1,7 +1,8 @@
 # Maintaining the log and the generated files
 
-Read before opening a `log.md` entry, changing `scripts/build.mjs`, or adding to what agents read
-first (`llms.txt`, `lessons/index.md`). Moved from `AGENTS.md`, which keeps the commands.
+Read before opening a `log.md` entry, changing `scripts/build.mjs`, adding to what agents read
+first (`llms.txt`, `lessons/index.md`), or trimming any file to meet a size cap ("Size caps" below).
+Moved from `AGENTS.md`, which keeps the commands.
 
 ## Update log
 
@@ -25,8 +26,8 @@ where cases disagree; no list of every lesson), `lessons/evidence.md` (one line 
 the lesson, oracle, model and strength tags, the "may be outdated" mark, the cases it cites and
 those its "Against" cites), `llms.txt` (entry point for agents: how to use, one line per lesson
 page, and one line pointing to `index.md` for the cases) and `llms-full.txt` (the single
-opt-in file with everything: every lesson and case line, the checklist and the pitfalls) from the
-case files, lesson pages, `checklist.md` and `pitfalls.md`. It also keeps hand-written files in
+opt-in file with everything: every lesson and case line, the checklist, its report formats and the pitfalls) from the
+case files, lesson pages, `checklist.md`, `docs/report-formats.md` and `pitfalls.md`. It also keeps hand-written files in
 step: every URL to this repository comes from `REPO_SLUGS` in `scripts/lib.mjs` (to rename the
 repository, put the new owner/name first in that line and rebuild; the build rewrites the old
 name in `SYNCED` files, `lychee.toml` included), and two blocks in `README.md` (the AI
@@ -50,6 +51,31 @@ disagree" lists IDs per page.
 must exit 0 before a commit. Never edit these files by hand: change the sources and rebuild.
 `GENERATED_FILES` in `scripts/lib.mjs` names the generated files; the build fails when it is out
 of step.
+
+## Size caps
+
+Every cap the validator enforces, and the other numbers in these rules, with where it comes from.
+None was measured: no test showed that a file at the cap works better for an agent than one above
+it. Each is a budget we picked (`ours`), kept because what an agent reads at the start is paid on
+every run. So a cap is never a reason to lose a rule: a trim to meet one moves text to a file read
+when needed and proves no rule lost (diff the rule sentences before and after, and name where each
+moved one now lives); it never drops a rule that changes what an agent does. When nothing can move,
+raise the cap in its own reviewed commit and update its row here.
+
+| Cap | Limit | Source | Level | Prevents | Blind failure |
+| --- | --- | --- | --- | --- | --- |
+| `AGENTS_MAX_BYTES` (`AGENTS.md`) | 8,192 bytes | the karpathy-ideas coordinator's advice (2026-11-14), from its own file of 7.5 KB, not a measurement | ours | every session paying for rules only some tasks need (`AGENTS.md` loads into each) | a rule cut to fit, or moved where the agent doing that task never looks |
+| `CHECKLIST_MAX_BYTES` (`checklist.md`) | 20,480 bytes | picked with the first validator cap (2026-11-13) | ours | a checklist that grows with each case until agents skim it | seen here: trims to fit dropped working instructions twice (the worktree reason, the `wc -l` fallback, the "Other gaps" slot, the read-only line of step 9, Q11's "what must exist before the first release"); the sweep 1 and 2 reviews found them and the fix rounds restored them |
+| `LESSON_MAX_BYTES` (each lesson page) | 20,480 bytes | picked with the lesson pages (2026-11-13): an agent reads a page whole | ours | a page too long to read whole | a page split by size instead of by aspect, or "Against" lines shortened past their meaning |
+| `INDEX_MAX_BYTES` (`lessons/index.md`) | 12,288 bytes | picked one commit after the index stopped listing every lesson (2026-11-14; it had reached 46,128 bytes) | ours | the table of contents for people turning back into a list of every lesson | a build change that drops "May be outdated" or "Disagree" entries to fit |
+| `LLMS_MAX_BYTES` (`llms.txt`) | 20,480 bytes | picked when `llms.txt` stopped listing cases (2026-11-14; it had reached 23,385 bytes) | ours | an entry point that grows with each case | cutting a how-to-use line an agent needs |
+| `OUTDATED_MONTHS` | 12 months | picked with the "Depends on model ability" tag (2026-11-14) | ours | trusting a lesson about model limits that only older models showed | reading the mark as an order to drop the lesson; it asks for a re-check against newer cases |
+| Lesson text | 200 characters | picked with the lesson format (2026-11-13) | ours | lesson lines that carry the case detail | a qualifier dropped to fit ("for independent units"), which widens the lesson |
+| Checklist questions | 5 to 12 questions | the first checklist allowed 5 to 10 questions; raised to 12 the same night to fit the 12 it had (2026-11-13): a number bent to the content, not measured | ours | a checklist too long to run in one session | merging questions until a Check is lost; merge only checks that measure the same thing |
+| Quoted span in a lesson | 4 words | the case validator's test for what counts as a quote (2026-11-13), applied to lessons too | ours | copied wording in our summaries | none on behaviour; a paraphrase is checked against the case instead |
+| Quote in a case | one quote, 15 words | picked with the case format (2026-11-13), for copyright care | ours | copied text in our summaries | none on behaviour; the case loses colour, not facts |
+| Case summary | 160 characters, and a summary paragraph of 40 to 150 words | picked with the case format (2026-11-13) | ours | index lines and summaries that carry the whole case | a failure or a limit left out of the summary to fit; "What went wrong" keeps it |
+| Practice text | 200 characters | picked with the case format (2026-11-13) | ours | practices that carry the case detail | a qualifier dropped to fit, which widens the practice |
 
 ## One line per case
 

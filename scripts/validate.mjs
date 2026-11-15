@@ -12,6 +12,7 @@ import {
   parseCase, listCases, sections, refDefs, linksIn, anchor, practices, closestPractices,
   LESSONS_DIR, LESSON_PAGES, LESSON_MAX_BYTES, INDEX_MAX_BYTES, LLMS_MAX_BYTES, LESSON_NOTE, LESSON_LEGEND, KARPATHY_IDEAS, ORACLES, MODEL_DEPENDENCE, STRENGTHS, META_LINE, parseLessonPage, strengthCeiling, lessonMeta,
   casesOf, expectedEra, eraText, parseEra, LOG, CHANGES_DIR, logEntries, parseChanges,
+  PROVENANCE_FILES, PROVENANCE_LEVELS, PROVENANCE_HEADER, HARD_RULE,
 } from './lib.mjs';
 
 // AGENTS.md loads into every agent session, so it stays short: the rules by task live in docs/.
@@ -323,7 +324,8 @@ function validateLessons() {
   const ids = new Map();
   const cited = new Set();
   const prefixes = new Map();
-  if (!existsSync(LESSONS_DIR)) { err('lessons/', 'missing'); return { ids, cited }; }
+  const lessonCases = new Map(); // lesson ID -> Set of the case files its "Cases" cites
+  if (!existsSync(LESSONS_DIR)) { err('lessons/', 'missing'); return { ids, cited, lessonCases }; }
   const present = readdirSync(LESSONS_DIR).filter(f => f.endsWith('.md') && !['index.md', 'evidence.md'].includes(f)).map(f => basename(f, '.md'));
   for (const s of present) if (!LESSON_PAGES.includes(s)) err(`lessons/${s}.md`, 'not listed in LESSON_PAGES (scripts/lib.mjs)');
   for (const s of LESSON_PAGES) if (!present.includes(s)) err(`lessons/${s}.md`, 'listed in LESSON_PAGES but missing');
@@ -365,6 +367,7 @@ function validateLessons() {
       }
       if (ids.has(l.id)) e(l.line, `${l.id} is used twice (also in ${ids.get(l.id)}); IDs are never reused`);
       ids.set(l.id, f);
+      lessonCases.set(l.id, new Set(casesOf(l, page.refs)));
       if (!['stated', 'ours'].includes(l.tag)) e(l.line, `${l.id}: tag must be [stated] or [ours]`);
       if (!l.text || l.text.length > 200) e(l.line, `${l.id}: lesson text must be one line of 1 to 200 characters (${l.text.length})`);
       if (checkUnits(l.text).need) e(l.line, `${l.id}: lesson text holds a number; put numbers in the cases`);
@@ -437,7 +440,7 @@ function validateLessons() {
     for (const q of spans.filter(q => words(q) > 4)) e(0, `quoted span over four words (lessons are in our own words): "${q.slice(0, 50)}"`);
     for (const t of brokenLinks(page.text, LESSONS_DIR)) e(0, `broken link ${t}`);
   }
-  return { ids, cited };
+  return { ids, cited, lessonCases };
 }
 
 function validateChecklist(caseFiles, lessonIds) {
@@ -470,6 +473,126 @@ function validateChecklist(caseFiles, lessonIds) {
   for (const t of brokenLinks(lines.join('\n'), dirname(CHECKLIST))) err(f, `broken link ${t}`);
   if (!lines.some(l => /^## Report format/.test(l))) err(f, 'needs a "## Report format" section');
   return { n: qs.length, cited };
+}
+
+// ---- Provenance -----------------------------------------------------------------------------
+// docs/lesson-rules.md "Provenance". The sentences of a method file that may hold a threshold or a hard
+// rule: from its first "## " heading or first numbered item on (the intro before it describes the file),
+// outside code, headings, tables, reference definitions, the "## Provenance" section and the
+// "Evidence:" and "Lessons:" parts of a question (they report the cases). Each list item, "Check:" and
+// paragraph is split into sentences; returns [{ line, text }].
+function ruleSentences(text) {
+  const lines = text.split('\n');
+  const start = lines.findIndex(l => /^## /.test(l) || /^1\. /.test(l));
+  const paras = [];
+  let fence = false, skip = false, prov = false, para = null;
+  const flush = () => { if (para) paras.push(para); para = null; };
+  for (let i = Math.max(start, 0); i < lines.length; i++) {
+    const l = lines[i];
+    if (/^```/.test(l)) { fence = !fence; flush(); continue; }
+    if (fence) continue;
+    if (/^## /.test(l)) prov = /^## Provenance\b/.test(l);
+    if (prov || /^#/.test(l) || /^\s*\|/.test(l) || /^\[[^\]]+\]:/.test(l) || !l.trim()) { flush(); skip = false; continue; }
+    const body = l.trim();
+    const label = body.match(/^(Check|Evidence|Lessons):/)?.[1];
+    if (/^\s*(\d+\.|[-*])\s/.test(l) || label) { flush(); skip = label === 'Evidence' || label === 'Lessons'; }
+    if (skip) continue;
+    if (para) para.text += ' ' + body; else para = { line: i + 1, text: body.replace(/^(\d+\.|[-*])\s+/, '') };
+  }
+  flush();
+  // A question (a checklist title) is not a rule.
+  return paras.flatMap(p => p.text.split(/(?<=[.!?])\s+(?=[A-Z("`*[])/).map(s => ({ line: p.line, text: s })))
+    .filter(s => !/\?\**$/.test(s.text));
+}
+const MARKER = /\((P\d+)\)/g;
+// The "## Provenance" table: ID -> { source, level, prevents, blind, line }.
+function provenanceRows(lines, e) {
+  const rows = new Map();
+  const at = lines.findIndex(l => /^## Provenance\b/.test(l));
+  if (at < 0) return null;
+  const tbl = [];
+  for (let i = at + 1; i < lines.length && !/^## /.test(lines[i]); i++) if (/^\|/.test(lines[i])) tbl.push({ l: lines[i], line: i + 1 });
+  if (tbl[0]?.l !== PROVENANCE_HEADER) e(at + 1, `the Provenance table header must be: ${PROVENANCE_HEADER}`);
+  for (const { l, line } of tbl.slice(2)) {
+    const c = l.split('|').slice(1, -1).map(x => x.trim());
+    if (c.length !== 5) { e(line, `a Provenance row needs 5 cells (ID, Source, Level, Prevents, Blind failure): ${l.slice(0, 60)}`); continue; }
+    if (!/^P\d+$/.test(c[0])) { e(line, `a Provenance ID is P and a number: "${c[0]}"`); continue; }
+    if (rows.has(c[0])) e(line, `${c[0]} is in the Provenance table twice`);
+    rows.set(c[0], { source: c[1], level: c[2], prevents: c[3], blind: c[4], line });
+  }
+  return rows;
+}
+// Check one method file. `lessonCases`: lesson ID -> Set of the case files its "Cases" cites.
+function validateProvenance(rel, caseFiles, lessonCases) {
+  const p = join(ROOT, rel);
+  if (!existsSync(p)) return;
+  const text = readFileSync(p, 'utf8').replace(/\r\n/g, '\n');
+  const lines = text.split('\n');
+  const e = (line, msg) => err(rel, line ? `line ${line}: ${msg}` : msg);
+  const used = new Set();
+  for (const s of ruleSentences(text)) {
+    // Not quantities: part labels (3a, 3b) and numbered references (question 1, proposals 1, 3 and 5).
+    const clean = s.text.replace(/`[^`]*`/g, ' ').replace(/\]\([^)]*\)/g, ']').replace(/\b\d+[a-z]\b/g, ' ')
+      .replace(/\b(questions?|lessons?|proposals?|Q)\s*\d+((,\s*|\s+(and|or|to)\s+)\d+)*/gi, ' ');
+    const marks = [...s.text.matchAll(MARKER)].map(m => m[1]);
+    marks.forEach(m => used.add(m));
+    const why = HARD_RULE.test(clean.replace(MARKER, ' ')) ? 'a hard rule' : checkUnits(clean.replace(MARKER, ' ')).need ? 'a threshold (a number)' : '';
+    if (why && !marks.length) e(s.line, `${why} without a provenance marker such as (P1): "${s.text.slice(0, 70)}"`);
+  }
+  const rows = provenanceRows(lines, e);
+  if (!rows) { if (used.size) e(0, 'has provenance markers but no "## Provenance" table'); return; }
+  const refs = refDefs(lines);
+  for (const m of used) if (!rows.has(m)) e(0, `marker (${m}) has no row in the Provenance table`);
+  for (const [id, r] of rows) {
+    if (!used.has(id)) e(r.line, `${id} is in the Provenance table but no sentence carries (${id})`);
+    if (!PROVENANCE_LEVELS.includes(r.level)) e(r.line, `${id}: Level must be one of ${PROVENANCE_LEVELS.join(', ')}`);
+    for (const [k, v] of [['Source', r.source], ['Prevents', r.prevents], ['Blind failure', r.blind]]) if (!v || /^[—-]+$/.test(v)) e(r.line, `${id}: "${k}" is empty`);
+    // The source's cases: case links in the cell, and the cases each cited lesson rests on.
+    const ids = r.source.match(/\b[A-Z]{3}-\d+\b/g) || [];
+    for (const x of ids) if (!lessonCases.has(x)) e(r.line, `${id}: source names lesson ${x}, which no lesson page holds`);
+    const links = caseLinks(r.source, refs);
+    for (const l of links) if (!caseFiles.has(l)) e(r.line, `${id}: source links to missing case ${l}`);
+    const cases = new Set([...links, ...ids.flatMap(x => [...(lessonCases.get(x) || [])])]);
+    if (r.level === 'published case' && cases.size < 1) e(r.line, `${id}: "published case" needs a case or a lesson in Source`);
+    if (r.level === 'published cases' && cases.size < 2) e(r.line, `${id}: "published cases" needs two or more cases in Source, directly or through its lessons (found ${cases.size})`);
+    if (["others' measurement", 'vendor guidance'].includes(r.level) && !/\]\(https:[^)\s]+\)|https:\/\/\S+/.test(r.source)) e(r.line, `${id}: "${r.level}" needs a link to that measurement or guidance in Source`);
+  }
+}
+
+// The record (docs/report-formats.md "The record"): each template table has the Owner and Check by
+// columns, so a row waiting for first use says who looks for its event and by when.
+function validateRecordFormat() {
+  const f = 'docs/report-formats.md';
+  const p = join(ROOT, f);
+  if (!existsSync(p)) return err(f, 'missing');
+  const heads = readFileSync(p, 'utf8').replace(/\r\n/g, '\n').split('\n').filter(l => /^\| # \|/.test(l));
+  if (heads.length < 2) err(f, 'needs the two record tables (a header starting "| # |")');
+  for (const h of heads) if (!/\| Status \| Owner \| Check by \|/.test(h)) err(f, `a record table needs "| Status | Owner | Check by |": ${h.slice(0, 60)}`);
+}
+
+// Size caps (docs/maintaining.md "Size caps"): every cap the validator enforces has a row there with its
+// source, evidence level, what it prevents and its blind failure.
+const CAPS = ['AGENTS_MAX_BYTES', 'CHECKLIST_MAX_BYTES', 'LESSON_MAX_BYTES', 'INDEX_MAX_BYTES', 'LLMS_MAX_BYTES'];
+function validateCaps() {
+  const f = 'docs/maintaining.md';
+  const p = join(ROOT, f);
+  if (!existsSync(p)) return err(f, 'missing');
+  const lines = readFileSync(p, 'utf8').replace(/\r\n/g, '\n').split('\n');
+  const at = lines.findIndex(l => /^## Size caps\b/.test(l));
+  if (at < 0) return err(f, 'needs a "## Size caps" section with a row per cap');
+  const rows = new Map();
+  for (let i = at + 1; i < lines.length && !/^## /.test(lines[i]); i++) {
+    const c = lines[i].split('|').slice(1, -1).map(x => x.trim());
+    const name = c[0]?.match(/`([A-Z_]+)`/)?.[1];
+    if (/^\|/.test(lines[i]) && name) rows.set(name, { c, line: i + 1 });
+  }
+  for (const k of CAPS) {
+    const r = rows.get(k);
+    if (!r) { err(f, `"Size caps" has no row for ${k}`); continue; }
+    if (r.c.length !== 6) { err(f, `line ${r.line}: a "Size caps" row needs 6 cells (Cap, Limit, Source, Level, Prevents, Blind failure)`); continue; }
+    if (!PROVENANCE_LEVELS.includes(r.c[3])) err(f, `line ${r.line}: ${k}: Level must be one of ${PROVENANCE_LEVELS.join(', ')}`);
+    for (const [i, name] of [[2, 'Source'], [4, 'Prevents'], [5, 'Blind failure']]) if (!r.c[i] || /^[—-]+$/.test(r.c[i])) err(f, `line ${r.line}: ${k}: "${name}" is empty`);
+  }
 }
 
 // log.md: every entry but the oldest (the first collection) has a "### Checklist and lessons impact"
@@ -548,6 +671,9 @@ if (!args.length) {
   const list = validateChecklist(files, lessons.ids);
   validatePitfalls();
   validateLog(lessons.ids);
+  for (const rel of PROVENANCE_FILES) validateProvenance(rel, files, lessons.lessonCases);
+  validateCaps();
+  validateRecordFormat();
   const index = join(LESSONS_DIR, 'index.md');
   if (existsSync(index)) {
     const size = Buffer.byteLength(readFileSync(index, 'utf8').replace(/\r\n/g, '\n'), 'utf8');

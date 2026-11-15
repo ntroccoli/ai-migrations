@@ -71,7 +71,8 @@ Rules (all checked by `node scripts/validate.mjs`; one broken-copy test each):
   `https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/` and ends with `, agrees.` or
   `, contradicts: why.`; it copies nothing from that project, and only where the match is clear.
 - Every number carries a unit (the Era is exempt); no quoted span over four words; every
-  relative link resolves; a page stays at or under 20 KB (20,480 bytes).
+  relative link resolves; a page stays at or under 20 KB (20,480 bytes). Where these numbers come
+  from, and how a trim must keep every rule: [maintaining.md "Size caps"](maintaining.md#size-caps).
 - Every case is cited by at least one lesson or checklist question.
 
 **Maintainer only:** each lesson was checked against the source lines it rests on, which the
@@ -91,8 +92,46 @@ agent without the cases can use it), and a "Lessons:" line citing the lesson IDs
 (`Lessons: TST-1, REV-3`); detail lives in the lessons, not here. Our own inferences are allowed
 and marked "(ours)". Questions stay language-neutral; lists per kind of move (pitfalls, seams) go
 to `pitfalls.md`, which the questions link. `checklist.md` stays at or under 20 KB (20,480 bytes;
-agents read it whole): trim or move detail before adding. Cases, where named, are cited by
+agents read it whole, a cap of ours: [maintaining.md "Size caps"](maintaining.md#size-caps)): trim
+wording or move detail before adding, and prove no rule lost. Cases, where named, are cited by
 reference links (`[Bun][]`, defined once at the end of the file). The validator checks the count,
 the size, "Check:", "Evidence:", that each question cites lesson IDs that exist, case links, and
 links in `pitfalls.md`. **Maintainer only:** run `check-copy` on `checklist.md` and `pitfalls.md`
 against all the source texts after changing them.
+
+## Provenance
+
+A reader's agent applies a published threshold as written, and a number we picked reads like a
+measured one unless it says otherwise. So in each method file we publish (`PROVENANCE_FILES` in
+`scripts/lib.mjs`: `checklist.md`, `docs/applying-lessons.md`, `docs/report-formats.md`), every
+threshold and hard rule carries a marker such as `(P3)` inside its sentence, and the file's
+`## Provenance` table gives that marker a row:
+
+```markdown
+| ID | Source | Level | Prevents | Blind failure |
+| --- | --- | --- | --- | --- |
+| P3 | [GitHub][], ROL-1 | published case | what the rule prevents | how it fails when applied blindly |
+```
+
+What the validator detects (one broken-copy test each):
+
+- Which sentences: from the file's first "## " heading or first numbered item on, outside code,
+  headings, tables, reference definitions, the Provenance section and the "Evidence:" and
+  "Lessons:" parts of a question; a question (ending in "?") is not a rule.
+- A threshold: a sentence holding a number that needs a unit (the units rule; part labels such as
+  3a and references such as "question 1" are not numbers).
+- A hard rule: a sentence that tells the reader or its agent to cut, cap, delete, forbid or stop,
+  found by the words in `HARD_RULE` (`scripts/lib.mjs`): cut, cap, trim, delete, remove, drop,
+  forbid, never, stop, limit, "do not", "must not", "no more than", "at most", "at or under",
+  "wait for", "change nothing", "write no". A description that uses one of them is reworded
+  ("Go rejects package cycles"), never marked to pass.
+- Each such sentence has a marker; each marker has a row; each row is used; a row has all five
+  cells; Level is exactly one of `published case` (a case or a lesson in Source), `published cases`
+  (two or more cases in Source, counting the cases its lessons cite), `others' measurement` or
+  `vendor guidance` (a link in Source), `ours` (our inference or a number we picked); lesson IDs
+  and case links in Source exist.
+
+The same four parts are kept for our own caps in [maintaining.md "Size caps"](maintaining.md#size-caps)
+(the validator checks a row per cap). Before every release, each item that tells an agent to cut,
+cap, delete, forbid or stop gets a behaviour check (**maintainer only**: a fresh agent applies it to a
+small prepared sample, and the check looks for the intended effect and the named harm).

@@ -10,7 +10,8 @@ company names describe the subject only.
 
 Layout: `cases/` (one file per case), `lessons/` (one page per aspect), `checklist.md`,
 `pitfalls.md`, `docs/field-reports.md` (how readers report what the checklist foresaw),
-`docs/applying-lessons.md` (the lessons route outside a migration: method, report, record); generated
+`docs/applying-lessons.md` (the lessons route outside a migration), `docs/report-formats.md` (both
+routes' report and record); generated
 by `node scripts/build.mjs`, never by hand: `index.md`, `lessons/index.md`, `lessons/evidence.md`, `llms.txt`,
 `llms-full.txt`, `changes/` (one file per log entry).
 
@@ -26,10 +27,12 @@ every session.
   template, the field rules, the body rules, units, the own-words check.
 - [docs/lesson-rules.md](docs/lesson-rules.md): before editing a lesson page or
   `checklist.md`. Lesson IDs and tags, strength caps, Era, "May be outdated", upkeep, the
-  checklist rules, the size caps of lesson pages and `checklist.md`.
+  checklist rules, the size caps of lesson pages and `checklist.md`, the provenance every
+  threshold and hard rule carries.
 - [docs/maintaining.md](docs/maintaining.md): before opening a `log.md` entry, changing
-  `scripts/build.mjs`, or adding to what agents read first. The update log and its changes
-  files, the generated files, their size caps, reading cost, one line per case.
+  `scripts/build.mjs`, adding to what agents read first, or trimming a file to meet a size cap.
+  The update log and its changes files, the generated files, every size cap with its provenance
+  (a trim moves text, never drops a rule), reading cost, one line per case.
 
 ## Scope
 
