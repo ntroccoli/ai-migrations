@@ -2,8 +2,9 @@
 // Find runs of N or more consecutive words (default 5) that a case shares with its source text.
 // The source text is not in this repository; pass the files that hold it.
 // Usage: node scripts/check-copy.mjs <case.md> <source file or folder>... [--min 5]
-// Skipped in the case: the front matter keys, the "In their words" section (the one allowed
-// quote), link targets, URLs and inline code. Exit 1 when a run is found.
+// Skipped in the case: the front matter keys, the values of `models:` and `tools:` (named exactly
+// as the source names them, by rule), the "In their words" section (the one allowed quote), link
+// targets, URLs and inline code. Exit 1 when a run is found.
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -43,7 +44,7 @@ for (const f of srcFiles) {
 if (!grams.size) { console.error(`no source text read from: ${srcArgs.join(', ')} (.md or .txt files)`); process.exit(2); }
 
 const text = readFileSync(casePath, 'utf8').replace(/\r\n/g, '\n')
-  .replace(/^---\n[\s\S]*?\n---\n/, m => m.replace(/^[a-z_]+:/gm, ''))
+  .replace(/^---\n[\s\S]*?\n---\n/, m => m.replace(/^(?:models|tools):.*$/gm, '').replace(/^[a-z_]+:/gm, ''))
   .replace(/^## In their words\n[\s\S]*?(?=^## |(?![\s\S]))/m, '');
 const w = words(text);
 const hits = [];

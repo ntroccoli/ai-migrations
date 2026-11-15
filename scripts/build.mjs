@@ -13,7 +13,7 @@ import { join, posix, dirname } from 'node:path';
 import {
   ROOT, REPO_SLUG, REPO_SLUGS, LANGUAGES, LESSON_NOTE, LESSON_LEGEND, LESSON_PAGES, listCases, parseCase, loadLessons, lessonMeta, sub, linksIn, refDefs,
   casesOf, mayBeOutdated, OUTDATED_MONTHS, modelFamily, CHECKLIST, CHANGES_DIR, logEntries, lessonPrints, questionPrints,
-  renderChanges, parseChanges,
+  renderChanges, parseChanges, GENERATED_FILES,
 } from './lib.mjs';
 
 const check = process.argv.includes('--check');
@@ -347,6 +347,12 @@ out['llms.txt'] = [
   `- [Pitfalls by kind of move](${RAW_BASE}/pitfalls.md): what the old stack did implicitly, and seams for moving in steps.`,
   `- [Update log](${RAW_BASE}/log.md): what each update covered and changed, and why.`, '',
 ].join('\n');
+
+// GENERATED_FILES (scripts/lib.mjs) names these outputs for other scripts (the private gate): keep it exact.
+{
+  const built = Object.keys(out).filter(k => !k.startsWith('changes/')).sort().join(', ');
+  if (built !== [...GENERATED_FILES].sort().join(', ')) throw new Error(`GENERATED_FILES in scripts/lib.mjs is out of step with the build: ${built}`);
+}
 
 // Hand-written files kept in step: this repository's URLs, and README's generated blocks.
 const questions = (readFileSync(join(ROOT, 'checklist.md'), 'utf8').match(/^\d+\. \*\*/gm) || []).length;

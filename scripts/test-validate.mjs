@@ -378,7 +378,10 @@ test('evidence.md shortens a Disagree line to its case names', 0, d => {
   return ['--check'];
 }, null, null, 'build.mjs');
 // modelFamily: a name the source writes two ways lands in one family; GPT chat names stay GPT.
-for (const [name, want] of [['GPT-5.3 Codex', 'OpenAI Codex 5.x'], ['Codex 5.3', 'OpenAI Codex 5.x'], ['GPT-5.3', 'GPT-5.x'], ['GPT-4o', 'GPT-4o']]) {
+// Kimi's K before the version, Gemma, Hunyuan, Doubao and Seed (taken from ai-interfaces, 2026-11-15).
+for (const [name, want] of [['GPT-5.3 Codex', 'OpenAI Codex 5.x'], ['Codex 5.3', 'OpenAI Codex 5.x'], ['GPT-5.3', 'GPT-5.x'], ['GPT-4o', 'GPT-4o'],
+  ['Kimi K2.6', 'Kimi K2.x'], ['Kimi', 'Kimi (version unstated)'], ['Gemma 4 (31B)', 'Gemma 4.x'], ['Hunyuan-T1', 'Hunyuan (version unstated)'],
+  ['Doubao 1.5 Pro', 'Doubao 1.x'], ['Seed-Coder 8B', 'Seed (version unstated)'], ['Qwen2.5-Coder', 'Qwen 2.x'], ['Seedance', undefined]]) {
   const got = modelFamily(name), ok = got === want;
   console.log(`${ok ? 'ok  ' : 'FAIL'} modelFamily("${name}") is ${want}`);
   if (!ok) failed.push(`modelFamily("${name}"): wanted ${want}, got ${got}`);
@@ -466,6 +469,19 @@ test('an older changes file is frozen: build leaves it as it is', 0, d => {
   if (/- Changed lessons: REV-2\b/.test(changes(d, '2026-11-14-second-update'))) throw new Error('the older file was rebuilt');
   return ['--check'];
 }, null, null, 'build.mjs');
+
+// check-copy: the values of `tools:` and `models:` are verbatim by rule, so never a copied run; the body still is.
+const BUN_TOOLS = 'Claude Code dynamic workflows, cargo check, Bun test suite, Buildkite CI, systemd-run';
+const srcFile = (d, text) => { const p = join(d, 'source.txt'); writeFileSync(p, text); return p; };
+test('check-copy skips the tools and models values', 0, d => [caseFile(d, BUN), srcFile(d, `${BUN_TOOLS}. Claude Fable 5 (pre-release version).`)],
+  null, null, 'check-copy.mjs');
+test('check-copy still flags the same run in the body', 1, d => {
+  edit(caseFile(d, BUN), '\n## Source\n', `\n## Source\n\nIt used ${BUN_TOOLS}.\n`);
+  return [caseFile(d, BUN), srcFile(d, BUN_TOOLS)];
+}, null, null, 'check-copy.mjs');
+// GENERATED_FILES (scripts/lib.mjs) must name exactly what the build writes: the private gate reads it.
+test('build refuses a GENERATED_FILES list out of step', 1,
+  d => edit(join(d, 'scripts', 'lib.mjs'), "'lessons/evidence.md', ", ''), ['--check'], 'GENERATED_FILES', 'build.mjs');
 
 // pitfalls.md: relative links resolve.
 test('pitfalls broken link fails', 1,
