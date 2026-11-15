@@ -2,8 +2,8 @@
 
 What this collection published wrong, and how a project that applied it can find and repair it.
 Every revisit reads this file first, before anything else, even while it has no entry: README step
-3 of both routes, step 10 of the [checklist](checklist.md) and step 7 of
-[applying the lessons](docs/applying-lessons.md).
+1 of both routes when the project has a record, step 10 of the [checklist](checklist.md) and step 7
+of [applying the lessons](docs/applying-lessons.md).
 
 ## How a revisit uses it
 

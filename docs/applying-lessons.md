@@ -10,7 +10,9 @@ report and record ([docs/report-formats.md](report-formats.md)), so both routes 
 
 ## How to run it
 
-1. Run it in a fresh session on the project, changing nothing there (P1). If the session that did the
+1. Run it in a fresh session on the project, changing nothing there (P1). Look for the record
+   `docs/ai-lessons-review.md` first: with none, this is the first review, up to step 6; with one, a
+   revisit (step 7). Say in one line which and why, the report's "Path:" line. If the session that did the
    work is still running, first ask it to write an events file with counts of what went wrong in
    its coordination (lost messages, reruns, requests outside its scope), each figure labelled
    "recorded"; measure everything else from the repository.
@@ -41,9 +43,26 @@ report and record ([docs/report-formats.md](report-formats.md)), so both routes 
    "Against" line or cases show it did not hold in a project like this one, say so. Wait for
    the owner's choice (P1). One change per option: split a proposal
    with several parts, or number its parts 3a, 3b, each with its own checks.
-6. Record: once the owner has chosen, write `docs/ai-lessons-review.md` in the project
-   ([the record](report-formats.md#the-record)), with an owner and a check-by date on each row
-   waiting for first use. In a read-only run, write no file (P1); show the record after the report.
+6. Apply and record, once the owner has chosen (P1) ("Apply what you recommended": the options your
+   reading favoured, the rest later; "Apply 1A and 3B; 2 later; skip 5"; "Apply none; write the
+   record"). In a read-only run, write no file (P1); show the record after the report. Else:
+   - Write `docs/ai-lessons-review.md` in the project ([the record](report-formats.md#the-record))
+     before changing anything, with each chosen proposal's baseline: how often its problem has
+     happened so far, with the evidence. Complete it with every finding, the later and skipped
+     ones too, the corrections.md entries checked ("none listed" if it has none) and the newest
+     log.md entry this review covered.
+   - Each row waiting for first use gets the owner (who looks for its event) and check-by date the
+     owner named, or ones you propose for the owner to confirm. A question of fact left
+     unanswered: assume the report's default and record the assumption; a decision left open
+     stays open.
+   - Do the work the way this project normally runs work (yourself, or by briefing workers), one
+     proposal at a time, on a branch. First state its "Check now" and its "Event that proves it";
+     it is applied when the check now passes (waiting for first use), proven only once later work
+     shows the event.
+   - Stop at the first failing check (P5): leave that proposal open, its event naming the failed
+     check, apply no later proposal, and report what failed and what is left. The owner decides.
+   - An owner's choice that differs from a lesson (a skip, or an option the lesson argues against)
+     is recorded as the owner's choice: its date, reason and the owner's words, under the table.
 7. Revisit, in a fresh session, when the collection has grown or after a few weeks of work:
    - Corrections, before anything else: read [corrections.md](../corrections.md) and follow it,
      even when the rest of the revisit ends at the Start step; with no entry, say so in a line and go on.
@@ -66,9 +85,14 @@ report and record ([docs/report-formats.md](report-formats.md)), so both routes 
      only those lessons, and measure them as in step 4.
    - Lint: list the applied lessons that a newer lesson now contradicts or supersedes, and the
      record's items whose lesson changed.
+   - Closed items stay closed (P6): a skipped or declined item, or an owner's choice recorded
+     against a lesson, comes back as a proposal only for a new or changed lesson that bears on it,
+     or a measurement that changed since the record; say which. Else list it under "Still closed".
    - Give options only for the new or changed lessons, earlier "later" items, applied items that stopped
-     holding and what the lint found, each as options with their trade-offs, for the owner's do,
-     later or skip. Update the record in its
+     holding, what the lint found and closed items reopened as above, each as options with their
+     trade-offs, for the owner's do, later or skip, in the
+     [revisit format](report-formats.md#revisit-report). Change nothing but the record (P1) until the
+     owner chooses, then apply as in step 6. Update the record in its
      existing layout and name in it the newest log entry read, by date and title.
    - The too-early rule below holds for the re-check only: new lessons can be proposed before
      anything has met its problem.
@@ -94,3 +118,5 @@ fails applied blindly.
 | P2 | ours | ours | proposing porting lessons to work that ports nothing | dropping a lesson that names porting but applies, such as an oracle lesson where a check stands in for the old system |
 | P3 | ours | ours | a revisit with nothing new to say | stopping when the project changed (a new model, a new kind of work) though the collection did not; the check-by date guards only rows already recorded |
 | P4 | ours (`OUTDATED_MONTHS`, [Size caps](maintaining.md#size-caps)) | ours | trusting a lesson about model limits that only older models showed | dropping a marked lesson; the mark asks for a re-check, and a lesson just past a year is no worse than one just under |
+| P5 | ours | ours | later changes piled on a failed one, so the failure points nowhere | stopping for a check that failed before the change too; report that, and let the owner decide |
+| P6 | ours | ours | the same declined proposal at every revisit, overruling the owner by repetition | missing a new lesson that should reopen it; the agent says which reason it used |

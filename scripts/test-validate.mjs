@@ -497,9 +497,9 @@ test('a hard rule without a provenance marker fails', 1,
 test('a threshold without a provenance marker fails', 1,
   d => edit(CL(d), 'before all 1,448 (P8).', 'before all 1,448.'), null, 'a threshold (a number) without a provenance marker');
 test('a marker with no row fails', 1,
-  d => edit(CL(d), 'guess its result (P11).', 'guess its result (P12).'), null, 'marker (P12) has no row');
+  d => edit(CL(d), 'guess its result (P11).', 'guess its result (P13).'), null, 'marker (P13) has no row');
 test('a row no sentence carries fails', 1,
-  d => edit(CL(d), `${P8_ROW}\n`, `${P8_ROW}\n| P12 | ours | ours | something | something else |\n`), null, 'no sentence carries (P12)');
+  d => edit(CL(d), `${P8_ROW}\n`, `${P8_ROW}\n| P13 | ours | ours | something | something else |\n`), null, 'no sentence carries (P13)');
 test('a provenance row without its source fails', 1,
   d => edit(CL(d), P8_ROW, P8_ROW.replace('[Bun][], PLN-1', '')), null, 'P8: "Source" is empty');
 test('a provenance row without its level fails', 1,

@@ -145,8 +145,10 @@ Check's measurement stands on its own.
 
 ## How to run this checklist
 
-1. Run it in a fresh session on the repository to migrate, changing nothing there (P10). The cases are
-   few and mostly their teams' own accounts: read "What went wrong" before relying on them.
+1. Run it in a fresh session on the repository to migrate, changing nothing there (P10). Look for
+   the record `docs/migration-review.md` first: with none, this is the first review, up to step 9;
+   with one, a revisit (step 10). Say in one line which and why, the report's "Path:" line. The
+   cases are few and mostly their teams' own accounts: read "What went wrong" before relying on them.
 2. Measure first: answer each Check with a number, file or command output, not from memory.
 3. A check you may not run: write the exact command, mark it "not run" with the reason, never
    guess its result (P11). Logs or CI history count if you name their source.
@@ -170,17 +172,33 @@ Check's measurement stands on its own.
    (question 1), then the oracle, the baseline and the end state.
 8. Report as below and wait for the owner's choice (P10): for each finding, do (which option),
    later or skip is theirs. One change per option (or parts 3a, 3b).
-9. Record: once the owner has chosen, write `docs/migration-review.md` in the measured repository
-   (the one file this checklist adds there; format below). In a read-only run, write no file (P10);
-   show the record after the report.
+9. Apply and record, once the owner has chosen (P10) ("Apply what you recommended": the options your
+   reading favoured, the rest later; "Apply 1A and 3B; 2 later; skip 5"; "Apply none; write the
+   record"). In a read-only run, write no file (P10); show the record after the report. Else:
+   - Write `docs/migration-review.md` in the measured repository (the one file this checklist adds
+     there; format below) before changing anything, with each chosen proposal's baseline: how
+     often its problem has happened so far, with the evidence. Complete it with every finding,
+     the later and skipped ones too, the corrections.md entries checked ("none listed" if it has
+     none) and the newest log.md entry this review covered.
+   - Each row waiting for first use gets the owner (who looks for its event) and check-by date the
+     owner named, or ones you propose for the owner to confirm. A question of fact left
+     unanswered: assume the report's default and record the assumption; a decision left open (an
+     approval, a change to a project rule) stays open.
+   - Do the work the way this project normally runs work (yourself, or by briefing workers), one
+     proposal at a time, on a branch. First state its "Check now" and its "Event that proves it";
+     it is applied when the check now passes (waiting for first use), proven only once later work
+     shows the event.
+   - Stop at the first failing check (P12): leave that proposal open, its event naming the failed
+     check, apply no later proposal, and report what failed and what is left. The owner decides.
 10. Revisit: read [corrections.md](corrections.md) first, then go on as step 7 of
     [applying the lessons](docs/applying-lessons.md) says, with the questions its `changes/` files
-    list as well as the lessons.
+    list as well as the lessons. Report in the revisit format; change nothing but the record (P10) until
+    the owner chooses, then apply as in step 9.
 11. Share (optional): a [field report](docs/field-reports.md) once an item has met its problem.
 
 ## Report format
 
-The report, and the record `docs/migration-review.md`: [docs/report-formats.md](docs/report-formats.md).
+The report, the revisit report and the record `docs/migration-review.md`: [docs/report-formats.md](docs/report-formats.md).
 
 ## Provenance
 
@@ -200,6 +218,7 @@ Levels: `published case` (one), `published cases` (two or more), `others' measur
 | P9 | [Airbnb][], VER-3 | published case | attempts spent on files that will not pass | ten attempts as a cap for units that are not small independent files |
 | P10 | ours | ours | changes the owner did not choose | skipping read-only builds and tests, or no record after the owner chose |
 | P11 | ours | ours | invented measurements | marking checks "not run" that could run safely |
+| P12 | ours | ours | later changes piled on a failed one, so the failure points nowhere | stopping for a check that failed before the change too; report that, and let the owner decide |
 
 [GitHub]: cases/2026-09-16-github-copilot-runtime-rust.md
 [Bun]: cases/2026-07-08-bun-zig-to-rust.md

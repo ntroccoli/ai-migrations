@@ -3,6 +3,37 @@
 Each update of the collection: when it ran, the sources it covered, and what changed. Newest
 first.
 
+## 2026-11-15 — one review prompt per route
+
+- **Covered:** no new sources. Why: each route had a step 1 prompt for the first review and a
+  separate, long step 3 prompt for revisits; a reader had to know which to paste, and the long
+  prompts held rules that belonged in the files they point to.
+- **One prompt:** README step 1 of each route is now a short prompt that does the first review and
+  every revisit. `llms.txt` sends the agent by the route's record: no `docs/migration-review.md` (or
+  `docs/ai-lessons-review.md`) means a first review; a record means a revisit, corrections.md
+  first. The agent says in one line which path it took and why (a "Path:" line in each report
+  template). The old step 3 prompts are gone; their links land on step 1, and an old prompt still
+  works. The rerun notice for a correction now says to run the review prompt again.
+- **Download, then read:** `llms.txt` asks the agent to download the files it needs (curl or a
+  shallow clone) into a temporary folder, read them in full from disk and delete the folder after,
+  since fetch tools summarise pages and drop parts.
+- **Apply:** step 2 is a short prompt ("Apply what you recommended", "Apply 1A and 3B; 2 later;
+  skip 5", "Apply none; write the record"); its rules moved into checklist "How to run" step 9 and
+  `docs/applying-lessons.md` step 6, with two new ones: one proposal at a time on a branch, and stop
+  at the first failing check and report. Each report template ends with a "Next step" block that
+  says so, so the agent meets the rule in its own answer when the apply prompt comes.
+- **Closed items:** a skipped item, or an owner's choice recorded against a lesson (date, reason,
+  the owner's words), is proposed again only for a new or changed lesson or a changed measurement,
+  and the agent says which. `docs/report-formats.md` gains a revisit template and a "Links:" field
+  on each finding.
+
+### Checklist and lessons impact
+
+- **New lessons:** none.
+- **Changed lessons:** none.
+- **Checklist:** no question changed; "How to run" steps 1 (record first, the path line), 9 (apply
+  and record) and 10 (revisit report), and the report format line (the revisit report).
+
 ## 2026-11-15 — a guide, not rules; corrections
 
 - **Covered:** no new sources. Why: the checklist read as the maintainer's rules (a "gap" or

@@ -156,7 +156,8 @@ const corrections = existsSync(CORRECTIONS) ? parseCorrections(readFileSync(CORR
 const CORRECTIONS_URL = `${RAW_BASE}/corrections.md`;
 const RERUN = corrections.length
   ? `Corrections published: ${corrections.map(e => `${e.id} (${e.title}; published ${e.fields.Published})`).join('; ')}. ` +
-    'If you ran the checklist or the lessons route during one of those spans, run the revisit (README step 3) again.'
+    'If you ran the checklist or the lessons route during one of those spans, run the review prompt (README step 1 of your ' +
+    'route) again: because your project has a record, it does the revisit.'
   : '';
 const GUIDE_NOTE = 'The checklist and the lessons guide an agent through what the cases show; they do not decide for a project. ' +
   'Each question\'s guide gives the lessons in our words with links, what it looks like in a project, questions to ask, the ' +
@@ -337,6 +338,26 @@ out['llms.txt'] = [
   MODEL_RULE, '',
   `${OUTDATED_NOTE} ${outdated.size ? `Marked now: ${[...outdated].join(', ')}.` : 'None is marked now.'} A lesson's Era gives the years of its cases and the newest model family among them.`, '',
   DISCLOSURE, '',
+  '## Review a project (README step 1, both routes)', '',
+  '1. Download, then read from disk: fetch tools summarise pages and drop parts. Make a new temporary folder outside the ' +
+    'project, download into it with curl each file you need (this file, corrections.md, docs/report-formats.md, then the ' +
+    'checklist and each question\'s guide, or docs/applying-lessons.md and lessons/evidence.md, and a revisit\'s changes/ ' +
+    `files), or \`git clone --depth 1 ${REPO}.git\` there; read each file in full from disk; delete the folder once the ` +
+    'record is written or the user ends the review.',
+  '2. Route, from the user\'s prompt: a review for a migration follows the checklist, record `docs/migration-review.md`; a ' +
+    'comparison of AI-driven work with the lessons follows docs/applying-lessons.md, record `docs/ai-lessons-review.md`. ' +
+    'If the prompt names neither, ask.',
+  '3. Path, from the record: look for the route\'s record in the project. None: the first review (checklist "How to run" ' +
+    'steps 1 to 8, or docs/applying-lessons.md steps 1 to 5), reported in its template in docs/report-formats.md. A record: ' +
+    'the revisit (corrections.md first, then checklist step 10 or docs/applying-lessons.md step 7, and the Revisit line ' +
+    'below), reported in the revisit template.',
+  '4. Say in one line which path you took and why, first in your answer (the report\'s "Path:" line).',
+  '5. Change nothing in the project until the user chooses; a revisit writes only the record\'s "Corrections checked:" ' +
+    'line. A skipped item, or an owner\'s choice recorded against a lesson, is proposed again only for a new or changed ' +
+    'lesson or a changed measurement; say which.',
+  '6. Step 2, in the same session: "Apply what you recommended", "Apply 1A and 3B; 2 later; skip 5" or "Apply none; ' +
+    'write the record". Follow checklist step 9 or docs/applying-lessons.md step 6: the record first, then one proposal ' +
+    'at a time on a branch; stop at the first failing check and report.', '',
   '## How to use', '',
   `- Before a migration or a large restructuring: run the [checklist](${RAW_BASE}/checklist.md) on the repository and change nothing. Each ` +
     'question has a Check to measure and report and cites lesson IDs; before writing up a finding on a question, read its guide ' +
@@ -350,7 +371,7 @@ out['llms.txt'] = [
   `- Once a prediction has met a real event (a decision not to migrate, a regression, an item proven or failing at a ` +
     'revisit): tell what the checklist or the lessons foresaw and what they missed, ' +
     `in a field report ([how](${RAW_BASE}/docs/field-reports.md)); show the user the exact text before posting.`,
-  `- Revisit: first read [corrections.md](${CORRECTIONS_URL}) and check the project for each entry, even when the rest ` +
+  `- Revisit (the project has a record): first read [corrections.md](${CORRECTIONS_URL}) and check the project for each entry, even when the rest ` +
     `of the revisit ends here. The newest update is "${NEWEST.head}". If your record names it and no item is due for re-check (due: waiting or ` +
     'open, with commits in the project since the record\'s date, or past its check-by date), stop. Else list first the rows ' +
     'waiting for first use past their check-by date, with their owner; then, for each ' +

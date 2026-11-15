@@ -11,6 +11,7 @@ agent's own reading, when it gives one, is labelled as such.
 ```markdown
 # Before-you-migrate review: <repository>, <YYYY-MM-DD>
 
+Path: first review — <no docs/migration-review.md in the repository>.
 Migration: <from> to <to>. Scope measured: <lines and files by kind, units, change rate>.
 Bearing on going ahead: <the findings that bear on it, and the decision the owner faces, as the agent's reading>. The decision is the owner's.
 
@@ -36,6 +37,7 @@ Bearing on going ahead: <the findings that bear on it, and the decision the owne
 1. Q<n> <question>: <the finding in a line>.
    Today: <what the repository does, with the measurement>.
    Guide: <the lesson IDs and the case sections you read; "(ours)" where the collection marks the maintainer's reading, "agent's reading" on yours>.
+   Links: <the guide's URL, each lesson's aspect page and each case section you read>.
    Options (the owner chooses; leaving it as it is may be one):
    - 1A: <change>. Trade-off: <what it costs, risks or gives up>. Cost: S | M | L.
    - 1B: <another change, or "leave as it is">. Trade-off: <...>. Cost: S | M | L.
@@ -46,6 +48,9 @@ Bearing on going ahead: <the findings that bear on it, and the decision the owne
    Event that proves it: <what later work must show>.
    Owner's choice: <left blank for the owner: do 1A | do 1B | later | skip>.
 2. ...
+
+## Next step
+Reply "Apply what you recommended", "Apply 1A and 3B; 2 later; skip 5" or "Apply none; write the record". I then follow checklist "How to run" step 9: the record first, with each chosen proposal's baseline; one proposal at a time, on a branch; I stop at the first failing check, apply nothing after it, and report.
 ```
 
 Cost: S under a day of agent work, M a few days, L a week or more.
@@ -55,6 +60,7 @@ Cost: S under a day of agent work, M a few days, L a week or more.
 ```markdown
 # AI lessons review: <project>, <YYYY-MM-DD>
 
+Path: first review — <no docs/ai-lessons-review.md in the project>.
 Work measured: <what agents do here: sessions, tasks, reviews, tests, releases>.
 
 ## Limits of this run
@@ -72,7 +78,8 @@ Work measured: <what agents do here: sessions, tasks, reviews, tests, releases>.
 
 1. <lesson ID> <the lesson in a few words>: <the finding in a line>.
    Today: <what the project does, with the measurement>.
-   Evidence: the lesson's strength, its "Against" line, and links to case sections you read; "agent's reading" on your own.
+   Evidence: <the lesson's strength and its "Against" line>; "agent's reading" on your own.
+   Links: <the lesson's aspect page and each case section you read>.
    Options (the owner chooses; leaving it as it is may be one):
    - 1A: <change>. Trade-off: <what it costs, risks or gives up>. Cost: S | M | L.
    - 1B: <another change, or "leave as it is">. Trade-off: <...>. Cost: S | M | L.
@@ -82,6 +89,39 @@ Work measured: <what agents do here: sessions, tasks, reviews, tests, releases>.
    Event that proves it: <what later work must show for the change to have held>.
    Owner's choice: <left blank for the owner: do 1A | do 1B | later | skip>.
 2. ...
+
+## Next step
+Reply "Apply what you recommended", "Apply 1A and 3B; 2 later; skip 5" or "Apply none; write the record". I then follow docs/applying-lessons.md step 6: the record first, with each chosen proposal's baseline; one proposal at a time, on a branch; I stop at the first failing check, apply nothing after it, and report.
+```
+
+## Revisit report
+
+Both routes, when the record exists (checklist step 10, [applying the lessons](applying-lessons.md)
+step 7). Each finding takes the first review's finding format, numbered after the record's last row.
+
+```markdown
+# <Before-you-migrate | AI lessons> revisit: <project>, <YYYY-MM-DD>
+
+Path: revisit — <the record found>, which names log entry <date and title>.
+Corrections: <each entry: applies or not, what was found, the options; or "corrections.md has no entry">.
+Newest log entry: <date and title>. Stop: <yes: same entry and nothing due | no: why>.
+
+## Due first
+- #<row> <ID>: waiting for first use, check by <YYYY-MM-DD> passed; owner <who>.
+
+## Re-check
+- #<row> <ID>: proven | still waiting | stopped holding | not shown — <the "Check now" output and the numbers against the baseline>.
+
+## Still closed
+- #<row> <ID>: skipped | owner's choice, <YYYY-MM-DD> — no new or changed lesson bears on it, and its measurement has not changed.
+
+## Lint
+- #<row> <ID>: <the newer lesson that contradicts or supersedes it, or the change to its lesson>.
+
+## Findings and options
+<Only new or changed lessons and questions, earlier "later" items, items that stopped holding, what the lint found, and closed items reopened (say why: which new lesson, or which measurement changed).>
+## Next step
+Reply "Apply what you recommended", "Apply 1A and 3B; 2 later; skip 5" or "Apply none; write the record". I then follow checklist "How to run" step 9 or docs/applying-lessons.md step 6: the record first, with each chosen proposal's baseline; one proposal at a time, on a branch; I stop at the first failing check, apply nothing after it, and report.
 ```
 
 ## The record
@@ -118,7 +158,10 @@ Corrections checked: <COR IDs with what was found, or "none listed">, <YYYY-MM-D
 Proposal: the option the owner chose ("1A"), with what it changes; a finding put off or declined
 keeps its finding in that cell. One status per row: a proposal with parts gets a row per part (3a,
 3b...), each with its own status and event. Assumed owner answers go under the table, one line each:
-"Assumed: <question> — <default>, <date>".
+"Assumed: <question> — <default>, <date>". An owner's choice that differs from a lesson or a
+question's guide goes there too, one line each: "Owner's choice: #<row> <ID> — <what was chosen>;
+reason: <why>; words: "<the owner's words>"; <date>". A revisit proposes a skipped row or an owner's
+choice again only for a new or changed lesson or a changed measurement, and says which.
 
 Corrections checked: the [corrections.md](../corrections.md) entries the last review or revisit
 compared with this project, with what it found and the date; a first review writes "none listed"
