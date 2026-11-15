@@ -21,7 +21,37 @@ export const PITFALLS = join(ROOT, 'pitfalls.md');
 export const CHECKLIST_MAX_BYTES = 20 * 1024;
 // Provenance (docs/lesson-rules.md "Provenance"): the published method files whose thresholds and hard
 // rules carry a marker such as (P3), read in the file's own "## Provenance" table.
-export const PROVENANCE_FILES = ['checklist.md', 'docs/applying-lessons.md', 'docs/report-formats.md'];
+export const PROVENANCE_FILES = ['checklist.md', 'docs/applying-lessons.md', 'docs/report-formats.md', 'corrections.md'];
+// The checklist's guide (docs/lesson-rules.md "Checklist"): one file per question, guide/q<n>.md, read
+// only for the question in use. Its five parts, in order; its markers use the checklist's Provenance table.
+export const GUIDE_DIR = join(ROOT, 'guide');
+export const GUIDE_PARTS = ['Lessons behind it', 'What it looks like in a project', 'Questions to ask of this project',
+  'Trade-offs', 'When not to apply it'];
+// corrections.md (docs/maintaining.md "Corrections"): what we published wrong, read first by every revisit.
+export const CORRECTIONS = join(ROOT, 'corrections.md');
+export const CORRECTION_FIELDS = ['What was wrong', 'Published', 'How to recognise it', 'How to find what it changed',
+  'What to propose'];
+// Entries of corrections.md: [{ id, n, title, line, fields: { name: text } }]; `none` when it says "None yet.".
+export function parseCorrections(text) {
+  const lines = text.replace(/\r\n/g, '\n').split('\n');
+  const at = lines.findIndex(l => /^## Entries\s*$/.test(l));
+  if (at < 0) return null;
+  const body = [];
+  for (let i = at + 1; i < lines.length && !/^## /.test(lines[i]); i++) body.push({ l: lines[i], line: i + 1 });
+  const entries = [];
+  let cur = null, field = null;
+  for (const { l, line } of body) {
+    const h = l.match(/^### (COR-(\d+)): (.+)$/);
+    if (h) { cur = { id: h[1], n: Number(h[2]), title: h[3], line, fields: {}, stray: [] }; entries.push(cur); field = null; continue; }
+    if (/^### /.test(l)) { entries.push({ id: null, title: l, line, fields: {}, stray: [] }); cur = null; continue; }
+    const f = l.match(/^- \*\*(.+?):\*\*\s*(.*)$/);
+    if (cur && f) { field = f[1]; cur.fields[field] = f[2]; continue; }
+    if (cur && field && /^\s+\S/.test(l)) { cur.fields[field] += ' ' + l.trim(); continue; }
+    if (cur && l.trim()) cur.stray.push(line);
+  }
+  const prose = body.filter(b => b.l.trim()).map(b => b.l.trim());
+  return { entries, none: !entries.length && prose.length === 1 && prose[0] === 'None yet.', prose };
+}
 export const PROVENANCE_LEVELS = ['published case', 'published cases', "others' measurement", 'vendor guidance', 'ours'];
 export const PROVENANCE_HEADER = '| ID | Source | Level | Prevents | Blind failure |';
 // A hard rule tells the reader or its agent to cut, cap, delete, forbid or stop. "limits" is left out: it
@@ -349,15 +379,26 @@ export function lessonPrints(pages) {
   }
   return out;
 }
-// The checklist's questions, Q1..Qn, each with its whole text (title, Check, Evidence, Lessons).
-export function questionPrints(text) {
+// The checklist's questions, Q1..Qn, each with its whole text (title, Check, Lessons, Guide) and, when
+// `guides` (Map "Q<n>" -> text of guide/q<n>.md) is given, its guide: a changed guide changes the question.
+export function questionPrints(text, guides = new Map()) {
   const out = new Map();
   let cur = null;
   for (const l of text.replace(/\r\n/g, '\n').split('\n')) {
     const q = l.match(/^(\d+)\. \*\*/);
     if (q) { cur = `Q${q[1]}`; out.set(cur, l); } else if (/^#/.test(l)) cur = null; else if (cur) out.set(cur, `${out.get(cur)}\n${l}`);
   }
-  for (const [k, v] of out) out.set(k, print(v));
+  for (const [k, v] of out) out.set(k, print(`${v}\n${guides.get(k) || ''}`));
+  return out;
+}
+// guide/q<n>.md texts by question, "Q<n>" -> text (LF line ends).
+export function loadGuides(dir = GUIDE_DIR) {
+  const out = new Map();
+  if (!existsSync(dir)) return out;
+  for (const f of readdirSync(dir)) {
+    const m = f.match(/^q(\d+)\.md$/);
+    if (m) out.set(`Q${m[1]}`, readFileSync(join(dir, f), 'utf8').replace(/\r\n/g, '\n'));
+  }
   return out;
 }
 // Compare two states (Map id -> fingerprint); `before` empty for the oldest entry.
@@ -402,7 +443,7 @@ export function renderChanges(entry, prev, lessons, questions, generated) {
     `- Changed questions: ${list(q.changed)}`,
     `- Questions gone: ${list(q.gone)}`, '',
     'A lesson counts as changed when its tag, words, oracle, model or strength tag, cited cases or Against line ' +
-      'changed; a question, when any of its text did.', '',
+      'changed; a question, when any of its text or its guide (guide/q<n>.md) did.', '',
     '## State after this entry', '',
     'Fingerprints (a short hash of each lesson and question) the next entry is compared with.', '',
     '```text', ...[...lessons, ...questions].map(([k, v]) => `${k} ${v}`), '```', '',

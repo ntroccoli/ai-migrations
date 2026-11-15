@@ -1,7 +1,9 @@
 # Applying the lessons outside a migration
 
 For large AI-driven work that is not a migration: compare how a project's agents and sessions
-work with the [lessons](../lessons/index.md), propose changes, and keep a record of what held.
+work with the [lessons](../lessons/index.md), give the project's owner findings and options, and
+keep a record of what held. The lessons guide; they do not decide for the project: the owner
+chooses, and the maintainer's reading is marked "ours".
 The [checklist](../checklist.md) does the same before a migration; this page follows its method,
 report and record ([docs/report-formats.md](report-formats.md)), so both routes read alike. README
 "Learning from the lessons" gives the prompts.
@@ -19,7 +21,7 @@ report and record ([docs/report-formats.md](report-formats.md)), so both routes 
    `partly` where the project already has a check that stands in for an old system. The tag is a
    hint, not a filter: judge each lesson by its own words, and drop those whose words are about
    moving code only (porting, an old system to compare with, shelved rewrites) (P2).
-   With a specific or a new model: process lessons (model ability `no`) apply as they are. Start
+   With a specific or a new model (ours): process lessons (model ability `no`) need no re-check for a newer model, though each is still judged by its own words. Start
    with the `yes` and `partly` lessons whose cases name your model or its family ("By model" in
    [lessons/index.md](../lessons/index.md)); treat those from other models as things to re-check
    on yours, not tips. A model newer than every case has no evidence here yet. The lessons hold
@@ -31,24 +33,32 @@ report and record ([docs/report-formats.md](report-formats.md)), so both routes 
    command's output, not from memory. A check you may not run: write the exact command and mark
    it "not run" with the reason. A fact only the owner knows: mark it "ask the owner" and state
    the default you will assume; if the owner does not answer, assume it, write the assumption in
-   the record, and go on (the owner can overturn it later).
-5. Report in the [AI lessons review format](report-formats.md#ai-lessons-review-report) and wait for
-   the owner's choice (P1). One change per proposal: split a proposal
+   the record, and go on (the owner can overturn it later). A decision only the owner can make (an
+   approval, a change to a project rule) is not assumed: it stays "waiting on the owner".
+5. Report in the [AI lessons review format](report-formats.md#ai-lessons-review-report): findings,
+   each with options for the owner and the trade-off of each (leaving it as it is is often one),
+   your own reading labelled "agent's reading"; do, later or skip is the owner's choice. Where a lesson's
+   "Against" line or cases show it did not hold in a project like this one, say so. Wait for
+   the owner's choice (P1). One change per option: split a proposal
    with several parts, or number its parts 3a, 3b, each with its own checks.
 6. Record: once the owner has chosen, write `docs/ai-lessons-review.md` in the project
    ([the record](report-formats.md#the-record)), with an owner and a check-by date on each row
    waiting for first use. In a read-only run, write no file (P1); show the record after the report.
 7. Revisit, in a fresh session, when the collection has grown or after a few weeks of work:
+   - Corrections, before anything else: read [corrections.md](../corrections.md) and follow it,
+     even when the rest of the revisit ends at the Start step; with no entry, say so in a line and go on.
+     Write what you checked on the record's "Corrections checked:" line.
    - Start: compare the log entry the record names (date and title) with the newest one
      [llms.txt](../llms.txt) names. If they match and no item is due for re-check (due: waiting
      or open, with commits in the project since the record's date, or past its check-by date), say
      so and stop (P3).
    - Re-check: list first the rows waiting for first use whose check-by date has passed, with
-     their owner. Rerun each item's "Check now" unchanged and look for its "Event that proves it"
+     their owner. Rerun each applied item's "Check now" unchanged (skipped items were not
+     applied: they stay skipped unless the owner reopens them) and look for its "Event that proves it"
      in the work since; compare with its baseline. Mark each exactly proven, still waiting,
      stopped holding or not shown (its event cannot be seen yet), with the numbers; in the
      record, still waiting and not shown stay "waiting for first use". Date each change; reopen
-     proven or skipped items only if their check now fails.
+     a proven item only if its check now fails.
    - New: for each [log.md](../log.md) entry newer than the record's, read its file in
      `changes/`, named by the entry's date and title (`2026-11-14 — third update` is
      `changes/2026-11-14-third-update.md`): the lesson IDs and checklist questions added, changed
@@ -56,8 +66,9 @@ report and record ([docs/report-formats.md](report-formats.md)), so both routes 
      only those lessons, and measure them as in step 4.
    - Lint: list the applied lessons that a newer lesson now contradicts or supersedes, and the
      record's items whose lesson changed.
-   - Propose only the new or changed lessons, earlier "later" items, applied items that stopped
-     holding and what the lint found, each with do, later or skip. Update the record in its
+   - Give options only for the new or changed lessons, earlier "later" items, applied items that stopped
+     holding and what the lint found, each as options with their trade-offs, for the owner's do,
+     later or skip. Update the record in its
      existing layout and name in it the newest log entry read, by date and title.
    - The too-early rule below holds for the re-check only: new lessons can be proposed before
      anything has met its problem.

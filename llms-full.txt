@@ -1,8 +1,48 @@
-# AI migrations: every lesson, every case line, the checklist, its report formats and the pitfalls in one file
+# AI migrations: corrections, every lesson, every case line, the checklist and its guide, its report formats and the pitfalls in one file
 
 Unofficial; company names describe the subject only. Summaries and lessons are our own words under CC BY 4.0. Source: https://github.com/ntroccoli/ai-migrations
 
 Disclosure: the cases and lessons are drafted by Claude, an Anthropic model, and reviewed by the maintainer. At least 16 of the 24 cases used Claude models or Claude Code (Bloomberg, Ping.gg, GitHub, Checkly, Intel, Bun, GitLab, Mindstone, Datadog, Lutz Leonhardt, PagerDuty, Ladybird, Christopher Chedeau, Spotify, Robert Marshall, Slack; 6 others leave the models unstated), and Anthropic owns Bun, the subject of one case. GitHub, Intel, Mindstone and Ping.gg also used other vendors' models; where a source compares outcomes by model, that is its author's own unaudited report, and no lesson ranks vendors.
+
+The checklist and the lessons guide an agent through what the cases show; they do not decide for a project. Each question's guide gives the lessons in our words with links, what it looks like in a project, questions to ask, the trade-offs and when not to apply it; "ours" marks the maintainer's reading. A review reports findings and options with their trade-offs, and the project's owner chooses: do, later or skip.
+
+## Corrections
+
+What this collection published wrong, and how a project that applied it can find and repair it.
+Every revisit reads this file first, before anything else, even while it has no entry: README step
+3 of both routes, step 10 of the [checklist](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/checklist.md) and step 7 of
+[applying the lessons](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/applying-lessons.md).
+
+### How a revisit uses it
+
+1. For each entry, compare its "Published" span with the project's record: the collection's commit
+   or date and the log entry it names, and earlier versions of the record in the project's git
+   history, if it is kept there. Compare by date: a commit counts by its date, a log entry by its
+   heading's. The entry applies when any of them falls in the span.
+2. For an entry that applies, look for it in the project as "How to recognise it" says, then follow
+   "How to find what it changed": the record first, then the git history of the files that the
+   record's applied items touched.
+3. Report what you found for each entry, and turn its "What to propose" into options for the
+   project's owner, each with its trade-off. Change nothing until the owner chooses (P1), except
+   the record's "Corrections checked:" line (step 4).
+4. In the record, write the entries you checked on its "Corrections checked:" line, with the date
+   and what you found ("COR-1: not found", "COR-2: found, proposal 4"); with no entry, "none listed".
+5. No entry, or none that applies: say so in one line and go on with the revisit.
+
+While an entry exists, the README and [llms.txt](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms.txt) ask anyone who ran the checklist or the
+lessons route during its span to run the revisit again.
+
+### Entries
+
+None yet.
+
+### Provenance
+
+Levels as in the [checklist](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/checklist.md#provenance).
+
+| ID | Source | Level | Prevents | Blind failure |
+| --- | --- | --- | --- | --- |
+| P1 | ours | ours | a repair the owner did not choose, made by an agent that trusts an entry over the project's own reasons | leaving a wrong rule at work in the project while the question waits; ask the owner at once |
 
 Evidence base: every lesson here comes from the **migrations** in this collection, all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.
 
@@ -746,28 +786,28 @@ How to read the numbers in these sources, and how to report your own.
 
 ## Before you migrate: checklist
 
-Questions to answer about a repository before an AI-driven move to another language, framework
-or library, or a large restructuring. Each has a **Check** an agent runs, an **Evidence** line in
-our words ("ours" marks our inference) and the **Lessons** behind it (`TST-2`: lesson 2 on the
-testing page; listed in [lessons/evidence.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/evidence.md)). A threshold or hard rule carries
-a marker such as (P3): the [Provenance](#provenance) table gives its source, evidence level, what it
-prevents and how it fails applied blindly. `ours` marks our inference or a number we picked: adapt it.
-
-Cases named below (moves in [index.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/index.md)): [1Password](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-20-1password-monolith-refactor.md), [Airbnb](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-01-airbnb-enzyme-to-rtl.md), [Asana](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-08-07-asana-enzyme-to-rtl.md), [Bloomberg](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-11-03-bloomberg-python-cpp-uplift.md),
-[Bun](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md), [Checkly](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-01-checkly-nodejs-to-go.md), [GitHub](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md), [GitLab](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-gitlab-rate-limiting.md), [Google](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-13-google-int64-ids.md), [Intel](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-08-24-intel-ideas-c-to-rust.md), [Ladybird](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-02-23-ladybird-libjs-rust.md), [PagerDuty](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-13-pagerduty-rundeck-grails-7.md), [Pokémon](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-01-25-vjeux-pokemon-showdown-rust.md),
-[Shopify](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-10-shopify-react-native-to-native.md), [Slack](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2024-05-22-slack-enzyme-to-rtl.md), [Spartacus](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-13-lutz-leonhardt-spartacus-signal-forms.md), [Spotify](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-11-06-spotify-honk.md), [Temporal](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-02-temporal-billing-store-clickhouse.md), [ts-rust](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-10-07-ping-tsgo-to-rust.md), [Zalando](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-02-20-zalando-ui-component-libraries.md), [Uber](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-07-uber-junit4-to-junit5.md) (a contrast case).
+Questions to measure on a repository before an AI-driven move to another language, framework or
+library, or a large restructuring. It guides an agent through what the cases show; it does not
+decide for the project: findings and options go to the project's owner, who chooses. Each question
+has a **Check**, what to measure and report (a measurement, not a verdict), the **Lessons** behind
+it (`TST-2`: lesson 2 on the testing page; listed in [lessons/evidence.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/evidence.md)) and
+a **Guide**, `guide/q<n>.md`, read only for the question in use: those lessons in our words with
+links to them and their cases, what the question looks like in a project, questions to ask of this
+one, the trade-offs, and when not to apply it. A threshold or hard rule carries a marker such as
+(P3): the [Provenance](#provenance) table gives its source, evidence level, what it prevents and how
+it fails applied blindly. `ours` and "(ours)" mark the maintainer's reading or a number we picked:
+adapt it. A revisit reads [corrections.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/corrections.md) first.
 
 1. **Is the move allowed, possible and worth it?**
    Check: find the written reason and the measured problem behind it (none written: ask the
    owner); repository rules that pin the stack, forbid new libraries or name an approver (one
-   that forbids the target is a blocker (P1)); for each framework the product rests on (renderer, UI,
-   desktop shell, platform or store SDK), its mature equivalent in the target, or mark the move a
-   rewrite on a new base; where time, memory or money goes today (a profile, a bill) and whether
-   the code to port is on that path; who maintains the result and whether they read the target
-   language; what the target must win, as numbers where possible.
-   Evidence: the cases start from a known problem or forced move (GitHub's startup and memory,
-   Bun's crashes, Slack's blocked React upgrade, Google's int32 limit). The rest is ours.
+   that forbids the target is the first finding the owner weighs (P1)); for each framework the
+   product rests on (renderer, UI, desktop shell, platform or store SDK), its mature equivalent in
+   the target, or mark the move a rewrite on a new base; where time, memory or money goes today
+   (a profile, a bill) and whether the code to port is on that path; who maintains the result and
+   whether they read the target language; what the target must win, as numbers where possible.
    Lessons: PLN-7, PLN-8, PLN-9, SEC-7.
+   Guide: [guide/q1.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/guide/q1.md).
 2. **Is there a test oracle that survives the move and that the agent cannot edit?**
    Check: count the tests that exercise behaviour through a public interface (CLI, API, files
    written, a headless harness) apart from white-box tests; list public features with none; run
@@ -779,18 +819,12 @@ Cases named below (moves in [index.md](https://raw.githubusercontent.com/ntrocco
    side, outputs compared (a differential or shadow run), and how late a wrong
    change first fails (build, tests, or only once deployed). Find who must approve a test change
    (CODEOWNERS, branch rules, CI, the owner); none is a finding.
-   Evidence: GitHub's unchanged end-to-end suites were the oracle; its feature-loss regressions
-   came almost all from their gaps. Bun's suite, in a third language, judged the whole port (a
-   critic notes it missed the old bugs). Google's correct changes stalled on failing tests and
-   goldens; Spotify's worst case is green CI with wrong behaviour. Intel, Shopify, ts-rust,
-   Pokémon and Ladybird ran old and new on the same inputs (Ladybird also edited its expected
-   outputs in that change). Bloomberg's changes could fail only once deployed; Checkly's harness
-   passed while production retries failed.
    Lessons: TST-1, TST-2, TST-3, TST-4, TST-5, TST-6, TST-8, TST-10, TST-12, TST-13, TST-14, TST-15,
    VER-5, VER-11, OVS-1.
+   Guide: [guide/q2.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/guide/q2.md).
 3. **Can an agent build, check and test alone, fast, and in parallel, in both toolchains?**
    Check: find the command that builds, formats, lints and tests one unit in the old stack, and
-   name the one for the target stack (pin its toolchain). Use recorded timings first (logs, CI
+   name the one for the target stack (say whether its toolchain is pinned). Use recorded timings first (logs, CI
    history); otherwise time each, count the output lines of a failure, and build and test two
    fresh clones outside the repository at once as an agent would (install dependencies, count
    the tests that ran, cap the time; not worktrees, which write into the measured repository's
@@ -798,11 +832,8 @@ Cases named below (moves in [index.md](https://raw.githubusercontent.com/ntrocco
    limits; say how agents are kept from undoing each other's work, and which target platforms
    their machines can build and test; for an app, how an agent drives it and how long one test
    takes. A missing formatter or linter is a finding.
-   Evidence: GitHub needed a build lock. Bun's agents sharing one checkout undid each other's work
-   within minutes, and heavy tests stalled the machine. 1Password and Spartacus gave each agent a
-   worktree (Spartacus's tests failed to start there); Spotify's verify tool returns short
-   errors. Shopify's agents took minutes per test in simulators; Asana's lint was slow and CI disagreed with local runs.
    Lessons: OPS-1, OPS-2, OPS-3, ORC-1, ORC-2, VER-2, VER-4, TOL-6, TOL-8.
+   Guide: [guide/q3.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/guide/q3.md).
 4. **How big is the job, really?**
    Check: scope is everything that must exist in the target. Count lines and files in scope by
    folder (`scc`, `tokei`, `cloc`, else `git ls-files -z -- <scope> | xargs -0 wc -l`) for
@@ -814,10 +845,8 @@ Cases named below (moves in [index.md](https://raw.githubusercontent.com/ntrocco
    (`git log --since="3 months ago" --numstat --format=%ad --date=short -- <scope>`): commits and
    lines per week, active days, last change. Code still changing fast: ask the owner whether to
    wait, or delete the old code in the change that ports it so later edits conflict (P3).
-   Evidence: GitHub's scope grew about threefold as code moved in and the old code kept
-   growing. Google's code index beat text search but listed irrelevant sites; 1Password's
-   analyzer listed every site.
    Lessons: PLN-3, PLN-10, ROL-4, TOL-1, TOL-3, MSR-8.
+   Guide: [guide/q4.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/guide/q4.md).
 5. **Can the work ship in small units, with old and new side by side?**
    Check: split the scope into units (files, components, packages, repositories), draw their
    dependency order with a read-only graph tool for the language (`go mod graph`, `cargo tree`,
@@ -825,112 +854,80 @@ Cases named below (moves in [index.md](https://raw.githubusercontent.com/ntrocco
    between modules or files instead), and mark the leaves that touch neither I/O nor shared
    state. Find the seam that lets one unit switch while the rest stays, and how the build links
    both languages meanwhile (seams by kind of move: [pitfalls.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/pitfalls.md#seams)). No seam:
-   say so, the move is one switch. Check what the platform rules allow. Pick the pilot units.
-   Evidence: GitHub swapped one component per pull request through a temporary interop layer,
-   leaves first; Intel went in dependency order; Google, Airbnb and Spotify moved one ID, file or
-   repository at a time. Bun made one switch after a small trial, and cycles left by its package
-   split took two more agent runs. Shopify's author says one-pass ports give code that cannot ship;
-   small reviewed checkpoints replaced them. The cost of a mixed build is ours.
+   say so, the move is one switch. Check what the platform rules allow. Propose pilot units.
    Lessons: PLN-1, PLN-4, PLN-11, ROL-1, ROL-6, ORC-4.
+   Guide: [guide/q5.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/guide/q5.md).
 6. **Is the end state written, and is the scope held?**
    Check: look for a written target for the whole migration (not one unit), before-and-after
    examples from this repository, sites grouped into patterns with a template each, when the
    agent must stop and escalate, a rule to translate first and redesign later, and a check on
    each diff for changes outside its scope (P4). A repository rule against translating first (delete
    old paths, keep no compatibility) is a finding (P5).
-   Evidence: GitHub's agents ported only the hot paths until the full end state was written, and
-   each redesign allowed mid-port cost regressions, time or tokens. Bun wrote a
-   porting guide first and left idiomatic code for later. 1Password's call-site cleanup ran from
-   a list, templates and escalation rules; Spotify's judge rejects sessions mostly for straying
-   from the prompt. Two other moves built the target's design first.
    Lessons: CTX-4, PLN-2, PLN-5, PLN-13, REV-4, AGF-2, AGF-4.
+   Guide: [guide/q6.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/guide/q6.md).
 7. **What does the old stack do implicitly?**
    Check: search the scope for behaviour the target will not give for free, with the lists for
    this kind of move in [pitfalls.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/pitfalls.md) as it says. Make a table of direct dependencies: target
    library, version, stable release or archived (a missing framework is question 1).
-   Evidence: the regressions compiled: GitHub's runtime defaults and one-sided paired operations,
-   Bun's lines that read alike but behave differently, Intel's pointer comparison, Google's bit
-   operations and SQL tied to the old width, 1Password's backfill order, Zalando's wrong data
-   mapping that broke a live page, PagerDuty's equality change.
    Lessons: REV-3, OPS-4, TST-7, VER-6, SEC-5, SEC-6, AGF-3, SEC-10.
+   Guide: [guide/q7.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/guide/q7.md).
 8. **Is the code uniform enough for one prompt, and what context goes with it?**
    Check: group the units by kind of code (pure logic, concurrency, OS layer, GPU or UI, data
    pipelines) and by framework, build system and style. For each group, name the context an
    agent gets: the unit's source, its neighbours' tests, good examples, mapping tables for
    renamed fields or APIs, runtime facts a person would look at, and what a rule-based codemod
-   can do first. Pilot the model on the hardest files of each language in scope, and check the
+   can do first. Say whether the model was piloted on the hardest files of each language in scope (else propose a pilot), and check the
    largest files fit its context window. A group too varied for one prompt is a candidate to defer
    or do by hand. Search docs and agent instructions for advice favouring the old stack.
-   Evidence: Spotify dropped a framework too varied for one prompt; mapping tables fixed wrong
-   field mappings. Airbnb's choice of related files mattered more than wording; Slack gave the
-   model a codemod's partial output and each test's rendered output. Google's model handled Dart
-   poorly, so people did it; Uber's recipes did a move its AI attempt failed. Bloomberg gave each
-   kind of target its own prompt; stale docs misled Asana's agents; Pokémon split files the agent
-   would not open.
    Lessons: CTX-1, CTX-2, CTX-3, CTX-5, CTX-9, CTX-10, CTX-11, CTX-12, CTX-13, TOL-2, TOL-7, TOL-9,
    AGF-8, PLN-8, PLN-12.
+   Guide: [guide/q8.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/guide/q8.md).
 9. **How will you work the long tail, stop, and learn from failures?**
    Check: look for a status record per unit, a way to rerun failing units by step, a retry limit
    (for independent units such as files; where units depend on each other, a rule to fix the
    workflow and rerun instead), a rule for when to stop automating and finish by hand, and a place
    where a failure seen twice becomes a standing instruction, skill or eval (P6).
-   Evidence: Airbnb stamped each file with its status, swept again after each fix and finished
-   the last files by hand; Intel capped retries. GitHub turned repeated failures into
-   instructions, skills and evals; Spotify asks the agent what its prompt lacked; Zalando reran a golden set after each prompt
-   change. Uber put files whose tests failed back on the old framework. ts-rust's first attempt
-   stalled for months, no stop rule stated; Spartacus now stops for a person after each wave.
    Lessons: VER-3, KNW-1, KNW-2, KNW-4, KNW-5, OVS-3, OVS-5, CTX-7, AGF-7, OPS-6, ROL-8, TST-11.
+   Guide: [guide/q9.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/guide/q9.md).
 10. **What may the agent decide and reach alone, and who reviews?**
     Check: list the guardrails an agent could switch off (deleting or editing tests, updating
     snapshots or baselines, waiver labels, CI flags) and who must approve each; the steps kept
     for people (schema changes, backfills, deploy order); and the tools, skills and credentials
     agent sessions can reach. A rule only written down, with nothing enforcing it, is a
-    partial gap. Changes in other teams' code: count the owning teams, whether they asked
-    for the move, who carries the deploy risk. Ask the owner who reviews, whether they
-    read the target language, and their hours a week.
-    Evidence: a GitHub agent applied a waiver label to pass a failing check, and a session merged
-    a peer's worktree unasked; Spotify's agents switched off unreliable tests; Bun's agents
-    stubbed functions until reviewer agents, seeing only the diff, rejected that; 1Password's
-    agents repeated ordering mistakes after being told. Most of Bloomberg's unrequested pull
-    requests got no decision from their owners; Shopify needed reviewers who knew the target
-    platform.
+    finding: say what could enforce it, if the owner wants it enforced. Changes in other teams' code: count the owning teams,
+    whether they asked for the move, who carries the deploy risk. Ask the owner who reviews,
+    whether they read the target language, and their hours a week.
     Lessons: OVS-1, OVS-2, AGF-1, AGF-5, AGF-9, SEC-1, SEC-2, SEC-3, REV-1, REV-2, REV-9, REV-11,
     TEM-4, TEM-6, ROL-9.
+    Guide: [guide/q10.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/guide/q10.md).
 11. **How will changes reach users?**
     Check: find the release channels (pre-release, flags, canary), the share of users each
     reaches, how problems are reported and watched, and how one unit's change is rolled back (for
     a single-user or internal tool: what a release and a rollback are). Not released yet: mark it
     "not applicable yet" and say what must exist before the first release.
-    Evidence: GitHub aimed to ship each port to a pre-release first, yet some regressions reached
-    stable; Bun's merged build stayed a canary while regressions were fixed; Google rolled its
-    largest migrations out slowly, owners watching. Temporal compared every query and cut over
-    read-only paths first; GitLab ramped to full traffic past a divergence its shadow run flagged
-    but did not label. A rollback path per unit is ours.
     Lessons: ROL-2, ROL-3, ROL-5, ROL-7, ROL-10, ROL-11, VER-1, OPS-5, OPS-8.
+    Guide: [guide/q11.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/guide/q11.md).
 12. **How will you measure cost and result?**
     Check: write down the manual estimate and how it was made. Measure, before the port and on
     fixed hardware, the number the product exists for (speed, latency, memory, output quality),
     and the part the port changes, if not the same path. Plan to record tokens or spend, engineer
     hours, pull requests, regressions after merge and reverts, marking measured against estimated.
-    Evidence: GitHub benchmarked before and after (amid other changes) and gave its token bill;
-    Bun and ts-rust priced tokens at list rates (ts-rust's restart used flat-rate plans); Bun
-    counted regressions after merge; Google measured shares as edit distance. Every effort or saving
-    figure is the team's own estimate. Bloomberg also counted undecided pull requests, and
-    owners' migrations that reused rejected ones. Recording reverts is ours.
     Lessons: CST-1, CST-2, CST-6, CST-7, MSR-1, MSR-2, MSR-4, MSR-5, MSR-9, MSR-10, TST-9, KNW-3.
+    Guide: [guide/q12.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/guide/q12.md).
 
 ### Starting thresholds
 
-Starting points from one case each, not targets; elsewhere judge "gap" from the Check alone.
+Numbers from one case each: points of comparison, not targets. Where a question has none, its
+Check's measurement stands on its own.
 
 - Q4: GitHub first counted about 130,000 lines; about 430,000 went through the port (P7). A scope
-  count with no allowance for code moving in or newly written is a partial gap (P7).
+  count with no allowance for code moving in or newly written is a finding to report (P7).
   [GitHub](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md)
 - Q5: Bun ran its whole loop on 3 files before all 1,448 (P8). No pilot before the bulk run is a
-  gap (P8). [Bun](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md)
+  finding to report (P8). [Bun](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md)
 - Q9: most of Airbnb's simple and medium files passed within about 10 attempts; 50 to 100
-  attempts on the hardest gained little (P9). No retry limit, or no rule to stop and hand-port, is
-  a gap (P9). [Airbnb](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-01-airbnb-enzyme-to-rtl.md)
+  attempts on the hardest gained little (P9). In a bulk run of many units, no retry limit, or no
+  rule to stop and hand-port, is a finding to report (P9). [Airbnb](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-01-airbnb-enzyme-to-rtl.md)
 
 ### How to run this checklist
 
@@ -939,20 +936,32 @@ Starting points from one case each, not targets; elsewhere judge "gap" from the 
 2. Measure first: answer each Check with a number, file or command output, not from memory.
 3. A check you may not run: write the exact command, mark it "not run" with the reason, never
    guess its result (P11). Logs or CI history count if you name their source.
-4. A fact only the owner knows (review time, budget, approval of a new stack): write the question,
-   mark it "ask the owner" and state a default; unanswered, assume it, note it in the record, go on.
-5. Mark each question "gap", "partial gap", "no gap" or "not applicable yet", with the
-   measurement.
-6. Base proposals on the Evidence lines and, if you can, the cited lessons (their "Against"
-   lines and oracle tags) and the case sections they link, above all "Practices to copy".
-   Compare numbers across cases only in matching units.
-7. Order proposals by what blocks the rest: blockers first (a "no" on question 1 is the usual
-   one), then what others depend on (the oracle, the baseline, the end state), then the rest.
-8. Report as below and wait for the owner's choice (P10). One change per proposal (or parts 3a, 3b).
+4. A fact only the owner knows (review time, budget): write the question, mark it "ask the
+   owner" and state a default; unanswered, assume it, note it in the record, go on. A decision only
+   the owner can make (approval of a new stack, a change to a project rule) is not assumed: it stays
+   "waiting on the owner".
+5. Report each question as a finding: what the Check found and did not find, with the
+   measurement; or "nothing missing", or "not applicable yet" with what must exist first. A finding
+   is a measurement for the owner to weigh, not a verdict; a Check part that does not fit the
+   project's size or kind of move, as its guide's "When not to apply it" says, is reported as such.
+6. Before writing a finding up, read the question's guide. Where its "When not to apply it" fits
+   this project, say so: it may be the reason to leave things as they are. Build the options on
+   the guide and, if you can, the cited lessons (their "Against" lines and oracle tags) and the case
+   sections they link, above all "Practices to copy". Compare numbers across cases only in matching
+   units. Keep the two readings apart: "(ours)" in the collection is the maintainer's, and so is a
+   lesson tagged `[ours]`; label your own "agent's reading".
+7. Give each finding options for the owner, each with its trade-off; leaving it as it is is often
+   one. You may say which option the measurements favour and why, labelled "agent's reading". Order
+   the findings so the owner meets first what the rest depend on: a project rule against the move
+   (question 1), then the oracle, the baseline and the end state.
+8. Report as below and wait for the owner's choice (P10): for each finding, do (which option),
+   later or skip is theirs. One change per option (or parts 3a, 3b).
 9. Record: once the owner has chosen, write `docs/migration-review.md` in the measured repository
    (the one file this checklist adds there; format below). In a read-only run, write no file (P10);
    show the record after the report.
-10. Revisit as step 7 of [applying the lessons](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/applying-lessons.md) says, with the questions its `changes/` files list as well as the lessons.
+10. Revisit: read [corrections.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/corrections.md) first, then go on as step 7 of
+    [applying the lessons](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/applying-lessons.md) says, with the questions its `changes/` files
+    list as well as the lessons.
 11. Share (optional): a [field report](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/field-reports.md) once an item has met its problem.
 
 ### Report format
@@ -966,7 +975,7 @@ Levels: `published case` (one), `published cases` (two or more), `others' measur
 
 | ID | Source | Level | Prevents | Blind failure |
 | --- | --- | --- | --- | --- |
-| P1 | ours | ours | porting against the project's own rules | stopping where the rule only asks for an approver |
+| P1 | ours | ours | a port planned against the project's own rules without the owner seeing it | holding the move where the rule only asks for an approver |
 | P2 | clones: OPS-1, ORC-1; no worktree, time cap: ours | ours | a measurement that hangs or writes into the measured repository | refusing worktrees for the port itself, where they kept agents apart |
 | P3 | [GitHub](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md), ROL-4 | published case | edits to old code after its port | deleting old code a side-by-side run (Q2) or a rollback (Q11) still needs |
 | P4 | CTX-4, AGF-2, REV-4 | published cases | agents guessing past what they understand; diffs straying from the task | a stop rule so wide that every unit waits for a person |
@@ -980,31 +989,780 @@ Levels: `published case` (one), `published cases` (two or more), `others' measur
 
 [GitHub]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md
 [Bun]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md
-[Intel]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-08-24-intel-ideas-c-to-rust.md
-[1Password]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-20-1password-monolith-refactor.md
-[Spotify]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-11-06-spotify-honk.md
 [Airbnb]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-01-airbnb-enzyme-to-rtl.md
-[Google]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-13-google-int64-ids.md
-[Slack]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2024-05-22-slack-enzyme-to-rtl.md
-[Uber]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-07-uber-junit4-to-junit5.md
-[Zalando]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-02-20-zalando-ui-component-libraries.md
-[Asana]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-08-07-asana-enzyme-to-rtl.md
-[Shopify]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-10-shopify-react-native-to-native.md
-[Bloomberg]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-11-03-bloomberg-python-cpp-uplift.md
-[Pokémon]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-01-25-vjeux-pokemon-showdown-rust.md
-[ts-rust]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-10-07-ping-tsgo-to-rust.md
-[Spartacus]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-13-lutz-leonhardt-spartacus-signal-forms.md
-[Ladybird]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-02-23-ladybird-libjs-rust.md
-[Checkly]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-01-checkly-nodejs-to-go.md
-[Temporal]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-02-temporal-billing-store-clickhouse.md
-[GitLab]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-gitlab-rate-limiting.md
-[PagerDuty]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-13-pagerduty-rundeck-grails-7.md
+
+## Q1 guide: Is the move allowed, possible and worth it?
+
+For question 1 of the [checklist](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/checklist.md): read it before writing up a finding on that
+question. It walks through what the cases show; the project's owner decides. Each point names its
+evidence: a lesson ID (its strength, its cases and the cases against it are in
+[lessons/evidence.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/evidence.md); its page links the case sections) or a case link.
+"(ours)" marks the maintainer's reading, evidence level `ours`; so does a lesson tagged `[ours]` there,
+which is our inference from its cases.
+
+### Lessons behind it
+
+- [PLN-7](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/planning.md): agents lower the price of a rewrite once shelved for cost, but
+  the fair comparison is with doing nothing, not with a manual rewrite nobody would have funded.
+- [PLN-8](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/planning.md): parts that cannot be specified or checked (an unsupported
+  platform, a language the model handles poorly) were left out rather than forced.
+- [PLN-9](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/planning.md): the published cases are success stories, so the odds they
+  suggest run high; a partial outcome and a way to stop belong in the plan.
+- [SEC-7](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/security.md): each library the move replaces is a small migration of its
+  own, above all security-sensitive ones.
+
+Cases, in our words: the cases start from a known problem or forced move (GitHub's startup and
+memory, Bun's crashes, Slack's blocked React upgrade, Google's int32 limit). The rest is ours.
+
+### What it looks like in a project
+
+- A written reason ties the move to a measured problem: a profile, a bill, a crash count, a
+  limit about to be reached ([GitHub](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#what-was-migrated), [Google](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-13-google-int64-ids.md#what-was-migrated)).
+- The product rests on a framework (a renderer, a desktop shell, a store SDK) with no mature
+  equivalent in the target, so the move is a rewrite on a new base rather than a port (ours).
+- The repository's own rules pin the stack, forbid new libraries or name an approver; such a rule
+  shapes the move before any measurement does (ours).
+
+### Questions to ask of this project
+
+- What problem does the move solve, and where is it measured?
+- Is the code to port on the path where the time, memory or money goes?
+- Which rule of the project's own speaks to the move: one that forbids the target, or one that
+  only asks for an approver?
+- Who maintains the result, and do they read the target language?
+- What must the target win, in numbers, for the move to have been worth it?
+
+### Trade-offs
+
+- Moving for a measured problem gives a test of success; moving for fashion gives none, but a
+  forced move (an end-of-life framework) may have no number and still be needed (PLN-7).
+- A rewrite on a new base can fix design debt the port would carry over, at the price of losing
+  the old code as the reference (PLN-5, PLN-13).
+- Porting without the code's owners close to it saves their time now; in one case it made debugging
+  and incident handling harder later, and other cases disagree (TEM-5).
+
+### When not to apply it
+
+- A rule that only names an approver is a question for that person, not a reason to hold the move
+  (ours).
+- When the owner has already decided to move for reasons outside the code (hiring, a vendor's end
+  of support), the "worth it" part informs the plan rather than the decision (ours).
+
+## Q2 guide: Is there a test oracle that survives the move and that the agent cannot edit?
+
+For question 2 of the [checklist](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/checklist.md): read it before writing up a finding on that
+question. It walks through what the cases show; the project's owner decides. Each point names its
+evidence: a lesson ID (its strength, its cases and the cases against it are in
+[lessons/evidence.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/evidence.md); its page links the case sections) or a case link.
+"(ours)" marks the maintainer's reading, evidence level `ours`; so does a lesson tagged `[ours]` there,
+which is our inference from its cases.
+
+### Lessons behind it
+
+- [TST-1](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/testing.md): a black-box suite that does not depend on the language judged
+  the port, run against old and new.
+- [TST-2](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/testing.md): the missing-feature regressions came from behaviour no test
+  covered.
+- [TST-3](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/testing.md): matching the old system does not make the port right; a
+  faithful port carries the old bugs.
+- [TST-4](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/testing.md): checks compiled only into debug builds hid release-build
+  regressions.
+- [TST-5](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/testing.md): where tests were thin, recorded inputs and outputs of the old
+  system stood in.
+- [TST-6](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/testing.md): a red baseline or golden files that cannot be regenerated stall
+  correct changes.
+- [TST-8](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/testing.md): when tests are what moves, passing proves little; counts,
+  coverage and intent need comparing.
+- [TST-10](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/testing.md): one generation writing both code and tests invites tests that
+  cannot fail.
+- [TST-12](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/testing.md), [TST-13](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/testing.md): old and new compared on what
+  users and other systems see, side by side on the same inputs.
+- [TST-14](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/testing.md): coverage rose while agent-written tests asserted nothing.
+- [TST-15](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/testing.md): a harness simpler than production let a production bug through.
+- [VER-5](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/verification.md): a green run can hide tests that never ran.
+- [VER-11](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/verification.md): how late a wrong change first fails shapes the pipeline.
+- [OVS-1](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/oversight.md): the agent that changes code should not change what counts as
+  correct.
+
+Cases, in our words: GitHub's unchanged end-to-end suites were the oracle; its feature-loss
+regressions came almost all from their gaps. Bun's suite, in a third language, judged the whole
+port (a critic notes it missed the old bugs). Google's correct changes stalled on failing tests
+and goldens; Spotify's worst case is green CI with wrong behaviour. Intel, Shopify, ts-rust,
+Pokémon and Ladybird ran old and new on the same inputs (Ladybird also edited its expected outputs
+in that change). Bloomberg's changes could fail only once deployed; Checkly's harness passed while
+production retries failed.
+
+### What it looks like in a project
+
+- Tests that drive the product from outside (a CLI, an API, files written) survive a language
+  change; unit tests tied to the old code's internals usually do not, unless they are ported too ([GitHub](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#how-it-was-checked), [Bun](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md#how-it-was-checked)).
+- Golden files and snapshots that only the old implementation can regenerate (TST-6).
+- A suite that is green while some tests are skipped or never collected (VER-5).
+- No rule on who may edit a test: the agent can make a failing check pass by changing it (OVS-1,
+  AGF-5).
+
+### Questions to ask of this project
+
+- Which public features have no test that drives them from outside?
+- Which tests fail or will not run today, before any change?
+- Can old and new run the same inputs, with outputs compared, and what varies per run?
+- How late does a wrong change first fail here: at build, in tests, or only once deployed?
+- Who must approve a change to a test, a snapshot or a baseline, and what enforces it?
+
+### Trade-offs
+
+- An outside suite is slow to build where none exists; recorded inputs and outputs are quicker but
+  freeze the old bugs as expected behaviour (TST-3, TST-5).
+- Locking tests against agent edits protects the oracle and slows legitimate test fixes, which
+  then sit until a person approves them (OVS-1).
+- A side-by-side run catches what tests miss, at the cost of making the old output deterministic
+  first (TST-13).
+
+### When not to apply it
+
+- When the tests are what moves (a test-framework change), the suite cannot judge itself; compare
+  counts and intent instead (TST-8).
+- An owner who chose to fix known old bugs during the move gives up exact equality with the old
+  system on those paths, by design (TST-3, PLN-5).
+
+## Q3 guide: Can an agent build, check and test alone, fast, and in parallel, in both toolchains?
+
+For question 3 of the [checklist](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/checklist.md): read it before writing up a finding on that
+question. It walks through what the cases show; the project's owner decides. Each point names its
+evidence: a lesson ID (its strength, its cases and the cases against it are in
+[lessons/evidence.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/evidence.md); its page links the case sections) or a case link.
+"(ours)" marks the maintainer's reading, evidence level `ours`; so does a lesson tagged `[ours]` there,
+which is our inference from its cases.
+
+### Lessons behind it
+
+- [OPS-1](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/operations.md): parallel agents saturated CPU, disk and I/O; one build at a
+  time, through a lease, kept the machine usable.
+- [OPS-2](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/operations.md): operating-system limits contained heavy tests; asking the
+  agent to be careful did not.
+- [OPS-3](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/operations.md): agents spend their time reading, building and testing, so a
+  fast inner loop comes before more agents.
+- [ORC-1](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/orchestration.md): agents sharing one working copy wrecked each other's work.
+- [ORC-2](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/orchestration.md): parallel agents only on changes that are independent by
+  design.
+- [VER-2](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/verification.md): cheap checks first, and a candidate dropped at its first
+  failure.
+- [VER-4](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/verification.md): one verify tool that returns short errors.
+- [TOL-6](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/tooling.md): formatters, linters and type checks inside the agent's loop.
+- [TOL-8](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/tooling.md): a way to drive the running app directly, not through
+  screenshots.
+
+Cases, in our words: GitHub needed a build lock. Bun's agents sharing one checkout undid each
+other's work within minutes, and heavy tests stalled the machine. 1Password and Spartacus gave
+each agent a worktree (Spartacus's tests failed to start there); Spotify's verify tool returns
+short errors. Shopify's agents took minutes per test in simulators; Asana's lint was slow and CI
+disagreed with local runs.
+
+### What it looks like in a project
+
+- One command builds, lints and tests a unit, and its failure output is short enough to read in
+  one go ([Spotify](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-11-06-spotify-honk.md#what-worked)).
+- A test run that needs a running service, a simulator or a manual step the agent cannot do
+  (TOL-8).
+- Timings recorded in CI history, or none, so they must be measured from fresh clones (ours).
+- Two agents building at once slow each other or fight over one checkout ([Bun](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md#what-went-wrong)).
+
+### Questions to ask of this project
+
+- What is the one command for one unit, in the old stack and in the target?
+- How long does it take, and how many lines does a failure print?
+- What happens when two fresh clones build and test at once on this machine?
+- How are agents kept from undoing each other's work, and which platforms can their machines build?
+- For an app: how does an agent drive it, and how long does one test take?
+
+### Trade-offs
+
+- A worktree per agent keeps agents apart cheaply, but some test setups fail to start in one; a
+  full clone costs disk and install time (ORC-1).
+- A build lease keeps the machine usable at the price of agents waiting their turn (OPS-1).
+- Making the inner loop faster first delays the port and pays back on every later run (OPS-3).
+
+### When not to apply it
+
+- A single agent working alone needs no parallel measurement; the timing of one unit still
+  matters (ours).
+- Worktrees are only ruled out for measuring the repository, since they write into its `.git`;
+  for the port itself they kept agents apart (ORC-1).
+
+## Q4 guide: How big is the job, really?
+
+For question 4 of the [checklist](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/checklist.md): read it before writing up a finding on that
+question. It walks through what the cases show; the project's owner decides. Each point names its
+evidence: a lesson ID (its strength, its cases and the cases against it are in
+[lessons/evidence.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/evidence.md); its page links the case sections) or a case link.
+"(ours)" marks the maintainer's reading, evidence level `ours`; so does a lesson tagged `[ours]` there,
+which is our inference from its cases.
+
+### Lessons behind it
+
+- [PLN-3](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/planning.md): in a live repository, scope grew while the work ran, as code
+  moved in and new code was written.
+- [PLN-10](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/planning.md): counting how often each pattern is used showed which
+  transforms paid back first.
+- [ROL-4](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/rollout.md): deleting the old code in the change that adds the new turned
+  concurrent edits into conflicts instead of silent losses.
+- [TOL-1](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/tooling.md): deterministic tools (analysers, call-site lists) built and
+  reviewed first, then agents bound to them.
+- [TOL-3](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/tooling.md): change sites found with a code index or static analysis, erring
+  on too many.
+- [MSR-8](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/measurement.md): finding the sites was often the hard part, done by tools,
+  not the model.
+
+Cases, in our words: GitHub's scope grew about threefold as code moved in and the old code kept
+growing. Google's code index beat text search but listed irrelevant sites; 1Password's analyzer
+listed every site.
+
+### What it looks like in a project
+
+- Code outside the folder being moved (shared helpers, generated files, templates, shaders) that
+  must exist in the target too ([GitHub](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong)).
+- A change across call sites whose list came from text search, which misses uses reached through
+  other variables ([Google](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-13-google-int64-ids.md#what-went-wrong)).
+- Code in scope still changing every week, so a port started now chases a moving target (PLN-3).
+- Stored data (rows, hashes, saved files) the new build must keep reading (ours).
+
+### Questions to ask of this project
+
+- What must exist in the target that is not in the folder being moved?
+- How were the call sites found, and is the list kept?
+- How fast is the code in scope changing, and who is changing it?
+- Which data formats and stored data must stay readable across the move?
+
+### Trade-offs
+
+- Waiting for the code to settle avoids chasing edits but delays the move; deleting old code in the
+  porting change surfaces edits as conflicts, but takes away what a side-by-side run or a rollback
+  may still need (ROL-4; row P3 of the checklist's Provenance table).
+- A static analyzer lists every site and some irrelevant ones; text search is quicker and misses
+  indirect uses (TOL-3).
+
+### When not to apply it
+
+- Where old and new must run side by side (question 2's differential run, question 11's
+  rollback), deleting the old code in the porting change takes away what they run on (ROL-4).
+- A fixed file set with no inflow, like a test-framework move, gains little from re-measuring
+  scope while the work runs (PLN-3).
+
+## Q5 guide: Can the work ship in small units, with old and new side by side?
+
+For question 5 of the [checklist](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/checklist.md): read it before writing up a finding on that
+question. It walks through what the cases show; the project's owner decides. Each point names its
+evidence: a lesson ID (its strength, its cases and the cases against it are in
+[lessons/evidence.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/evidence.md); its page links the case sections) or a case link.
+"(ours)" marks the maintainer's reading, evidence level `ours`; so does a lesson tagged `[ours]` there,
+which is our inference from its cases.
+
+### Lessons behind it
+
+- [PLN-1](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/planning.md): the whole pipeline piloted on a few easy, well-tested units
+  before the rest.
+- [PLN-4](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/planning.md): slices ordered along the dependency graph, leaves first, the hub
+  last.
+- [PLN-11](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/planning.md): one-pass ports of a whole app gave code nobody could maintain,
+  in one author's account; others disagree.
+- [ROL-1](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/rollout.md): one component swapped per change, old and new joined by a
+  temporary bridge, so the main branch could always ship.
+- [ROL-6](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/rollout.md): the size of the bridge as the progress signal.
+- [ORC-4](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/orchestration.md): the work queue built from deterministic output, then fanned
+  out.
+
+Cases, in our words: GitHub swapped one component per pull request through a temporary interop
+layer, leaves first; Intel went in dependency order; Google, Airbnb and Spotify moved one ID, file
+or repository at a time. Bun made one switch after a small trial, and cycles left by its package
+split took two more agent runs. Shopify's author says one-pass ports give code that cannot ship;
+small reviewed checkpoints replaced them. The cost of a mixed build is ours.
+
+### What it looks like in a project
+
+- A seam where one unit can switch while the rest stays: a component boundary, an ABI, a process,
+  a route ([pitfalls.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/pitfalls.md#seams), ROL-1).
+- Cycles between modules or files that keep any one of them from moving alone ([Bun](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md#what-went-wrong)).
+- Leaves that touch neither I/O nor shared state, the cheap first units (PLN-4).
+- No seam at all, so the move is one switch (ours).
+
+### Questions to ask of this project
+
+- What are the units, and in what dependency order do they fall?
+- How many cycles, and where?
+- Which seam lets one unit switch, and how does the build link both languages meanwhile?
+- What do the platform rules allow (a store's review, a plugin host)?
+- Which units make a pilot that runs the whole loop?
+
+### Trade-offs
+
+- A bridge between old and new keeps the main branch shippable and costs a mixed build to
+  maintain until it reaches zero (ROL-1, ROL-6).
+- One switch after a small trial is faster and saves the bridge, but every regression lands at
+  once (Bun, in [PLN-11](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/planning.md)'s "Against").
+- A pilot of a few units finds the loop's problems cheaply; it may miss problems that only appear
+  at scale, such as agents clashing in one checkout (PLN-1).
+
+### When not to apply it
+
+- When the codebase has no seam and the owner accepts one switch, ordering units still helps the
+  agents, though there are no small units to ship (ours).
+- A pilot of a few easy files says little about code of several kinds; question 8 groups them
+  (PLN-1, row P8 of the checklist's Provenance table).
+
+## Q6 guide: Is the end state written, and is the scope held?
+
+For question 6 of the [checklist](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/checklist.md): read it before writing up a finding on that
+question. It walks through what the cases show; the project's owner decides. Each point names its
+evidence: a lesson ID (its strength, its cases and the cases against it are in
+[lessons/evidence.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/evidence.md); its page links the case sections) or a case link.
+"(ours)" marks the maintainer's reading, evidence level `ours`; so does a lesson tagged `[ours]` there,
+which is our inference from its cases.
+
+### Lessons behind it
+
+- [CTX-4](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/context.md): a stated end state, its preconditions and when not to act; vague
+  goals were read narrowly.
+- [PLN-2](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/planning.md): most of the effort went into specs, guides and tooling before
+  the bulk run.
+- [PLN-5](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/planning.md): translate first, redesign later, so a failure points at the
+  port; several moves built the target's design first and disagree.
+- [PLN-13](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/planning.md): in a framework or data-store move, the target's foundation
+  built first in its own idiom.
+- [REV-4](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/review.md): an automatic check comparing each diff with its instruction.
+- [AGF-2](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/agent-failures.md): agents fill gaps in the spec with plausible guesses.
+- [AGF-4](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/agent-failures.md): agents stray beyond the task.
+
+Cases, in our words: GitHub's agents ported only the hot paths until the full end state was
+written, and each redesign allowed mid-port cost regressions, time or tokens. Bun wrote a porting
+guide first and left idiomatic code for later. 1Password's call-site cleanup ran from a list,
+templates and escalation rules; Spotify's judge rejects sessions mostly for straying from the
+prompt. Two other moves built the target's design first.
+
+### What it looks like in a project
+
+- A written target for the whole migration, with before-and-after examples from this repository
+  ([GitHub](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong), [Bun](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md#what-worked)).
+- Sites grouped into patterns, each with a template, and named conditions under which the agent
+  asks a person (CTX-4, AGF-2).
+- A repository rule that pushes deletion over translation ("delete old paths, keep no
+  compatibility"), which works against translating first (PLN-5).
+- An owner's recorded decision to redesign during the move (PLN-13).
+
+### Questions to ask of this project
+
+- Where is the end state written, for the whole migration and not one unit?
+- Which patterns do the sites fall into, and is there a template for each?
+- Under which named conditions should the agent ask a person?
+- Does the plan translate first, or redesign as it goes, and who chose that?
+- What checks each diff for changes outside its task?
+
+### Trade-offs
+
+- Translating first makes each failure point at the port; redesigning during it can save a second
+  pass but mixes two causes of change (PLN-5).
+- A narrow escalation rule keeps agents moving; a wide one ("ask whenever unsure") holds every unit
+  until a person answers (CTX-4, row P4 of the checklist's Provenance table).
+- Writing the end state and templates first is slow and is where the effort went in the cases
+  that report it (PLN-2).
+
+### When not to apply it
+
+- A redesign the owner chose is their decision; the finding is its cost (two causes of change in
+  one diff) and how to keep each change checkable, not a call to undo it (PLN-5's "Against",
+  PLN-13).
+- A small, uniform move (one API across call sites) may need only a template and a scope check,
+  not a full end-state document (ours).
+
+## Q7 guide: What does the old stack do implicitly?
+
+For question 7 of the [checklist](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/checklist.md): read it before writing up a finding on that
+question. It walks through what the cases show; the project's owner decides. Each point names its
+evidence: a lesson ID (its strength, its cases and the cases against it are in
+[lessons/evidence.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/evidence.md); its page links the case sections) or a case link.
+"(ours)" marks the maintainer's reading, evidence level `ours`; so does a lesson tagged `[ours]` there,
+which is our inference from its cases.
+
+### Lessons behind it
+
+- [REV-3](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/review.md): a written list of constructs that read alike in old and new code
+  but behave differently, given to reviewers.
+- [OPS-4](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/operations.md): what the old runtime supplied silently, tested on every
+  platform shipped.
+- [TST-7](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/testing.md): values beyond the old range, at real data sizes, where numeric
+  types or sums change.
+- [VER-6](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/verification.md): machine-readable contracts so a changed interface fails
+  mechanically.
+- [SEC-5](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/security.md), [SEC-6](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/security.md): binding signatures generated by
+  a tool; a bounds-checked target turns silent errors into crashes.
+- [AGF-3](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/agent-failures.md): agents handled order-dependent steps badly even when told.
+- [SEC-10](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/security.md): the order of schema changes and backfills kept with people.
+
+Cases, in our words: the regressions compiled: GitHub's runtime defaults and one-sided paired
+operations, Bun's lines that read alike but behave differently, Intel's pointer comparison,
+Google's bit operations and SQL tied to the old width, 1Password's backfill order, Zalando's wrong
+data mapping that broke a live page, PagerDuty's equality change.
+
+### What it looks like in a project
+
+- Code that relies on defaults: a time zone, an environment read, a falsy check, a number type
+  ([GitHub](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong)).
+- Paired operations (open and close, subscribe and unsubscribe) where a port may carry one side
+  only ([GitHub](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong)).
+- Each item of the [pitfalls](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/pitfalls.md) list for this kind of move, found in the scope by a
+  search you can name (ours).
+- A direct dependency whose target replacement is unmaintained or behaves differently (SEC-7).
+
+### Questions to ask of this project
+
+- Which items of the pitfalls list for this move appear in the scope, and by which search?
+- Which direct dependencies have a stable equivalent in the target, and which are archived?
+- Which orders (schema, writers, backfill) must hold across the switch, and who sets them?
+
+### Trade-offs
+
+- A written list of look-alike constructs helps reviewers and agents, and takes a person who knows
+  both stacks to write (REV-3).
+- Testing every shipped platform catches runtime defaults and multiplies the test matrix (OPS-4).
+
+### When not to apply it
+
+- A pitfalls item marked "(ours)" has no case behind it: search for it, and weigh what you find as
+  the maintainer's inference (ours).
+- A move within one runtime (a library upgrade) keeps most runtime defaults; the release notes
+  between the two versions are the better list there (ours).
+
+## Q8 guide: Is the code uniform enough for one prompt, and what context goes with it?
+
+For question 8 of the [checklist](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/checklist.md): read it before writing up a finding on that
+question. It walks through what the cases show; the project's owner decides. Each point names its
+evidence: a lesson ID (its strength, its cases and the cases against it are in
+[lessons/evidence.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/evidence.md); its page links the case sections) or a case link.
+"(ours)" marks the maintainer's reading, evidence level `ours`; so does a lesson tagged `[ours]` there,
+which is our inference from its cases.
+
+### Lessons behind it
+
+- [CTX-1](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/context.md): the right context moved results more than prompt wording.
+- [CTX-2](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/context.md): runtime facts a person would look at, such as a test's rendered
+  output.
+- [CTX-3](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/context.md): field and API mappings written out and checked by a person.
+- [CTX-5](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/context.md): one change per prompt.
+- [CTX-9](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/context.md): with a small context budget, context chosen by fixed rules.
+- [CTX-10](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/context.md): docs and agent guidance that favour the old code steer agents
+  back to it.
+- [CTX-11](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/context.md): units small enough to read whole.
+- [CTX-12](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/context.md), [CTX-13](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/context.md): notes on why old code exists;
+  rules kept beside the code they govern.
+- [TOL-2](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/tooling.md), [TOL-7](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/tooling.md), [TOL-9](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/tooling.md): a
+  rule-based codemod or template first, the model after.
+- [AGF-8](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/agent-failures.md): one poorly supported language fell back to people.
+- [PLN-8](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/planning.md), [PLN-12](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/planning.md): segments that cannot be
+  specified left out; archetypes each with its own prompt.
+
+Cases, in our words: Spotify dropped a framework too varied for one prompt; mapping tables fixed
+wrong field mappings. Airbnb's choice of related files mattered more than wording; Slack gave the
+model a codemod's partial output and each test's rendered output. Google's model handled Dart
+poorly, so people did it; Uber's recipes did a move its AI attempt failed. Bloomberg gave each
+kind of target its own prompt; stale docs misled Asana's agents; Pokémon split files the agent
+would not open.
+
+### What it looks like in a project
+
+- Several kinds of code in scope (pure logic, concurrency, OS layer, UI, data pipelines), each
+  needing its own prompt and examples (PLN-12).
+- Renamed fields or APIs with no written mapping, which a model maps by name and gets wrong
+  ([Zalando](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-02-20-zalando-ui-component-libraries.md#what-went-wrong), CTX-3).
+- Files too long for the model to read whole ([Pokémon](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-01-25-vjeux-pokemon-showdown-rust.md#what-went-wrong)).
+- Docs or agent instructions that still recommend the old library ([Asana](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-08-07-asana-enzyme-to-rtl.md#what-went-wrong)).
+
+### Questions to ask of this project
+
+- Into which groups does the code fall, by kind, framework, build system and style?
+- For each group, what context would an agent get: source, neighbours' tests, examples, mappings,
+  runtime facts?
+- What can a rule-based codemod do first?
+- How does the model do on the hardest files of each language in scope?
+- Which docs or instructions still point at the old stack?
+
+### Trade-offs
+
+- A codemod first anchors the model and costs rules that grow on long-tail patterns (TOL-2,
+  TOL-4).
+- A prompt per group gives better results and more prompts to maintain (PLN-12).
+- Deferring a varied group or doing it by hand keeps the pipeline simple and leaves part of the
+  move undone (PLN-8).
+
+### When not to apply it
+
+- Lessons about what models handle well or badly age fast: see whether
+  [lessons/index.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/index.md) marks AGF-8 or TOL-2 "may be outdated", and pilot on the
+  model you will use (AGF-8).
+- A small, uniform scope needs no grouping; the context list still applies (ours).
+
+## Q9 guide: How will you work the long tail, stop, and learn from failures?
+
+For question 9 of the [checklist](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/checklist.md): read it before writing up a finding on that
+question. It walks through what the cases show; the project's owner decides. Each point names its
+evidence: a lesson ID (its strength, its cases and the cases against it are in
+[lessons/evidence.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/evidence.md); its page links the case sections) or a case link.
+"(ours)" marks the maintainer's reading, evidence level `ours`; so does a lesson tagged `[ours]` there,
+which is our inference from its cases.
+
+### Lessons behind it
+
+- [VER-3](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/verification.md): a failed unit retried with its latest errors in a fresh
+  prompt, a bounded number of times, then handed to people; it fits independent units.
+- [KNW-1](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/knowledge.md): when a failure recurs, what generates the code is fixed, not
+  only the output; the second time is the trigger.
+- [KNW-2](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/knowledge.md): each unit stamped with its status, the largest failing group
+  tuned on a sample, then everything swept again.
+- [KNW-4](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/knowledge.md), [KNW-5](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/knowledge.md): the method kept in files a
+  fresh session rereads; temporary migration code marked when written.
+- [OVS-3](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/oversight.md): where automation hands over to people decided up front.
+- [OVS-5](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/oversight.md): small waves with a person's approval between them.
+- [CTX-7](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/context.md): the agent asked after each session what its prompt lacked.
+- [AGF-7](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/agent-failures.md): output varies between runs on the same input.
+- [OPS-6](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/operations.md): bulk jobs in scheduled batches, results sorted by status,
+  only the stuck ones rerun.
+- [ROL-8](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/rollout.md): a unit that fails its tests sent back to the old framework.
+- [TST-11](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/testing.md): a golden set rerun after each prompt change.
+
+Cases, in our words: Airbnb stamped each file with its status, swept again after each fix and
+finished the last files by hand; Intel capped retries. GitHub turned repeated failures into
+instructions, skills and evals; Spotify asks the agent what its prompt lacked; Zalando reran a
+golden set after each prompt change. Uber put files whose tests failed back on the old framework.
+ts-rust's first attempt stalled for months, no stop rule stated; Spartacus now stops for a person
+after each wave.
+
+### What it looks like in a project
+
+- A plan that retries every failing unit until it passes, with no bound and no hand-over
+  ([Airbnb](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-01-airbnb-enzyme-to-rtl.md#what-worked), [ts-rust](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-10-07-ping-tsgo-to-rust.md#what-went-wrong)).
+- Units that depend on each other, where a failure downstream often comes from a wrong unit
+  upstream (VER-3's "Against").
+- The same failure fixed by hand in many outputs, with no change to the prompt or tool that made it
+  (KNW-1).
+- No status per unit, so a rerun redoes what already passed (KNW-2).
+
+### Questions to ask of this project
+
+- Which units are independent, and which depend on others?
+- Where is each unit's status kept, and can a failing unit be rerun from the step that failed?
+- After how many attempts, or what signal, does a unit go to a person?
+- Where does a failure seen twice become an instruction, a skill or an eval?
+- What is the rule for stopping the automation as a whole?
+
+### Trade-offs
+
+- A bound on retries saves attempts on units that will not pass and sends some units to people
+  that one more try would have fixed (VER-3; rows P6 and P9 of the checklist's Provenance table).
+- Fixing the prompt or tool after a repeated failure costs a rerun of everything it made, and
+  saves fixing each output by hand (KNW-1).
+- Waves with a person's approval between them contain a systematic mistake and slow the run
+  (OVS-5).
+
+### When not to apply it
+
+- A count of attempts suits small independent units such as files; for units in a chain, fixing
+  the workflow and rerunning from the first wrong unit fits better (VER-3, row P6).
+- Airbnb's numbers come from test files of simple and medium difficulty; they say nothing about
+  packages or services (VER-3; row P9 of the checklist's Provenance table).
+
+## Q10 guide: What may the agent decide and reach alone, and who reviews?
+
+For question 10 of the [checklist](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/checklist.md): read it before writing up a finding on that
+question. It walks through what the cases show; the project's owner decides. Each point names its
+evidence: a lesson ID (its strength, its cases and the cases against it are in
+[lessons/evidence.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/evidence.md); its page links the case sections) or a case link.
+"(ours)" marks the maintainer's reading, evidence level `ours`; so does a lesson tagged `[ours]` there,
+which is our inference from its cases.
+
+### Lessons behind it
+
+- [OVS-1](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/oversight.md): edits to tests, snapshots, baselines and waiver labels need an
+  owner's approval separate from the agent.
+- [OVS-2](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/oversight.md): the final merge kept with a person who checks how the agent
+  answered CI and review.
+- [AGF-1](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/agent-failures.md), [AGF-5](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/agent-failures.md),
+  [AGF-9](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/agent-failures.md): agents stubbed functions, used escape hatches and avoided
+  the hard part.
+- [SEC-1](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/security.md), [SEC-2](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/security.md),
+  [SEC-3](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/security.md): a minimal sandbox; whatever the harness exposes may get used;
+  destructive commands blocked in the tool layer.
+- [REV-1](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/review.md), [REV-2](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/review.md): reviewers in fresh contexts other
+  than the writer; people on architecture and flagged risk.
+- [REV-9](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/review.md), [REV-11](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/review.md): review by the owning teams became
+  the bottleneck; reviewers who know the target platform.
+- [TEM-4](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/team.md), [TEM-6](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/team.md): review in two tiers; the people doing
+  it get drained.
+- [ROL-9](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/rollout.md): unrequested changes mostly sat undecided.
+
+Cases, in our words: a GitHub agent applied a waiver label to pass a failing check, and a session
+merged a peer's worktree unasked; Spotify's agents switched off unreliable tests; Bun's agents
+stubbed functions until reviewer agents, seeing only the diff, rejected that; 1Password's agents
+repeated ordering mistakes after being told. Most of Bloomberg's unrequested pull requests got no
+decision from their owners; Shopify needed reviewers who knew the target platform.
+
+### What it looks like in a project
+
+- Guardrails an agent can switch off: a waiver label, a flag that skips a check, write access to
+  snapshots ([GitHub](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong), AGF-5).
+- A rule written in agent instructions with nothing in CI or the tool layer enforcing it (SEC-3).
+- Changes landing in other teams' code that did not ask for the move ([Bloomberg](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-11-03-bloomberg-python-cpp-uplift.md#what-went-wrong)).
+- One reviewer, who does not read the target language, with a few hours a week (REV-9, REV-11).
+
+### Questions to ask of this project
+
+- Which guardrails could an agent switch off, and who must approve each?
+- Which steps stay with people (schema changes, backfills, deploy order)?
+- Which tools, skills and credentials can agent sessions reach?
+- Which written rules does nothing enforce?
+- Who reviews, do they read the target language, and how many hours a week do they have?
+
+### Trade-offs
+
+- Enforcing a rule in CI or the tool layer holds where an instruction did not, and costs setup and
+  some false blocks (SEC-3).
+- Reviewer agents in fresh contexts catch stubs and drift cheaply; their miss rate is unmeasured,
+  so keeping the merge with a person is one option (REV-1, REV-5, OVS-2).
+- Sending changes to other teams spreads the review load and leaves many changes undecided
+  (ROL-9, TEM-4).
+
+### When not to apply it
+
+- A solo project where the owner is the only reviewer has no team to spread the load to; the
+  hours a week still bound how fast agents' changes can land (ours).
+- A sandboxed agent with no credentials needs fewer guardrails on what it can reach, not on what
+  counts as correct (SEC-1, OVS-1).
+
+## Q11 guide: How will changes reach users?
+
+For question 11 of the [checklist](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/checklist.md): read it before writing up a finding on that
+question. It walks through what the cases show; the project's owner decides. Each point names its
+evidence: a lesson ID (its strength, its cases and the cases against it are in
+[lessons/evidence.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/evidence.md); its page links the case sections) or a case link.
+"(ours)" marks the maintainer's reading, evidence level `ours`; so does a lesson tagged `[ours]` there,
+which is our inference from its cases.
+
+### Lessons behind it
+
+- [ROL-2](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/rollout.md): merged and released as separate gates; a canary or pre-release
+  first.
+- [ROL-3](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/rollout.md): slow production rollouts watched by owners; the pipeline speeds
+  the code, not this step.
+- [ROL-5](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/rollout.md): short-lived agent branches against a busy main branch.
+- [ROL-7](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/rollout.md): a new failure boundary shipped as an opt-in mode beside the old
+  default.
+- [ROL-10](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/rollout.md): shadow comparison aimed at the largest and oddest inputs, with
+  mismatches labelled.
+- [ROL-11](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/rollout.md): cut over in order of how costly a mistake is to undo,
+  read-only paths first.
+- [VER-1](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/verification.md): a green build shows the parts fit, not that behaviour
+  survived.
+- [OPS-5](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/operations.md), [OPS-8](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/operations.md): hardening after merge;
+  headroom of shared services under double load.
+
+Cases, in our words: GitHub aimed to ship each port to a pre-release first, yet some regressions
+reached stable; Bun's merged build stayed a canary while regressions were fixed; Google rolled its
+largest migrations out slowly, owners watching. Temporal compared every query and cut over
+read-only paths first; GitLab ramped to full traffic past a divergence its shadow run flagged but
+did not label. A rollback path per unit is ours.
+
+### What it looks like in a project
+
+- Release channels (pre-release, flags, canary) and the share of users each reaches
+  ([GitHub](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#what-went-wrong), ROL-2).
+- A shadow run whose mismatches are counted but not labelled by kind ([GitLab](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-gitlab-rate-limiting.md#what-went-wrong)).
+- One unit's change that cannot be rolled back without rolling back the rest (ours).
+- A single-user or internal tool, where a release is a merge and a rollback is a revert (ours).
+
+### Questions to ask of this project
+
+- Which channels exist before stable, and who uses them?
+- How are problems reported and watched after a release?
+- How is one unit's change rolled back?
+- Which paths are read-only and could go first?
+- Not released yet: what must exist before the first release?
+
+### Trade-offs
+
+- A canary catches regressions before most users meet them and slows each release (ROL-2).
+- A shadow run on real traffic finds divergences tests miss, at the cost of running both paths and
+  of the shared services' headroom (ROL-10, OPS-8).
+
+### When not to apply it
+
+- A project not released yet has no channels to measure; the finding is what must exist before the
+  first release (ours).
+- A tool only its author runs gains little from staged rollout; a quick revert is its rollback
+  (ours).
+
+## Q12 guide: How will you measure cost and result?
+
+For question 12 of the [checklist](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/checklist.md): read it before writing up a finding on that
+question. It walks through what the cases show; the project's owner decides. Each point names its
+evidence: a lesson ID (its strength, its cases and the cases against it are in
+[lessons/evidence.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/evidence.md); its page links the case sections) or a case link.
+"(ours)" marks the maintainer's reading, evidence level `ours`; so does a lesson tagged `[ours]` there,
+which is our inference from its cases.
+
+### Lessons behind it
+
+- [CST-1](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/cost.md): long runs stayed affordable only with high prompt-cache reuse.
+- [CST-2](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/cost.md), [CST-6](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/cost.md), [CST-7](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/cost.md): the full
+  bill, the work after merge, and review agents as a multiple of generation.
+- [MSR-1](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/measurement.md), [MSR-2](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/measurement.md): savings against a
+  manual effort that never ran are self-estimates; every rate needs its base.
+- [MSR-4](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/measurement.md), [MSR-5](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/measurement.md): gains separated from
+  other work in the same window; known regressions published as a floor.
+- [MSR-9](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/measurement.md), [MSR-10](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/measurement.md): people's share measured
+  from day one; owners who rejected a change and migrated anyway counted.
+- [TST-9](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/testing.md): performance treated as part of the contract.
+- [KNW-3](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/lessons/knowledge.md): structured session logs from the start.
+
+Cases, in our words: GitHub benchmarked before and after (amid other changes) and gave its token
+bill; Bun and ts-rust priced tokens at list rates (ts-rust's restart used flat-rate plans); Bun
+counted regressions after merge; Google measured shares as edit distance. Every effort or saving
+figure is the team's own estimate. Bloomberg also counted undecided pull requests, and owners'
+migrations that reused rejected ones. Recording reverts is ours.
+
+### What it looks like in a project
+
+- A manual estimate with no record of how it was made, so no saving can be measured against it
+  (MSR-1).
+- No baseline of the number the product exists for (speed, latency, memory, quality) on fixed
+  hardware before the port ([GitHub](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md#numbers), TST-9).
+- Token spend known only from the bill, not per run or per unit (CST-1, KNW-3).
+
+### Questions to ask of this project
+
+- What is the manual estimate, and how was it made?
+- What number does the product exist for, and is it measured on fixed hardware today?
+- Where will tokens or spend, people's hours, pull requests, regressions after merge and reverts be
+  recorded?
+- Which figures will be measured, and which estimated?
+
+### Trade-offs
+
+- Logging tokens and hours from the start costs a little setup; in one case such logs later
+  answered where the time went, and a bill rebuilt afterwards rests on estimates (KNW-3, MSR-9).
+- A benchmark amid other changes credits the move with gains it did not make; separating them costs
+  extra runs (MSR-4).
+
+### When not to apply it
+
+- A small personal move needs no cost study; the result number and the regressions still tell
+  whether it was worth it (ours).
+- Published costs from other cases rarely transfer: different models, prices and units (CST-4,
+  CST-5).
 
 ## Report and record formats
 
 The two routes report and record alike. A migration review follows the
 [checklist](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/checklist.md); an AI lessons review follows [applying the lessons](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/applying-lessons.md).
-Both write a report, wait for the owner's choice, then keep a record in the measured project.
+Both write a report, wait for the owner's choice, then keep a record in the measured project. The
+report gives findings and options; the owner decides. Each option carries its trade-off, and the
+agent's own reading, when it gives one, is labelled as such.
 
 ### Migration review report
 
@@ -1012,10 +1770,10 @@ Both write a report, wait for the owner's choice, then keep a record in the meas
 # Before-you-migrate review: <repository>, <YYYY-MM-DD>
 
 Migration: <from> to <to>. Scope measured: <lines and files by kind, units, change rate>.
-Go / no-go: go | go after the blockers | no-go — <one line why>.
+Bearing on going ahead: <the findings that bear on it, and the decision the owner faces, as the agent's reading>. The decision is the owner's.
 
-## Blockers
-- Q<n>: <what must happen first, and who decides>.
+## Weigh first
+- Q<n>: <a finding the rest depend on (a project rule against the move, no oracle, no baseline), and who decides>.
 
 ## Not run
 - Q<n>: `<exact command>` — <why it was not run>.
@@ -1023,27 +1781,32 @@ Go / no-go: go | go after the blockers | no-go — <one line why>.
 ## Ask the owner
 - Q<n>: <question>. Default: <assumed if unanswered>.
 
-## No gap
+## Nothing missing
 - Q<n> <question>: <measurement>.
 
 ## Not applicable yet
 - Q<n> <question>: <why, and what must exist first>.
 
-## Proposals
+## Findings and options
 
-<After a no-go on Q1, replace this section with "Other gaps": one line per gap.>
+<If the owner may stop at Q1, give the other findings one line each under "Other findings" instead.>
 
-1. Q<n> <question> — gap | partial gap.
+1. Q<n> <question>: <the finding in a line>.
    Today: <what the repository does, with the measurement>.
-   Change: <the proposal>.
-   Evidence: Q<n>, its lesson IDs, and links to case sections you read.
-   Depends on: <proposal numbers, or none>.
-   Cost: S | M | L (S under a day of agent work, M a few days, L a week or more).
-   Recommendation: do | later | skip (one word), with a one-line reason.
-   Check now: <command or count that passes once applied>.
+   Guide: <the lesson IDs and the case sections you read; "(ours)" where the collection marks the maintainer's reading, "agent's reading" on yours>.
+   Options (the owner chooses; leaving it as it is may be one):
+   - 1A: <change>. Trade-off: <what it costs, risks or gives up>. Cost: S | M | L.
+   - 1B: <another change, or "leave as it is">. Trade-off: <...>. Cost: S | M | L.
+   When not to apply: <the guide's points that fit this project, or "none fit">.
+   Depends on: <finding numbers, or none>.
+   Agent's reading: <the option the measurements favour, and why; or "no lean">.
+   Check now: <for each option, a command or count that passes once it is applied>.
    Event that proves it: <what later work must show>.
+   Owner's choice: <left blank for the owner: do 1A | do 1B | later | skip>.
 2. ...
 ```
+
+Cost: S under a day of agent work, M a few days, L a week or more.
 
 ### AI lessons review report
 
@@ -1063,17 +1826,19 @@ Work measured: <what agents do here: sessions, tasks, reviews, tests, releases>.
 ## Ask the owner
 - <lesson ID>: <question>. Default if unanswered: <what you will assume>.
 
-## Proposals
+## Findings and options
 
-1. <lesson ID> <the lesson in a few words>.
+1. <lesson ID> <the lesson in a few words>: <the finding in a line>.
    Today: <what the project does, with the measurement>.
-   Change: <the proposal>.
-   Evidence: the lesson's strength, its "Against" line, and links to case sections you read.
-   Depends on: <proposal numbers, or none>.
-   Cost: S | M | L (S under a day of agent work, M a few days, L a week or more).
-   Recommendation: do | later | skip (one word), with a one-line reason.
-   Check now: <a command or count that passes once the change is applied>.
+   Evidence: the lesson's strength, its "Against" line, and links to case sections you read; "agent's reading" on your own.
+   Options (the owner chooses; leaving it as it is may be one):
+   - 1A: <change>. Trade-off: <what it costs, risks or gives up>. Cost: S | M | L.
+   - 1B: <another change, or "leave as it is">. Trade-off: <...>. Cost: S | M | L.
+   Depends on: <finding numbers, or none>.
+   Agent's reading: <the option the measurements favour, and why; or "no lean">.
+   Check now: <for each option, a command or count that passes once it is applied>.
    Event that proves it: <what later work must show for the change to have held>.
+   Owner's choice: <left blank for the owner: do 1A | do 1B | later | skip>.
 2. ...
 ```
 
@@ -1088,10 +1853,11 @@ column differ:
 
 Checklist: <ai-migrations commit or date>. Migration: <from> to <to>.
 Log entry: <date and title of the newest log.md entry this review covered>.
+Corrections checked: <COR IDs with what was found, or "none listed">, <YYYY-MM-DD>.
 
 | # | Question | Proposal | Baseline | Status | Owner | Check by | Event that shows it | Date |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Q<n> | <one line> | <how often, evidence> | <status> | <who looks for the event> | <YYYY-MM-DD> | <commit, test run or number> | <YYYY-MM-DD> |
+| 1 | Q<n> | <the option the owner chose, in one line> | <how often, evidence> | <status> | <who looks for the event> | <YYYY-MM-DD> | <commit, test run or number> | <YYYY-MM-DD> |
 ```
 
 ```markdown
@@ -1099,23 +1865,29 @@ Log entry: <date and title of the newest log.md entry this review covered>.
 
 Lessons: <ai-migrations commit or date>.
 Log entry: <date and title of the newest log.md entry this review covered>.
+Corrections checked: <COR IDs with what was found, or "none listed">, <YYYY-MM-DD>.
 
 | # | Lesson | Proposal | Baseline | Status | Owner | Check by | Event that shows it | Date |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | <ID> | <one line> | <how often, evidence> | <status> | <who looks for the event> | <YYYY-MM-DD> | <commit, test run, count or incident> | <YYYY-MM-DD> |
+| 1 | <ID> | <the option the owner chose, in one line> | <how often, evidence> | <status> | <who looks for the event> | <YYYY-MM-DD> | <commit, test run, count or incident> | <YYYY-MM-DD> |
 | 3a | <ID> | <one part of a bundled proposal> | ... | ... | ... | ... | ... | ... |
 ```
 
-One status per row: a proposal with parts gets a row per part (3a, 3b...), each with its own status
-and event. Assumed owner answers go under the table, one line each: "Assumed: <question> —
-<default>, <date>".
+Proposal: the option the owner chose ("1A"), with what it changes; a finding put off or declined
+keeps its finding in that cell. One status per row: a proposal with parts gets a row per part (3a,
+3b...), each with its own status and event. Assumed owner answers go under the table, one line each:
+"Assumed: <question> — <default>, <date>".
+
+Corrections checked: the [corrections.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/corrections.md) entries the last review or revisit
+compared with this project, with what it found and the date; a first review writes "none listed"
+when the file has no entry.
 
 Baseline: written before any change, how often the proposal's problem happened so far, with the
 evidence (a count from the history, logs or incidents), marked "(recorded)" when it comes from notes
 rather than a fresh count; a revisit compares the work since with it.
 
-Status, one of: open, proven, waiting for first use, stopped holding, skipped. A proposal marked
-"later" is open; one the owner declined is skipped; an applied change whose check failed stays
+Status, one of: open, proven, waiting for first use, stopped holding, skipped. A proposal the owner
+marked "later" is open; one the owner declined is skipped; an applied change whose check failed stays
 open, and its event names the failed check. A "do" that waits on an owner action, or on work outside
 this session, stays open, and its event says what it waits on. An applied change whose "Check now"
 passes is waiting for first use; once later work shows its "Event that proves it", it is proven.
@@ -1124,7 +1896,8 @@ Owner and Check by: every row waiting for first use names who looks for its even
 which the event should have shown if the change holds (when the work that would show it is
 expected; the owner of the project sets or changes it). Other rows may leave both "—". A revisit
 lists first the rows waiting for first use whose Check by date has passed, with their owner, then
-the rest. A record written before these columns existed gets them at its next revisit.
+the rest. A record written before these columns existed gets them at its next revisit, and a
+record without a "Corrections checked:" line gets one.
 
 ## Pitfalls by kind of move
 
@@ -1300,4 +2073,17 @@ where a case is linked):
 - Not a language difference but an agent failure that looks like one: functions left as stubs, or
   missing, behind a clean build; compiler feedback alone lets them through. [Intel](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-08-24-intel-ideas-c-to-rust.md), [Bun](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md)
 
+[Intel]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-08-24-intel-ideas-c-to-rust.md
+[Google]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-04-13-google-int64-ids.md
+[1Password]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-20-1password-monolith-refactor.md
+[Slack]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2024-05-22-slack-enzyme-to-rtl.md
+[Uber]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-07-uber-junit4-to-junit5.md
+[Zalando]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-02-20-zalando-ui-component-libraries.md
+[Shopify]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-10-shopify-react-native-to-native.md
+[Bloomberg]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-11-03-bloomberg-python-cpp-uplift.md
+[Asana]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-08-07-asana-enzyme-to-rtl.md
+[Pokémon]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-01-25-vjeux-pokemon-showdown-rust.md
+[Spartacus]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-13-lutz-leonhardt-spartacus-signal-forms.md
+[PagerDuty]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-04-13-pagerduty-rundeck-grails-7.md
 [Datadog]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-06-23-datadog-foundationdb-to-postgres.md
+[Temporal]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-02-temporal-billing-store-clickhouse.md

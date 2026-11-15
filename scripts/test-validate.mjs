@@ -9,7 +9,8 @@ import { ROOT, parseCase, expectedEra, eraText, LOG, logEntries, modelFamily } f
 
 const TMP = join(ROOT, '.test-tmp');
 const PARTS = ['scripts', 'cases', 'lessons', 'checklist.md', 'pitfalls.md', 'NOTICE.md', 'index.md', 'llms.txt', 'llms-full.txt',
-  'README.md', 'CONTRIBUTING.md', 'docs', 'changes', 'LICENSE-CONTENT.md', '.github', 'lychee.toml', 'log.md', 'AGENTS.md'];
+  'README.md', 'CONTRIBUTING.md', 'docs', 'changes', 'LICENSE-CONTENT.md', '.github', 'lychee.toml', 'log.md', 'AGENTS.md',
+  'guide', 'corrections.md'];
 const ONEPW = '2026-04-20-1password-monolith-refactor.md';
 const INTEL = '2026-08-24-intel-ideas-c-to-rust.md';
 const BUN = '2026-07-08-bun-zig-to-rust.md';
@@ -99,7 +100,7 @@ test('checklist question with no lesson fails', 1,
 test('checklist citing an unknown lesson fails', 1,
   d => edit(join(d, 'checklist.md'), 'Lessons: PLN-7, PLN-8,', 'Lessons: PLN-7, PLN-99,'), null, 'cites lesson PLN-99, which no lesson page holds');
 test('a model name outside "Lessons:" is not a lesson ID', 0,
-  d => edit(join(d, 'checklist.md'), 'The rest is ours.\n', 'The rest is ours; GPT-5 is a model name.\n'));
+  d => edit(join(d, 'checklist.md'), 'as numbers where possible.\n', 'as numbers where possible; GPT-5 is a model name.\n'));
 test('a model name on a line after "Lessons:" is not a lesson ID', 0,
   d => edit(join(d, 'checklist.md'), '   Lessons: PLN-7, PLN-8, PLN-9, SEC-7.\n', '   Lessons: PLN-7, PLN-8, PLN-9, SEC-7.\n   Note: GPT-5 and SHA-256 are not lessons.\n'));
 
@@ -517,14 +518,92 @@ test('a cut rule in docs/applying-lessons.md without a marker fails', 1,
   d => edit(AL(d), 'shelved rewrites) (P2).', 'shelved rewrites).'), null, 'docs/applying-lessons.md: line');
 test('a hard rule in a file with no Provenance table fails', 1,
   d => appendFileSync(join(d, 'docs', 'report-formats.md'), '\nNever reopen a skipped row.\n'), null, 'docs/report-formats.md: line');
-test('a question that names stopping is not a rule', 0,
-  d => edit(CL(d), '9. **How will you work the long tail, stop, and learn from failures?**', '9. **How will you work the long tail, and when do you stop?**'));
+test('a question that names stopping is not a rule', 0, d => {
+  edit(CL(d), '9. **How will you work the long tail, stop, and learn from failures?**', '9. **How will you work the long tail, and when do you stop?**');
+  edit(join(d, 'guide', 'q9.md'), '# Q9 guide: How will you work the long tail, stop, and learn from failures?', '# Q9 guide: How will you work the long tail, and when do you stop?');
+});
 test('a size cap without its row in "Size caps" fails', 1,
   d => edit(join(d, 'docs', 'maintaining.md'), '| `AGENTS_MAX_BYTES`', '| `AGENTS_BYTES`'), null, '"Size caps" has no row for AGENTS_MAX_BYTES');
 test('a size cap row without its blind failure fails', 1,
   d => edit(join(d, 'docs', 'maintaining.md'), '| cutting a how-to-use line an agent needs |', '| |'), null, 'LLMS_MAX_BYTES: "Blind failure" is empty');
 test('a record table without Owner and Check by fails', 1,
   d => edit(join(d, 'docs', 'report-formats.md'), '| # | Lesson | Proposal | Baseline | Status | Owner | Check by |', '| # | Lesson | Proposal | Baseline | Status |'), null, 'needs "| Status | Owner | Check by |"');
+
+test('a record template without "Corrections checked:" fails', 1,
+  d => edit(join(d, 'docs', 'report-formats.md'), 'Lessons: <ai-migrations commit or date>.\nLog entry: <date and title of the newest log.md entry this review covered>.\nCorrections checked:',
+    'Lessons: <ai-migrations commit or date>.\nLog entry: <date and title of the newest log.md entry this review covered>.\nChecked:'), null, 'needs a "Corrections checked: " line');
+
+// The checklist's guide (docs/lesson-rules.md "Checklist"): one broken copy per rule.
+const G = (d, n) => join(d, 'guide', `q${n}.md`);
+test('a question without its "Guide:" line fails', 1,
+  d => edit(join(d, 'checklist.md'), '   Guide: [guide/q1.md](guide/q1.md).\n', ''), null, 'needs a "Guide: [guide/q1.md](guide/q1.md)." line');
+test('a question linking another question\'s guide fails', 1,
+  d => edit(join(d, 'checklist.md'), '   Guide: [guide/q1.md](guide/q1.md).\n', '   Guide: [guide/q2.md](guide/q2.md).\n'), null, 'needs a "Guide: [guide/q1.md]');
+test('a missing guide file fails', 1, d => rmSync(G(d, 3)), null, 'guide/q3.md: missing');
+test('a guide no question has fails', 1, d => writeFileSync(join(d, 'guide', 'q13.md'), '# Q13 guide: none\n'), null, 'no checklist question has this guide');
+test('a guide whose title is not its question fails', 1,
+  d => edit(G(d, 1), '# Q1 guide: Is the move allowed, possible and worth it?', '# Q1 guide: Is the move worth it?'), null, 'the first line must be "# Q1 guide:');
+test('a guide missing a part fails', 1,
+  d => edit(G(d, 1), '## Trade-offs\n', '## Costs\n'), null, 'needs the parts');
+test('a guide with its parts out of order fails', 1, d => {
+  const p = G(d, 2), t = readFileSync(p, 'utf8').replace(/\r\n/g, '\n');
+  const a = t.indexOf('## Trade-offs'), b = t.indexOf('## When not to apply it'), c = t.search(/\n\[[a-z]+\]: /);
+  writeFileSync(p, t.slice(0, a) + t.slice(b, c) + '\n' + t.slice(a, b) + t.slice(c));
+}, null, 'in that order');
+test('a guide that leaves out a lesson its question cites fails', 1,
+  d => edit(G(d, 1), '- [SEC-7](../lessons/security.md): each library', '- SEC-7: each library'), null, '"Lessons behind it" must name SEC-7');
+test('a guide linking a lesson to the wrong page fails', 1,
+  d => edit(G(d, 1), '[SEC-7](../lessons/security.md)', '[SEC-7](../lessons/planning.md)'), null, 'SEC-7 must link to ../lessons/security.md');
+test('a guide bullet with no evidence fails', 1,
+  d => edit(G(d, 1), '  (ours).\n- When the owner', '  for now.\n- When the owner'), null, 'names no evidence');
+test('a statement among a guide\'s questions fails', 1,
+  d => edit(G(d, 1), '- Who maintains the result, and do they read the target language?', '- Find who maintains the result.'), null, 'is not a question');
+test('a hard rule in a guide without a marker fails', 1,
+  d => edit(G(d, 4), '- A static analyzer lists every site', '- Never trust text search. A static analyzer lists every site'), null, 'guide/q4.md: line');
+test('a hard rule in a guide may carry a checklist marker', 0,
+  d => edit(G(d, 4), '- A static analyzer lists every site', '- Never trust text search alone (P3). A static analyzer lists every site'));
+test('a guide marker with no row in the checklist fails', 1,
+  d => edit(G(d, 4), '- A static analyzer lists every site', '- Never trust text search alone (P99). A static analyzer lists every site'), null, 'marker (P99) has no row');
+test('a guide link to a missing case section fails', 1,
+  d => edit(G(d, 4), 'google-int64-ids.md#what-went-wrong', 'google-int64-ids.md#no-such-section'), null, 'guide/q4.md: broken link');
+
+// corrections.md (docs/maintaining.md "Corrections"): one broken copy per rule.
+const COR = d => join(d, 'corrections.md');
+const ENTRY = ['### COR-1: a size cap read as measured', '',
+  '- **What was wrong:** a cap of ours read as a measured limit.',
+  '- **Published:** 2026-11-13 to 2026-11-15 (releases 2026.11 and 2026.11.1).',
+  '- **How to recognise it:** the record names the cap; a check fails on a file\'s size.',
+  '- **How to find what it changed:** the record first, then the git history of each file the cap trimmed.',
+  '- **What to propose:** restore the lines that left, or keep the trim; the project\'s owner decides.'].join('\n');
+const withEntry = (d, entry = ENTRY) => edit(COR(d), '## Entries\n\nNone yet.\n', `## Entries\n\n${entry}\n`);
+test('corrections.md with "None yet." passes', 0, () => {});
+test('corrections.md with a full entry passes', 0, d => withEntry(d));
+test('a missing corrections.md fails', 1, d => rmSync(COR(d)), null, 'corrections.md: missing');
+test('corrections.md without "## Entries" fails', 1, d => edit(COR(d), '## Entries\n', '## List\n'), null, 'needs a "## Entries" section');
+test('corrections.md with an empty "## Entries" fails', 1, d => edit(COR(d), '\nNone yet.\n', '\n'), null, 'holds neither "None yet."');
+for (const field of ['What was wrong', 'Published', 'How to recognise it', 'How to find what it changed', 'What to propose']) {
+  test(`a correction without "${field}" fails`, 1,
+    d => withEntry(d, ENTRY.split('\n').filter(l => !l.startsWith(`- **${field}:**`)).join('\n')), null, `COR-1 needs "- **${field}:**" filled`);
+}
+test('a correction numbered out of order fails', 1, d => withEntry(d, ENTRY.replace('COR-1:', 'COR-2:')), null, 'COR-2 out of order');
+test('a correction whose "Published" names no span fails', 1,
+  d => withEntry(d, ENTRY.replace('2026-11-13 to 2026-11-15 (releases 2026.11 and 2026.11.1)', 'last week')), null, '"Published" needs the first and last date');
+test('a correction that does not leave the choice to the owner fails', 1,
+  d => withEntry(d, ENTRY.replace("; the project's owner decides", '')), null, 'must say the project\'s owner decides');
+test('a correction entry builds the rerun notice into llms.txt and README', 0, d => {
+  withEntry(d);
+  const r = node(d, 'build.mjs', []);
+  if (r.status !== 0) throw new Error(`build failed: ${r.stderr}`);
+  for (const f of ['llms.txt', 'README.md']) {
+    if (!readFileSync(join(d, f), 'utf8').includes('Corrections published: COR-1 (a size cap read as measured; published 2026-11-13 to 2026-11-15'))
+      throw new Error(`${f} lacks the rerun notice`);
+  }
+  return ['--check'];
+}, null, null, 'build.mjs');
+test('without a correction entry README carries no rerun notice', 0, d => {
+  if (readFileSync(join(d, 'README.md'), 'utf8').includes('Corrections published:')) throw new Error('README names a correction');
+  return ['--check'];
+}, null, null, 'build.mjs');
 
 // pitfalls.md: relative links resolve.
 test('pitfalls broken link fails', 1,

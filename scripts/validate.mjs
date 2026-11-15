@@ -12,7 +12,7 @@ import {
   parseCase, listCases, sections, refDefs, linksIn, anchor, practices, closestPractices,
   LESSONS_DIR, LESSON_PAGES, LESSON_MAX_BYTES, INDEX_MAX_BYTES, LLMS_MAX_BYTES, LESSON_NOTE, LESSON_LEGEND, KARPATHY_IDEAS, ORACLES, MODEL_DEPENDENCE, STRENGTHS, META_LINE, parseLessonPage, strengthCeiling, lessonMeta,
   casesOf, expectedEra, eraText, parseEra, LOG, CHANGES_DIR, logEntries, parseChanges,
-  PROVENANCE_FILES, PROVENANCE_LEVELS, PROVENANCE_HEADER, HARD_RULE,
+  PROVENANCE_FILES, PROVENANCE_LEVELS, PROVENANCE_HEADER, HARD_RULE, GUIDE_DIR, GUIDE_PARTS, CORRECTIONS, CORRECTION_FIELDS, parseCorrections,
 } from './lib.mjs';
 
 // AGENTS.md loads into every agent session, so it stays short: the rules by task live in docs/.
@@ -460,19 +460,104 @@ function validateChecklist(caseFiles, lessonIds) {
     if (q) { cur = { title: q[2], text: l }; qs.push(cur); } else if (/^#/.test(l)) cur = null; else if (cur) cur.text += '\n' + l;
   }
   if (qs.length < 5 || qs.length > 12) err(f, `${qs.length} questions (5 to 12)`);
+  qs.forEach((q, i) => { q.n = i + 1; });
   for (const q of qs) {
     if (!/\bCheck:/.test(q.text)) err(f, `"${q.title}" has no "Check:" step`);
-    if (!/\bEvidence:\s+\S/.test(q.text)) err(f, `"${q.title}" has no "Evidence:" line (what the cases show, in our words)`);
+    // "Guide: [guide/q1.md](guide/q1.md)." on a line of its own: the lessons in our words, what it looks like,
+    // questions to ask, trade-offs and when not to apply it (validateGuides checks the file).
+    const guide = q.text.match(/^\s*Guide: \[[^\]]+\]\(([^)\s]+)\)/m)?.[1];
+    if (guide !== `guide/q${q.n}.md`) err(f, `"${q.title}" needs a "Guide: [guide/q${q.n}.md](guide/q${q.n}.md)." line`);
     // "Lessons: TST-1, REV-3." on a line of its own; only IDs on that line count (GPT-5 elsewhere is a model).
     const ids = [...q.text.matchAll(/^\s*Lessons:([^\n]*)$/gm)]
       .flatMap(m => m[1].match(/\b[A-Z]{3}-\d+\b/g) || []);
     if (!ids.length) err(f, `"${q.title}" cites no lesson ("Lessons: TST-1, REV-3")`);
     for (const id of ids) if (!lessonIds.has(id)) err(f, `"${q.title}" cites lesson ${id}, which no lesson page holds`);
+    q.ids = ids;
     for (const l of caseLinks(q.text, refs)) { if (!caseFiles.has(l)) err(f, `"${q.title}" links to missing case ${l}`); cited.add(l); }
   }
   for (const t of brokenLinks(lines.join('\n'), dirname(CHECKLIST))) err(f, `broken link ${t}`);
   if (!lines.some(l => /^## Report format/.test(l))) err(f, 'needs a "## Report format" section');
-  return { n: qs.length, cited };
+  return { n: qs.length, cited, qs };
+}
+
+// guide/q<n>.md (docs/lesson-rules.md "Checklist"): one per question, titled "# Q<n> guide: <the question>",
+// with the five parts of GUIDE_PARTS in order. "Lessons behind it" names every lesson its question cites,
+// each linked to the page that holds it. In "What it looks like in a project", "Trade-offs" and "When not to
+// apply it", each bullet names its evidence: a lesson ID, a case link, or "(ours)" for the maintainer's
+// reading. "Questions to ask of this project" holds questions. Case links count as citations.
+function validateGuides(qs, caseFiles, lessonPage, cited) {
+  const files = existsSync(GUIDE_DIR) ? readdirSync(GUIDE_DIR).filter(x => x.endsWith('.md')) : [];
+  for (const x of files) if (!/^q\d+\.md$/.test(x) || !qs.some(q => `q${q.n}.md` === x)) err(`guide/${x}`, 'no checklist question has this guide (guide/q<n>.md, n its number)');
+  for (const q of qs) {
+    const f = `guide/q${q.n}.md`, p = join(GUIDE_DIR, `q${q.n}.md`);
+    if (!existsSync(p)) { err(f, 'missing'); continue; }
+    const text = readFileSync(p, 'utf8').replace(/\r\n/g, '\n');
+    const lines = text.split('\n');
+    const refs = refDefs(lines);
+    const want = `# Q${q.n} guide: ${q.title}`;
+    if (lines[0] !== want) err(f, `the first line must be "${want}"`);
+    const heads = lines.map((l, i) => [l.match(/^## (.+)$/)?.[1], i]).filter(([h]) => h);
+    const names = heads.map(([h]) => h);
+    if (names.join('|') !== GUIDE_PARTS.join('|')) err(f, `needs the parts ${GUIDE_PARTS.map(x => `"## ${x}"`).join(', ')}, in that order (found ${names.map(x => `"${x}"`).join(', ') || 'none'})`);
+    const part = name => {
+      const at = heads.find(([h]) => h === name);
+      if (!at) return [];
+      const end = heads.find(([, i]) => i > at[1])?.[1] ?? lines.length;
+      return lines.slice(at[1] + 1, end).map((l, k) => ({ l, line: at[1] + 2 + k }));
+    };
+    const bullets = name => {
+      const out = [];
+      for (const { l, line } of part(name)) {
+        if (/^- /.test(l)) out.push({ text: l.slice(2), line });
+        else if (/^\s+\S/.test(l) && out.length) out.at(-1).text += ' ' + l.trim();
+      }
+      return out;
+    };
+    for (const name of GUIDE_PARTS) if (heads.some(([h]) => h === name) && !bullets(name).length) err(f, `"## ${name}" has no bullet`);
+    const lessonsText = part('Lessons behind it').map(x => x.l).join('\n');
+    for (const id of q.ids || []) {
+      const page = lessonPage.get(id);
+      const linked = [...lessonsText.matchAll(new RegExp(`\\[${id}\\]\\(([^)\\s#]+)`, 'g'))].map(m => m[1]);
+      if (!linked.length) err(f, `"Lessons behind it" must name ${id} (cited by question ${q.n}) as a link: [${id}](../lessons/<page>.md)`);
+      else if (page && !linked.includes(`../lessons/${page}`)) err(f, `${id} must link to ../lessons/${page}, the page that holds it`);
+    }
+    const evidence = /\b[A-Z]{3}-\d+\b|\(ours\)|\]\([^)]*cases\/[^)]+\)|\]\[[^\]]*\]/;
+    for (const name of ['What it looks like in a project', 'Trade-offs', 'When not to apply it']) {
+      for (const b of bullets(name)) if (!evidence.test(b.text)) err(f, `line ${b.line}: a bullet in "${name}" names no evidence (a lesson ID, a case link, or "(ours)"): "${b.text.slice(0, 60)}"`);
+    }
+    for (const b of bullets('Questions to ask of this project')) if (!/\?(\s*\([^)]*\))?\s*$/.test(b.text)) err(f, `line ${b.line}: a bullet in "Questions to ask of this project" is not a question: "${b.text.slice(0, 60)}"`);
+    for (const l of caseLinks(text, refs)) { if (!caseFiles.has(l)) err(f, `links to missing case ${l}`); cited.add(l); }
+    for (const t of brokenLinks(text, GUIDE_DIR)) err(f, `broken link ${t}`);
+    // A link to a case section must name a section the case has, as lesson links must.
+    for (const [, file, sec] of text.matchAll(/\]\(\.\.\/cases\/([^#)\s]+\.md)#([^)\s]+)\)/g)) {
+      const secs = sectionsOf(file);
+      if (secs && !secs.has(sec)) err(f, `broken link: no section #${sec} in ${file}`);
+    }
+  }
+}
+
+// corrections.md (docs/maintaining.md "Corrections"): "## Entries" holds "None yet." or entries
+// "### COR-<n>: <title>", numbered from 1 without gaps, each with every field of CORRECTION_FIELDS
+// filled. "Published" names two dates (YYYY-MM-DD) or commits; "What to propose" says the project's
+// owner decides.
+function validateCorrections() {
+  const f = 'corrections.md';
+  if (!existsSync(CORRECTIONS)) return err(f, 'missing (every revisit reads it first; "None yet." under "## Entries" is valid)');
+  const c = parseCorrections(readFileSync(CORRECTIONS, 'utf8'));
+  if (!c) return err(f, 'needs a "## Entries" section');
+  if (!c.entries.length && !c.none) return err(f, '"## Entries" holds neither "None yet." nor an entry "### COR-<n>: <title>"');
+  if (c.entries.length && c.prose.includes('None yet.')) err(f, '"None yet." beside entries: remove it');
+  c.entries.forEach((e, i) => {
+    if (!e.id) return err(f, `line ${e.line}: an entry heading is "### COR-<n>: <title>": ${e.title}`);
+    if (e.n !== i + 1) err(f, `line ${e.line}: ${e.id} out of order (entries are COR-1, COR-2, ... in order; IDs are never reused)`);
+    for (const k of CORRECTION_FIELDS) if (!e.fields[k]?.trim()) err(f, `line ${e.line}: ${e.id} needs "- **${k}:**" filled`);
+    for (const k of Object.keys(e.fields)) if (!CORRECTION_FIELDS.includes(k)) err(f, `line ${e.line}: ${e.id} has an unknown field "${k}"`);
+    const pub = e.fields.Published || '';
+    if ((pub.match(/\b\d{4}-\d{2}-\d{2}\b|\b[0-9a-f]{7,40}\b/g) || []).length < 2) err(f, `line ${e.line}: ${e.id}: "Published" needs the first and last date (YYYY-MM-DD) or commit it was published`);
+    if (e.fields['What to propose'] && !/\bowner\b/i.test(e.fields['What to propose'])) err(f, `line ${e.line}: ${e.id}: "What to propose" must say the project's owner decides`);
+    if (e.stray.length) err(f, `line ${e.stray[0]}: ${e.id}: text outside its fields`);
+  });
+  return c;
 }
 
 // ---- Provenance -----------------------------------------------------------------------------
@@ -481,6 +566,10 @@ function validateChecklist(caseFiles, lessonIds) {
 // outside code, headings, tables, reference definitions, the "## Provenance" section and the
 // "Evidence:" and "Lessons:" parts of a question (they report the cases). Each list item, "Check:" and
 // paragraph is split into sentences; returns [{ line, text }].
+// Sections that report what the cases show, how a project looks or what was published, never rules: a
+// guide's "Lessons behind it" and "What it looks like in a project", and the entries of corrections.md
+// (each a proposal to a project's owner).
+const DESCRIBING = /^## (Provenance|Lessons behind it|What it looks like in a project|Entries)\b/;
 function ruleSentences(text) {
   const lines = text.split('\n');
   const start = lines.findIndex(l => /^## /.test(l) || /^1\. /.test(l));
@@ -491,7 +580,7 @@ function ruleSentences(text) {
     const l = lines[i];
     if (/^```/.test(l)) { fence = !fence; flush(); continue; }
     if (fence) continue;
-    if (/^## /.test(l)) prov = /^## Provenance\b/.test(l);
+    if (/^## /.test(l)) prov = DESCRIBING.test(l);
     if (prov || /^#/.test(l) || /^\s*\|/.test(l) || /^\[[^\]]+\]:/.test(l) || !l.trim()) { flush(); skip = false; continue; }
     const body = l.trim();
     const label = body.match(/^(Check|Evidence|Lessons):/)?.[1];
@@ -523,21 +612,25 @@ function provenanceRows(lines, e) {
   return rows;
 }
 // Check one method file. `lessonCases`: lesson ID -> Set of the case files its "Cases" cites.
-function validateProvenance(rel, caseFiles, lessonCases) {
+// `extra`: files (the guides) whose markers resolve in this file's table.
+function validateProvenance(rel, caseFiles, lessonCases, extra = []) {
   const p = join(ROOT, rel);
   if (!existsSync(p)) return;
   const text = readFileSync(p, 'utf8').replace(/\r\n/g, '\n');
   const lines = text.split('\n');
-  const e = (line, msg) => err(rel, line ? `line ${line}: ${msg}` : msg);
+  const at = x => (line, msg) => err(x, line ? `line ${line}: ${msg}` : msg);
+  const e = at(rel);
   const used = new Set();
-  for (const s of ruleSentences(text)) {
+  const sentences = [rel, ...extra].filter(x => existsSync(join(ROOT, x)))
+    .flatMap(x => ruleSentences(readFileSync(join(ROOT, x), 'utf8').replace(/\r\n/g, '\n')).map(s => ({ ...s, e: at(x) })));
+  for (const s of sentences) {
     // Not quantities: part labels (3a, 3b) and numbered references (question 1, proposals 1, 3 and 5).
     const clean = s.text.replace(/`[^`]*`/g, ' ').replace(/\]\([^)]*\)/g, ']').replace(/\b\d+[a-z]\b/g, ' ')
       .replace(/\b(questions?|lessons?|proposals?|Q)\s*\d+((,\s*|\s+(and|or|to)\s+)\d+)*/gi, ' ');
     const marks = [...s.text.matchAll(MARKER)].map(m => m[1]);
     marks.forEach(m => used.add(m));
     const why = HARD_RULE.test(clean.replace(MARKER, ' ')) ? 'a hard rule' : checkUnits(clean.replace(MARKER, ' ')).need ? 'a threshold (a number)' : '';
-    if (why && !marks.length) e(s.line, `${why} without a provenance marker such as (P1): "${s.text.slice(0, 70)}"`);
+    if (why && !marks.length) s.e(s.line, `${why} without a provenance marker such as (P1): "${s.text.slice(0, 70)}"`);
   }
   const rows = provenanceRows(lines, e);
   if (!rows) { if (used.size) e(0, 'has provenance markers but no "## Provenance" table'); return; }
@@ -568,6 +661,9 @@ function validateRecordFormat() {
   const heads = readFileSync(p, 'utf8').replace(/\r\n/g, '\n').split('\n').filter(l => /^\| # \|/.test(l));
   if (heads.length < 2) err(f, 'needs the two record tables (a header starting "| # |")');
   for (const h of heads) if (!/\| Status \| Owner \| Check by \|/.test(h)) err(f, `a record table needs "| Status | Owner | Check by |": ${h.slice(0, 60)}`);
+  // Each record template names the corrections (corrections.md) its last review or revisit checked.
+  const n = (readFileSync(p, 'utf8').match(/^Corrections checked: </gm) || []).length;
+  if (n < 2) err(f, `each record template needs a "Corrections checked: " line (found ${n} of 2)`);
 }
 
 // Size caps (docs/maintaining.md "Size caps"): every cap the validator enforces has a row there with its
@@ -669,9 +765,12 @@ if (!args.length) {
   const files = new Set(cases.map(c => c.file));
   const lessons = validateLessons();
   const list = validateChecklist(files, lessons.ids);
+  const guideFiles = existsSync(GUIDE_DIR) ? readdirSync(GUIDE_DIR).filter(x => x.endsWith('.md')).sort().map(x => `guide/${x}`) : [];
+  if (list) validateGuides(list.qs, files, new Map([...lessons.ids].map(([id, page]) => [id, basename(page)])), list.cited);
+  validateCorrections();
   validatePitfalls();
   validateLog(lessons.ids);
-  for (const rel of PROVENANCE_FILES) validateProvenance(rel, files, lessons.lessonCases);
+  for (const rel of PROVENANCE_FILES) validateProvenance(rel, files, lessons.lessonCases, rel === 'checklist.md' ? guideFiles : []);
   validateCaps();
   validateRecordFormat();
   const index = join(LESSONS_DIR, 'index.md');

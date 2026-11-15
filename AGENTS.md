@@ -8,7 +8,9 @@ checklist (and `llms.txt`) so a coding agent can measure a project before it mig
 sources stay migrations; the lessons may reach wider. Unofficial: it names no endorsement;
 company names describe the subject only.
 
-Layout: `cases/` (one file per case), `lessons/` (one page per aspect), `checklist.md`,
+Layout: `cases/` (one file per case), `lessons/` (one page per aspect), `checklist.md` and its
+`guide/` (one file per question, read only for the question in use), `corrections.md` (what we
+published wrong; every revisit reads it first),
 `pitfalls.md`, `docs/field-reports.md` (how readers report what the checklist foresaw),
 `docs/applying-lessons.md` (the lessons route outside a migration), `docs/report-formats.md` (both
 routes' report and record); generated
@@ -25,13 +27,13 @@ every session.
 
 - [docs/case-format.md](docs/case-format.md): before writing or editing a case. The case
   template, the field rules, the body rules, units, the own-words check.
-- [docs/lesson-rules.md](docs/lesson-rules.md): before editing a lesson page or
-  `checklist.md`. Lesson IDs and tags, strength caps, Era, "May be outdated", upkeep, the
-  checklist rules, the size caps of lesson pages and `checklist.md`, the provenance every
+- [docs/lesson-rules.md](docs/lesson-rules.md): before editing a lesson page,
+  `checklist.md` or a guide. Lesson IDs and tags, strength caps, Era, "May be outdated", upkeep, the
+  checklist and guide rules (a guide, not imposed rules), the size caps of lesson pages and `checklist.md`, the provenance every
   threshold and hard rule carries.
-- [docs/maintaining.md](docs/maintaining.md): before opening a `log.md` entry, changing
+- [docs/maintaining.md](docs/maintaining.md): before opening a `log.md` or `corrections.md` entry, changing
   `scripts/build.mjs`, adding to what agents read first, or trimming a file to meet a size cap.
-  The update log and its changes files, the generated files, every size cap with its provenance
+  The update log and its changes files, corrections, the generated files, every size cap with its provenance
   (a trim moves text, never drops a rule), reading cost, one line per case.
 
 ## Scope

@@ -3,6 +3,38 @@
 Each update of the collection: when it ran, the sources it covered, and what changed. Newest
 first.
 
+## 2026-11-15 — a guide, not rules; corrections
+
+- **Covered:** no new sources. Why: the checklist read as the maintainer's rules (a "gap" or
+  "blocker" verdict, a one-word recommendation the agent chose); it should walk an agent through
+  what the cases show and leave each choice to the project's owner. And a reader who ran an
+  earlier version needs a way to learn what we published wrong.
+- **Guide:** each checklist question keeps its Check (what to measure and report) and its lessons,
+  and links a guide, `guide/q<n>.md`, read only for the question in use: the lessons behind it in
+  our words with links, what it looks like in a project, questions to ask of this one, the
+  trade-offs and when not to apply it; the maintainer's reading is marked "(ours)". The Evidence
+  lines moved into the guides. Findings replace "gap" and "blocker" verdicts; proposals are
+  options for the owner, each with its trade-off; do, later or skip is the owner's choice (both
+  README routes, `docs/report-formats.md`, `docs/applying-lessons.md`, `llms.txt`).
+- **Also changed, after an outside review:** a decision only the owner can make (an approval, a
+  change to a project rule) is never assumed from a default; a revisit re-checks applied items only
+  (it used to reopen a skipped item whose check failed, which a never-applied item always does);
+  the agent labels its own reading "agent's reading", apart from the maintainer's "(ours)"; the
+  owner names or confirms each row's owner and check-by date; process lessons need no re-check for
+  a newer model, rather than "apply as they are".
+- **Corrections:** `corrections.md` lists what we published wrong, how a project that applied it
+  recognises and repairs it; every revisit reads it first, and the record names the entries it
+  checked. It has no entry yet: no published threshold or hard rule was found to read stronger
+  than its evidence in a way a project would act on (`corrections.md` says how entries are made).
+
+### Checklist and lessons impact
+
+- **New lessons:** none.
+- **Changed lessons:** none.
+- **Checklist:** every question: each now links its guide, and its Evidence line moved there;
+  questions 1 and 10 reworded a verdict ("blocker", "partial gap") as a finding; the "How to run"
+  steps 5 to 8 and 10 and the starting thresholds now ask for findings and options.
+
 ## 2026-11-15 — provenance of thresholds and hard rules
 
 - **Covered:** no new sources. Why: a size limit of 12 KB, picked in another project without a

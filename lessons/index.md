@@ -41,7 +41,7 @@ The legend of the tags, the Era and the strength rule heads every aspect page.
 
 ## By model
 
-With a specific or a new model: process lessons (model ability: no) apply as they are. Start with the lessons tagged yes or partly whose cases name your model or its family ("By model" in lessons/index.md); treat those from other models as things to re-check on yours, not tips. A model released after the newest case (published 2026-11-03) has no evidence here yet. The lessons hold only what the cases show: no prompting advice.
+With a specific or a new model (our reading): process lessons (model ability: no) need no re-check for a newer model, though each is still judged by its own words. Start with the lessons tagged yes or partly whose cases name your model or its family ("By model" in lessons/index.md); treat those from other models as things to re-check on yours, not tips. A model released after the newest case (published 2026-11-03) has no evidence here yet. The lessons hold only what the cases show: no prompting advice.
 
 Families group the model names the cases give by maker, line and major version ("Claude Opus 4.6" and "Opus 4.8" are Claude Opus 4.x; "GPT-5.4" and "gpt-5.5" are GPT-5.x); a name with a line but no version, and an internal model, stay apart; unstated covers the cases that name no model. Lessons: those tagged yes or partly for model ability whose cited cases name a model of the family (a lesson's Era names only the newest). Newest case: the latest publication date among the cases that name it. Families with the same newest case and lessons share a row.
 

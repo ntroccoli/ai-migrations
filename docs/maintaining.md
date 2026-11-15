@@ -1,6 +1,6 @@
 # Maintaining the log and the generated files
 
-Read before opening a `log.md` entry, changing `scripts/build.mjs`, adding to what agents read
+Read before opening a `log.md` or `corrections.md` entry, changing `scripts/build.mjs`, adding to what agents read
 first (`llms.txt`, `lessons/index.md`), or trimming any file to meet a size cap ("Size caps" below).
 Moved from `AGENTS.md`, which keeps the commands.
 
@@ -18,6 +18,31 @@ validator fails when the part misses an ID or question its changes file lists. A
 the changes files newer than its record's entry, never the whole log; it names entries by date
 and title, since two can share a date.
 
+## Corrections
+
+`corrections.md` is hand-written and validated. It lists what we published wrong in a way a
+reader's project may have acted on, so a project that applied it can find and repair it; every
+revisit reads it first (both README routes, checklist step 10, `docs/applying-lessons.md` step 7),
+and the record names the entries checked. Under `## Entries` it holds "None yet." or entries,
+numbered from COR-1, IDs never reused:
+
+```markdown
+### COR-1: <what was wrong, in a few words>
+
+- **What was wrong:** <the item, and why it read stronger than its evidence or misled>.
+- **Published:** <first and last date (YYYY-MM-DD) or commit, and the releases between>.
+- **How to recognise it:** <what a project that applied it shows: a record row, a check, a file>.
+- **How to find what it changed:** <the record first, then the git history of the files it touched>.
+- **What to propose:** <the options for the project's owner, each with its trade-off; the owner decides>.
+```
+
+Add an entry when a published threshold, hard rule or lesson is found wrong or stronger than its
+evidence and a project could have acted on it (cut, capped, deleted, stopped, or skipped work
+because of it): a behaviour check that shows the harm, a field report, a sceptic pass. A
+wording that read stronger but led to no harm in a behaviour check needs no entry; fix it and say
+so in the log. While an entry exists, `llms.txt` and README name it and ask anyone who ran a route
+during its span to run the revisit again (`build.mjs` writes both from the entries).
+
 ## Generated files
 
 `node scripts/build.mjs` writes `index.md` (one line per case, newest first), `lessons/index.md`
@@ -26,8 +51,9 @@ where cases disagree; no list of every lesson), `lessons/evidence.md` (one line 
 the lesson, oracle, model and strength tags, the "may be outdated" mark, the cases it cites and
 those its "Against" cites), `llms.txt` (entry point for agents: how to use, one line per lesson
 page, and one line pointing to `index.md` for the cases) and `llms-full.txt` (the single
-opt-in file with everything: every lesson and case line, the checklist, its report formats and the pitfalls) from the
-case files, lesson pages, `checklist.md`, `docs/report-formats.md` and `pitfalls.md`. It also keeps hand-written files in
+opt-in file with everything: the corrections, every lesson and case line, the checklist and its guide, its report
+formats and the pitfalls) from the case files, lesson pages, `corrections.md`, `checklist.md`, `guide/`,
+`docs/report-formats.md` and `pitfalls.md`. It also keeps hand-written files in
 step: every URL to this repository comes from `REPO_SLUGS` in `scripts/lib.mjs` (to rename the
 repository, put the new owner/name first in that line and rebuild; the build rewrites the old
 name in `SYNCED` files, `lychee.toml` included), and two blocks in `README.md` (the AI
@@ -40,7 +66,9 @@ name each family.
 
 Reading cost drives this layout: what an agent reads at the start is paid on every run. One agent
 route: `llms.txt`, then `lessons/evidence.md`, then an aspect page only for the lessons used;
-`index.md` only to choose cases. `llms.txt` lists no cases, so it does not grow with each case, and
+`index.md` only to choose cases. The checklist route: `checklist.md` whole, then `guide/q<n>.md`
+only for a question with a finding to write up (the guide holds the case evidence the questions
+once carried, so the checklist stays short). `llms.txt` lists no cases, so it does not grow with each case, and
 stays at or under 20 KB (20,480 bytes, `LLMS_MAX_BYTES`, checked by the validator). Only
 `lessons/evidence.md` and `llms-full.txt` list every lesson; keep it so (a test checks the index
 and `llms.txt`).

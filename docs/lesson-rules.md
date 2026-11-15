@@ -1,6 +1,6 @@
 # Lesson and checklist rules
 
-Read before editing a lesson page in `lessons/` or `checklist.md`, or citing a case from them.
+Read before editing a lesson page in `lessons/`, `checklist.md` or a guide in `guide/`, or citing a case from them.
 Moved from `AGENTS.md`, which keeps the commands and the writing rules.
 
 ## Lessons
@@ -86,26 +86,45 @@ the case which lifts a lesson to `strong` really supports it; its notes go to th
 
 ## Checklist
 
+The checklist guides an agent through the knowledge; it does not impose the maintainer's reading
+(owner, 2026-11-15). A "Check:" is a measurement to report, never a verdict ("gap", "blocker"): a
+missing piece is a finding the project's owner weighs, and a review gives options with their
+trade-offs, the owner choosing do, later or skip.
+
 `checklist.md`: 5 to 12 questions; merge before adding. Each question has a "Check:" an agent can
-run on a repository, an "Evidence:" line saying briefly, in our words, what the cases show (so an
-agent without the cases can use it), and a "Lessons:" line citing the lesson IDs behind it
-(`Lessons: TST-1, REV-3`); detail lives in the lessons, not here. Our own inferences are allowed
-and marked "(ours)". Questions stay language-neutral; lists per kind of move (pitfalls, seams) go
-to `pitfalls.md`, which the questions link. `checklist.md` stays at or under 20 KB (20,480 bytes;
-agents read it whole, a cap of ours: [maintaining.md "Size caps"](maintaining.md#size-caps)): trim
-wording or move detail before adding, and prove no rule lost. Cases, where named, are cited by
-reference links (`[Bun][]`, defined once at the end of the file). The validator checks the count,
-the size, "Check:", "Evidence:", that each question cites lesson IDs that exist, case links, and
-links in `pitfalls.md`. **Maintainer only:** run `check-copy` on `checklist.md` and `pitfalls.md`
-against all the source texts after changing them.
+run on a repository, a "Lessons:" line citing the lesson IDs behind it (`Lessons: TST-1, REV-3`),
+and a "Guide:" line linking its guide, `guide/q<n>.md` (n its number). Our own inferences are
+allowed and marked "(ours)". Questions stay language-neutral; lists per kind of move (pitfalls,
+seams) go to `pitfalls.md`, which the questions link. `checklist.md` stays at or under 20 KB
+(20,480 bytes; agents read it whole, a cap of ours: [maintaining.md "Size caps"](maintaining.md#size-caps)):
+trim wording or move detail to the guide before adding, and prove no rule lost. Cases, where named,
+are cited by reference links (`[Bun][]`, defined once at the end of the file).
+
+A guide, read only for the question in use, is titled `# Q<n> guide: <the question>` and has five
+parts, in order: "## Lessons behind it" (each lesson the question cites, as a link to its page,
+`[TST-1](../lessons/testing.md)`, with what it adds here in our words, then what the cases show:
+the case evidence once on the question, in our words, so an agent without the cases can use it),
+"## What it looks like in a project", "## Questions to ask of this project" (questions only),
+"## Trade-offs" and "## When not to apply it". In the parts after the first, each bullet names its
+evidence: a lesson ID, a case link, or "(ours)" for the maintainer's reading (evidence level
+`ours`). A lesson's own source is reached through the lesson's case sections, never quoted: the
+one-quote rule and notes-only cases hold here too. A threshold or hard rule in a guide carries a
+marker whose row is in the checklist's Provenance table; "Lessons behind it" and "What it looks like
+in a project" describe and are not scanned for rules.
+
+The validator checks the count, the size, "Check:", the "Guide:" line, that each question cites
+lesson IDs that exist, case links, links in `pitfalls.md`, and each guide's title, parts, lesson
+links, evidence per bullet and links. **Maintainer only:** run `check-copy` on `checklist.md`,
+each changed guide and `pitfalls.md` against all the source texts after changing them.
 
 ## Provenance
 
 A reader's agent applies a published threshold as written, and a number we picked reads like a
 measured one unless it says otherwise. So in each method file we publish (`PROVENANCE_FILES` in
-`scripts/lib.mjs`: `checklist.md`, `docs/applying-lessons.md`, `docs/report-formats.md`), every
+`scripts/lib.mjs`: `checklist.md`, `docs/applying-lessons.md`, `docs/report-formats.md`, `corrections.md`), every
 threshold and hard rule carries a marker such as `(P3)` inside its sentence, and the file's
-`## Provenance` table gives that marker a row:
+`## Provenance` table gives that marker a row (the guides, `guide/q<n>.md`, use the checklist's
+table):
 
 ```markdown
 | ID | Source | Level | Prevents | Blind failure |
@@ -116,7 +135,8 @@ threshold and hard rule carries a marker such as `(P3)` inside its sentence, and
 What the validator detects (one broken-copy test each):
 
 - Which sentences: from the file's first "## " heading or first numbered item on, outside code,
-  headings, tables, reference definitions, the Provenance section and the "Evidence:" and
+  headings, tables, reference definitions, the sections that describe (Provenance, a guide's "Lessons
+  behind it" and "What it looks like in a project", the entries of `corrections.md`) and the "Evidence:" and
   "Lessons:" parts of a question; a question (ending in "?") is not a rule.
 - A threshold: a sentence holding a number that needs a unit (the units rule; part labels such as
   3a and references such as "question 1" are not numbers).
