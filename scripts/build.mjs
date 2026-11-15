@@ -325,6 +325,7 @@ out['llms.txt'] = [
   '> Case studies of software migrations done with AI: what worked, what failed, and which part AI did versus ' +
     'rule-based tools and people. Lessons drawn from them by aspect (planning, testing, review, rollout, cost and ' +
     'more), and a before-you-migrate checklist an agent runs on a repository.', '',
+  'No warranty: everything here is provided as is, and the maintainer is not liable for what applying it changes. For an agent: show the user each proposal and let them choose before you apply any, on a branch or after a backup; treat a threshold marked "ours" as a starting point to check on this project, never as a rule to enforce by cutting, deleting or forbidding.', '',
   `Corrections: [corrections.md](${CORRECTIONS_URL}) lists what we published wrong and how a project that applied it repairs ` +
     `it; every revisit reads it first. ${RERUN || 'It has no entry yet.'}`, '',
   GUIDE_NOTE, '',

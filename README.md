@@ -39,6 +39,8 @@ Now: 24 cases (Slack, Zalando, Airbnb, Google, Robert Marshall, Spotify, Christo
 
 ## Try it
 
+**No warranty.** Everything here is provided as is, without warranty, under [`LICENSE`](LICENSE) (scripts, MIT) and [`LICENSE-CONTENT.md`](LICENSE-CONTENT.md) (text, CC BY 4.0); the maintainer is not liable for what applying it changes. Read each proposal before you apply it, on a branch or with a backup; a threshold marked "ours" is the maintainer's own starting point, not a measured value.
+
 Open your coding agent (Claude Code, Codex, Cursor, …) in your project and pick one of two routes:
 
 - [Planning a migration](#planning-a-migration): run the checklist on the project you are
