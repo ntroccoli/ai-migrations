@@ -30,6 +30,10 @@ first.
   first release" are all present after the guide move.
 - **No correction:** the caps were rules for the maintainer's own files, never advice to readers,
   so `corrections.md` gets no entry.
+- **Field reports:** the form asks who ran the review (the session that built the work, a fresh
+  session, fresh subagents or a person), the log entry the run read, and how each outcome was
+  measured, one line per ID; reports are counted by reviewer next to relation, and older reports
+  count these as "unstated". `docs/field-reports.md` says how to count from session logs.
 
 ### Checklist and lessons impact
 
