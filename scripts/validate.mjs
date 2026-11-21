@@ -9,7 +9,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, dirname, resolve, basename } from 'node:path';
 import {
   ROOT, CASES_DIR, CHECKLIST, NOTICE, SOURCE_TYPES, KINDS, AI_SHARES, RELATIONS, EVIDENCE, OUTCOMES,
-  STATUSES, BASES, REQUIRED, LANGUAGES, SECTIONS, NUMBERS_HEADER, UNITS, SCALES, PITFALLS,
+  STATUSES, RECORD_STATUSES, BASES, REQUIRED, LANGUAGES, SECTIONS, NUMBERS_HEADER, UNITS, SCALES, PITFALLS,
   LIMITS, SUMMARY_MAX_CHARS, LINE_MAX_CHARS, QUOTE_MAX_WORDS, SPAN_MAX_WORDS, SUMMARY_WORDS, QUESTIONS, sizeReportFiles, byteSize,
   parseCase, listCases, sections, refDefs, linksIn, anchor, practices, closestPractices,
   LESSONS_DIR, LESSON_PAGES, LESSON_NOTE, LESSON_LEGEND, KARPATHY_IDEAS, ORACLES, MODEL_DEPENDENCE, STRENGTHS, META_LINE, parseLessonPage, strengthCeiling, lessonMeta,
@@ -661,6 +661,13 @@ function validateRecordFormat() {
   // Each record template names the corrections (corrections.md) its last review or revisit checked.
   const n = (readFileSync(p, 'utf8').match(/^Corrections checked: </gm) || []).length;
   if (n < 2) err(f, `each record template needs a "Corrections checked: " line (found ${n} of 2)`);
+  // Each names who ran the review, the field report's "Who ran the review" (#60).
+  const r = (readFileSync(p, 'utf8').match(/^Run by: </gm) || []).length;
+  if (r < 2) err(f, `each record template needs a "Run by: " line (found ${r} of 2)`);
+  // The statuses a row may take: the revisit and field reports count by them, "retired" included (#60).
+  const line = readFileSync(p, 'utf8').replace(/\r\n/g, '\n').match(/^Status, one of: ([^.]*)\./m);
+  if (!line) err(f, 'needs the "Status, one of: ..." sentence under the record');
+  else for (const s of RECORD_STATUSES) if (!line[1].split(/,\s*/).includes(s)) err(f, `"Status, one of:" must list "${s}"`);
 }
 
 // Sizes and format limits (docs/maintaining.md "Sizes and format limits"): every name in LIMITS

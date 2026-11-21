@@ -36,7 +36,7 @@ One report per review or revisit. Use the
    which are not yet tested by a real event, how each outcome was measured, and what nothing
    foresaw. Three of these fields say how much weight a report can bear:
    - **Who ran the review**: the session that built the work, a fresh session, fresh subagents
-     sent by a session, or a person. A session that grades the work it built tends to grade it
+     sent by a session, or a person (the record's "Run by:" line). A session that grades the work it built tends to grade it
      kindly, so reports are counted by this field next to the relation.
    - **Log entry the run read**: the date and title of the newest entry in [log.md](../log.md)
      when the files were read (the record names it). It ties the report to a version of the

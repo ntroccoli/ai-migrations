@@ -3,6 +3,67 @@
 Each update of the collection: when it ran, the sources it covered, and what changed. Newest
 first.
 
+## 2026-11-21 — recommend by the cost seen
+
+- **Covered:** no new sources. Why: in another collection's review method, gaps graded against
+  the idea rather than against a cost in the project led agents to lean "do" on everything, and
+  the rules applied that way were barely followed afterwards; on large real projects, web fetches
+  summarised the files, findings held only in a session were lost at a compaction, and trims
+  dropped sentences that still drove behaviour. Our two routes had the same openings. Also three
+  wording points from the maintainer's own project (a change of engine under stored work; never a
+  lesson source).
+- **Recommend by the cost seen:** each option the agent favours gives "Prevents:" (the cost seen,
+  "seen here: <evidence>" or "seen in cases <X, Y>") and "Costs the owner:" (what it adds each
+  week). An option that adds a running cost (a prompt, a gate, a weekly step) needs a cost seen
+  in the project; without one the lean is "later", naming the event that would make it "do". A
+  one-off step before something hard to undo may rest on the cases. Where to look: git history
+  (reverts, fix-after-fix, rework), issues and CI failures, session logs, rules the owner wrote
+  more than once. Checklist "How to run" step 7, `docs/applying-lessons.md` step 5, both report
+  templates.
+- **Step 2's filter:** "Apply what you recommended" first drops each favoured option whose reason
+  the agent would not defend if the owner pushed back, naming it, never because it expects the
+  check to fail (so the stop at the first failing check still holds). Before changing a file
+  outside the project, the agent shows the exact text and waits for a yes; a shared user-level
+  file changes for one project at a time. Checklist step 9, `docs/applying-lessons.md` step 6.
+- **Saved report:** step 1 saves its report to a file outside the project before asking, so step 2
+  can run in a fresh session from it; a long review may send the measuring to fresh subagents and
+  save their findings to the file as they arrive. Checklist step 8, `docs/applying-lessons.md`
+  step 5, llms.txt, README.
+- **Retired:** a revisit counts each applied rule's trigger events since the record's date; a rule
+  used in few of them is offered as retire or apply again, each with its trade-off; one with no
+  trigger yet stays waiting for first use. The record's statuses gain "retired" (the validator
+  checks the list). Checklist step 10, `docs/applying-lessons.md` step 7.
+- **Record:** a "Run by:" line (agent, model, and the building session, a fresh session or fresh
+  subagents), and the "Log entry:" line said as the entry read, both as the field-report form asks.
+  An option that cuts or moves text gives as its "Check now" each sentence that leaves, where it
+  goes and whether it still drives behaviour. "Leave as it is" carries its trade-off too, what the
+  problem goes on costing: two test reviews left it bare. Every finding carries every line of the
+  form, the last as the first (test reviews wrote the first findings in full and cut the later
+  ones); a finding not written out goes under "Other findings", one line.
+- **Corrections:** "How a revisit uses it" recognises an affected project by the publication
+  window first, then by the log entry its record names; reads the files each role loads where it
+  starts; a repair proposes only the repair (other gaps, new or changed questions included, one line
+  each); the record says who repaired it, and a shared file another project repaired is recorded,
+  not proposed again.
+- **README:** both step 1 prompts start by downloading llms.txt with curl into a temporary folder
+  and reading it from disk; older prompts still work, since llms.txt says the same. Step 2 may run
+  in a fresh session from the saved report.
+- **Session logs:** `docs/applying-lessons.md` step 4 points to the field-report counting rules.
+- **Not run:** checklist "How to run" step 3 says the command is the line you would type, and an
+  estimate for the target is labelled one (test runs gave "a cross-compile" as a command).
+- **Questions:** Q2's Check adds stored output of the old system proved unchanged on a copy (old
+  and new code over every stored item, outputs compared); Q8's search covers prompts written for
+  the old engine, which fail quietly; Q10 asks whether a fresh reader reads each large change
+  before the merge. Each is marked "(ours)", its guide saying it comes from the maintainer's own
+  project.
+
+### Checklist and lessons impact
+
+- **New lessons:** none.
+- **Changed lessons:** none.
+- **Checklist:** questions 2, 8 and 10 changed (their Checks and guides); "How to run" steps 7,
+  8, 9 and 10 changed, and step 3.
+
 ## 2026-11-21 — sizes reported, not capped
 
 - **Covered:** no new sources. Why: none of our byte caps was measured; the 8 KB cap on

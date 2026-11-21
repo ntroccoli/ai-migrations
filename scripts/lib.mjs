@@ -81,6 +81,8 @@ export const RELATIONS = ['seller-of-tool', 'user-of-tool', 'independent'];
 export const EVIDENCE = ['independent-data', 'shown-in-source', 'assertion-only'];
 export const OUTCOMES = ['completed', 'partial', 'ongoing', 'abandoned'];
 export const STATUSES = ['current', 'superseded'];
+// A record row's status (docs/report-formats.md "The record"); "retired" since #60.
+export const RECORD_STATUSES = ['open', 'proven', 'waiting for first use', 'stopped holding', 'skipped', 'retired'];
 export const BASES = ['measured', 'reported', 'estimate', 'self-estimate', 'vendor-claim'];
 export const REQUIRED = ['title', 'date', 'company', 'summary', 'source_url', 'also', 'source_type',
   'author_relation', 'evidence', 'kind', 'from', 'to', 'from_languages', 'size', 'duration', 'people', 'cost', 'ai_share', 'tools',

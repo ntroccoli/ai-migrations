@@ -15,18 +15,30 @@ of [applying the lessons](https://raw.githubusercontent.com/ntroccoli/ai-migrati
 
 ### How a revisit uses it
 
-1. For each entry, compare its "Published" span with the project's record: the collection's commit
-   or date and the log entry it names, and earlier versions of the record in the project's git
-   history, if it is kept there. Compare by date: a commit counts by its date, a log entry by its
-   heading's. The entry applies when any of them falls in the span.
+1. For each entry, recognise whether the project could have read it, first by the publication
+   window, then by the log entry. Window: compare the entry's "Published" span with the record's
+   date and the collection's commit or date it names, and with earlier versions of the record in
+   the project's git history, if it is kept there; a commit counts by its date. A review dated
+   before the span did not read the wrong text: it applies only when the record or the project shows
+   what "How to recognise it" names anyway. Log entry: a record that names a log entry newer than
+   the span (by its heading's date), or lists the entry as checked, read the corrected text: it
+   does not apply. Otherwise it applies when any of these dates falls in the span.
 2. For an entry that applies, look for it in the project as "How to recognise it" says, then follow
    "How to find what it changed": the record first, then the git history of the files that the
-   record's applied items touched.
+   record's applied items touched. Take the files each role loads where it starts: a session
+   started in another folder (the home folder, a coordinator's folder) loads other instruction
+   files and another memory store than one started in the repository, so read the history of each.
 3. Report what you found for each entry, and turn its "What to propose" into options for the
    project's owner, each with its trade-off. Change nothing until the owner chooses (P1), except
-   the record's "Corrections checked:" line (step 4).
+   the record's "Corrections checked:" line (step 4). A repair proposes the repair only: every
+   other gap the revisit finds, its new or changed lessons and questions included, gets one line
+   each, with no recommendation, so the owner can ask for them once the repair is chosen.
 4. In the record, write the entries you checked on its "Corrections checked:" line, with the date
    and what you found ("COR-1: not found", "COR-2: found, proposal 4"); with no entry, "none listed".
+   Once a repair is applied, the line says who made it: "COR-2: found, repaired by <who>, <date>".
+   A shared file (a user-level setup several projects load) may already have been repaired by
+   another project's revisit: check its history, and record "COR-1: repaired by <who>, <date>"
+   instead of proposing the repair again.
 5. No entry, or none that applies: say so in one line and go on with the revisit.
 
 While an entry exists, the README and [llms.txt](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms.txt) ask anyone who ran the checklist or the
@@ -812,8 +824,10 @@ adapt it. A revisit reads [corrections.md](https://raw.githubusercontent.com/ntr
    Check: count the tests that exercise behaviour through a public interface (CLI, API, files
    written, a headless harness) apart from white-box tests; list public features with none; run
    them once and list those that fail or will not run. Find golden files tied to the old
-   implementation and how they are regenerated. Say how results are compared across languages
-   (plain-data summaries, tolerances) and how you confirm the tests ran. When the tests are what
+   implementation and how they are regenerated. Find what the old system has already made and
+   kept that must stay as it is (saved results, rendered files, rows), and say how it is proved
+   unchanged: on a copy of the store, old and new code each process all of it, outputs compared
+   (ours). Say how results are compared across languages (plain-data summaries, tolerances) and how you confirm the tests ran. When the tests are what
    moves, say how intent and coverage are compared (coverage before and after, a hand-converted
    sample) and check new tests can fail. Say whether old and new can run the same inputs side by
    side, outputs compared (a differential or shadow run), and how late a wrong
@@ -878,7 +892,9 @@ adapt it. A revisit reads [corrections.md](https://raw.githubusercontent.com/ntr
    renamed fields or APIs, runtime facts a person would look at, and what a rule-based codemod
    can do first. Say whether the model was piloted on the hardest files of each language in scope (else propose a pilot), and check the
    largest files fit its context window. A group too varied for one prompt is a candidate to defer
-   or do by hand. Search docs and agent instructions for advice favouring the old stack.
+   or do by hand. Search docs, agent instructions and the prompts tuned to the old engine or
+   stack for advice favouring it: such a prompt raises no error on the new engine, its output is
+   only worse (ours).
    Lessons: CTX-1, CTX-2, CTX-3, CTX-5, CTX-9, CTX-10, CTX-11, CTX-12, CTX-13, TOL-2, TOL-7, TOL-9,
    AGF-8, PLN-8, PLN-12.
    Guide: [guide/q8.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/guide/q8.md).
@@ -896,7 +912,8 @@ adapt it. A revisit reads [corrections.md](https://raw.githubusercontent.com/ntr
     agent sessions can reach. A rule only written down, with nothing enforcing it, is a
     finding: say what could enforce it, if the owner wants it enforced. Changes in other teams' code: count the owning teams,
     whether they asked for the move, who carries the deploy risk. Ask the owner who reviews,
-    whether they read the target language, and their hours a week.
+    whether they read the target language, and their hours a week, and whether a fresh reader
+    reads each large change before the merge rather than after (ours).
     Lessons: OVS-1, OVS-2, AGF-1, AGF-5, AGF-9, SEC-1, SEC-2, SEC-3, REV-1, REV-2, REV-9, REV-11,
     TEM-4, TEM-6, ROL-9.
     Guide: [guide/q10.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/guide/q10.md).
@@ -937,7 +954,9 @@ Check's measurement stands on its own.
    cases are few and mostly their teams' own accounts: read "What went wrong" before relying on them.
 2. Measure first: answer each Check with a number, file or command output, not from memory.
 3. A check you may not run: write the exact command, mark it "not run" with the reason, never
-   guess its result (P11). Logs or CI history count if you name their source.
+   guess its result (P11). The command is the line you would type (`GOOS=linux go build ./...`,
+   not "a cross-compile"); a figure for the target that you estimate is labelled an estimate. Logs or
+   CI history count if you name their source.
 4. A fact only the owner knows (review time, budget): write the question, mark it "ask the
    owner" and state a default; unanswered, assume it, note it in the record, go on. A decision only
    the owner can make (approval of a new stack, a change to a project rule) is not assumed: it stays
@@ -953,19 +972,36 @@ Check's measurement stands on its own.
    units. Keep the two readings apart: "(ours)" in the collection is the maintainer's, and so is a
    lesson tagged `[ours]`; label your own "agent's reading".
 7. Give each finding options for the owner, each with its trade-off; leaving it as it is is often
-   one. You may say which option the measurements favour and why, labelled "agent's reading". Order
-   the findings so the owner meets first what the rest depend on: a project rule against the move
-   (question 1), then the oracle, the baseline and the end state.
+   one, and its trade-off is what the problem goes on costing. You may say which option the measurements favour, labelled "agent's reading", with two
+   reasons: "Prevents:", the cost seen, with its source ("seen here: <evidence>" or "seen in cases
+   <X, Y>"), and "Costs the owner:", what the option adds each week. An option that adds a running
+   cost (a prompt, a gate, a weekly step) needs a cost seen here; without one, lean "later" and
+   name the event that would make it "do" (P13). A one-off step before something hard to undo (a
+   baseline, a golden set, a rollback path) may rest on the cost seen in the cases. Look for the
+   cost seen here in the project's own record: git history (reverts, fix-after-fix commits,
+   rework on the same files), issues and CI failures, session logs, rules the owner wrote more
+   than once. An option that cuts or moves text gives as its "Check now" each sentence that
+   leaves, where it goes and whether it still drives behaviour (P14). Order the findings so the
+   owner meets first what the rest depend on: a project rule against the move (question 1), then
+   the oracle, the baseline and the end state.
 8. Report as below and wait for the owner's choice (P10): for each finding, do (which option),
-   later or skip is theirs. One change per option (or parts 3a, 3b).
+   later or skip is theirs. One change per option (or parts 3a, 3b). Before you wait, save the
+   report to a file outside the project (in the temporary folder, or a path the owner names) and
+   give its path: step 9 may then run in a fresh session from that file. A long review may send
+   the measuring to fresh subagents: save each one's findings to that file as they arrive, since
+   findings held only in a session's context are lost at a compaction.
 9. Apply and record, once the owner has chosen (P10) ("Apply what you recommended": the options your
    reading favoured, the rest later; "Apply 1A and 3B; 2 later; skip 5"; "Apply none; write the
    record"). In a read-only run, write no file (P10); show the record after the report. Else:
+   - "Apply what you recommended": first drop each favoured option whose reason you would not
+     defend if the owner pushed back (P15); name it with that reason and record it as later. Never
+     drop one because you expect its check to fail: that check runs, and the stop below holds
+     (P15).
    - Write `docs/migration-review.md` in the measured repository (the one file this checklist adds
      there; format below) before changing anything, with each chosen proposal's baseline: how
      often its problem has happened so far, with the evidence. Complete it with every finding,
      the later and skipped ones too, the corrections.md entries checked ("none listed" if it has
-     none) and the newest log.md entry this review covered.
+     none), the newest log.md entry this review covered and who ran it ("Run by:").
    - Each row waiting for first use gets the owner (who looks for its event) and check-by date the
      owner named, or ones you propose for the owner to confirm. A question of fact left
      unanswered: assume the report's default and record the assumption; a decision left open (an
@@ -974,12 +1010,18 @@ Check's measurement stands on its own.
      proposal at a time, on a branch. First state its "Check now" and its "Event that proves it";
      it is applied when the check now passes (waiting for first use), proven only once later work
      shows the event.
+   - Before you change a file outside the project (user-level instructions, skills or settings,
+     another repository), show the owner the exact text (a diff; for a long change, a summary and
+     the path to a file with the full text) and wait for their yes (P16). A user-level file that
+     several projects share changes for one project at a time, each from its latest version.
    - Stop at the first failing check (P12): leave that proposal open, its event naming the failed
      check, apply no later proposal, and report what failed and what is left. The owner decides.
 10. Revisit: read [corrections.md](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/corrections.md) first, then go on as step 7 of
     [applying the lessons](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/applying-lessons.md) says, with the questions its `changes/` files
-    list as well as the lessons. Report in the revisit format; change nothing but the record (P10) until
-    the owner chooses, then apply as in step 9.
+    list as well as the lessons. There, each applied item's trigger events since the record's date
+    are counted; one that was used in few of them is offered as retire or apply again, and one with
+    no trigger yet stays waiting for first use. Report in the revisit format; change nothing but the
+    record (P10) until the owner chooses, then apply as in step 9.
 11. Share (optional): a [field report](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/field-reports.md) once an item has met its problem.
 
 ### Report format
@@ -1005,6 +1047,10 @@ Levels: `published case` (one), `published cases` (two or more), `others' measur
 | P10 | ours | ours | changes the owner did not choose | skipping read-only builds and tests, or no record after the owner chose |
 | P11 | ours | ours | invented measurements | marking checks "not run" that could run safely |
 | P12 | ours | ours | later changes piled on a failed one, so the failure points nowhere | stopping for a check that failed before the change too; report that, and let the owner decide |
+| P13 | ours (one-off steps: the costs the cited cases report) | ours | rules that add a weekly cost against a risk this project has not paid, applied and then not followed | holding back a one-off baseline, golden set or rollback path because nothing has gone wrong here yet |
+| P14 | ours | ours | a trim or move that drops sentences that still drive behaviour | listing sentences for a change that moves nothing out of the files loaded at the start |
+| P15 | ours | ours | an option applied on a reason that would not survive the owner's question; an option held back to get round the stop at a failing check | holding back every option the owner might question, so nothing is applied |
+| P16 | ours | ours | changes to the owner's user-level setup or other repositories that the owner never saw | asking for a yes on each file inside the project, which the choice in step 8 already covers |
 
 [GitHub]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-09-16-github-copilot-runtime-rust.md
 [Bun]: https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-07-08-bun-zig-to-rust.md
@@ -1119,6 +1165,11 @@ production retries failed.
 - A suite that is green while some tests are skipped or never collected (VER-5).
 - No rule on who may edit a test: the agent can make a failing check pass by changing it (OVS-1,
   AGF-5).
+- Results the old system already made and kept (saved results, rendered files, rows) that must
+  stay exactly as they are, with no test fixture holding one: green tests then say nothing about
+  them. One proof is a copy of the live store on which old and new code each process all of it,
+  outputs compared (ours; seen in a change of engine in the maintainer's own project, not a
+  published case; near TST-5 and TST-13).
 
 ### Questions to ask of this project
 
@@ -1127,6 +1178,7 @@ production retries failed.
 - Can old and new run the same inputs, with outputs compared, and what varies per run?
 - How late does a wrong change first fail here: at build, in tests, or only once deployed?
 - Who must approve a change to a test, a snapshot or a baseline, and what enforces it?
+- Which kept results must stay unchanged, and how will a copy of them prove that before each merge?
 
 ### Trade-offs
 
@@ -1493,6 +1545,10 @@ would not open.
   ([Zalando](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2025-02-20-zalando-ui-component-libraries.md#what-went-wrong), CTX-3).
 - Files too long for the model to read whole ([Pokémon](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-01-25-vjeux-pokemon-showdown-rust.md#what-went-wrong)).
 - Docs or agent instructions that still recommend the old library ([Asana](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-08-07-asana-enzyme-to-rtl.md#what-went-wrong)).
+- Prompts tuned to the old engine or model, still in use after the switch: nothing fails, the
+  output is only worse, so the search for terms of the old engine covers prompts and instruction
+  files too (ours; seen in a change of engine in the maintainer's own project, not a published
+  case; near CTX-10).
 
 ### Questions to ask of this project
 
@@ -1501,7 +1557,8 @@ would not open.
   runtime facts?
 - What can a rule-based codemod do first?
 - How does the model do on the hardest files of each language in scope?
-- Which docs or instructions still point at the old stack?
+- Which docs, instructions or prompts still point at the old stack or were tuned to the old
+  engine?
 
 ### Trade-offs
 
@@ -1629,6 +1686,9 @@ decision from their owners; Shopify needed reviewers who knew the target platfor
 - A rule written in agent instructions with nothing in CI or the tool layer enforcing it (SEC-3).
 - Changes landing in other teams' code that did not ask for the move ([Bloomberg](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/cases/2026-11-03-bloomberg-python-cpp-uplift.md#what-went-wrong)).
 - One reviewer, who does not read the target language, with a few hours a week (REV-9, REV-11).
+- A fresh reader who runs only after the merge: the faults it finds then cost a repair change
+  each time, where before the merge they would have cost a revision (ours; seen in the
+  maintainer's own project, not a published case; near REV-1).
 
 ### Questions to ask of this project
 
@@ -1637,6 +1697,7 @@ decision from their owners; Shopify needed reviewers who knew the target platfor
 - Which tools, skills and credentials can agent sessions reach?
 - Which written rules does nothing enforce?
 - Who reviews, do they read the target language, and how many hours a week do they have?
+- Does a fresh reader read each large change before it is merged, or only after?
 
 ### Trade-offs
 
@@ -1817,20 +1878,31 @@ Bearing on going ahead: <the findings that bear on it, and the decision the owne
    Links: <the guide's URL, each lesson's aspect page and each case section you read>.
    Options (the owner chooses; leaving it as it is may be one):
    - 1A: <change>. Trade-off: <what it costs, risks or gives up>. Cost: S | M | L.
-   - 1B: <another change, or "leave as it is">. Trade-off: <...>. Cost: S | M | L.
+   - 1B: <another change, or "leave as it is">. Trade-off: <...; for "leave as it is", what the problem goes on costing>. Cost: S | M | L.
    When not to apply: <the guide's points that fit this project, or "none fit">.
    Depends on: <finding numbers, or none>.
-   Agent's reading: <the option the measurements favour, and why; or "no lean">.
-   Check now: <for each option, a command or count that passes once it is applied>.
+   Agent's reading: <the option the measurements favour, "later" (name the event that would make it "do"), or "no lean">, because:
+   - Prevents: <the cost seen, with its source: "seen here: <reverts, fix-after-fix commits, rework, issues, CI failures, session-log counts, a rule the owner wrote twice>" or "seen in cases <X, Y>" (a one-off step only); or "no cost seen">.
+   - Costs the owner: <what the option adds each week: prompts, gates, waiting, review hours, tokens; or "once: <what>">.
+   Check now: <for each option, a command or count that passes once it is applied; for an option that cuts or moves text, each sentence that leaves, where it goes, and whether it still drives behaviour>.
    Event that proves it: <what later work must show>.
    Owner's choice: <left blank for the owner: do 1A | do 1B | later | skip>.
 2. ...
 
+## Other findings
+- <A finding not written out in full, in one line; the owner can ask for it in full.>
+
 ## Next step
-Reply "Apply what you recommended", "Apply 1A and 3B; 2 later; skip 5" or "Apply none; write the record". I then follow checklist "How to run" step 9: the record first, with each chosen proposal's baseline; one proposal at a time, on a branch; I stop at the first failing check, apply nothing after it, and report.
+This report is saved at <path outside the project>; step 2 can run in this session or in a fresh one that reads it. Step 2 follows checklist "How to run" step 9 (https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/checklist.md) and writes the record in the format of docs/report-formats.md "The record" (https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/report-formats.md); a fresh session downloads those files with curl and reads them from disk first.
+Reply "Apply what you recommended", "Apply 1A and 3B; 2 later; skip 5" or "Apply none; write the record". I then follow checklist "How to run" step 9: first I name any favoured option whose reason I would not defend and keep it later; the record first, with each chosen proposal's baseline; one proposal at a time, on a branch; I stop at the first failing check, apply nothing after it, and report.
 ```
 
 Cost: S under a day of agent work, M a few days, L a week or more.
+
+In both reports and the revisit report, every finding under "Findings and options", the last as the
+first, carries every line of the form under these labels (Links, the trade-off of each option, the
+agent's reading with its two reasons, Owner's choice): the owner chooses from them, and step 2,
+revisits and field reports read them by label. A finding you would not write out in full goes under "Other findings", one line each.
 
 ### AI lessons review report
 
@@ -1859,16 +1931,22 @@ Work measured: <what agents do here: sessions, tasks, reviews, tests, releases>.
    Links: <the lesson's aspect page and each case section you read>.
    Options (the owner chooses; leaving it as it is may be one):
    - 1A: <change>. Trade-off: <what it costs, risks or gives up>. Cost: S | M | L.
-   - 1B: <another change, or "leave as it is">. Trade-off: <...>. Cost: S | M | L.
+   - 1B: <another change, or "leave as it is">. Trade-off: <...; for "leave as it is", what the problem goes on costing>. Cost: S | M | L.
    Depends on: <finding numbers, or none>.
-   Agent's reading: <the option the measurements favour, and why; or "no lean">.
-   Check now: <for each option, a command or count that passes once it is applied>.
+   Agent's reading: <the option the measurements favour, "later" (name the event that would make it "do"), or "no lean">, because:
+   - Prevents: <the cost seen, with its source: "seen here: <reverts, fix-after-fix commits, rework, issues, CI failures, session-log counts, a rule the owner wrote twice>" or "seen in cases <X, Y>" (a one-off step only); or "no cost seen">.
+   - Costs the owner: <what the option adds each week: prompts, gates, waiting, review hours, tokens; or "once: <what>">.
+   Check now: <for each option, a command or count that passes once it is applied; for an option that cuts or moves text, each sentence that leaves, where it goes, and whether it still drives behaviour>.
    Event that proves it: <what later work must show for the change to have held>.
    Owner's choice: <left blank for the owner: do 1A | do 1B | later | skip>.
 2. ...
 
+## Other findings
+- <A finding not written out in full, in one line; the owner can ask for it in full.>
+
 ## Next step
-Reply "Apply what you recommended", "Apply 1A and 3B; 2 later; skip 5" or "Apply none; write the record". I then follow docs/applying-lessons.md step 6: the record first, with each chosen proposal's baseline; one proposal at a time, on a branch; I stop at the first failing check, apply nothing after it, and report.
+This report is saved at <path outside the project>; step 2 can run in this session or in a fresh one that reads it. Step 2 follows docs/applying-lessons.md step 6 (https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/applying-lessons.md) and writes the record in the format of docs/report-formats.md "The record" (https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/report-formats.md); a fresh session downloads those files with curl and reads them from disk first.
+Reply "Apply what you recommended", "Apply 1A and 3B; 2 later; skip 5" or "Apply none; write the record". I then follow docs/applying-lessons.md step 6: first I name any favoured option whose reason I would not defend and keep it later; the record first, with each chosen proposal's baseline; one proposal at a time, on a branch; I stop at the first failing check, apply nothing after it, and report.
 ```
 
 ### Revisit report
@@ -1887,7 +1965,7 @@ Newest log entry: <date and title>. Stop: <yes: same entry and nothing due | no:
 - #<row> <ID>: waiting for first use, check by <YYYY-MM-DD> passed; owner <who>.
 
 ## Re-check
-- #<row> <ID>: proven | still waiting | stopped holding | not shown — <the "Check now" output and the numbers against the baseline>.
+- #<row> <ID>: proven | still waiting | stopped holding | not shown — <the "Check now" output and the numbers against the baseline>; triggers since <record date>: <m>, the rule used in <n> (an applied rule; "no trigger yet" when m is 0).
 
 ## Still closed
 - #<row> <ID>: skipped | owner's choice, <YYYY-MM-DD> — no new or changed lesson bears on it, and its measurement has not changed.
@@ -1896,9 +1974,10 @@ Newest log entry: <date and title>. Stop: <yes: same entry and nothing due | no:
 - #<row> <ID>: <the newer lesson that contradicts or supersedes it, or the change to its lesson>.
 
 ## Findings and options
-<Only new or changed lessons and questions, earlier "later" items, items that stopped holding, what the lint found, and closed items reopened (say why: which new lesson, or which measurement changed).>
+<Only new or changed lessons and questions, earlier "later" items, items that stopped holding, applied rules used in few of their triggers (options: retire it, or apply it again, each with its trade-off), what the lint found, and closed items reopened (say why: which new lesson, or which measurement changed).>
 ## Next step
-Reply "Apply what you recommended", "Apply 1A and 3B; 2 later; skip 5" or "Apply none; write the record". I then follow checklist "How to run" step 9 or docs/applying-lessons.md step 6: the record first, with each chosen proposal's baseline; one proposal at a time, on a branch; I stop at the first failing check, apply nothing after it, and report.
+This report is saved at <path outside the project>; step 2 can run in this session or in a fresh one that reads it. Step 2 follows checklist "How to run" step 9 (https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/checklist.md) or docs/applying-lessons.md step 6 (https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/applying-lessons.md) and writes the record in the format of docs/report-formats.md "The record" (https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/report-formats.md); a fresh session downloads those files with curl and reads them from disk first.
+Reply "Apply what you recommended", "Apply 1A and 3B; 2 later; skip 5" or "Apply none; write the record". I then follow checklist "How to run" step 9 or docs/applying-lessons.md step 6: first I name any favoured option whose reason I would not defend and keep it later; the record first, with each chosen proposal's baseline; one proposal at a time, on a branch; I stop at the first failing check, apply nothing after it, and report.
 ```
 
 ### The record
@@ -1911,8 +1990,9 @@ column differ:
 # Migration review record: <repository>
 
 Checklist: <ai-migrations commit or date>. Migration: <from> to <to>.
-Log entry: <date and title of the newest log.md entry this review covered>.
+Log entry: <date and title of the newest log.md entry when the files were read, the one this review covered>.
 Corrections checked: <COR IDs with what was found, or "none listed">, <YYYY-MM-DD>.
+Run by: <agent and model>, <the session that built the work | a fresh session | fresh subagents sent by a session | a person>.
 
 | # | Question | Proposal | Baseline | Status | Owner | Check by | Event that shows it | Date |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -1923,8 +2003,9 @@ Corrections checked: <COR IDs with what was found, or "none listed">, <YYYY-MM-D
 # AI lessons review record: <project>
 
 Lessons: <ai-migrations commit or date>.
-Log entry: <date and title of the newest log.md entry this review covered>.
+Log entry: <date and title of the newest log.md entry when the files were read, the one this review covered>.
 Corrections checked: <COR IDs with what was found, or "none listed">, <YYYY-MM-DD>.
+Run by: <agent and model>, <the session that built the work | a fresh session | fresh subagents sent by a session | a person>.
 
 | # | Lesson | Proposal | Baseline | Status | Owner | Check by | Event that shows it | Date |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -1944,15 +2025,23 @@ Corrections checked: the [corrections.md](https://raw.githubusercontent.com/ntro
 compared with this project, with what it found and the date; a first review writes "none listed"
 when the file has no entry.
 
+Log entry and Run by: the field report's "Log entry the run read" and "Who ran the review"
+([field reports](https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/field-reports.md)), so the agent that drafts a report copies them from here. A
+revisit updates both; a record written before "Run by:" existed gets it at its next revisit
+("unstated" for the earlier runs).
+
 Baseline: written before any change, how often the proposal's problem happened so far, with the
 evidence (a count from the history, logs or incidents), marked "(recorded)" when it comes from notes
 rather than a fresh count; a revisit compares the work since with it.
 
-Status, one of: open, proven, waiting for first use, stopped holding, skipped. A proposal the owner
+Status, one of: open, proven, waiting for first use, stopped holding, skipped, retired. A proposal the owner
 marked "later" is open; one the owner declined is skipped; an applied change whose check failed stays
 open, and its event names the failed check. A "do" that waits on an owner action, or on work outside
 this session, stays open, and its event says what it waits on. An applied change whose "Check now"
 passes is waiting for first use; once later work shows its "Event that proves it", it is proven.
+An applied rule that its trigger events met and that was used in few of them, which the owner then
+removed at a revisit, is retired: its row keeps the trigger count, the uses and the owner's words.
+A rule with no trigger yet is not retired: it stays waiting for first use.
 
 Owner and Check by: every row waiting for first use names who looks for its event and the date by
 which the event should have shown if the change holds (when the work that would show it is

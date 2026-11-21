@@ -26,8 +26,10 @@ adapt it. A revisit reads [corrections.md](corrections.md) first.
    Check: count the tests that exercise behaviour through a public interface (CLI, API, files
    written, a headless harness) apart from white-box tests; list public features with none; run
    them once and list those that fail or will not run. Find golden files tied to the old
-   implementation and how they are regenerated. Say how results are compared across languages
-   (plain-data summaries, tolerances) and how you confirm the tests ran. When the tests are what
+   implementation and how they are regenerated. Find what the old system has already made and
+   kept that must stay as it is (saved results, rendered files, rows), and say how it is proved
+   unchanged: on a copy of the store, old and new code each process all of it, outputs compared
+   (ours). Say how results are compared across languages (plain-data summaries, tolerances) and how you confirm the tests ran. When the tests are what
    moves, say how intent and coverage are compared (coverage before and after, a hand-converted
    sample) and check new tests can fail. Say whether old and new can run the same inputs side by
    side, outputs compared (a differential or shadow run), and how late a wrong
@@ -92,7 +94,9 @@ adapt it. A revisit reads [corrections.md](corrections.md) first.
    renamed fields or APIs, runtime facts a person would look at, and what a rule-based codemod
    can do first. Say whether the model was piloted on the hardest files of each language in scope (else propose a pilot), and check the
    largest files fit its context window. A group too varied for one prompt is a candidate to defer
-   or do by hand. Search docs and agent instructions for advice favouring the old stack.
+   or do by hand. Search docs, agent instructions and the prompts tuned to the old engine or
+   stack for advice favouring it: such a prompt raises no error on the new engine, its output is
+   only worse (ours).
    Lessons: CTX-1, CTX-2, CTX-3, CTX-5, CTX-9, CTX-10, CTX-11, CTX-12, CTX-13, TOL-2, TOL-7, TOL-9,
    AGF-8, PLN-8, PLN-12.
    Guide: [guide/q8.md](guide/q8.md).
@@ -110,7 +114,8 @@ adapt it. A revisit reads [corrections.md](corrections.md) first.
     agent sessions can reach. A rule only written down, with nothing enforcing it, is a
     finding: say what could enforce it, if the owner wants it enforced. Changes in other teams' code: count the owning teams,
     whether they asked for the move, who carries the deploy risk. Ask the owner who reviews,
-    whether they read the target language, and their hours a week.
+    whether they read the target language, and their hours a week, and whether a fresh reader
+    reads each large change before the merge rather than after (ours).
     Lessons: OVS-1, OVS-2, AGF-1, AGF-5, AGF-9, SEC-1, SEC-2, SEC-3, REV-1, REV-2, REV-9, REV-11,
     TEM-4, TEM-6, ROL-9.
     Guide: [guide/q10.md](guide/q10.md).
@@ -151,7 +156,9 @@ Check's measurement stands on its own.
    cases are few and mostly their teams' own accounts: read "What went wrong" before relying on them.
 2. Measure first: answer each Check with a number, file or command output, not from memory.
 3. A check you may not run: write the exact command, mark it "not run" with the reason, never
-   guess its result (P11). Logs or CI history count if you name their source.
+   guess its result (P11). The command is the line you would type (`GOOS=linux go build ./...`,
+   not "a cross-compile"); a figure for the target that you estimate is labelled an estimate. Logs or
+   CI history count if you name their source.
 4. A fact only the owner knows (review time, budget): write the question, mark it "ask the
    owner" and state a default; unanswered, assume it, note it in the record, go on. A decision only
    the owner can make (approval of a new stack, a change to a project rule) is not assumed: it stays
@@ -167,19 +174,36 @@ Check's measurement stands on its own.
    units. Keep the two readings apart: "(ours)" in the collection is the maintainer's, and so is a
    lesson tagged `[ours]`; label your own "agent's reading".
 7. Give each finding options for the owner, each with its trade-off; leaving it as it is is often
-   one. You may say which option the measurements favour and why, labelled "agent's reading". Order
-   the findings so the owner meets first what the rest depend on: a project rule against the move
-   (question 1), then the oracle, the baseline and the end state.
+   one, and its trade-off is what the problem goes on costing. You may say which option the measurements favour, labelled "agent's reading", with two
+   reasons: "Prevents:", the cost seen, with its source ("seen here: <evidence>" or "seen in cases
+   <X, Y>"), and "Costs the owner:", what the option adds each week. An option that adds a running
+   cost (a prompt, a gate, a weekly step) needs a cost seen here; without one, lean "later" and
+   name the event that would make it "do" (P13). A one-off step before something hard to undo (a
+   baseline, a golden set, a rollback path) may rest on the cost seen in the cases. Look for the
+   cost seen here in the project's own record: git history (reverts, fix-after-fix commits,
+   rework on the same files), issues and CI failures, session logs, rules the owner wrote more
+   than once. An option that cuts or moves text gives as its "Check now" each sentence that
+   leaves, where it goes and whether it still drives behaviour (P14). Order the findings so the
+   owner meets first what the rest depend on: a project rule against the move (question 1), then
+   the oracle, the baseline and the end state.
 8. Report as below and wait for the owner's choice (P10): for each finding, do (which option),
-   later or skip is theirs. One change per option (or parts 3a, 3b).
+   later or skip is theirs. One change per option (or parts 3a, 3b). Before you wait, save the
+   report to a file outside the project (in the temporary folder, or a path the owner names) and
+   give its path: step 9 may then run in a fresh session from that file. A long review may send
+   the measuring to fresh subagents: save each one's findings to that file as they arrive, since
+   findings held only in a session's context are lost at a compaction.
 9. Apply and record, once the owner has chosen (P10) ("Apply what you recommended": the options your
    reading favoured, the rest later; "Apply 1A and 3B; 2 later; skip 5"; "Apply none; write the
    record"). In a read-only run, write no file (P10); show the record after the report. Else:
+   - "Apply what you recommended": first drop each favoured option whose reason you would not
+     defend if the owner pushed back (P15); name it with that reason and record it as later. Never
+     drop one because you expect its check to fail: that check runs, and the stop below holds
+     (P15).
    - Write `docs/migration-review.md` in the measured repository (the one file this checklist adds
      there; format below) before changing anything, with each chosen proposal's baseline: how
      often its problem has happened so far, with the evidence. Complete it with every finding,
      the later and skipped ones too, the corrections.md entries checked ("none listed" if it has
-     none) and the newest log.md entry this review covered.
+     none), the newest log.md entry this review covered and who ran it ("Run by:").
    - Each row waiting for first use gets the owner (who looks for its event) and check-by date the
      owner named, or ones you propose for the owner to confirm. A question of fact left
      unanswered: assume the report's default and record the assumption; a decision left open (an
@@ -188,12 +212,18 @@ Check's measurement stands on its own.
      proposal at a time, on a branch. First state its "Check now" and its "Event that proves it";
      it is applied when the check now passes (waiting for first use), proven only once later work
      shows the event.
+   - Before you change a file outside the project (user-level instructions, skills or settings,
+     another repository), show the owner the exact text (a diff; for a long change, a summary and
+     the path to a file with the full text) and wait for their yes (P16). A user-level file that
+     several projects share changes for one project at a time, each from its latest version.
    - Stop at the first failing check (P12): leave that proposal open, its event naming the failed
      check, apply no later proposal, and report what failed and what is left. The owner decides.
 10. Revisit: read [corrections.md](corrections.md) first, then go on as step 7 of
     [applying the lessons](docs/applying-lessons.md) says, with the questions its `changes/` files
-    list as well as the lessons. Report in the revisit format; change nothing but the record (P10) until
-    the owner chooses, then apply as in step 9.
+    list as well as the lessons. There, each applied item's trigger events since the record's date
+    are counted; one that was used in few of them is offered as retire or apply again, and one with
+    no trigger yet stays waiting for first use. Report in the revisit format; change nothing but the
+    record (P10) until the owner chooses, then apply as in step 9.
 11. Share (optional): a [field report](docs/field-reports.md) once an item has met its problem.
 
 ## Report format
@@ -219,6 +249,10 @@ Levels: `published case` (one), `published cases` (two or more), `others' measur
 | P10 | ours | ours | changes the owner did not choose | skipping read-only builds and tests, or no record after the owner chose |
 | P11 | ours | ours | invented measurements | marking checks "not run" that could run safely |
 | P12 | ours | ours | later changes piled on a failed one, so the failure points nowhere | stopping for a check that failed before the change too; report that, and let the owner decide |
+| P13 | ours (one-off steps: the costs the cited cases report) | ours | rules that add a weekly cost against a risk this project has not paid, applied and then not followed | holding back a one-off baseline, golden set or rollback path because nothing has gone wrong here yet |
+| P14 | ours | ours | a trim or move that drops sentences that still drive behaviour | listing sentences for a change that moves nothing out of the files loaded at the start |
+| P15 | ours | ours | an option applied on a reason that would not survive the owner's question; an option held back to get round the stop at a failing check | holding back every option the owner might question, so nothing is applied |
+| P16 | ours | ours | changes to the owner's user-level setup or other repositories that the owner never saw | asking for a yes on each file inside the project, which the choice in step 8 already covers |
 
 [GitHub]: cases/2026-09-16-github-copilot-runtime-rust.md
 [Bun]: cases/2026-07-08-bun-zig-to-rust.md

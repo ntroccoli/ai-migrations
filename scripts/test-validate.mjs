@@ -517,9 +517,9 @@ test('a hard rule without a provenance marker fails', 1,
 test('a threshold without a provenance marker fails', 1,
   d => edit(CL(d), 'before all 1,448 (P8).', 'before all 1,448.'), null, 'a threshold (a number) without a provenance marker');
 test('a marker with no row fails', 1,
-  d => edit(CL(d), 'guess its result (P11).', 'guess its result (P13).'), null, 'marker (P13) has no row');
+  d => edit(CL(d), 'guess its result (P11).', 'guess its result (P99).'), null, 'marker (P99) has no row');
 test('a row no sentence carries fails', 1,
-  d => edit(CL(d), `${P8_ROW}\n`, `${P8_ROW}\n| P13 | ours | ours | something | something else |\n`), null, 'no sentence carries (P13)');
+  d => edit(CL(d), `${P8_ROW}\n`, `${P8_ROW}\n| P99 | ours | ours | something | something else |\n`), null, 'no sentence carries (P99)');
 test('a provenance row without its source fails', 1,
   d => edit(CL(d), P8_ROW, P8_ROW.replace('[Bun][], PLN-1', '')), null, 'P8: "Source" is empty');
 test('a provenance row without its level fails', 1,
@@ -554,8 +554,13 @@ test('a record table without Owner and Check by fails', 1,
   d => edit(join(d, 'docs', 'report-formats.md'), '| # | Lesson | Proposal | Baseline | Status | Owner | Check by |', '| # | Lesson | Proposal | Baseline | Status |'), null, 'needs "| Status | Owner | Check by |"');
 
 test('a record template without "Corrections checked:" fails', 1,
-  d => edit(join(d, 'docs', 'report-formats.md'), 'Lessons: <ai-migrations commit or date>.\nLog entry: <date and title of the newest log.md entry this review covered>.\nCorrections checked:',
-    'Lessons: <ai-migrations commit or date>.\nLog entry: <date and title of the newest log.md entry this review covered>.\nChecked:'), null, 'needs a "Corrections checked: " line');
+  d => edit(join(d, 'docs', 'report-formats.md'), 'the one this review covered>.\nCorrections checked: <COR IDs with what was found, or "none listed">, <YYYY-MM-DD>.\nRun by: <agent and model>, <the session that built the work | a fresh session | fresh subagents sent by a session | a person>.\n\n| # | Lesson |',
+    'the one this review covered>.\nChecked: <COR IDs with what was found, or "none listed">, <YYYY-MM-DD>.\nRun by: <agent and model>, <the session that built the work | a fresh session | fresh subagents sent by a session | a person>.\n\n| # | Lesson |'), null, 'needs a "Corrections checked: " line');
+test('a record template without "Run by:" fails', 1,
+  d => edit(join(d, 'docs', 'report-formats.md'), 'Run by: <agent and model>, <the session that built the work | a fresh session | fresh subagents sent by a session | a person>.\n\n| # | Lesson |',
+    'Reviewer: <agent and model>.\n\n| # | Lesson |'), null, 'needs a "Run by: " line (found 1 of 2)');
+test('a record status list without "retired" fails', 1,
+  d => edit(join(d, 'docs', 'report-formats.md'), 'stopped holding, skipped, retired. A proposal', 'stopped holding, skipped. A proposal'), null, '"Status, one of:" must list "retired"');
 
 // The checklist's guide (docs/lesson-rules.md "Checklist"): one broken copy per rule.
 const G = (d, n) => join(d, 'guide', `q${n}.md`);

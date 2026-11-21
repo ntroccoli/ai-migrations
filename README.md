@@ -57,8 +57,12 @@ agent looks for the route's record in your project (`docs/migration-review.md` o
 what is new in the collection or due in your project, and stops when nothing is. It says in one
 line which it did and why. Step 1 only reads your project and changes nothing: you get numbered
 findings, each with options and their trade-offs (the agent may say which one the measurements
-favour, labelled as its reading), and you choose for each: do an option, later, or skip. Run step
-1 in a fresh session and paste step 2 in that same session; steps 2 to 4 are optional. Run step 1 again in a fresh session
+favour, labelled as its reading, with the cost it prevents and what it costs you each week),
+and you choose for each: do an option, later, or skip. To find costs already paid, it may read
+your agent's session logs for this project; they hold whatever was pasted into a session, secrets
+included. Run step 1 in a fresh session. It saves its report to a file outside your project and
+gives you the path: paste step 2 in that same session, or in a fresh one that starts from that
+file. Steps 2 to 4 are optional. Run step 1 again in a fresh session
 when the collection has grown (llms.txt names a newer log entry than your record) or after a few
 weeks of work.
 
@@ -73,7 +77,7 @@ weeks of work.
 #### Step 1: review
 
 ```text
-Read https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms.txt and follow it to review this project for a migration. Change nothing until I choose.
+Download https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms.txt with curl into a temporary folder outside this project and read it from disk in full; follow it to review this project for a migration. Change nothing until I choose.
 ```
 
 Before applying anything, check step 1's claims: a proposal can rest on a wrong reading of your
@@ -81,7 +85,8 @@ project.
 
 #### Step 2: apply
 
-Once you have chosen, paste one of these in the same session, with your choices:
+Once you have chosen, paste one of these in the same session, with your choices; in a fresh
+session, start it with "My review is in <the report's path>.":
 
 ```text
 Apply what you recommended.
@@ -97,7 +102,10 @@ Apply none; write the record.
 
 The agent follows the checklist's "How to run" step 9: it writes the record
 `docs/migration-review.md` with each chosen proposal's baseline, then applies one proposal at a
-time on a branch, stops at the first failing check and reports it.
+time on a branch, stops at the first failing check and reports it. Asked to apply what it
+recommended, it first names any option whose reason it would not defend if you pushed back, and
+keeps it for later. It shows you the exact text, and waits for your yes, before it changes a
+file outside the project.
 
 #### Step 3: revisit
 
@@ -122,7 +130,7 @@ Read https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/docs/field-r
 #### Step 1: compare
 
 ```text
-Read https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms.txt and follow it to compare this project's AI-driven work with the lessons. Change nothing until I choose.
+Download https://raw.githubusercontent.com/ntroccoli/ai-migrations/main/llms.txt with curl into a temporary folder outside this project and read it from disk in full; follow it to compare this project's AI-driven work with the lessons. Change nothing until I choose.
 ```
 
 Before applying anything, check step 1's claims: a proposal can rest on a wrong reading of your
@@ -130,7 +138,8 @@ project.
 
 #### Step 2: apply
 
-Once you have chosen, paste one of these in the same session, with your choices:
+Once you have chosen, paste one of these in the same session, with your choices; in a fresh
+session, start it with "My review is in <the report's path>.":
 
 ```text
 Apply what you recommended.
@@ -146,7 +155,10 @@ Apply none; write the record.
 
 The agent follows step 6 of [applying the lessons](docs/applying-lessons.md): it writes the record
 `docs/ai-lessons-review.md` with each chosen proposal's baseline, then applies one proposal at a
-time on a branch, stops at the first failing check and reports it.
+time on a branch, stops at the first failing check and reports it. Asked to apply what it
+recommended, it first names any option whose reason it would not defend if you pushed back, and
+keeps it for later. It shows you the exact text, and waits for your yes, before it changes a
+file outside the project (your user-level setup, another repository).
 
 #### Step 3: revisit
 

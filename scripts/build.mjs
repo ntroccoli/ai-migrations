@@ -360,9 +360,18 @@ out['llms.txt'] = [
   '5. Change nothing in the project until the user chooses; a revisit writes only the record\'s "Corrections checked:" ' +
     'line. A skipped item, or an owner\'s choice recorded against a lesson, is proposed again only for a new or changed ' +
     'lesson or a changed measurement; say which.',
-  '6. Step 2, in the same session: "Apply what you recommended", "Apply 1A and 3B; 2 later; skip 5" or "Apply none; ' +
-    'write the record". Follow checklist step 9 or docs/applying-lessons.md step 6: the record first, then one proposal ' +
-    'at a time on a branch; stop at the first failing check and report.', '',
+  '6. Each option the agent favours gives what it prevents (the cost seen here, or in which cases) and what it costs ' +
+    'the owner each week; an option that adds a running cost with no cost seen here leans later (checklist step 7, ' +
+    'docs/applying-lessons.md step 5). Write every finding in the template in full, the last as the first (Links, a ' +
+    'trade-off for each option, "leave as it is" included, the reading\'s two reasons, Owner\'s choice); one not worth ' +
+    'that goes under "Other findings", one line. Save the report to a file outside the project (the temporary folder, or a path ' +
+    'the user names) before asking the user to choose, and give its path; a long review may send the measuring to fresh ' +
+    'subagents and save their findings to that file as they arrive.',
+  '7. Step 2, in the same session or in a fresh one that reads the saved report: "Apply what you recommended", "Apply ' +
+    '1A and 3B; 2 later; skip 5" or "Apply none; write the record". Follow checklist step 9 or docs/applying-lessons.md ' +
+    'step 6: first name any favoured option whose reason you would not defend, never because you expect its check to ' +
+    'fail; the record first, then one proposal at a time on a branch; the exact text and the user\'s yes before any ' +
+    'change outside the project; stop at the first failing check and report.', '',
   '## How to use', '',
   `- Before a migration or a large restructuring: run the [checklist](${RAW_BASE}/checklist.md) on the repository and change nothing. Each ` +
     'question has a Check to measure and report and cites lesson IDs; before writing up a finding on a question, read its guide ' +
