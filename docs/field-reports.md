@@ -31,9 +31,25 @@ One report per review or revisit. Use the
 2. Fill the form's fields: what was run, the relation of the project to this collection
    (independent, the maintainer's own project, or other), the IDs used, the move as a category
    ("none (not a migration)" on the lessons route), the models the agents ran on (as their makers
-   name them, or "unstated"), the size band, the stage, what was predicted, what happened, which
-   IDs foresaw a problem, which did not hold, which are not yet tested by a real event, and what
-   nothing foresaw.
+   name them, or "unstated"), who ran the review, the log entry the run read, the size band, the
+   stage, what was predicted, what happened, which IDs foresaw a problem, which did not hold,
+   which are not yet tested by a real event, how each outcome was measured, and what nothing
+   foresaw. Three of these fields say how much weight a report can bear:
+   - **Who ran the review**: the session that built the work, a fresh session, fresh subagents
+     sent by a session, or a person. A session that grades the work it built tends to grade it
+     kindly, so reports are counted by this field next to the relation.
+   - **Log entry the run read**: the date and title of the newest entry in [log.md](../log.md)
+     when the files were read (the record names it). It ties the report to a version of the
+     lessons and the checklist, so a count is never mixed across a rewording.
+   - **How each outcome was measured**: one line per ID, starting with the ID: what was counted or
+     compared, on what, or "judged from the review, nothing measured". A measured "foresaw" weighs
+     more than a judged one.
+
+   When the report gives token or call counts read from the agent's session logs, count one API
+   call per message id (logs that write a line per content block repeat the id, and summing every
+   line doubles the totals), count tool calls rather than all text, and state the definition of
+   "tokens re-read" used (for example, the context at the first reply after each wake-up,
+   summed).
 3. Remove everything listed under "Never include" below. Write numbers as counts, sizes or
    shares; name a file by its role ("the test runner config"), not its path.
 4. Show the user the exact text and what you removed. Post it only after their yes. Either hand
@@ -57,7 +73,8 @@ paths and anything private.
   `needs-fix` and one comment that says what to fix (edit the issue; the next batch reads it
   again).
 - Reports from independent projects are counted apart from the rest: the maintainer's own
-  projects are not independent evidence.
+  projects are not independent evidence. Each is also counted by who ran the review and by the
+  log entry it read; reports filed before the form asked for these count them as "unstated".
 - Reports are counted by question and lesson ID: how often each foresaw a problem, how often it
   is not yet tested, how often its
   prediction did not hold. The counts lead to changes in the checklist (a question reworded,

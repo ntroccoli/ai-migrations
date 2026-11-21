@@ -55,6 +55,25 @@ body:
     validations:
       required: true
   - type: dropdown
+    id: reviewer
+    attributes:
+      label: Who ran the review
+      description: A session that built the work tends to grade its own work kindly; reports are counted by this field.
+      options:
+        - The session that built the work
+        - A fresh session
+        - Fresh subagents sent by a session
+        - A person
+    validations:
+      required: true
+  - type: input
+    id: log_entry
+    attributes:
+      label: Log entry the run read
+      description: The date and title of the newest entry in log.md when the files were read, for example "2026-11-15 — one review prompt per route". It ties the report to a version of the lessons. Write "unstated" if you do not know.
+    validations:
+      required: true
+  - type: dropdown
     id: size
     attributes:
       label: Code in scope
@@ -111,6 +130,13 @@ body:
     attributes:
       label: IDs not yet tested by a real event
       description: IDs applied or checked where nothing has happened yet that they would catch, comma-separated, or "none".
+    validations:
+      required: true
+  - type: textarea
+    id: method
+    attributes:
+      label: How each outcome was measured
+      description: One line per ID above, starting with the ID, for example "TST-1 compared the error output of old and new builds on 40 recorded requests" or "Q4 judged from the review, nothing measured". The most useful field. Name files by role, not path.
     validations:
       required: true
   - type: textarea
