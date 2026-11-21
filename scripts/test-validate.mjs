@@ -5,7 +5,7 @@
 import { cpSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync, existsSync, appendFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { ROOT, parseCase, expectedEra, eraText, LOG, logEntries, modelFamily } from './lib.mjs';
+import { ROOT, parseCase, expectedEra, eraText, LOG, logEntries, modelFamily, parseChanges, byteSize } from './lib.mjs';
 
 const TMP = join(ROOT, '.test-tmp');
 const PARTS = ['scripts', 'cases', 'lessons', 'checklist.md', 'pitfalls.md', 'NOTICE.md', 'index.md', 'llms.txt', 'llms-full.txt',
@@ -30,14 +30,14 @@ const edit = (file, from, to) => {
 };
 const node = (dir, script, args) => spawnSync(process.execPath, [join(dir, 'scripts', script), ...args], { cwd: dir, encoding: 'utf8' });
 const run = (dir, args = []) => node(dir, 'validate.mjs', args);
-// expect: 0 (valid), 1 (problems), 2 (usage); `want` must appear in the output when given.
+// expect: 0 (valid), 1 (problems), 2 (usage); `want` (a string, or a list of them) must appear in the output when given.
 // `script` runs another script than validate.mjs (build.mjs for the --check tests).
 function test(name, expect, setup, args, want, script = 'validate.mjs') {
   const dir = copy();
   let r;
   try { r = node(dir, script, setup(dir) || args || []); } catch (e) { failed.push(`${name}: ${e.message}`); return; }
   const out = r.stdout + r.stderr;
-  const ok = r.status === expect && (!want || out.includes(want));
+  const ok = r.status === expect && (!want || [want].flat().every(w => out.includes(w)));
   console.log(`${ok ? 'ok  ' : 'FAIL'} ${name} (exit ${r.status})`);
   if (!ok) failed.push(`${name}: wanted exit ${expect}${want ? ` with "${want}"` : ''}, got ${r.status}\n${out}`);
 }
@@ -86,9 +86,37 @@ test('staged case with --cases-dir still catches a missing case', 1, d => {
 }, null, 'broken link 2026-09-16-no-such-case.md');
 test('--cases-dir needs a folder', 2, d => ['--cases-dir', join(d, 'nowhere'), caseFile(d, BUN)]);
 
-// checklist.md: size cap, reference links, every question cites a case.
-test('checklist over the size cap fails', 1,
-  d => appendFileSync(join(d, 'checklist.md'), `\n${'Padding words for the size test. '.repeat(700)}\n`), null, 'bytes (at most');
+// Sizes (docs/maintaining.md "Sizes and format limits"): no byte cap fails; the validator reports each
+// file's bytes and its growth since the sizes the previous log entry's changes file recorded.
+const prevSizes = () => {
+  const e = logEntries(readFileSync(LOG, 'utf8'))[1];
+  return parseChanges(readFileSync(join(ROOT, 'changes', `${e.slug}.md`), 'utf8')).sizes;
+};
+const fmt = n => n.toLocaleString('en-US');
+const grown = (rel, add) => {
+  const now = byteSize(readFileSync(join(ROOT, rel), 'utf8')) + Buffer.byteLength(add), d = now - prevSizes().get(rel);
+  return `  ${rel} ${fmt(now)} (${d >= 0 ? '+' : '-'}${fmt(Math.abs(d))})`;
+};
+const PAD = {
+  'checklist.md': `\n${'Padding words for the size test. '.repeat(700)}\n`, 'lessons/review.md': `\n[pad]: ../index.md${' '.repeat(21000)}\n`,
+  'lessons/index.md': `\n${' '.repeat(13000)}\n`, 'llms.txt': `\n${' '.repeat(21000)}\n`, 'AGENTS.md': `\n${' '.repeat(9000)}\n`,
+};
+test('files past the old byte caps pass, and the report shows each one\'s growth', 0,
+  d => { for (const [rel, add] of Object.entries(PAD)) appendFileSync(join(d, rel), add); }, null,
+  ['a report, never a failure; growth since', ...Object.entries(PAD).map(([rel, add]) => grown(rel, add))]);
+test('a previous entry with no recorded sizes is reported as such', 0, d => {
+  const e = logEntries(readFileSync(join(d, 'log.md'), 'utf8'))[1];
+  const f = join(d, 'changes', `${e.slug}.md`);
+  writeFileSync(f, readFileSync(f, 'utf8').replace(/\r\n/g, '\n').split('## Sizes after this entry')[0]);
+}, null, 'recorded no sizes');
+test('a changed AGENTS.md puts the newest changes file out of date', 1,
+  d => { appendFileSync(join(d, 'AGENTS.md'), '\nOne more line.\n'); return ['--check']; }, null, 'out of date: changes/', 'build.mjs');
+test('a long summary paragraph is a note, not a failure', 0, d => {
+  const c = parseCase(caseFile(d, BUN));
+  edit(caseFile(d, BUN), `# ${c.meta.title}\n\n`, `# ${c.meta.title}\n\n${'Extra words here. '.repeat(55)}`);
+}, null, 'summary paragraph has');
+
+// checklist.md: reference links, every question cites a case.
 test('checklist with CRLF line ends measures as LF', 0, d => {
   const p = join(d, 'checklist.md');
   writeFileSync(p, readFileSync(p, 'utf8').replace(/\r?\n/g, '\r\n'));
@@ -110,7 +138,7 @@ const REV1 = '- **REV-1** [stated] Never let the writing agent review its own ch
 test('lesson with an unknown tag fails', 1,
   d => edit(L(d, 'review'), '- **REV-1** [stated]', '- **REV-1** [maybe]'), null, 'REV-1: tag must be [stated] or [ours]');
 test('lesson text over 200 characters fails', 1,
-  d => edit(L(d, 'review'), REV1, `${REV1} ${'and then some more words '.repeat(6)}`), null, 'REV-1: lesson text must be one line of 1 to 200 characters');
+  d => edit(L(d, 'review'), REV1, `${REV1} ${'and then some more words '.repeat(6)}`), null, ['REV-1: lesson text must be one line of 1 to 200 characters', 'never drop a qualifier to fit']);
 test('lesson text with a number fails', 1,
   d => edit(L(d, 'review'), REV1, '- **REV-1** [stated] Never let the writing agent review its own 3 changes;'), null, 'REV-1: lesson text holds a number');
 test('duplicate lesson ID fails', 1,
@@ -193,14 +221,6 @@ test('lesson page without an intro fails', 1,
   d => edit(L(d, 'review'), 'How agent-written changes were reviewed, by agents and by people.\n\n', ''), null, 'needs a one-paragraph intro');
 test('lesson page without the evidence note fails', 1,
   d => edit(L(d, 'review'), 'Evidence base: every lesson here comes from', 'Evidence: every lesson here comes from'), null, 'needs the evidence note');
-test('lesson page over the size cap fails', 1,
-  d => appendFileSync(L(d, 'review'), `\n[pad]: ../index.md${' '.repeat(21000)}\n`), null, 'bytes (at most 20480)');
-test('lessons/index.md over its size cap fails', 1,
-  d => appendFileSync(join(d, 'lessons', 'index.md'), `\n${' '.repeat(13000)}\n`), null, 'bytes (at most 12288)');
-test('llms.txt over its size cap fails', 1,
-  d => appendFileSync(join(d, 'llms.txt'), `\n${' '.repeat(21000)}\n`), null, 'bytes (at most 20480)');
-test('AGENTS.md over its size cap fails', 1,
-  d => appendFileSync(join(d, 'AGENTS.md'), `\n${' '.repeat(9000)}\n`), null, 'bytes (at most 8192)');
 test('AGENTS.md pointing to a missing docs file fails', 1,
   d => edit(join(d, 'AGENTS.md'), '(docs/lesson-rules.md)', '(docs/lesson-rule.md)'), null, 'link to docs/lesson-rule.md does not resolve');
 // One fixture per label word: in a shared sentence the other word, within three words, would pass the number.
@@ -522,10 +542,14 @@ test('a question that names stopping is not a rule', 0, d => {
   edit(CL(d), '9. **How will you work the long tail, stop, and learn from failures?**', '9. **How will you work the long tail, and when do you stop?**');
   edit(join(d, 'guide', 'q9.md'), '# Q9 guide: How will you work the long tail, stop, and learn from failures?', '# Q9 guide: How will you work the long tail, and when do you stop?');
 });
-test('a size cap without its row in "Size caps" fails', 1,
-  d => edit(join(d, 'docs', 'maintaining.md'), '| `AGENTS_MAX_BYTES`', '| `AGENTS_BYTES`'), null, '"Size caps" has no row for AGENTS_MAX_BYTES');
-test('a size cap row without its blind failure fails', 1,
-  d => edit(join(d, 'docs', 'maintaining.md'), '| cutting a how-to-use line an agent needs |', '| |'), null, 'LLMS_MAX_BYTES: "Blind failure" is empty');
+test('a limit without its row in "Sizes and format limits" fails', 1,
+  d => edit(join(d, 'docs', 'maintaining.md'), '| `SUMMARY_MAX_CHARS`', '| `SUMMARY_CHARS`'), null,
+  ['"Sizes and format limits" has no row for SUMMARY_MAX_CHARS', 'SUMMARY_CHARS is not in LIMITS']);
+test('a limit row whose Status is not what the validator does fails', 1,
+  d => edit(join(d, 'docs', 'maintaining.md'), '| a lesson\'s text and a practice\'s text: 200 characters | enforced |', '| a lesson\'s text and a practice\'s text: 200 characters | warning |'),
+  null, 'LINE_MAX_CHARS: Status must be "enforced"');
+test('a limit row without its blind failure fails', 1,
+  d => edit(join(d, 'docs', 'maintaining.md'), '| reading the mark as an order to drop the lesson; it asks for a re-check against newer cases |', '| |'), null, 'OUTDATED_MONTHS: "Blind failure" is empty');
 test('a record table without Owner and Check by fails', 1,
   d => edit(join(d, 'docs', 'report-formats.md'), '| # | Lesson | Proposal | Baseline | Status | Owner | Check by |', '| # | Lesson | Proposal | Baseline | Status |'), null, 'needs "| Status | Owner | Check by |"');
 

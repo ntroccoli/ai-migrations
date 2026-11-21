@@ -1,7 +1,7 @@
 # Maintaining the log and the generated files
 
 Read before opening a `log.md` or `corrections.md` entry, changing `scripts/build.mjs`, adding to what agents read
-first (`llms.txt`, `lessons/index.md`), or trimming any file to meet a size cap ("Size caps" below).
+first (`llms.txt`, `lessons/index.md`), or removing or moving text in any file ("Sizes and format limits" below).
 Moved from `AGENTS.md`, which keeps the commands.
 
 ## Update log
@@ -68,42 +68,63 @@ Reading cost drives this layout: what an agent reads at the start is paid on eve
 route: `llms.txt`, then `lessons/evidence.md`, then an aspect page only for the lessons used;
 `index.md` only to choose cases. The checklist route: `checklist.md` whole, then `guide/q<n>.md`
 only for a question with a finding to write up (the guide holds the case evidence the questions
-once carried, so the checklist stays short). `llms.txt` lists no cases, so it does not grow with each case, and
-stays at or under 20 KB (20,480 bytes, `LLMS_MAX_BYTES`, checked by the validator). Only
-`lessons/evidence.md` and `llms-full.txt` list every lesson; keep it so (a test checks the index
-and `llms.txt`).
-`lessons/index.md` stays at or under 12 KB (12,288 bytes, `INDEX_MAX_BYTES`, checked by the
-validator): model families with the same lessons share a "By model" row, and "Where the cases
-disagree" lists IDs per page.
+once carried, so the checklist stays short). `llms.txt` lists no cases, so it does not grow with each case; its
+size, like that of every file an agent may read whole, is in the validator's size report ("Sizes and
+format limits" below), never a failure. Only `lessons/evidence.md` and `llms-full.txt` list every
+lesson; keep it so (a test checks the index and `llms.txt`).
+`lessons/index.md` stays a short table of contents: model families with the same lessons share a
+"By model" row, and "Where the cases disagree" lists IDs per page.
 `node scripts/build.mjs --check` writes nothing and exits 1 when any of them is out of date; it
 must exit 0 before a commit. Never edit these files by hand: change the sources and rebuild.
 `GENERATED_FILES` in `scripts/lib.mjs` names the generated files; the build fails when it is out
 of step.
 
-## Size caps
+## Sizes and format limits
 
-Every cap the validator enforces, and the other numbers in these rules, with where it comes from.
-None was measured: no test showed that a file at the cap works better for an agent than one above
-it. Each is a budget we picked (`ours`), kept because what an agent reads at the start is paid on
-every run. So a cap is never a reason to lose a rule: a trim to meet one moves text to a file read
-when needed and proves no rule lost (diff the rule sentences before and after, and name where each
-moved one now lives); it never drops a rule that changes what an agent does. When nothing can move,
-raise the cap in its own reviewed commit and update its row here.
+No file has a byte cap. Our caps were budgets we picked (`ours`), never measured: no test showed
+that a file at a cap works better for an agent than one above it, and trims to meet
+`checklist.md`'s cap dropped five working instructions in sweeps 1 and 2 (the worktree reason, the
+`wc -l` fallback, the "Other gaps" slot, now "Other findings", the read-only line of step 9, Q11's
+"what must exist before the first release"; the sweep reviews found them and the fix rounds
+restored them). So the validator reports sizes and fails on none: each full run prints the bytes
+of every file an agent may read whole (`sizeReportFiles` in `scripts/lib.mjs`) and its growth since
+the sizes the previous log entry's `changes/` file recorded. Read the report for reading cost: what
+an agent reads at the start is paid on every run, and a missing instruction costs a wrong run.
 
-| Cap | Limit | Source | Level | Prevents | Blind failure |
-| --- | --- | --- | --- | --- | --- |
-| `AGENTS_MAX_BYTES` (`AGENTS.md`) | 8,192 bytes | the karpathy-ideas coordinator's advice (2026-11-14), from its own file of 7.5 KB, not a measurement | ours | every session paying for rules only some tasks need (`AGENTS.md` loads into each) | a rule cut to fit, or moved where the agent doing that task never looks |
-| `CHECKLIST_MAX_BYTES` (`checklist.md`) | 20,480 bytes | picked with the first validator cap (2026-11-13) | ours | a checklist that grows with each case until agents skim it | seen here: trims to fit dropped working instructions twice (the worktree reason, the `wc -l` fallback, the "Other gaps" slot, the read-only line of step 9, Q11's "what must exist before the first release"); the sweep 1 and 2 reviews found them and the fix rounds restored them |
-| `LESSON_MAX_BYTES` (each lesson page) | 20,480 bytes | picked with the lesson pages (2026-11-13): an agent reads a page whole | ours | a page too long to read whole | a page split by size instead of by aspect, or "Against" lines shortened past their meaning |
-| `INDEX_MAX_BYTES` (`lessons/index.md`) | 12,288 bytes | picked one commit after the index stopped listing every lesson (2026-11-14; it had reached 46,128 bytes) | ours | the table of contents for people turning back into a list of every lesson | a build change that drops "May be outdated" or "Disagree" entries to fit |
-| `LLMS_MAX_BYTES` (`llms.txt`) | 20,480 bytes | picked when `llms.txt` stopped listing cases (2026-11-14; it had reached 23,385 bytes) | ours | an entry point that grows with each case | cutting a how-to-use line an agent needs |
-| `OUTDATED_MONTHS` | 12 months | picked with the "Depends on model ability" tag (2026-11-14) | ours | trusting a lesson about model limits that only older models showed | reading the mark as an order to drop the lesson; it asks for a re-check against newer cases |
-| Lesson text | 200 characters | picked with the lesson format (2026-11-13) | ours | lesson lines that carry the case detail | a qualifier dropped to fit ("for independent units"), which widens the lesson |
-| Checklist questions | 5 to 12 questions | the first checklist allowed 5 to 10 questions; raised to 12 the same night to fit the 12 it had (2026-11-13): a number bent to the content, not measured | ours | a checklist too long to run in one session | merging questions until a Check is lost; merge only checks that measure the same thing |
-| Quoted span in a lesson | 4 words | the case validator's test for what counts as a quote (2026-11-13), applied to lessons too | ours | copied wording in our summaries | none on behaviour; a paraphrase is checked against the case instead |
-| Quote in a case | one quote, 15 words | picked with the case format (2026-11-13), for copyright care | ours | copied text in our summaries | none on behaviour; the case loses colour, not facts |
-| Case summary | 160 characters, and a summary paragraph of 40 to 150 words | picked with the case format (2026-11-13) | ours | index lines and summaries that carry the whole case | a failure or a limit left out of the summary to fit; "What went wrong" keeps it |
-| Practice text | 200 characters | picked with the case format (2026-11-13) | ours | practices that carry the case detail | a qualifier dropped to fit, which widens the practice |
+Removing or moving text, in any file:
+
+- Remove a sentence only when it duplicates a live line or is stale, never for a size.
+- A moved line keeps a pointer from a file that loads at the start (`AGENTS.md`, `llms.txt`,
+  `checklist.md`), so the agent doing that task still finds it.
+- Every cut or move lists, in its commit message or report, each sentence that leaves, where it
+  went (or which live line it duplicates, or why it is stale) and whether it still drives
+  behaviour. Count by sentence, not by line (**maintainer only**: the private archive's
+  `behaviour-checks/rule-diff.mjs` prints each sentence of the old files found in no new file).
+
+The limits still enforced are format rules with a reason other than size. A failing line limit is
+never a reason to drop a qualifier: split the line or move detail to a sub-item (the validator's
+message says so). `LIMITS` in `scripts/lib.mjs` names each row below with what the validator does
+with it (reported, enforced, a warning, or a mark that removes nothing); the validator checks that
+the rows and the code agree.
+
+| Name | Limit | Status | Source | Level | Prevents | Blind failure |
+| --- | --- | --- | --- | --- | --- | --- |
+| `SIZE_REPORT` | the bytes of `AGENTS.md`, `llms.txt`, `checklist.md`, `lessons/evidence.md`, `lessons/index.md` and each lesson page, and their growth since the previous log entry | reported | replaced five byte caps on 2026-11-21 (`AGENTS_MAX_BYTES` 8 KB, `CHECKLIST_MAX_BYTES` and `LESSON_MAX_BYTES` 20 KB, `INDEX_MAX_BYTES` 12 KB, `LLMS_MAX_BYTES` 20 KB; picked 2026-11-13 to 2026-11-14, none measured), after the karpathy-ideas coordinator withdrew the advice behind the 8 KB cap and its work setup turned its size gate into a report | ours | reading cost rising with each case unseen | reading the report as a cap again and cutting to keep a number down; remove for a reason only (above) |
+| `SUMMARY_MAX_CHARS` | a case's `summary`: one sentence of 160 characters | enforced | picked with the case format (2026-11-13): it is the case's line in `index.md`, which an agent scans to choose cases | ours | index lines that carry the whole case | a failure or a limit left out of the summary to fit; "What went wrong" keeps it, and the message says so |
+| `LINE_MAX_CHARS` | a lesson's text and a practice's text: 200 characters | enforced | picked with the lesson and case formats (2026-11-13): one line each in `lessons/evidence.md`, `llms-full.txt` and a case's practices | ours | lesson and practice lines that carry the case detail | a qualifier dropped to fit ("for independent units"), which widens the lesson; the message names the fix: split the line or move detail to a sub-item |
+| `QUOTE_MAX_WORDS` | one quote per case, of 15 words | enforced | picked with the case format (2026-11-13) for licence and fair-use care; karpathy-ideas keeps the same rule | ours | copied text in our summaries | none on behaviour; the case loses colour, not facts |
+| `SPAN_MAX_WORDS` | a quoted span of more than 4 words counts as a quote (in a lesson, none is allowed) | enforced | the case validator's test for what counts as a quote (2026-11-13), applied to lessons too: lessons are in our own words | ours | copied wording in our summaries | none on behaviour; a paraphrase is checked against the case instead |
+| `SUMMARY_WORDS` | a case's summary paragraph: 40 to 150 words | warning | picked with the case format (2026-11-13); a size alone, so a note since 2026-11-21 | ours | summaries that carry the whole case, or say nothing | a failure or a limit left out to fit; as a note it asks for a look, never a cut |
+| `QUESTIONS` | checklist questions: 5 to 12 | warning | the first checklist allowed 5 to 10, raised to 12 the same night to fit the 12 it had (2026-11-13): a number bent to the content, not measured; a note since 2026-11-21 | ours | a checklist too long to run in one session | merging questions until a Check is lost; merge only checks that measure the same thing |
+| `OUTDATED_MONTHS` | 12 months | mark | picked with the "Depends on model ability" tag (2026-11-14); it marks a lesson and removes nothing | ours | trusting a lesson about model limits that only older models showed | reading the mark as an order to drop the lesson; it asks for a re-check against newer cases |
+
+Why the line limits still fail and the counts only warn (2026-11-21): the line limits serve a
+format (one line per lesson or practice in the generated lists, as the summary is one index line),
+and their recorded harm comes from the fix chosen at the moment of failure; the failing message is
+read exactly then, so it names the safe fix. A note would let lines grow into case detail with
+nothing naming that fix. The question count and the paragraph length serve no format: their
+numbers were picked or bent to the content, and the harm they risk (merging questions until a
+Check is lost, a failure cut from a summary) is what a failing check pushes toward.
 
 ## One line per case
 

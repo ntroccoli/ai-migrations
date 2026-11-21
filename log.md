@@ -3,6 +3,40 @@
 Each update of the collection: when it ran, the sources it covered, and what changed. Newest
 first.
 
+## 2026-11-21 — sizes reported, not capped
+
+- **Covered:** no new sources. Why: none of our byte caps was measured; the 8 KB cap on
+  `AGENTS.md` came from advice its giver, the karpathy-ideas coordinator, has withdrawn; and trims
+  to fit `checklist.md`'s cap dropped five working instructions in sweeps 1 and 2. On the owner's
+  work setup the same kind of limits cut 21 of 49 sentences that drove behaviour.
+- **Sizes reported:** the five byte caps are gone as checks (`AGENTS.md`, `checklist.md`, each
+  lesson page, `lessons/index.md`, `llms.txt`). The validator prints a size report instead: the
+  bytes of each file an agent may read whole and its growth since the sizes the previous log
+  entry recorded (each entry's `changes/` file now records them), with no effect on the exit code.
+  The structural checks stay: `llms.txt` lists no cases, and only `lessons/evidence.md` and
+  `llms-full.txt` list every lesson.
+- **Format limits kept:** the 15-word quote (licence and fair use), the four-word quoted span (our
+  own words), the 160-character case summary (one index line) and the 200-character lesson and
+  practice line (one line each in the generated lists). The line limits fail with the fix named in
+  the message: never drop a qualifier to fit; split the line or move detail to a sub-item. The
+  question count (5 to 12) and the summary paragraph (40 to 150 words) are now notes, not failures.
+- **Remove for a reason:** the trim rule is replaced everywhere it appeared. A sentence is removed
+  only when it duplicates a live line or is stale, never for a size; a moved line keeps a pointer
+  from a file that loads at the start; every cut or move lists each sentence that leaves, where it
+  went and whether it still drives behaviour. "Size caps" in `docs/maintaining.md` is now "Sizes
+  and format limits", saying what is reported and what is still enforced, with provenance.
+- **Five instructions checked:** the worktree reason, the `wc -l` fallback, the "Other findings"
+  slot (once "Other gaps"), the read-only line of step 9 and Q11's "what must exist before the
+  first release" are all present after the guide move.
+- **No correction:** the caps were rules for the maintainer's own files, never advice to readers,
+  so `corrections.md` gets no entry.
+
+### Checklist and lessons impact
+
+- **New lessons:** none.
+- **Changed lessons:** none.
+- **Checklist:** no question changed.
+
 ## 2026-11-15 — one review prompt per route
 
 - **Covered:** no new sources. Why: each route had a step 1 prompt for the first review and a

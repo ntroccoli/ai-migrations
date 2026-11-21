@@ -15,10 +15,25 @@ export const CASES_DIR = join(ROOT, 'cases');
 export const CHECKLIST = join(ROOT, 'checklist.md');
 export const NOTICE = join(ROOT, 'NOTICE.md');
 export const PITFALLS = join(ROOT, 'pitfalls.md');
-// Agents read checklist.md whole before a migration: keep it small. Every size cap's source, what it
-// prevents and how it fails applied blindly: docs/maintaining.md "Size caps" (the validator checks a row
-// per cap in CAPS).
-export const CHECKLIST_MAX_BYTES = 20 * 1024;
+// Sizes and format limits (docs/maintaining.md "Sizes and format limits"): no file has a byte cap; the
+// validator reports the size of each file in sizeReportFiles() and its growth, and never fails on it. The
+// limits still checked are format rules with a reason other than size. LIMITS maps each name to what the
+// validator does with it; the table there has a row per name with the same Status (validate.mjs checks).
+export const LIMITS = {
+  SIZE_REPORT: 'reported', SUMMARY_MAX_CHARS: 'enforced', LINE_MAX_CHARS: 'enforced', QUOTE_MAX_WORDS: 'enforced',
+  SPAN_MAX_WORDS: 'enforced', SUMMARY_WORDS: 'warning', QUESTIONS: 'warning', OUTDATED_MONTHS: 'mark',
+};
+export const SUMMARY_MAX_CHARS = 160; // a case's index line
+export const LINE_MAX_CHARS = 200; // a lesson's or a practice's one line
+export const QUOTE_MAX_WORDS = 15; // the one quote a case may carry
+export const SPAN_MAX_WORDS = 4; // a quoted span longer than this counts as a quote
+export const SUMMARY_WORDS = [40, 150]; // a case's summary paragraph, a warning outside it
+export const QUESTIONS = [5, 12]; // checklist questions, a warning outside it
+// The files the size report lists: what an agent may read whole. Bytes with LF line ends, so a Windows
+// checkout (CRLF) measures the same as the repository.
+export const sizeReportFiles = () => ['AGENTS.md', 'llms.txt', 'checklist.md', 'lessons/index.md', 'lessons/evidence.md',
+  ...LESSON_PAGES.map(s => `lessons/${s}.md`)];
+export const byteSize = text => Buffer.byteLength(text.replace(/\r\n/g, '\n'), 'utf8');
 // Provenance (docs/lesson-rules.md "Provenance"): the published method files whose thresholds and hard
 // rules carry a marker such as (P3), read in the file's own "## Provenance" table.
 export const PROVENANCE_FILES = ['checklist.md', 'docs/applying-lessons.md', 'docs/report-formats.md', 'corrections.md'];
@@ -174,13 +189,8 @@ export const LESSONS_DIR = join(ROOT, 'lessons');
 export const GENERATED_FILES = ['index.md', 'lessons/index.md', 'lessons/evidence.md', 'llms.txt', 'llms-full.txt'];
 export const LESSON_PAGES = ['planning', 'testing', 'verification', 'review', 'rollout', 'operations', 'security',
   'cost', 'team', 'tooling', 'context', 'orchestration', 'agent-failures', 'oversight', 'knowledge', 'measurement'];
-export const LESSON_MAX_BYTES = 20 * 1024; // an agent reads a page whole
-// lessons/index.md (generated) is a table of contents for people; its size is checked so "By model" and
-// "Where the cases disagree" stay short as cases arrive.
-export const INDEX_MAX_BYTES = 12 * 1024;
 // llms.txt (generated) is what an agent reads first on every run; it lists no cases (index.md does), so it
-// does not grow with each case. Checked by validate.mjs.
-export const LLMS_MAX_BYTES = 20 * 1024;
+// does not grow with each case. Its size is reported, never capped (LIMITS above).
 // Every lesson page opens with this sentence (after its title and intro); validate.mjs matches it.
 export const LESSON_NOTE = 'Evidence base: every lesson here comes from the **migrations** in [this collection](../index.md), all done with AI except one rule-based contrast case; many apply to large engineering work done with AI agents generally.';
 // Every lesson page holds this legend as its own paragraph, after the evidence note; validate.mjs
@@ -355,7 +365,8 @@ export function mayBeOutdated(lesson, metas, today) {
 
 // Update log entries and what each added or changed (docs/maintaining.md "Update log"). Each entry of log.md
 // has a generated changes/<slug>.md: the lesson IDs and checklist questions added, changed or gone
-// since the previous entry, and the fingerprints of the state after it. The newest entry's file is
+// since the previous entry, the fingerprints of the state after it and the sizes of the files in
+// sizeReportFiles() (the size report's baseline for the next entry). The newest entry's file is
 // rebuilt from the sources; an older one is frozen, since its state can no longer be rebuilt.
 export const LOG = join(ROOT, 'log.md');
 export const CHANGES_DIR = join(ROOT, 'changes');
@@ -422,10 +433,13 @@ export function parseChanges(text) {
   }
   const state = new Map((t.split(/^## State after this entry$/m)[1] || '').split('\n')
     .map(l => l.match(/^((?:[A-Z]{3}-|Q)\d+) ([0-9a-f]{8})$/)).filter(Boolean).map(m => [m[1], m[2]]));
-  return { lists, state };
+  // Older entries' files have no sizes: the report then says so.
+  const sizes = new Map((t.split(/^## Sizes after this entry$/m)[1] || '').split('\n')
+    .map(l => l.match(/^(\S+\.(?:md|txt)) (\d+)$/)).filter(Boolean).map(m => [m[1], Number(m[2])]));
+  return { lists, state, sizes };
 }
 // Write a changes file. `prev` is the previous entry ({ head, state }) or null for the oldest.
-export function renderChanges(entry, prev, lessons, questions, generated) {
+export function renderChanges(entry, prev, lessons, questions, generated, sizes = new Map()) {
   const before = prev?.state ?? new Map();
   const pick = re => new Map([...before].filter(([k]) => re.test(k)));
   const l = diffPrints(pick(/^[A-Z]{3}-/), lessons), q = diffPrints(pick(/^Q/), questions);
@@ -447,5 +461,9 @@ export function renderChanges(entry, prev, lessons, questions, generated) {
     '## State after this entry', '',
     'Fingerprints (a short hash of each lesson and question) the next entry is compared with.', '',
     '```text', ...[...lessons, ...questions].map(([k, v]) => `${k} ${v}`), '```', '',
+    '## Sizes after this entry', '',
+    'Bytes of each file an agent may read whole (LF line ends). The validator reports each file\'s growth since ' +
+      'the previous entry\'s sizes; a size is never a failure.', '',
+    '```text', ...[...sizes].map(([k, v]) => `${k} ${v}`), '```', '',
   ].join('\n');
 }

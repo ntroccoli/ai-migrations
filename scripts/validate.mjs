@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Validate case files, lesson pages and the checklist. Rules: docs/case-format.md,
-// docs/lesson-rules.md and docs/maintaining.md; AGENTS.md's own size cap and links are checked here.
+// docs/lesson-rules.md and docs/maintaining.md; AGENTS.md's links are checked here. File sizes are reported,
+// never a failure (docs/maintaining.md "Sizes and format limits").
 // Usage: node scripts/validate.mjs            (all of cases/, lessons/, checklist.md and pitfalls.md)
 //        node scripts/validate.mjs <file|dir>  (only those cases; no checklist check)
 //        node scripts/validate.mjs --cases-dir cases <staged case>  (its links resolve in cases/)
@@ -8,19 +9,20 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, dirname, resolve, basename } from 'node:path';
 import {
   ROOT, CASES_DIR, CHECKLIST, NOTICE, SOURCE_TYPES, KINDS, AI_SHARES, RELATIONS, EVIDENCE, OUTCOMES,
-  STATUSES, BASES, REQUIRED, LANGUAGES, SECTIONS, NUMBERS_HEADER, UNITS, SCALES, PITFALLS, CHECKLIST_MAX_BYTES,
+  STATUSES, BASES, REQUIRED, LANGUAGES, SECTIONS, NUMBERS_HEADER, UNITS, SCALES, PITFALLS,
+  LIMITS, SUMMARY_MAX_CHARS, LINE_MAX_CHARS, QUOTE_MAX_WORDS, SPAN_MAX_WORDS, SUMMARY_WORDS, QUESTIONS, sizeReportFiles, byteSize,
   parseCase, listCases, sections, refDefs, linksIn, anchor, practices, closestPractices,
-  LESSONS_DIR, LESSON_PAGES, LESSON_MAX_BYTES, INDEX_MAX_BYTES, LLMS_MAX_BYTES, LESSON_NOTE, LESSON_LEGEND, KARPATHY_IDEAS, ORACLES, MODEL_DEPENDENCE, STRENGTHS, META_LINE, parseLessonPage, strengthCeiling, lessonMeta,
+  LESSONS_DIR, LESSON_PAGES, LESSON_NOTE, LESSON_LEGEND, KARPATHY_IDEAS, ORACLES, MODEL_DEPENDENCE, STRENGTHS, META_LINE, parseLessonPage, strengthCeiling, lessonMeta,
   casesOf, expectedEra, eraText, parseEra, LOG, CHANGES_DIR, logEntries, parseChanges,
   PROVENANCE_FILES, PROVENANCE_LEVELS, PROVENANCE_HEADER, HARD_RULE, GUIDE_DIR, GUIDE_PARTS, CORRECTIONS, CORRECTION_FIELDS, parseCorrections,
 } from './lib.mjs';
 
-// AGENTS.md loads into every agent session, so it stays short: the rules by task live in docs/.
-const AGENTS_MAX_BYTES = 8 * 1024;
-
 const errors = [];
 const warnings = [];
 const err = (file, msg) => errors.push(`${file}: ${msg}`);
+const warn = (file, msg) => warnings.push(`${file}: ${msg}`);
+// The fix a line limit must never get (docs/maintaining.md "Sizes and format limits").
+const FIT = 'never drop a qualifier to fit; split the line or move detail to a sub-item';
 const pad = n => String(n).padStart(2, '0');
 const localDate = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 const today = localDate(new Date()); // local, not UTC: the maintainer works at UTC-3
@@ -149,7 +151,7 @@ function validateCase(c) {
   }
   if (!meta.title) err(file, 'title is empty');
   if (!meta.company) err(file, 'company is empty');
-  if (!meta.summary || meta.summary.length > 160) err(file, 'summary: one sentence, at most 160 characters');
+  if (!meta.summary || meta.summary.length > SUMMARY_MAX_CHARS) err(file, `summary: one sentence, at most ${SUMMARY_MAX_CHARS} characters (never drop a failure or a limit to fit; "What went wrong" keeps the detail)`);
   if (!isHttps(meta.source_url)) err(file, 'source_url must be an https URL');
   if (!Array.isArray(meta.also)) err(file, 'also must be an inline list, e.g. []');
   else for (const u of meta.also) if (!isHttps(u)) err(file, `also: bad URL ${u}`);
@@ -192,7 +194,7 @@ function validateCase(c) {
   if (h1 < 0 || lines[h1].slice(2).trim() !== meta.title) err(file, 'first heading must equal the title');
   const firstH2 = lines.findIndex(l => /^## /.test(l));
   const summaryWords = words(lines.slice(h1 + 1, firstH2 < 0 ? undefined : firstH2).join(' '));
-  if (summaryWords < 40 || summaryWords > 150) err(file, `summary paragraph has ${summaryWords} words (40 to 150)`);
+  if (summaryWords < SUMMARY_WORDS[0] || summaryWords > SUMMARY_WORDS[1]) warn(file, `summary paragraph has ${summaryWords} words (usually ${SUMMARY_WORDS[0]} to ${SUMMARY_WORDS[1]}; a note, not a failure)`);
   const secs = sections(body);
   const names = secs.map(s => s.name);
   const expected = SECTIONS.filter(s => !s.optional || names.includes(s.name)).map(s => s.name);
@@ -220,7 +222,7 @@ function validateCase(c) {
   for (const l of prac) {
     const p = l.trimEnd().match(/^- \[(stated|ours)\] (.+) \(\[[^\]]+\]\((https:[^)\s]+)\)\)$/);
     if (!p) { err(file, `practice must be one line: "- [stated] or [ours] text ([Section](source link))": "${l.slice(0, 50)}"`); continue; }
-    if (p[2].length > 200) err(file, `practice text longer than 200 characters: "${p[2].slice(0, 50)}..."`);
+    if (p[2].length > LINE_MAX_CHARS) err(file, `practice text longer than ${LINE_MAX_CHARS} characters (${FIT}): "${p[2].slice(0, 50)}..."`);
     if (checkUnits(p[2]).need) err(file, `practice holds a number (keep numbers in the Numbers table): "${p[2].slice(0, 50)}"`);
     if (!isSource(p[3])) err(file, `practice must link a section of this case's source: "${p[2].slice(0, 50)}"`);
   }
@@ -268,13 +270,13 @@ function validateCase(c) {
   }
   const prose = noCode.split('\n').filter(l => !/^>/.test(l)).join('\n');
   const spans = [/"([^"\n]+)"/g, /“([^”\n]+)”/g, /‘([^’\n]+)’/g].flatMap(re => [...prose.matchAll(re)].map(m => m[1]));
-  const inline = spans.filter(q => words(q) > 4);
+  const inline = spans.filter(q => words(q) > SPAN_MAX_WORDS);
   const nQuotes = quoteLines.length + inline.length;
   if (nQuotes > 1) err(file, `${nQuotes} quotes (at most one; a quoted span over four words counts)`);
   for (const q of inline) err(file, `quote outside "In their words": "${q.slice(0, 50)}"`);
   for (const l of quoteLines) {
     const q = l.trim().replace(/^["“]/, '').replace(/["”]$/, '').trim();
-    if (words(q) > 15) err(file, `quote has ${words(q)} words (max 15)`);
+    if (words(q) > QUOTE_MAX_WORDS) err(file, `quote has ${words(q)} words (max ${QUOTE_MAX_WORDS})`);
     if (!sec('In their words').includes(q)) err(file, 'the quote belongs in "In their words"');
     if (!notice.includes(q)) err(file, 'the quote is not listed in NOTICE.md');
   }
@@ -334,8 +336,6 @@ function validateLessons() {
     const page = parseLessonPage(join(LESSONS_DIR, `${slug}.md`));
     const f = page.file;
     const e = (line, msg) => err(f, line ? `line ${line}: ${msg}` : msg);
-    const size = Buffer.byteLength(page.text, 'utf8');
-    if (size > LESSON_MAX_BYTES) e(0, `${size} bytes (at most ${LESSON_MAX_BYTES}); split the page or trim lessons`);
     if (!page.title) e(0, 'needs a "# Title" heading');
     if (!page.intro || page.intro === LESSON_NOTE || /^[-*] /.test(page.intro)) e(0, 'needs a one-paragraph intro under the title');
     if (!page.lines.includes(LESSON_NOTE)) e(0, `needs the evidence note as its own paragraph: "${LESSON_NOTE.slice(0, 60)}..."`);
@@ -369,7 +369,7 @@ function validateLessons() {
       ids.set(l.id, f);
       lessonCases.set(l.id, new Set(casesOf(l, page.refs)));
       if (!['stated', 'ours'].includes(l.tag)) e(l.line, `${l.id}: tag must be [stated] or [ours]`);
-      if (!l.text || l.text.length > 200) e(l.line, `${l.id}: lesson text must be one line of 1 to 200 characters (${l.text.length})`);
+      if (!l.text || l.text.length > LINE_MAX_CHARS) e(l.line, `${l.id}: lesson text must be one line of 1 to ${LINE_MAX_CHARS} characters (${l.text.length}; ${FIT})`);
       if (checkUnits(l.text).need) e(l.line, `${l.id}: lesson text holds a number; put numbers in the cases`);
 
       const labels = l.subs.map(s => s.label).join('|');
@@ -437,7 +437,7 @@ function validateLessons() {
     }
     const prose = page.text.replace(/```[\s\S]*?```/g, '').replace(/`[^`]*`/g, '');
     const spans = [/"([^"\n]+)"/g, /“([^”\n]+)”/g].flatMap(re => [...prose.matchAll(re)].map(m => m[1]));
-    for (const q of spans.filter(q => words(q) > 4)) e(0, `quoted span over four words (lessons are in our own words): "${q.slice(0, 50)}"`);
+    for (const q of spans.filter(q => words(q) > SPAN_MAX_WORDS)) e(0, `quoted span over four words (lessons are in our own words): "${q.slice(0, 50)}"`);
     for (const t of brokenLinks(page.text, LESSONS_DIR)) e(0, `broken link ${t}`);
   }
   return { ids, cited, lessonCases };
@@ -447,9 +447,6 @@ function validateChecklist(caseFiles, lessonIds) {
   const f = 'checklist.md';
   if (!existsSync(CHECKLIST)) return err(f, 'missing');
   const text = readFileSync(CHECKLIST, 'utf8').replace(/\r\n/g, '\n');
-  // Bytes with LF line ends, so a Windows checkout (CRLF) measures the same as the repository.
-  const size = Buffer.byteLength(text, 'utf8');
-  if (size > CHECKLIST_MAX_BYTES) err(f, `${size} bytes (at most ${CHECKLIST_MAX_BYTES}); move detail to pitfalls.md or merge questions`);
   const lines = text.split('\n');
   const refs = refDefs(lines);
   const cited = new Set();
@@ -459,7 +456,7 @@ function validateChecklist(caseFiles, lessonIds) {
     const q = l.match(/^(\d+)\. \*\*(.+?)\*\*/);
     if (q) { cur = { title: q[2], text: l }; qs.push(cur); } else if (/^#/.test(l)) cur = null; else if (cur) cur.text += '\n' + l;
   }
-  if (qs.length < 5 || qs.length > 12) err(f, `${qs.length} questions (5 to 12)`);
+  if (qs.length < QUESTIONS[0] || qs.length > QUESTIONS[1]) warn(f, `${qs.length} questions (usually ${QUESTIONS[0]} to ${QUESTIONS[1]}; a note, not a failure: merge only checks that measure the same thing)`);
   qs.forEach((q, i) => { q.n = i + 1; });
   for (const q of qs) {
     if (!/\bCheck:/.test(q.text)) err(f, `"${q.title}" has no "Check:" step`);
@@ -666,29 +663,51 @@ function validateRecordFormat() {
   if (n < 2) err(f, `each record template needs a "Corrections checked: " line (found ${n} of 2)`);
 }
 
-// Size caps (docs/maintaining.md "Size caps"): every cap the validator enforces has a row there with its
-// source, evidence level, what it prevents and its blind failure.
-const CAPS = ['AGENTS_MAX_BYTES', 'CHECKLIST_MAX_BYTES', 'LESSON_MAX_BYTES', 'INDEX_MAX_BYTES', 'LLMS_MAX_BYTES'];
-function validateCaps() {
+// Sizes and format limits (docs/maintaining.md "Sizes and format limits"): every name in LIMITS
+// (scripts/lib.mjs) has a row there whose Status says what the validator does with it, with its source,
+// evidence level, what it prevents and its blind failure; no row names a limit the validator lacks.
+function validateLimits() {
   const f = 'docs/maintaining.md';
   const p = join(ROOT, f);
   if (!existsSync(p)) return err(f, 'missing');
   const lines = readFileSync(p, 'utf8').replace(/\r\n/g, '\n').split('\n');
-  const at = lines.findIndex(l => /^## Size caps\b/.test(l));
-  if (at < 0) return err(f, 'needs a "## Size caps" section with a row per cap');
+  const at = lines.findIndex(l => /^## Sizes and format limits\b/.test(l));
+  if (at < 0) return err(f, 'needs a "## Sizes and format limits" section with a row per name in LIMITS (scripts/lib.mjs)');
   const rows = new Map();
   for (let i = at + 1; i < lines.length && !/^## /.test(lines[i]); i++) {
     const c = lines[i].split('|').slice(1, -1).map(x => x.trim());
-    const name = c[0]?.match(/`([A-Z_]+)`/)?.[1];
+    const name = c[0]?.match(/^`([A-Z_]+)`/)?.[1];
     if (/^\|/.test(lines[i]) && name) rows.set(name, { c, line: i + 1 });
   }
-  for (const k of CAPS) {
+  for (const [k, status] of Object.entries(LIMITS)) {
     const r = rows.get(k);
-    if (!r) { err(f, `"Size caps" has no row for ${k}`); continue; }
-    if (r.c.length !== 6) { err(f, `line ${r.line}: a "Size caps" row needs 6 cells (Cap, Limit, Source, Level, Prevents, Blind failure)`); continue; }
-    if (!PROVENANCE_LEVELS.includes(r.c[3])) err(f, `line ${r.line}: ${k}: Level must be one of ${PROVENANCE_LEVELS.join(', ')}`);
-    for (const [i, name] of [[2, 'Source'], [4, 'Prevents'], [5, 'Blind failure']]) if (!r.c[i] || /^[—-]+$/.test(r.c[i])) err(f, `line ${r.line}: ${k}: "${name}" is empty`);
+    if (!r) { err(f, `"Sizes and format limits" has no row for ${k}`); continue; }
+    if (r.c.length !== 7) { err(f, `line ${r.line}: a "Sizes and format limits" row needs 7 cells (Name, Limit, Status, Source, Level, Prevents, Blind failure)`); continue; }
+    if (r.c[2] !== status) err(f, `line ${r.line}: ${k}: Status must be "${status}", what the validator does with it (LIMITS in scripts/lib.mjs)`);
+    if (!PROVENANCE_LEVELS.includes(r.c[4])) err(f, `line ${r.line}: ${k}: Level must be one of ${PROVENANCE_LEVELS.join(', ')}`);
+    for (const [i, name] of [[3, 'Source'], [5, 'Prevents'], [6, 'Blind failure']]) if (!r.c[i] || /^[—-]+$/.test(r.c[i])) err(f, `line ${r.line}: ${k}: "${name}" is empty`);
   }
+  for (const [k, r] of rows) if (!(k in LIMITS)) err(f, `line ${r.line}: ${k} is not in LIMITS (scripts/lib.mjs): the validator has no such limit`);
+}
+
+// The size report (docs/maintaining.md "Sizes and format limits"): each file an agent may read whole, its
+// bytes now and its growth since the sizes the previous log entry's changes file recorded. Never a failure.
+function sizeReport() {
+  const fmt = n => n.toLocaleString('en-US');
+  const now = sizeReportFiles().filter(rel => existsSync(join(ROOT, rel))).map(rel => [rel, byteSize(readFileSync(join(ROOT, rel), 'utf8'))]);
+  const prev = existsSync(LOG) ? logEntries(readFileSync(LOG, 'utf8'))[1] : null;
+  const pf = prev && join(CHANGES_DIR, `${prev.slug}.md`);
+  const before = pf && existsSync(pf) ? parseChanges(readFileSync(pf, 'utf8')).sizes : new Map();
+  const since = !prev ? 'no previous log entry to compare with' : before.size ? `growth since "${prev.head}"` : `"${prev.head}" recorded no sizes`;
+  const delta = (rel, n) => {
+    if (!before.size) return '';
+    if (!before.has(rel)) return ' (new)';
+    const d = n - before.get(rel);
+    return ` (${d >= 0 ? '+' : '-'}${fmt(Math.abs(d))})`;
+  };
+  const total = now.reduce((s, [, n]) => s + n, 0);
+  return [`Sizes in bytes, LF line ends (a report, never a failure; ${since}):`,
+    ...now.map(([rel, n]) => `  ${rel} ${fmt(n)}${delta(rel, n)}`), `  total ${fmt(total)}`].join('\n');
 }
 
 // log.md: every entry but the oldest (the first collection) has a "### Checklist and lessons impact"
@@ -760,6 +779,7 @@ const statusOf = new Map(cases.map(c => [c.file, c.meta.status]));
 const companyOf = new Map(cases.map(c => [c.file, c.meta.company]));
 cases.forEach(validateCase);
 let summary = '';
+let report = '';
 if (!args.length) {
   // The whole repository: lessons, checklist, pitfalls, and every case cited somewhere.
   const files = new Set(cases.map(c => c.file));
@@ -771,33 +791,23 @@ if (!args.length) {
   validatePitfalls();
   validateLog(lessons.ids);
   for (const rel of PROVENANCE_FILES) validateProvenance(rel, files, lessons.lessonCases, rel === 'checklist.md' ? guideFiles : []);
-  validateCaps();
+  validateLimits();
   validateRecordFormat();
-  const index = join(LESSONS_DIR, 'index.md');
-  if (existsSync(index)) {
-    const size = Buffer.byteLength(readFileSync(index, 'utf8').replace(/\r\n/g, '\n'), 'utf8');
-    if (size > INDEX_MAX_BYTES) err('lessons/index.md', `${size} bytes (at most ${INDEX_MAX_BYTES}); shorten what build.mjs writes there`);
-  }
-  const llms = join(ROOT, 'llms.txt');
-  if (existsSync(llms)) {
-    const size = Buffer.byteLength(readFileSync(llms, 'utf8').replace(/\r\n/g, '\n'), 'utf8');
-    if (size > LLMS_MAX_BYTES) err('llms.txt', `${size} bytes (at most ${LLMS_MAX_BYTES}); shorten what build.mjs writes there`);
-  }
   const agents = join(ROOT, 'AGENTS.md');
   if (existsSync(agents)) {
     const text = readFileSync(agents, 'utf8').replace(/\r\n/g, '\n');
-    const size = Buffer.byteLength(text, 'utf8');
-    if (size > AGENTS_MAX_BYTES) err('AGENTS.md', `${size} bytes (at most ${AGENTS_MAX_BYTES}); move rules to a docs/ file and point to it`);
     for (const [, target] of text.matchAll(/\]\(([^)\s]+)\)/g)) {
       const path = target.split('#')[0];
       if (path && !/^[a-z]+:/.test(path) && !existsSync(join(ROOT, path))) err('AGENTS.md', `link to ${path} does not resolve`);
     }
   }
   for (const c of files) if (!lessons.cited.has(c) && !list?.cited.has(c)) err(c, 'no lesson and no checklist question cites this case');
+  report = sizeReport();
   summary = ` ${lessons.ids.size} lessons valid. checklist.md valid: ${list?.n ?? 0} questions, each citing lessons.`;
 }
 
 for (const w of warnings) console.warn(`note: ${w}`);
+if (report) console.log(report);
 if (errors.length) {
   console.error(`${errors.length} problem(s):\n` + errors.map(e => '  ' + e).join('\n'));
   process.exit(1);

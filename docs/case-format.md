@@ -123,7 +123,7 @@ Body rules (all checked):
   `- [ours] text ([Section](source link))`. `[stated]`: the source recommends it or reports it
   as what worked. `[ours]`: we infer it from what the source reports (often from a failure). The
   link goes to the source section it comes from. The text is at most 200 characters, with no
-  number.
+  number; never drop a qualifier to fit: split the practice in two.
 - "Numbers": one row per number as the source writes it, with its unit. Basis: `measured` (the
   source says how it counted: logs, repository history, a benchmark), `reported` (stated as
   fact, method not given), `estimate` (the source calls it an estimate), `self-estimate` (a team

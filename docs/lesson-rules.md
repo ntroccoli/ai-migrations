@@ -71,8 +71,10 @@ Rules (all checked by `node scripts/validate.mjs`; one broken-copy test each):
   `https://github.com/ntroccoli/karpathy-ideas/blob/main/ideas/` and ends with `, agrees.` or
   `, contradicts: why.`; it copies nothing from that project, and only where the match is clear.
 - Every number carries a unit (the Era is exempt); no quoted span over four words; every
-  relative link resolves; a page stays at or under 20 KB (20,480 bytes). Where these numbers come
-  from, and how a trim must keep every rule: [maintaining.md "Size caps"](maintaining.md#size-caps).
+  relative link resolves. A page has no byte cap; its size is reported. Where these limits come
+  from, and the rule for removing or moving text (for a reason, never for a size):
+  [maintaining.md "Sizes and format limits"](maintaining.md#sizes-and-format-limits). A lesson over
+  200 characters never drops a qualifier to fit: split it or move detail to a sub-item.
 - Every case is cited by at least one lesson or checklist question.
 
 **Maintainer only:** each lesson was checked against the source lines it rests on, which the
@@ -91,13 +93,16 @@ The checklist guides an agent through the knowledge; it does not impose the main
 missing piece is a finding the project's owner weighs, and a review gives options with their
 trade-offs, the owner choosing do, later or skip.
 
-`checklist.md`: 5 to 12 questions; merge before adding. Each question has a "Check:" an agent can
+`checklist.md`: 5 to 12 questions (a note, not a failure, outside that); merge before adding, and merge only checks that measure the same thing. Each question has a "Check:" an agent can
 run on a repository, a "Lessons:" line citing the lesson IDs behind it (`Lessons: TST-1, REV-3`),
 and a "Guide:" line linking its guide, `guide/q<n>.md` (n its number). Our own inferences are
 allowed and marked "(ours)". Questions stay language-neutral; lists per kind of move (pitfalls,
-seams) go to `pitfalls.md`, which the questions link. `checklist.md` stays at or under 20 KB
-(20,480 bytes; agents read it whole, a cap of ours: [maintaining.md "Size caps"](maintaining.md#size-caps)):
-trim wording or move detail to the guide before adding, and prove no rule lost. Cases, where named,
+seams) go to `pitfalls.md`, which the questions link. Agents read `checklist.md` whole, so put
+case evidence and detail in the guide; `checklist.md` has no byte cap, and its size is reported
+([maintaining.md "Sizes and format limits"](maintaining.md#sizes-and-format-limits)). Remove a
+sentence only when it duplicates a live line or is stale, never for a size; a moved line keeps a
+pointer from `checklist.md`; list each sentence that leaves, where it went and whether it still
+drives behaviour. Cases, where named,
 are cited by reference links (`[Bun][]`, defined once at the end of the file).
 
 A guide, read only for the question in use, is titled `# Q<n> guide: <the question>` and has five
@@ -151,7 +156,7 @@ What the validator detects (one broken-copy test each):
   `vendor guidance` (a link in Source), `ours` (our inference or a number we picked); lesson IDs
   and case links in Source exist.
 
-The same four parts are kept for our own caps in [maintaining.md "Size caps"](maintaining.md#size-caps)
-(the validator checks a row per cap). Before every release, each item that tells an agent to cut,
+The same four parts are kept for our own limits in [maintaining.md "Sizes and format limits"](maintaining.md#sizes-and-format-limits)
+(the validator checks a row per limit). Before every release, each item that tells an agent to cut,
 cap, delete, forbid or stop gets a behaviour check (**maintainer only**: a fresh agent applies it to a
 small prepared sample, and the check looks for the intended effect and the named harm).

@@ -29,12 +29,12 @@ every session.
   template, the field rules, the body rules, units, the own-words check.
 - [docs/lesson-rules.md](docs/lesson-rules.md): before editing a lesson page,
   `checklist.md` or a guide. Lesson IDs and tags, strength caps, Era, "May be outdated", upkeep, the
-  checklist and guide rules (a guide, not imposed rules), the size caps of lesson pages and `checklist.md`, the provenance every
-  threshold and hard rule carries.
+  checklist and guide rules (a guide, not imposed rules), the provenance every threshold and hard
+  rule carries.
 - [docs/maintaining.md](docs/maintaining.md): before opening a `log.md` or `corrections.md` entry, changing
-  `scripts/build.mjs`, adding to what agents read first, or trimming a file to meet a size cap.
-  The update log and its changes files, corrections, the generated files, every size cap with its provenance
-  (a trim moves text, never drops a rule), reading cost, one line per case.
+  `scripts/build.mjs`, adding to what agents read first, or removing or moving text in any file.
+  The update log and its changes files, corrections, the generated files, the size report and the
+  format limits still enforced, with their provenance, reading cost, one line per case.
 
 ## Scope
 
@@ -53,7 +53,8 @@ Before a commit the validator, the linter and `build.mjs --check` must exit 0 (`
 runs all but the linter), and so must the tests after a change to the validator.
 
 - `node scripts/validate.mjs`: checks every case, lesson page, the checklist, `pitfalls.md`,
-  `log.md` and the size caps (this file at or under 8 KB, `AGENTS_MAX_BYTES`). A case staged
+  `log.md` and the limits table, then prints a size report (bytes of each file an agent may read
+  whole and growth since the previous log entry; never a failure). A case staged
   outside `cases/` validates in place with `node scripts/validate.mjs --cases-dir cases <staged case>`
   (its links to other cases resolve in `cases/`).
 - `npx markdownlint-cli2@0.24.0 "**/*.md"`: the Markdown linter (pinned; the version in
@@ -69,6 +70,9 @@ runs all but the linter), and so must the tests after a change to the validator.
 
 ## Writing rules
 
+- Remove a sentence only when it duplicates a live line or is stale, never for a size. A moved line
+  keeps a pointer from a file that loads at the start. Every cut or move lists each sentence that
+  leaves, where it went and whether it still drives behaviour (by sentence, not by line).
 - Summaries in our own words. At most one quote per file, 15 words or fewer, attributed, linked.
 - When part of a source was written by a model (a README section an agent wrote, say), the case's
   Source section says which parts, and each claim is cited from the part that says it.
