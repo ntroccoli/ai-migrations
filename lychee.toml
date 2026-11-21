@@ -6,6 +6,10 @@ accept = ["200..=299", "429", "503"]
 exclude = [
   '^https://raw\.githubusercontent\.com/ntroccoli/ai-migrations/',
   '^https://github\.com/ntroccoli/ai-migrations(/|$)',
+  # Sites that refuse bots (scheduled run 43884348459: uber.com 406 x35, intel.com 403 x44).
+  # Their cases are read by hand; no header spoofing.
+  '^https://www\.uber\.com/blog/junit-migration/',
+  '^https://www\.intel\.com/content/www/us/en/security/security-practices/blogs/ideas-for-tractor\.html',
 ]
 exclude_path = ["node_modules", ".test-tmp", "CODE_OF_CONDUCT.md"]
 cache = true
